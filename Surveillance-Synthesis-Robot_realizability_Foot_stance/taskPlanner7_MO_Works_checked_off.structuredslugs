@@ -1,0 +1,195 @@
+[INPUT]
+x:0...63
+y:0...29
+deliveryrequest
+orientation:0...11
+mox:0...63
+moy:0...29
+
+[OUTPUT]
+forward
+turnLeft
+turnRight
+stepL:0...3
+stop
+requestPending1
+requestPending2
+
+
+[ENV_INIT]
+x = 52
+y = 16
+orientation = 3
+deliveryrequest
+mox = 62
+moy = 28
+
+[SYS_INIT]
+!forward
+!turnLeft
+!turnRight
+!stop
+
+[SYS_TRANS]
+# vv done
+!forward' -> (!turnLeft' & !turnRight')
+
+turnLeft' -> !turnRight'
+turnRight' -> !turnLeft'
+
+
+# Shouldn't need these, should be able to be any step length
+# turnRight' | turnLeft' -> stepL'=0
+# turnRight | turnLeft -> stepL'=1
+
+# Need to avoid contradicting other turnX specsssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+# stop -> (stepL=0 & !turnRight' & !turnLeft')
+stop -> stepL=0
+!forward -> (stepL=0 & !turnRight & !turnLeft)
+# ^^ done
+
+# Need to fixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+#shouldn't need these, can turn succesive steps as long as it finishes turn
+#turnRight -> (! turnRight' & ! turnLeft')
+#turnLeft -> (! turnRight' & ! turnLeft')
+
+#!forward' | !stop
+#forward' | stop
+# Inspecttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+stop <-> !forward'
+# ^^ done
+
+# Inspecttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+# Can't do this for when obstacle/human is in the way?
+# Actually should be able to stop with obstacle while requestPending1 or requestPending2 are true
+#requestPending1' | requestPending2' | stop
+!requestPending1 & !requestPending2 -> !forward
+
+#Think Aboutttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+# vv done
+(orientation'!=0 & orientation'!=3  & orientation'!=6 & orientation'!=9) -> stepL=3
+(orientation'=0 | orientation'=3  | orientation'=6 | orientation'=9) -> stepL!=3
+
+(turnRight & (orientation'!=0 & orientation'!=3  & orientation'!=6 & orientation'!=9)) -> turnRight'
+(turnLeft & (orientation'!=0 & orientation'!=3  & orientation'!=6 & orientation'!=9)) -> turnLeft'
+# ^^ done
+
+[ENV_TRANS]
+# Update robot position according to requirements
+# vv done
+(orientation=0 | orientation=11 | orientation=1) & y>0 & forward & stepL=0 -> y'+1=y
+(orientation=0 | orientation=11 | orientation=1) & y>1 & forward & stepL=1 -> y'+2=y 
+(orientation=0 | orientation=11 | orientation=1) & y>2 & forward & stepL=2 -> y'+3=y
+(orientation=3 | orientation=4 | orientation=2) & x<63 & forward & stepL=0 -> x'=x+1
+(orientation=3 | orientation=4 | orientation=2) & x<62 & forward & stepL=1 -> x'=x+2
+(orientation=3 | orientation=4 | orientation=2) & x<61 & forward & stepL=2 -> x'=x+3
+(orientation=6 | orientation=7 | orientation=5) & y<29 & forward & stepL=0 -> y'=y+1
+(orientation=6 | orientation=7 | orientation=5) & y<28 & forward & stepL=1 -> y'=y+2
+(orientation=6 | orientation=7 | orientation=5) & y<27 & forward & stepL=2 -> y'=y+3
+(orientation=9 | orientation=10 | orientation=8) & x>0 & forward & stepL=0 -> x'+1=x
+(orientation=9 | orientation=10 | orientation=8) & x>1 & forward & stepL=1 -> x'+2=x
+(orientation=9 | orientation=10 | orientation=8) & x>2 & forward & stepL=2 -> x'+3=x
+
+
+
+
+forward & turnLeft & orientation>0 -> orientation'+1=orientation
+forward & turnRight & orientation<11 -> orientation'=orientation+1
+forward & turnLeft & orientation=0 -> orientation'=orientation+11
+forward & turnRight & orientation=11 -> orientation'+11=orientation
+# ^^ done
+
+((orientation=0 | orientation=11 | orientation=1) & stepL<3) -> x'=x
+((orientation=3 | orientation=4 | orientation=2) & stepL<3) -> y'=y
+((orientation=6 | orientation=7 | orientation=5) & stepL<3) -> x'=x
+((orientation=9 | orientation=10 | orientation=8) & stepL<3) -> y'=y
+
+# vv done
+((orientation=0 | orientation=1) & turnRight & stepL=3) -> (x'=x+1 & y'+1=y)
+((orientation=3 | orientation=4) & turnRight & stepL=3) -> (x'=x+1 & y'=y+1)
+((orientation=6 | orientation=7) & turnRight & stepL=3) -> (x'+1=x & y'=y+1)
+((orientation=9 | orientation=10) & turnRight & stepL=3) -> (x'+1=x & y'+1=y)
+
+
+((orientation=0 | orientation=11) & turnLeft & stepL=3) -> (x'+1=x & y'+1=y)
+((orientation=3 | orientation=2) & turnLeft & stepL=3) -> (x'=x+1 & y'+1=y)
+((orientation=6 | orientation=5) & turnLeft & stepL=3) -> (x'=x+1 & y'=y+1)
+((orientation=9 | orientation=8) & turnLeft & stepL=3) -> (x'+1=x & y'=y+1)
+
+!forward -> x'=x & y'=y
+!turnLeft & !turnRight -> orientation' = orientation
+# ^^ done
+
+#Obstacle moving rules
+mox' <= mox+1
+moy' <= moy+1
+mox <= mox'+1
+moy <= moy'+1
+mox'=mox | moy'=moy
+#mox'=mox & moy'=moy
+
+# vv done
+stop -> (mox' < x' | moy' < y' | mox' > x' | moy' > y')
+# ^^ done
+
+[SYS_TRANS]
+# No crash of robot with obstacle
+x<39 |x>42 | y<5 | y>20
+x<15 |x>18 | y<5 | y>8
+x<59 | y<19 | y>22
+
+x<9 | x>12 | y<20 | y>22
+x<47 | x>49 | y<11 | y>14
+#y=9 & orientation=2 & (x<7 | x>3) -> !forward
+#y=11 & orientation=0 & (x<7 | x>3) -> !forward
+#x=25 & orientation=3 & (y<8 | y>4) -> !forward
+#x=23 & orientation=1 & (y<8 | y>4) -> !forward
+
+# No crash of robot with wall
+# vv done
+x' != 0
+y' != 0
+x' != 63
+y' != 29
+# ^^ done
+
+
+[ENV_TRANS]
+# No crash of moving obstacle with the static obstacle
+mox'<39 | mox'>42 | moy'<5 | moy'>20
+mox'<15 | mox'>18 | moy'<5 | moy'>8
+mox'<59 | moy'<19 | moy'>22
+mox'<9 | mox'>12 | moy'<20 | moy'>22
+mox'<47 | mox'>49 | moy'<11 | moy'>14
+
+# No crash of moving obstacle with wall
+# vv done
+mox != 0
+moy != 0
+mox != 63
+moy != 29
+# ^^ done
+
+[SYS_LIVENESS]
+# Cycling between the goals
+!requestPending1
+!requestPending2
+
+
+
+
+[SYS_TRANS]
+# Track delivery requests - Part 1
+(x=10 & y=19) & (x'=10 & y'=19) -> ! requestPending1'
+!((x=10) & (y=19) & (x'=10) & (y'=19)) -> (requestPending1' <-> (requestPending1 | deliveryrequest))
+
+(x=50) & (y=12) & (x'=50 & y'=12) -> !requestPending2'
+!((x=50) & (y=12) & (x'=50 & y'=12)) -> (requestPending2' <-> (((x=10) & (y=19) & requestPending1) | requestPending2))
+
+
+[SYS_TRANS]
+# No crash with moving obstacle
+x' < mox' | y' < moy' | x' > mox' | y' > moy'
+
+[ENV_LIVENESS]
+mox'=62 & moy'=28

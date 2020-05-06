@@ -1,0 +1,56 @@
+\section{Preliminaries}
+\label{sec_prel}
+
+
+
+\subsubsection{Two-player Games}
+%
+A two-player game is a tuple $\game = (\gstates,
+\ginit, \alphabet, \delta, \Acc)$,
+where $\gstates$ is a finite set of states, $\ginit \in \gstates$ is the initial state,
+$\delta: \gstates \times \alphabet \rightarrow \gstates$
+is a complete transition function, $\Acc: (\gstates \times \alphabet \times \gstates)^\omega \rightarrow \bools$ is a winning condition
+and defines the qualitative objective of the game.
+%
+The game is played  by two players:  the system and the environment. In every state $s\in \gstates$
+(starting with $\ginit$), the environment chooses an input
+$\isymb \in \ialphabet$, and then the system chooses some output $\osymb \in \oalphabet$. These choices define the next state $s' = \delta(s,(\isymb, \osymb))$, and so on. The resulting (infinite)
+sequence $\overline{\pi} = (\ginit,\isymb, \osymb, s_1) (s_1,\isymb, \osymb, s_2) \ldots$ is called a \emph{play}.
+A deterministic  \emph{strategy} for the environment is a function
+$\rho_e: \gstates^* \rightarrow \ialphabet$.
+A nondeterministic \emph{strategy} for the system is a relation $\rho_s:
+\gstates^* \times \ialphabet \rightarrow 2^{\oalphabet}$ and a
+deterministic  strategy for the system is a function $\rho_s:
+\gstates^* \times \ialphabet \rightarrow \oalphabet$.\looseness=-1
+
+A play $\overline{\pi}$ is \emph{won} by the system iff $\Acc(\overline{\pi})=\top$.
+ A strategy is \emph{winning} for the system if all plays $\overline{\pi}$ that can be
+constructed when defining the outputs using the strategy result in
+$\Acc(\overline{\pi})=\top$. The \emph{winning region} $\Win$ is the set of states
+from which a winning strategy exists.
+A \emph{permissive} winning strategy  $\rho_s:
+\gstates^* \times \ialphabet \rightarrow 2^{\oalphabet}$ is a strategy that is not only winning for the system, but also contains all deterministic winning strategies.
+
+A \emph{safety game} defines $\Acc$ via a set $F\subseteq \gstates$ of
+safe states: $\Acc(\overline{\pi})=\top$ iff $g_i \in F$ for all $i \geq 0$, i.e., if only safe states are visited in the play $\overline{\pi}$. Otherwise, $\Acc(\overline{\pi})=\bot$.
+%If a safety game is won by the system player, then there exists a permissive strategy $\rho_s$ that is \emph{memoryless}, i.e., has the form $\rho_s:
+%\gstates \times \ialphabet \rightarrow 2^{\oalphabet}$.
+%
+The \emph{\buchi} winning condition is $\Acc(\overline{\pi})=\top$ iff $\inf(\overline{\pi})
+\cap F \neq \emptyset$, where $F \subseteq Q$ is
+the set of accepting states and $\inf(\overline{\pi})$ is the set of states that occur infinitely often in $\overline{\pi}$.
+We abbreviate the \buchi condition as $\mathcal{B}(F)$.
+A \emph{Generalized Reactivity 1} (GR(1))
+acceptance condition is a predicate $\bigwedge_{i=1}^{m} \mathcal{B}(E_{i}) \rightarrow \bigwedge_{i=1}^{n} \mathcal{B}(F_{i})$, with
+$E_i \subseteq Q$ and $F_i \subseteq Q$.
+\looseness=-1
+%
+\iffalse MEAN-PAYOFF
+A \emph{mean-payoff game} is a game where $\Val$ is defined via an edge labeling function $r :
+\delta \rightarrow \{-W,\dots, W\}$, which assigns values between $-W$ and $W$ to edges. For a play $\pi =
+e_0 e_1 e_2 \dots \in \delta^\omega, \Val(\overline{\pi}) = \lim \sup_{n\rightarrow\infty} \frac{1}{n+1} \sum_{i=0}^{n} r(e_i)$.
+\fi
+
+
+
+

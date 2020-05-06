@@ -1,0 +1,141 @@
+We begin by defining a formal model for describing surveillance strategy synthesis problems, in the form of a two-player game between an agent and a target, in which the agent has only partial information about the target's location.
+
+\subsection{Surveillance Game Structures}\label{sec:surveillance-games}
+We define a \emph{surveillance game structure} to be  a tuple $G = (\game,\vis)$ where $\game  = (\gstates,
+\ginit, \alphabet, \delta, \Acc)$, with the following components:
+\begin{itemize}
+\item $\gstates = L_a \times L_t$ is the set of states, with $L_a$ the set of locations of the agent, and $L_t$ the locations of the target;
+\item $s^\init = (l_a^\init,l_t^\init)$ is the initial state;
+\item $\alphabet = (\ialphabet,\oalphabet)$ is the joint action of the target and agent respectively - in this case $\ialphabet = \oalphabet = \{N,S,W,E\}$;
+\item $\delta: \states \times \alphabet \rightarrow \states$ is the transition relation describing the possible moves of the agent and the target; and
+\item $\vis : \states \to \bools$ is a function that maps a state $(l_a,l_t)$ to $\true$ iff \emph{ position $l_t$ is in the area of sight of $l_a$}.
+\end{itemize}
+
+
+\begin{figure}[h!]
+\centering
+\subfloat[Surveillance arena \label{simple-grid}]{
+%\includegraphics[scale=.33]{figs/7x7_safety.png}
+\begin{tikzpicture}[scale=0.8]
+\draw[step=0.5cm,color=gray] (-1.5,-1.5) grid (1,1);
+\filldraw[fill=blue,draw=black] (+0.75,+0.75) circle (0.2cm);
+\filldraw[fill=red,draw=black] (0,0) rectangle (-0.5,-0.5);
+\filldraw[fill=red,draw=black] (-0.5,0) rectangle (-1,-0.5);
+\filldraw[fill=red,draw=black] (0,0) rectangle (0.5,-0.5);
+\filldraw[fill=blue!40!white,draw=black] (+0.75,+0.75) circle (0.2cm);
+\filldraw[fill=orange!40!white,draw=black] (0.25,-0.75) circle (0.2cm);
+\node at (-1.30,+0.75) {\tiny{0}};
+\node at (-0.80,+0.75) {\tiny{1}};
+\node at (-0.30,+0.75) {\tiny{2}};
+\node at (0.20,+0.75) {\tiny{3}};
+\node at (0.73,+0.75) {\tiny{4}};
+\node at (-1.33,+0.25) {\tiny{5}};
+\node at (-0.85,+0.25) {\tiny{6}};
+\node at (-0.35,+0.25) {\tiny{7}};
+\node at (0.25,+0.25) {\tiny{8}};
+\node at (0.75,+0.25) {\tiny{9}};
+\node at (-1.28,-0.27) {\tiny{10}};
+\node at (-0.78,-0.27) {\tiny{11}};
+\node at (-0.28,-0.27) {\tiny{12}};
+\node at (0.28,-0.27) {\tiny{13}};
+\node at (0.75,-0.25) {\tiny{14}};
+\node at (-1.3,-0.75) {\tiny{15}};
+\node at (-0.8,-0.75) {\tiny{16}};
+\node at (-0.3,-0.75) {\tiny{17}};
+\node at (0.25,-0.75) {\tiny{18}};
+\node at (0.75,-0.75) {\tiny{19}};
+\node at (-1.35,-1.25) {\tiny{20}};
+\node at (-0.85,-1.25) {\tiny{21}};
+\node at (-0.35,-1.25) {\tiny{22}};
+\node at (0.25,-1.25) {\tiny{23}};
+\node at (0.75,-1.25) {\tiny{24}};
+\end{tikzpicture}
+\hspace{.3cm}}
+%\hfill
+\subfloat[Transitions from the initial state\label{fig:simple-transitions}]{
+\input{figs/simple-transitions.tex}
+}
+
+\caption{A simple surveillance game on a grid arena. Obstacles are shown in red, the agent (at location 4) and the target (at location 18) are coloured in blue and orange respectively.}
+\label{fig:simple-surveillance-game}
+
+\end{figure}
+
+
+The transition relation $\delta$ encodes the one-step move of both the target and the agent, where the target moves first and the agent moves second. For a state $(l_a,l_t)$ we define $\succs_t(l_a,l_t)$ as the set of successor locations of the target.
+
+\begin{example}\label{ex:simple-surveillance-game}
+Figure~\ref{fig:simple-surveillance-game} shows an example of a surveillance game on a grid.  The sets of possible locations $L_a$ and $L_t$ for the agent and the target consist of the squares of the  grid. The transition relation $\delta$ encodes the possible one-step moves of both the agent and the target on the grid, and incorporates all desired constraints. For example, moving to an occupied location, or an obstacle, is not allowed. Figure~\ref{fig:simple-transitions} shows the possible transitions from the initial state $(4,18)$.
+
+The function $\vis$ encodes straight-line visibility: a location $l_t$ is visible from a location $l_a$ if there is no obstacle on the straight line between them. Initially the target is not in the area of sight of the agent, but the agent knows the initial position of the target. However, once the target moves to one of the locations reachable in one step, in this case, locations $\{17,19,23\}$, this might no longer be the case. More precisely, if the target moves to location $19$ (by choosing $\sigma_i = W$), then the agent observes its location, but if it moves to one of the others, then the agent no longer knows its exact location.
+\end{example}
+
+
+
+\subsection{Belief-Set Game Structures}
+
+For surveillance games, when the target is not in vision, it is natural that we need reason about the \emph{belief} the agent has in the location of the target. 
+ To this end, we can employ a powerset construction which is commonly used to transform a partial-information game into a perfect-information one, by explicitly tracking the knowledge one player has as a set of possible states of the other player.
+
+Given a set $B$, we denote with $\mathcal{P}(B) = \{B' \mid B'\subseteq B\}$ the powerset (set of all subsets) of $B$.
+
+For a surveillance game structure $G = (\game,\vis)$ we define the corresponding \emph{belief-set game structure} $G_\belief  = (\game_\belief,\vis)$ where $\game_\belief = (\states_\belief,s^\init_\belief,\alphabet,\delta_\belief)$ with the following components:
+\begin{itemize}
+\item $\states_\belief = L_a \times \beliefs$ is the set of states, with $L_a$ the set of locations of the agent, and $\beliefs$ the set of \emph{belief sets} describing information about the location of the target;
+\item $s^\init_\belief = (l_a^\init,\{l_t^\init\})$ is the initial state;
+\item $\alphabet$ is the same as given in the underlying surveillance game;
+\item $\delta_\belief: \states_\belief \times \ialphabet \rightarrow \states_\belief \times \states_\belief$ is the transition relation.
+\end{itemize}
+\begin{figure}
+\input{figs/simple-belief-transitions.tex}
+
+
+\caption{Transitions from the initial state in the belief-set game from Example~\ref{ex:simple-belief-game} where $\vis(4,17) = \vis(4,23) = \false$.}
+\label{fig:simple-belief-game}
+
+\end{figure}
+
+\begin{example}\label{ex:simple-belief-game}
+Consider the surveillance game structure from Example~\ref{ex:simple-surveillance-game}. The initial belief set is $\{18\}$, consisting of the target's initial position. After the first move of the target, there are two possible belief sets: the set $\{19\}$ resulting from the move to a location in the area of sight of the agent, and $\{17,23\}$ consisting of the two invisible locations reachable in one step from location $18$.
+Figure~\ref{fig:simple-belief-game} shows the successor states of the initial state $(4,\{18\})$ in $G_\belief$. 
+\end{example}
+
+A \emph{run} in the game $G_\belief$ is an infinite sequence $s_0,s_1,\ldots$ of states in $\states_\belief$, where $s_0 = s_\belief^\init$,  $\delta_\belief(s_i,\sigma) = s_{i+1}$ for all $i$. 
+
+A \emph{strategy for the target in $G_\belief$} is a function $f_t: \states_\belief \to \beliefs$ such that a strategy for the target suggests a move resulting in some belief set reachable from some location in the current belief.
+
+A \emph{strategy for the agent in $G_\belief$} is a function $f_a : S_\belief \times \beliefs \to S_\belief$. Intuitively, a strategy for the agent suggests a move based on the observed history of the play and the current belief about the target's position.
+
+The outcome of given strategies $f_a$ and $f_t$ for the agent and the target in $G_\belief$, denoted $\outcome(G_\belief,f_a,f_t)$, is a run $s_0,s_1,\ldots$ of $G_\belief$ such that for every $i \geq 0$, we have $s_{i+1} = f_a(s_0,\ldots,s_i,B_t^i)$, where $B_t^i = f_t(s_0,\ldots,s_i)$.
+
+
+\subsection{Temporal Surveillance Objectives}
+Since the states of a belief-set game structure track the information that the agent has, we can state and interpret surveillance objectives over its runs. We now formally define the surveillance properties in which we are interested. 
+
+We consider a set of \emph{surveillance predicates} $\SP = \{p_k \mid k \in \nats_{>0}\}$, where for $k \in \nats_{>0}$ we say that a state $(l_a,B_t)$ in the belief game structure satisfies $p_k$ (denoted $(l_a,B_t) \models p_k$) iff 
+$|\{l_t \in B_t \mid \vis(l_a,l_t)  = \false \}| \leq k$. Intuitively, $p_k$ is satisfied by the states in the belief game structure where the size of the belief set does not exceed the threshold $k \in \nats_{>0}$.
+
+We study surveillance objectives expressed by formulas of linear temporal logic (LTL) over surveillance predicates.
+% Since we are only interested in surveillance predicates that upper-bound the size of belief sets, we consider LTL formulas in negation normal form, in which we disallow the occurrence of negation in front of surveillance predicates.
+ The LTL surveillance formulas  are generated by the grammar\\
+$\varphi := p \mid \true \mid \false \mid \varphi \wedge \varphi \mid \varphi \vee \varphi \mid \LTLnext  \varphi  \mid \varphi \LTLuntil \varphi \mid \varphi \LTLrelease \varphi,$\\
+where $p \in \SP$ is a surveillance predicate, $\LTLnext$ is the \emph{next} operator, $\LTLuntil$ is the \emph{until} operator, and $\LTLrelease$ is the \emph{release} operator. We also define the derived operators 
+\emph{finally}: $\LTLfinally \varphi = \true \LTLuntil \varphi$ and 
+\emph{globally}: $\LTLglobally \varphi = \false \LTLrelease \varphi$.
+
+LTL formulas are interpreted over (infinite) runs. If a run $\rho$ satisfies an LTL formula $\varphi$, we write $\rho \models \varphi$. The formal definition of LTL semantics can be found in~\cite{BaierKatoen08}. Here we informally explain the meaning of the formulas we use.
+
+Of special interest will be surveillance formulas of the form $\LTLglobally p_k$, termed \emph{safety surveillance objective}, and $\LTLglobally\LTLfinally p_k$, called \emph{liveness surveillance objective}.
+Intuitively, the safety surveillance formula $\LTLglobally p_k$ is satisfied if at each point in time the size of the belief set does not exceed $k$. The liveness surveillance objective $\LTLglobally\LTLfinally p_k$, on the other hand, requires that infinitely often this size is below or equal to $k$.
+
+
+\subsection{Surveillance Synthesis Problem}
+A \emph{surveillance game} is a pair $(G,\varphi)$, where $G$ is a surveillance game structure and $\varphi$ is a surveillance objective. A \emph{winning strategy for the agent for $(G,\varphi)$} is a strategy $f_a$ for the agent in the corresponding belief-set game structure $G_\belief$ such that for every strategy $f_t$ for the target in $G_\belief$ it holds that $\outcome(G_\belief,f_a,f_t) \models \varphi$. Analogously, a \emph{winning strategy for the target for $(G,\varphi)$} is a strategy $f_t$ such that, for every strategy $f_a$ for the agent in $G_\belief$, it holds that $\outcome(G_\belief,f_a,f_t) \not\models \varphi$.
+A \emph{permissive} winning strategy for the agent $f_s$ is a strategy that is not only winning for the agent, but also contains all deterministic winning strategies.
+
+{\bf Surveillance synthesis problem:} Given a surveillance game $(G,\varphi)$, compute a permissive winning strategy for the agent for $(G,\varphi)$, or determine that such a strategy does not exist.
+
+
+It is well-known that two-player perfect-information games with LTL objectives over finite-state game structures are determined, that is exactly one of the players has a winning strategy~\cite{BorelDeterminacy}. This means that the agent does not have a winning strategy for a given surveillance game, if and only if the target has a winning strategy for this game. We refer to winning strategies of the target as \emph{counterexamples}.
+
+We note that to avoid the state space blow up arising from the subset construction, we can solve these games using the techniques outlined in \cite{Bh2018}

@@ -1,0 +1,20 @@
+\begin{tikzpicture}[node distance=.7 cm,auto,>=latex',line join=bevel,transform shape,scale=.75]
+\node at (0,0) (s0) {$v_0:(4,18)$};
+\node  [below left of=s0,yshift=-.2cm,xshift=-2.2cm] (s1) {$v_1:(3,\{Q_2\})$};
+\node  [below right of=s0,yshift=-.2cm,xshift=2.2cm] (s2) {$v_2:(9,\{Q_2\})$};
+\node  [below of=s1,yshift=-.2cm] (s4) {$v_4:(4,A)$};
+\node  [below of=s2,yshift=-.2cm] (s7) {$v_7:(8,A)$};
+\node  [left of=s4,xshift=-1cm] (s3) {$v_3:(2,A)$};
+\node  [right of=s4,xshift=1cm] (s5) {$v_5:(8,A)$};
+\node  [left of=s7,xshift=-1cm] (s6) {$v_6:(4,A)$};
+\node  [right of=s7,xshift=1cm] (s8) {$v_8:(14,A)$};
+\draw [->] (s0) edge (s1.north);
+\draw [->] (s0) edge (s2.north);
+\draw [->] (s1) edge (s3.north);
+\draw [->] (s1) edge (s4.north);
+\draw [->] (s1) edge (s5.north);
+\draw [->] (s2) edge (s6.north);
+\draw [->] (s2) edge (s7.north);
+\draw [->] (s2) edge (s8.north);
+
+\end{tikzpicture}

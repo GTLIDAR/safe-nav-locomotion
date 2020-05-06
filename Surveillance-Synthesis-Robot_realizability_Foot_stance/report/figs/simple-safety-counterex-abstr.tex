@@ -1,0 +1,8 @@
+\begin{tikzpicture}[node distance=.7 cm,auto,>=latex',line join=bevel,transform shape,scale=.75]
+\node at (0,0) (s0) {$(4,18)$};
+\node  [below left of=s0,yshift=-.5cm,xshift=-.5cm] (s1) {$(3,\{Q_4,Q_5\})$};
+\node  [below right of=s0,yshift=-.5cm,xshift=.5cm] (s2) {$(9,\{Q_4,Q_5\})$};
+
+\draw [->] (s0) edge (s1.north);
+\draw [->] (s0) edge (s2.north);
+\end{tikzpicture}
