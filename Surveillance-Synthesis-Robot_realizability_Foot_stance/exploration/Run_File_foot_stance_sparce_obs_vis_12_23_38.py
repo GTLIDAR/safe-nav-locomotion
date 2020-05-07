@@ -1,7 +1,7 @@
 from gridworld import *
 import argparse
 # import write_structured_slugs_copy_2
-import write_structured_slugs_past_action_foot_stance_yingke_specs_step_height_23_38_no_step_over
+import write_structured_slugs_past_action_foot_stance_MP_specs_step_height_23_38_no_step_over
 import compute_all_vis
 import cv2
 # import visibility
@@ -352,7 +352,7 @@ if __name__ == '__main__':
         #                                                            pg[n], belief_safety=0, belief_liveness=0,
         #                                                            target_reachability=False, PUDO_targets = PUDO_t)
 
-        write_structured_slugs_past_action_foot_stance_yingke_specs.write_to_slugs_part_dist(infile, gwg, initial[n], moveobstacles[0], iset,[],
+        write_structured_slugs_past_action_foot_stance_MP_specs_step_height_23_38_no_step_over.write_to_slugs_part_dist(infile, gwg, initial[n], moveobstacles[0], iset,[],
                                                                    targets[n], vel[n], visdist[n], allowed_states[n],
                                                                    [],
                                                                    pg[n], belief_safety=0, belief_liveness=0,
