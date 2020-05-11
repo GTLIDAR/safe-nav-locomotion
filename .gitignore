@@ -1,3 +1,4 @@
 *.pyc
 *.json
-Bipedal_Locomotion_Task_Planner/Navigation/Examples/Integration/
+**/Integration/
+Bipedal_Locomotion_Task_Planner/Navigation/Joans_Vis_Studio.code-workspace

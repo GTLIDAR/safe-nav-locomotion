@@ -75,7 +75,7 @@ def getGridstate(gwg,currstate,dirn):
         return currstate - gwg.ncols
 
 
-def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibilityset):
+def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibilityset,jsonfile):
     automaton = parseJson(filename)
     automaton_state = 0
     xstates = list(set(gwg.states))
@@ -85,7 +85,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         allstates.append(i)
     gwg.colorstates = [set(), set()]
     gridstate = copy.deepcopy(moveobstacles[0])
-    output = BeliefIOParser('Examples/Integration/TEST123.json')
+    output = BeliefIOParser(jsonfile)
     while True:
         output.saveState(gwg, automaton, automaton_state,gridstate)
         envstate = automaton[automaton_state]['State']['st']
