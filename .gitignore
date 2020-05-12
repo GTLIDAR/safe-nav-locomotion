@@ -2,3 +2,5 @@
 *.json
 **/Integration/
 Bipedal_Locomotion_Task_Planner/Navigation/Joans_Vis_Studio.code-workspace
+**/Examples
+*.slugsin
