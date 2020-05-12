@@ -5,8 +5,7 @@ import itertools
 from tqdm import *
 import simplejson as json
 import math
-# from gridworld import *
-from gridworld_height_2 import *
+from gridworld import *
 import time
 
 

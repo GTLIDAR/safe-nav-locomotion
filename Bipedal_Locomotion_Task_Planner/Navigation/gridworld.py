@@ -125,9 +125,32 @@ class Gridworld():
             tempobs.append(self.coords2state_works(row+1,col-1))
             tempobs.append(self.coords2state_works(row,col-1))
             tempobs.append(self.coords2state_works(row-1,col-1))
+
+            tempobs.append(self.coords2state_works(row-2,col))
+            tempobs.append(self.coords2state_works(row-2,col+1))
+            tempobs.append(self.coords2state_works(row-2,col+2))
+            tempobs.append(self.coords2state_works(row-1,col+2))
+            tempobs.append(self.coords2state_works(row,col+2))
+            tempobs.append(self.coords2state_works(row+1,col+2))
+            tempobs.append(self.coords2state_works(row+2,col+2))
+            tempobs.append(self.coords2state_works(row+2,col+1))
+            tempobs.append(self.coords2state_works(row+2,col))
+            tempobs.append(self.coords2state_works(row+2,col-1))
+            tempobs.append(self.coords2state_works(row+2,col-2))
+            tempobs.append(self.coords2state_works(row+1,col-2))
+            tempobs.append(self.coords2state_works(row,col-2))
+            tempobs.append(self.coords2state_works(row-1,col-2))
+            tempobs.append(self.coords2state_works(row-2,col-2))
+            tempobs.append(self.coords2state_works(row-2,col-1))
+
             for location in tempobs:
                 if location in self.states:
                     self.obsborder.add(location)
+
+        self.level1states = [291,292,293,294,295,296,329,334,367,372,405,410,443,448,481,482,483,484,485,486]
+        self.level2states = [330,331,332,333,368,369,370,371,406,407,408,409,444,445,446,447]
+        self.level0states = set(self.states) - set(self.level1states) - set(self.level2states)
+        # self.level1states.append
             
 
         ########## Jonas ##########

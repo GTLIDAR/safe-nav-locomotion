@@ -1,5 +1,4 @@
-# from gridworld import *
-from gridworld_height_2 import *
+from gridworld import *
 import argparse
 import write_structured_slugs_past_action_foot_stance_MP_specs_collision_allowed
 import compute_all_vis
