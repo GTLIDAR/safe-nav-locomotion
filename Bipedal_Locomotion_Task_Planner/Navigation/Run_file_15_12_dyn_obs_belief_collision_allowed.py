@@ -58,7 +58,7 @@ if __name__ == '__main__':
     # mapname = 'BelieEvasion_64_30'
     # mapname = 'BelieEvasion_fifteen'
     # mapname = 'BelieEvasion_15_20_sparse_obs'
-    mapname = 'BelieEvasion_15_12_height_2'
+    mapname = 'BelieEvasion_15_12_new'
     
     #####     2) Chose grid size     ###### rownum = 15
     # colnum = 20
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     h, w = image.shape[:2]
     folder_locn = 'Examples/'
     #####     3) name trial     #####
-    example_name = 'benchmark_15_12_avoid_collisions_with_dyn_obs_collision_allowed_test_without_last_motionplanner_specs'
+    example_name = 'benchmark_15_12_collision_allowed_new_env_test'
 
     jsonfile_name = example_name + ".json"
     trial_name = folder_locn + example_name
@@ -113,7 +113,7 @@ if __name__ == '__main__':
     # 38_23
     initial = [140]
     moveobstacles = [28]
-    PUDO_t = [143,21]
+    PUDO_t = [144,22]
 
     # initial = [42]
     # moveobstacles = [278]
@@ -229,11 +229,9 @@ if __name__ == '__main__':
 
         #####     6) chose specification writing file     #####
 
-        write_structured_slugs_past_action_foot_stance_MP_specs_collision_allowed.write_to_slugs_part_dist(infile, gwg, initial[n], moveobstacles[0], iset,[],
-                                                                   targets[n], vel[n], visdist[n], allowed_states[n],
-                                                                   [],
-                                                                   pg[n], belief_safety=0, belief_liveness=0,
-                                                                   target_reachability=False, PUDO_targets = PUDO_t)
+        write_structured_slugs_past_action_foot_stance_MP_specs_collision_allowed.write_to_slugs_part_dist(infile, gwg, initial[n], moveobstacles[0], iset, PUDO_targets = PUDO_t,
+                                                                   visdist =  visdist[n], allowed_states = allowed_states[n],
+                                                                   partitionGrid = pg[n])
         
         noww = time.time()
         print('Writing specifications took ', noww - then, ' seconds')

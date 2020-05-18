@@ -176,9 +176,9 @@ def vis_parser(file_target_vis):
     f2parse.close()
     return vis_dict
 ##################################################################################
-def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,visset_target,targets,vel=1,visdist = 5,allowed_states = [],
+def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_targets,visset_target = [],targets = [],vel=1,visdist = 5,allowed_states = [],
     fullvis_states = [],partitionGrid =dict(), belief_safety = 0, belief_liveness = 0, target_reachability = False,
-    target_has_vision = False, target_vision_dist = 1.1, filename_target_vis = None, compute_vis_flag = False, PUDO_targets=[92,100]):
+    target_has_vision = False, target_vision_dist = 1.1, filename_target_vis = None, compute_vis_flag = False):
     nonbeliefstates = gw.states
     beliefcombs = powerset(partitionGrid.keys())
     #beliefcombs is all possible combination of belief states defined in main file

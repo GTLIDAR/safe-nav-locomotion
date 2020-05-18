@@ -367,7 +367,7 @@ import cv2
 #
 # img2.save("BelieEvasion_15_12_height_2.png")
 
-os.chdir(r'/home/jwarnke3/Documents/Slugs/Surveillance-Synthesis-Robot_realizability_Foot_stance/exploration/figures')
+os.chdir(r'../Bipedal_Locomotion_Task_Planner/Navigation/figures')
 
 filename = 'chicago4_45_2454_5673_map.png'
 # image = cv2.imread(specFile, cv2.IMREAD_GRAYSCALE)
@@ -379,7 +379,6 @@ img2.paste((255),(0,0,15,12))
 # img2.show()
 pixels=img2.load()
 
-pixels[3,4] = 0
 pixels[4,4] = 0
 pixels[5,4] = 0
 pixels[6,4] = 0
@@ -391,4 +390,4 @@ pixels[6,4] = 0
 
 img2.show()
 
-img2.save("BelieEvasion_15_12_height_2.png")
+img2.save("BelieEvasion_15_12_new_3_stat_obs.png")

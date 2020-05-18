@@ -13,7 +13,7 @@ image = cv2.resize(image,dsize=(colnum,rownum),interpolation=cv2.INTER_AREA)
 h, w = image.shape[:2]
 
 folder_locn = 'Examples/'
-example_name = 'benchmark_15_12_avoid_collisions_with_dyn_obs_collision_allowed_test'
+example_name = 'benchmark_15_12_avoid_collisions_with_dyn_obs_collision_allowed_test_without_last_motionplanner_specs'
 trial_name = folder_locn + example_name
 
 outfile = trial_name + '.json'
