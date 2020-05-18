@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e97864fc-478c-4026-a0d9-baa0d6cd3f2c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/State_Decode.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PNG_Gen.py" beforeDir="false" afterPath="$PROJECT_DIR$/PNG_Gen.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/Example1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/Example1.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/Example1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/Example1.structuredslugs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/Example1_perm.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/Example1_perm.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/Example1_perm.slugsin" beforeDir="false" afterPath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/Example1_perm.slugsin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/Example1_perm.structuredslugs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/Example1_perm.structuredslugs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/Example1_perm_readable" beforeDir="false" afterPath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/Example1_perm_readable" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/Exploration_Permissive_Example" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/Gazebo_Dist_example.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/Gazebo_Dist_example.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/gridworld.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/gridworld.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/simulateController.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/simulateController.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/write_structured_slugs.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Surveillance-Synthesis-master_Jonas/exploration/write_structured_slugs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../slugs-master/Jonas/Bipedal_Navigation/Moving_Obstacle/ReadMe.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../slugs-master/Jonas/Bipedal_Navigation/Moving_Obstacle/ReadMe.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../slugs-master/Jonas/Bipedal_Navigation/Moving_Obstacle/taskPlanner7_MO_no_attack_when_stop_3.structuredslugs" beforeDir="false" afterPath="$PROJECT_DIR$/../../slugs-master/Jonas/Bipedal_Navigation/Moving_Obstacle/taskPlanner7_MO_no_attack_when_stop_3.structuredslugs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../slugs-master/Jonas/Simple_Belief_Abstraction/basicAbstractEvasion.structuredslugs" beforeDir="false" afterPath="$PROJECT_DIR$/../../slugs-master/Jonas/Simple_Belief_Abstraction/basicAbstractEvasion.structuredslugs" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="1XUhw7Rafdg6GOdQTgI79FCkKdD" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+  </component>
+  <component name="RunManager" selected="Python.PNG_Gen">
+    <configuration name="PNG_Gen" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="PNG_Gen" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PNG_Gen.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="State_Decode" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="PNG_Gen" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/State_Decode.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="PNG_Gen" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.PNG_Gen" />
+        <item itemvalue="Python.State_Decode" />
+        <item itemvalue="Python.Test" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1745" height="263" key="GridCell.Tab.0.bottom" timestamp="1585636202454">
+      <screen x="1920" y="0" width="2560" height="1440" />
+    </state>
+    <state width="1745" height="263" key="GridCell.Tab.0.bottom/67.219.1853.1053/1920.0.2560.1440@1920.0.2560.1440" timestamp="1584823224177" />
+    <state width="1830" height="263" key="GridCell.Tab.0.bottom/67.219.1853.1053/1920.0.2560.1440@67.219.1853.1053" timestamp="1583091441008" />
+    <state width="1745" height="263" key="GridCell.Tab.0.bottom/67.387.1853.1053/1920.0.2560.1440@1920.0.2560.1440" timestamp="1585636202454" />
+    <state width="1745" height="263" key="GridCell.Tab.0.center" timestamp="1585636202454">
+      <screen x="1920" y="0" width="2560" height="1440" />
+    </state>
+    <state width="1745" height="263" key="GridCell.Tab.0.center/67.219.1853.1053/1920.0.2560.1440@1920.0.2560.1440" timestamp="1584823224177" />
+    <state width="1830" height="263" key="GridCell.Tab.0.center/67.219.1853.1053/1920.0.2560.1440@67.219.1853.1053" timestamp="1583091441008" />
+    <state width="1745" height="263" key="GridCell.Tab.0.center/67.387.1853.1053/1920.0.2560.1440@1920.0.2560.1440" timestamp="1585636202454" />
+    <state width="1745" height="263" key="GridCell.Tab.0.left" timestamp="1585636202454">
+      <screen x="1920" y="0" width="2560" height="1440" />
+    </state>
+    <state width="1745" height="263" key="GridCell.Tab.0.left/67.219.1853.1053/1920.0.2560.1440@1920.0.2560.1440" timestamp="1584823224177" />
+    <state width="1830" height="263" key="GridCell.Tab.0.left/67.219.1853.1053/1920.0.2560.1440@67.219.1853.1053" timestamp="1583091441008" />
+    <state width="1745" height="263" key="GridCell.Tab.0.left/67.387.1853.1053/1920.0.2560.1440@1920.0.2560.1440" timestamp="1585636202454" />
+    <state width="1745" height="263" key="GridCell.Tab.0.right" timestamp="1585636202454">
+      <screen x="1920" y="0" width="2560" height="1440" />
+    </state>
+    <state width="1745" height="263" key="GridCell.Tab.0.right/67.219.1853.1053/1920.0.2560.1440@1920.0.2560.1440" timestamp="1584823224177" />
+    <state width="1830" height="263" key="GridCell.Tab.0.right/67.219.1853.1053/1920.0.2560.1440@67.219.1853.1053" timestamp="1583091441008" />
+    <state width="1745" height="263" key="GridCell.Tab.0.right/67.387.1853.1053/1920.0.2560.1440@1920.0.2560.1440" timestamp="1585636202454" />
+    <state x="3143" y="407" key="SettingsEditor" timestamp="1584810951187">
+      <screen x="1920" y="0" width="2560" height="1440" />
+    </state>
+    <state x="3143" y="407" key="SettingsEditor/67.219.1853.1053/1920.0.2560.1440@1920.0.2560.1440" timestamp="1584810951187" />
+    <state x="2863" y="327" key="search.everywhere.popup" timestamp="1583083938167">
+      <screen x="1920" y="0" width="2560" height="1440" />
+    </state>
+    <state x="2863" y="327" key="search.everywhere.popup/67.219.1853.1053/1920.0.2560.1440@1920.0.2560.1440" timestamp="1583083938167" />
+  </component>
+</project>
