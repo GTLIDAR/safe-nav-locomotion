@@ -1,6 +1,6 @@
 from gridworld import *
 import argparse
-import write_structured_slugs_past_action_foot_stance_MP_specs_collision_allowed
+import write_structured_slugs_past_action_foot_stance_MP_specs
 import compute_all_vis
 import cv2
 # import visibility
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     h, w = image.shape[:2]
     folder_locn = 'Examples/'
     #####     3) name trial     #####
-    example_name = 'benchmark_15_12_avoid_collisions_with_dyn_obs'
+    example_name = 'benchmark_15_12_avoid_collisions_with_dyn_obs_test'
     jsonfile_name = example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'

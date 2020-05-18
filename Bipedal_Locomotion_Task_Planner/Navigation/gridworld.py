@@ -128,19 +128,19 @@ class Gridworld():
 
             tempobs.append(self.coords2state_works(row-2,col))
             tempobs.append(self.coords2state_works(row-2,col+1))
-            tempobs.append(self.coords2state_works(row-2,col+2))
+            # tempobs.append(self.coords2state_works(row-2,col+2))
             tempobs.append(self.coords2state_works(row-1,col+2))
             tempobs.append(self.coords2state_works(row,col+2))
             tempobs.append(self.coords2state_works(row+1,col+2))
-            tempobs.append(self.coords2state_works(row+2,col+2))
+            # tempobs.append(self.coords2state_works(row+2,col+2))
             tempobs.append(self.coords2state_works(row+2,col+1))
             tempobs.append(self.coords2state_works(row+2,col))
             tempobs.append(self.coords2state_works(row+2,col-1))
-            tempobs.append(self.coords2state_works(row+2,col-2))
+            # tempobs.append(self.coords2state_works(row+2,col-2))
             tempobs.append(self.coords2state_works(row+1,col-2))
             tempobs.append(self.coords2state_works(row,col-2))
             tempobs.append(self.coords2state_works(row-1,col-2))
-            tempobs.append(self.coords2state_works(row-2,col-2))
+            # tempobs.append(self.coords2state_works(row-2,col-2))
             tempobs.append(self.coords2state_works(row-2,col-1))
 
             for location in tempobs:

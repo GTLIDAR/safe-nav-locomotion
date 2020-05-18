@@ -549,11 +549,11 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,visse
     file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=0 /\\ stanceFoot=0 -> !turnRight\n")
     file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=0 /\\ stanceFoot=1 -> !turnLeft\n")
 
-    # last updates for yignke's new velocity picking:
-    file.write("!forward /\\ forward' -> stepL' = 1\n")
-    file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=2 /\\ stanceFoot=0 -> !turnLeft\n")
-    file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=2 /\\ stanceFoot=1 -> !turnRight\n")
-    # ^last updates for yignke's new velocity picking
+    # # last updates for yignke's new velocity picking:
+    # file.write("!forward /\\ forward' -> stepL' = 1\n")
+    # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=2 /\\ stanceFoot=0 -> !turnLeft\n")
+    # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=2 /\\ stanceFoot=1 -> !turnRight\n")
+    # # ^last updates for yignke's new velocity picking
 
     file.write('\n')
     file.write('turnRight \/ turnLeft -> stepL != 1 /\ stepL !=2\n')

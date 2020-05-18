@@ -77,6 +77,9 @@ def getGridstate(gwg,currstate,dirn):
 
 def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibilityset,jsonfile):
     automaton = parseJson(filename)
+    # for s in automaton:
+    #     print automaton[s]['State']['s']
+
     automaton_state = 0
     xstates = list(set(gwg.states))
     allstates = copy.deepcopy(xstates)
