@@ -179,22 +179,18 @@ def vis_parser(file_target_vis):
 def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_targets,visset_target = [],targets = [],vel=1,visdist = 5,allowed_states = [],
     fullvis_states = [],partitionGrid =dict(), belief_safety = 0, belief_liveness = 0, target_reachability = False,
     target_has_vision = False, target_vision_dist = 1.1, filename_target_vis = None, compute_vis_flag = False):
-    nonbeliefstates = gw.states
-    beliefcombs = powerset(partitionGrid.keys())
-    #beliefcombs is all possible combination of belief states defined in main file
+    nonbeliefstates = gw.states #these are real physical locations on the grid
+    beliefcombs = powerset(partitionGrid.keys())  #beliefcombs is all possible combination of belief states defined in main file
     allstates = copy.deepcopy(nonbeliefstates)
     for i in range(gw.nstates,gw.nstates + len(beliefcombs)):
         allstates.append(i)
-    allstates.append(len(allstates)) # nominal state if target leaves allowed region
+    allstates.append(len(allstates)) # nominal state if dynamic obstacle leaves allowed region
 
     # target_total_vis = target_visibility(gw)
 
     filename = infile+'.structuredslugs'
     file = open(filename,'w')
-    file.write('[INPUT]\n')
-    # print('nonbeliefstates: ' + str(nonbeliefstates))
-    # print('allstates: ' + str(allstates))
-    # print('len(allstates): ' + str(len(allstates)))
+    file.write('[INPUT]\n') #write components and range of environment state
     file.write('st:0...{}\n'.format(len(allstates) -1))
     file.write('orientation:0...11\n') # 0 = North, 1 = South, 2 = West, 3 = East
     file.write('s:0...{}\n'.format(len(gw.states)-1))
@@ -202,7 +198,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('sOld:0...{}\n'.format(len(gw.states)-1))
     file.write('pastTurnStanceMatchFoot:0...2\n')
 
-    file.write('\n[OUTPUT]\n')
+    file.write('\n[OUTPUT]\n') #Write components and range of system state
     file.write('forward\n')
     file.write('turnLeft\n')
     file.write('turnRight\n')
@@ -211,11 +207,10 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('requestPending1\n')
     file.write('requestPending2\n')
     file.write('stanceFoot:0...2\n')
-    # file.write('s:0...{}\n'.format(len(gw.states)-1))
     if target_reachability:
         file.write('c:0...1\n')
 
-    file.write('\n[ENV_INIT]\n')
+    file.write('\n[ENV_INIT]\n') #write initial value of environment state
     file.write('s = {}\n'.format(init))
     file.write('orientation = 3\n')
     file.write('deliveryrequest\n')
@@ -229,8 +224,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('sOld = {}\n'.format(init))
     
 
-    file.write('\n[SYS_INIT]\n')
-    # file.write('s = {}\n'.format(init))
+    file.write('\n[SYS_INIT]\n') #write initial value of system state
     if target_reachability:
         file.write('c = 0\n')
 
@@ -241,15 +235,15 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # file.write('!stop\n')
 
     # writing env_trans
-    file.write('\n[ENV_TRANS]\n')
+    file.write('\n[ENV_TRANS]\n') #write specifications on how the environment state can transition at each step with "'" indicating the next state
     print 'Writing ENV_TRANS'
-    for st in tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states))): #Only allowed states and belief states
-        if st in allowed_states:
+    for st in tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states))): #iterate through allowed states and belief states (tqdm displays a progress bar)
+        if st in allowed_states: #write transitions if the dynamic obstacle (st) is visible
             for s in allowed_states:
                 repeat = set()
                 stri = "(s = {} /\\ st = {}) -> ".format(s,st)
                 beliefset = set()
-                for a in range(gw.nactionsMO):
+                for a in range(gw.nactionsMO):  
                     for t in np.nonzero(gw.probMO[gw.actlistMO[a]][st])[0]:
                         if t in allowed_states and t not in repeat:
                             if t not in invisibilityset[s]:
@@ -257,19 +251,17 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
                                 repeat.add(t)
                             else:
                                 if not t == s and t not in targets: # not allowed to move on agent's position
-                                    try:
+                                    try: # here we evaluate which grid partitions the robot enters with action a
                                         partgridkeyind = [inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]
                                         t2 = partitionGrid.keys()[partgridkeyind]
-                                        beliefset.add(t2)
+                                        beliefset.add(t2) 
                                     except:
                                         print t
-                                        # Jonay = 1
-                                        # print('test print t')
                         elif t not in allowed_states and t not in gw.obstacles and allstates[-1] not in repeat: # Error state????
                             stri += 'st\' = {} \\/'.format(allstates[-1])
                             # t should always be in allowed state or in obstacle state
                             repeat.add(allstates[-1])
-                if len(beliefset) > 0:
+                if len(beliefset) > 0: #here we write the possible next belief state if the obstacle was at the edge of the visible range at the current step
                     b2 = allstates[len(nonbeliefstates) + beliefcombs.index(beliefset)]
                     if b2 not in repeat:
                         stri += ' st\' = {} \\/'.format(b2)
@@ -283,14 +275,14 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
                 # #####################################################Jonas#######################
                 # .format() fills {} with whats in ()
                 # file.write("s = {} -> !st = {}\n".format(s,s))
-        elif st == allstates[-1]: # Error state?????
+        elif st == allstates[-1]: # Error state
             stri = "st = {} -> ".format(st)
             for t in fullvis_states:
                 stri += "st' = {} \\/ ".format(t)
             stri += "st' = {}".format(st)
             stri += '\n'
             file.write(stri)
-        else: # Belief states
+        else: write transitions if the dynamic obstacle (st) is not visible ransitions between belief states and from belief state to visible state
             for s in tqdm(allowed_states):
                 
                 (row,col)=gw.coords(s)

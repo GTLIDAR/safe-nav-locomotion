@@ -202,7 +202,7 @@ if __name__ == '__main__':
     #b = range(1,25)
     #for state in b:
     #    pg[0][i]=set([state])
-    #    i += 1
+    #    i += 1s
 
     # for state in allowed_states[0]:
     #     pg[0][i]=set([state])
