@@ -1,6 +1,6 @@
 from gridworld import *
 import argparse
-import write_structured_slugs_past_action_foot_stance_MP_specs_step_height_23_38_no_step_over
+import write_structured_slugs_past_action_foot_stance_MP_specs_collision_allowed_env_live_not_visible_state
 import compute_all_vis
 import cv2
 # import visibility
@@ -51,24 +51,26 @@ if __name__ == '__main__':
     print 'time: ' + str(datetime.datetime.now().time())
     ######     1) Choose Environment input figure name:     #####
     # mapname = '3ne'
-    # mapname = 'BeliefTestEvasion'
+    # mapname = 'BelieEvasion_38_23_height'
     # mapname = 'BelieEvasionTwenty'
-    mapname = 'BelieEvasionFifteen_w'
+    # mapname = 'BelieEvasionFifteen_w'
     # mapname = 'chicago4_45_2454_5673_map'
     # mapname = 'BelieEvasion_64_30'
     # mapname = 'BelieEvasion_fifteen'
     # mapname = 'BelieEvasion_15_20_sparse_obs'
-    # mapname = 'BelieEvasion_38_23_height'
+    # mapname = 'BelieEvasion_15_12_new'
+    mapname = 'BelieEvasion_15_12_new_3_stat_obs'
     
-    #####     2) Chose grid size     #####
-    # rownum = 15
+    #####     2) Chose grid size     ###### rownum = 15
     # colnum = 20
     # rownum = 30
     # colnum = 64
-    rownum = 15
-    colnum = 15
+    # rownum = 20
+    # colnum = 20
     # rownum = 23
     # colnum = 38
+    rownum = 12
+    colnum = 15
 
     filename = 'figures/'+mapname+'.png'
     image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
@@ -76,7 +78,7 @@ if __name__ == '__main__':
     h, w = image.shape[:2]
     folder_locn = 'Examples/'
     #####     3) name trial     #####
-    example_name = 'Jonas_Belief_Evasion_Terminal_no_stat_obs_vis_12_removed_YL_specs'
+    example_name = 'benchmark_15_12_collision_allowed_env_live_says_always_some_belief_state_test'
 
     jsonfile_name = example_name + ".json"
     trial_name = folder_locn + example_name
@@ -91,26 +93,28 @@ if __name__ == '__main__':
     targets = [[]]
 
     #####     4) pick initial location for robot and dynamic obstacle, pick goal locations     #####
+    # initial = [16]
+    # moveobstacles = [41]
     # initial = [54]
     # moveobstacles = [47]
     # PUDO_t = [84,143]
 
     # initial = [1076]
     # moveobstacles = [75]
-    # # PUDO_t = [1162,818]
-    # PUDO_t = [842,818]
-
-    # 38_23
-    # initial = [812]
-    # moveobstacles = [90]
-    # PUDO_t = [408,611]
+    # PUDO_t = [1162,818]
 
     # PUDO_t = [84,147]
     # PUDO_t = [189,53]
 
-    initial = [54]
-    moveobstacles = [47]
-    PUDO_t = [92,100]
+# 20x20
+    # initial = [63]
+    # moveobstacles = [73]
+    # PUDO_t = [70,350]
+
+    # 38_23
+    initial = [140]
+    moveobstacles = [28]
+    PUDO_t = [144,22]
 
     # initial = [42]
     # moveobstacles = [278]
@@ -146,17 +150,21 @@ if __name__ == '__main__':
     #           9: set.union(*[set(range(135,150))])  - set(gwg.obstacles), 10: set.union(*[set(range(150,165))])  - set(gwg.obstacles), 11: set.union(*[set(range(165,180))])  - set(gwg.obstacles),
     #            12: set.union(*[set(range(180,195))])  - set(gwg.obstacles), 13: set.union(*[set(range(195,210))])  - set(gwg.obstacles), 14: set.union(*[set(range(210,225))])  - set(gwg.obstacles)}
 
+    # pg[0] = {0: set.union(*[set(range(0,180))])  - set(gwg.obstacles) - set([75,76,77,78,79,80,81,90,91,92,93,94,95,96,97,105,106,107,108,109,110,111,112,120,121,122,123,124,125,126,127,135,136,137,138,139,140,141,142,150,151,152,153,154,155,156,157,165,166,167,168,169,170,171,172]), 
+    #          1: set.union(*[set([75,76,77,90,91,92,105,106,107,120,121,122,135,136,137,150,151,152,165,166,167])])  - set(gwg.obstacles), 
+    #          2: set.union(*[set([78,93,108,123,138,153,168])])  - set(gwg.obstacles),
+    # 		 3: set.union(*[set([79,94,109,124,139,154,169])])  - set(gwg.obstacles), 
+    #          4: set.union(*[set([80,95,110,125,140,155,170])])  - set(gwg.obstacles), 
+    #          5: set.union(*[set([81,96,111,126,141,156,171])])  - set(gwg.obstacles),
+    # 		 6: set.union(*[set([82,97,112,127,142,157,172])])  - set(gwg.obstacles), }
 
 
-    # block1 = []
-    # block2 = []
-    # block3 = []
-    # block4 = []
-    # block5 = []
-    # block6 = []
-    # block7 = []
-    # block8 = []
-    # block9 = []
+    pg[0] = {0: set.union(*[set(range(0,180))])  - set(gwg.obstacles) - set([75,76,77,78,79,80,81,90,91,92,93,94,95,96,105,106,107,108,109,110,111,120,121,122,123,124,125,126,135,136,137,138,139,140,141,150,151,152,153,154,155,156,165,166,167,168,169,170,171]), 
+             1: set.union(*[set([75,76,77,90,91,92,105,106,107,120,121,122,135,136,137,150,151,152,165,166,167,78,93,108,123,138,153,168])])  - set(gwg.obstacles), 
+             2: set.union(*[set([79,94,109,124,139,154,169])])  - set(gwg.obstacles), 
+             3: set.union(*[set([80,95,110,125,140,155,170])])  - set(gwg.obstacles), 
+             4: set.union(*[set([81,96,111,126,141,156,171])])  - set(gwg.obstacles) }
+
 
     # for s in gwg.states:
     #     (row,col)=gwg.coords(s)
@@ -200,8 +208,7 @@ if __name__ == '__main__':
     #     pg[0][i]=set([state])
     #     i += 1
         
-   
-    visdist = [12 ,20,3500,3500]
+    visdist = [12,20,3500,3500]
     target_vis_dist = 2
     vel = [1,2,2,2]
     invisibilityset = []
@@ -222,7 +229,7 @@ if __name__ == '__main__':
 
         #####     6) chose specification writing file     #####
 
-        write_structured_slugs_past_action_foot_stance_MP_specs_step_height_23_38_no_step_over.write_to_slugs_part_dist(infile, gwg, initial[n], moveobstacles[0], iset, PUDO_targets = PUDO_t,
+        write_structured_slugs_past_action_foot_stance_MP_specs_collision_allowed_env_live_not_visible_state.write_to_slugs_part_dist(infile, gwg, initial[n], moveobstacles[0], iset, PUDO_targets = PUDO_t,
                                                                    visdist =  visdist[n], allowed_states = allowed_states[n],
                                                                    partitionGrid = pg[n])
         

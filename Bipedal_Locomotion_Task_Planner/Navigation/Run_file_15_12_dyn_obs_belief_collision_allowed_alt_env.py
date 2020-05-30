@@ -78,7 +78,7 @@ if __name__ == '__main__':
     h, w = image.shape[:2]
     folder_locn = 'Examples/'
     #####     3) name trial     #####
-    example_name = 'benchmark_15_12_collision_allowed_new_env_3_stat_obs'
+    example_name = 'benchmark_15_12_collision_allowed_new_env_3_stat_obs_test'
 
     jsonfile_name = example_name + ".json"
     trial_name = folder_locn + example_name

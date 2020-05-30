@@ -58,7 +58,8 @@ if __name__ == '__main__':
     # mapname = 'BelieEvasion_64_30'
     # mapname = 'BelieEvasion_fifteen'
     # mapname = 'BelieEvasion_15_20_sparse_obs'
-    mapname = 'BelieEvasion_15_12_height_2'
+    # mapname = 'BelieEvasion_15_12_height_2'
+    mapname = 'BelieEvasion_15_12_new_3_stat_obs'
     
     #####     2) Chose grid size     ###### rownum = 15
     # colnum = 20

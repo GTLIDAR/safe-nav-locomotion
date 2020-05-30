@@ -282,7 +282,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
             stri += "st' = {}".format(st)
             stri += '\n'
             file.write(stri)
-        else: write transitions if the dynamic obstacle (st) is not visible ransitions between belief states and from belief state to visible state
+        else: #write transitions if the dynamic obstacle (st) is not visible ransitions between belief states and from belief state to visible state
             for s in tqdm(allowed_states):
                 
                 (row,col)=gw.coords(s)
@@ -542,9 +542,9 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=0 /\\ stanceFoot=1 -> !turnLeft\n")
 
     # last updates for yignke's new velocity picking:
-    file.write("!forward /\\ forward' -> stepL' = 1\n")
-    file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=2 /\\ stanceFoot=0 -> !turnLeft\n")
-    file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=2 /\\ stanceFoot=1 -> !turnRight\n")
+    # file.write("!forward /\\ forward' -> stepL' = 1\n")
+    # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=2 /\\ stanceFoot=0 -> !turnLeft\n")
+    # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=2 /\\ stanceFoot=1 -> !turnRight\n")
     # ^last updates for yignke's new velocity picking
 
     file.write('\n')
