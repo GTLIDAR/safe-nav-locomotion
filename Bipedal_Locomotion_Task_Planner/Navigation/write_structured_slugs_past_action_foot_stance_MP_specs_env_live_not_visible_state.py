@@ -196,7 +196,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('s:0...{}\n'.format(len(gw.states)-1))
     file.write('deliveryrequest\n')
     file.write('sOld:0...{}\n'.format(len(gw.states)-1))
-    file.write('pastTurnStanceMatchFoot:0...2\n')
+    # file.write('pastTurnStanceMatchFoot:0...2\n')
 
     file.write('\n[OUTPUT]\n') #Write components and range of system state
     file.write('forward\n')
@@ -206,7 +206,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('stop\n')
     file.write('requestPending1\n')
     file.write('requestPending2\n')
-    file.write('stanceFoot:0...2\n')
+    # file.write('stanceFoot:0...2\n')
     if target_reachability:
         file.write('c:0...1\n')
 
@@ -214,7 +214,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('s = {}\n'.format(init))
     file.write('orientation = 3\n')
     file.write('deliveryrequest\n')
-    file.write('pastTurnStanceMatchFoot = 2\n')
+    # file.write('pastTurnStanceMatchFoot = 2\n')
 
     if initmovetarget in allowed_states:
         file.write('st = {}\n'.format(initmovetarget))
@@ -449,12 +449,12 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     stri += "\n"
     file.write(stri)
 
-    file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ turnLeft /\\ stanceFoot=0 -> pastTurnStanceMatchFoot' = 1\n")
-    file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ turnLeft /\\ stanceFoot=1 -> pastTurnStanceMatchFoot' = 0\n")
-    file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ turnRight /\\ stanceFoot=0 -> pastTurnStanceMatchFoot' = 0\n")
-    file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ turnRight /\\ stanceFoot=1 -> pastTurnStanceMatchFoot' = 1\n")
-    file.write("forward /\\ ((orientation !=0 /\\ orientation!=3 /\\ orientation != 6 /\\ orientation != 9) \/ (!turnLeft /\\ !turnRight)) -> pastTurnStanceMatchFoot' = pastTurnStanceMatchFoot\n")
-    file.write("!forward -> pastTurnStanceMatchFoot' = 2\n")
+    # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ turnLeft /\\ stanceFoot=0 -> pastTurnStanceMatchFoot' = 1\n")
+    # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ turnLeft /\\ stanceFoot=1 -> pastTurnStanceMatchFoot' = 0\n")
+    # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ turnRight /\\ stanceFoot=0 -> pastTurnStanceMatchFoot' = 0\n")
+    # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ turnRight /\\ stanceFoot=1 -> pastTurnStanceMatchFoot' = 1\n")
+    # file.write("forward /\\ ((orientation !=0 /\\ orientation!=3 /\\ orientation != 6 /\\ orientation != 9) \/ (!turnLeft /\\ !turnRight)) -> pastTurnStanceMatchFoot' = pastTurnStanceMatchFoot\n")
+    # file.write("!forward -> pastTurnStanceMatchFoot' = 2\n")
     ##################### Jonas Action Based Specs ###################
 
 
@@ -527,25 +527,25 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write(stri)
 
     file.write('\n')
-    file.write("forward & !stop & stanceFoot=0 -> stanceFoot'=1\n")
-    file.write("forward & !stop & stanceFoot=1 -> stanceFoot'=0\n")
+    # file.write("forward & !stop & stanceFoot=0 -> stanceFoot'=1\n")
+    # file.write("forward & !stop & stanceFoot=1 -> stanceFoot'=0\n")
 
-    file.write("!forward' -> stanceFoot' =2\n")
-    file.write("forward' -> stanceFoot' !=2\n")
+    # file.write("!forward' -> stanceFoot' =2\n")
+    # file.write("forward' -> stanceFoot' !=2\n")
 
-    # # file.write("forward & stanceFoot=0 -> stanceFoot'=1\n")
-    # # file.write("forward & stanceFoot=1 -> stanceFoot'=0\n")
+    # # # file.write("forward & stanceFoot=0 -> stanceFoot'=1\n")
+    # # # file.write("forward & stanceFoot=1 -> stanceFoot'=0\n")
 
-    file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=1 /\\ stanceFoot=0 -> !turnLeft\n")
-    file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=1 /\\ stanceFoot=1 -> !turnRight\n")
-    file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=0 /\\ stanceFoot=0 -> !turnRight\n")
-    file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=0 /\\ stanceFoot=1 -> !turnLeft\n")
+    # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=1 /\\ stanceFoot=0 -> !turnLeft\n")
+    # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=1 /\\ stanceFoot=1 -> !turnRight\n")
+    # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=0 /\\ stanceFoot=0 -> !turnRight\n")
+    # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=0 /\\ stanceFoot=1 -> !turnLeft\n")
 
-    # last updates for yignke's new velocity picking:
-    # file.write("!forward /\\ forward' -> stepL' = 1\n")
-    # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=2 /\\ stanceFoot=0 -> !turnLeft\n")
-    # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=2 /\\ stanceFoot=1 -> !turnRight\n")
-    # ^last updates for yignke's new velocity picking
+    # # last updates for yignke's new velocity picking:
+    # # file.write("!forward /\\ forward' -> stepL' = 1\n")
+    # # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=2 /\\ stanceFoot=0 -> !turnLeft\n")
+    # # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=2 /\\ stanceFoot=1 -> !turnRight\n")
+    # # ^last updates for yignke's new velocity picking
 
     file.write('\n')
     file.write('turnRight \/ turnLeft -> stepL != 1 /\ stepL !=2\n')

@@ -4,7 +4,7 @@ import copy
 import compute_all_vis
 import cv2
 
-mapname = 'BelieEvasion_15_12_height_2'
+mapname = 'BelieEvasion_15_12_new_3_stat_obs'
 rownum = 12
 colnum = 15
 filename = 'figures/'+mapname+'.png'
@@ -13,7 +13,7 @@ image = cv2.resize(image,dsize=(colnum,rownum),interpolation=cv2.INTER_AREA)
 h, w = image.shape[:2]
 
 folder_locn = 'Examples/'
-example_name = 'benchmark_15_12_avoid_collisions_with_dyn_obs_collision_allowed_test_without_last_motionplanner_specs'
+example_name = 'benchmark_15_12_collision_allowed_env_live_says_always_leave_vis_range'
 trial_name = folder_locn + example_name
 
 outfile = trial_name + '.json'
@@ -48,12 +48,18 @@ pg[0] = {0:allowed_states[0]}
 #     	3: set.union(*[set(range(90,120))])  - set(gwg.obstacles), 4: set.union(*[set(range(120,150))])  - set(gwg.obstacles), 5: set.union(*[set(range(150,180))])  - set(gwg.obstacles),
 #     	6: set.union(*[set(range(180,210))])  - set(gwg.obstacles), 7: set.union(*[set(range(210,225))])  - set(gwg.obstacles)}
 
+# pg[0] = {0: set.union(*[set(range(0,180))])  - set(gwg.obstacles) - set([75,76,77,78,79,80,81,90,91,92,93,94,95,96,105,106,107,108,109,110,111,120,121,122,123,124,125,126,135,136,137,138,139,140,141,150,151,152,153,154,155,156,165,166,167,168,169,170,171]), 
+#              1: set.union(*[set([75,76,77,90,91,92,105,106,107,120,121,122,135,136,137,150,151,152,165,166,167])])  - set(gwg.obstacles), 
+#              2: set.union(*[set([78,93,108,123,138,153,168])])  - set(gwg.obstacles),
+#     		 3: set.union(*[set([79,94,109,124,139,154,169])])  - set(gwg.obstacles), 
+#              4: set.union(*[set([80,95,110,125,140,155,170])])  - set(gwg.obstacles), 
+#              5: set.union(*[set([81,96,111,126,141,156,171])])  - set(gwg.obstacles)}
+
 pg[0] = {0: set.union(*[set(range(0,180))])  - set(gwg.obstacles) - set([75,76,77,78,79,80,81,90,91,92,93,94,95,96,105,106,107,108,109,110,111,120,121,122,123,124,125,126,135,136,137,138,139,140,141,150,151,152,153,154,155,156,165,166,167,168,169,170,171]), 
-             1: set.union(*[set([75,76,77,90,91,92,105,106,107,120,121,122,135,136,137,150,151,152,165,166,167])])  - set(gwg.obstacles), 
-             2: set.union(*[set([78,93,108,123,138,153,168])])  - set(gwg.obstacles),
-    		 3: set.union(*[set([79,94,109,124,139,154,169])])  - set(gwg.obstacles), 
-             4: set.union(*[set([80,95,110,125,140,155,170])])  - set(gwg.obstacles), 
-             5: set.union(*[set([81,96,111,126,141,156,171])])  - set(gwg.obstacles)}
+             1: set.union(*[set([75,76,77,90,91,92,105,106,107,120,121,122,135,136,137,150,151,152,165,166,167,78,93,108,123,138,153,168])])  - set(gwg.obstacles), 
+             2: set.union(*[set([79,94,109,124,139,154,169])])  - set(gwg.obstacles), 
+             3: set.union(*[set([80,95,110,125,140,155,170])])  - set(gwg.obstacles), 
+             4: set.union(*[set([81,96,111,126,141,156,171])])  - set(gwg.obstacles) }
 
 visdist = [12,20,3500,3500]
 target_vis_dist = 2
