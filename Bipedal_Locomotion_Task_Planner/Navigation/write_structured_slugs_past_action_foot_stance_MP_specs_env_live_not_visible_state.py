@@ -778,8 +778,16 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('\n[ENV_LIVENESS]\n')
     # file.write("st' = {}".format(allstates[-2]))
 
+    # stri = ""
+    # for visstate in set(nonbeliefstates):
+    #     stri += "st != {} /\\ ".format(visstate)
+    # stri = stri[:-4]
+    # file.write(stri)
+
     stri = ""
     for visstate in set(nonbeliefstates):
         stri += "st != {} /\\ ".format(visstate)
     stri = stri[:-4]
     file.write(stri)
+    file.write('\n')
+    file.write('st = 39')
