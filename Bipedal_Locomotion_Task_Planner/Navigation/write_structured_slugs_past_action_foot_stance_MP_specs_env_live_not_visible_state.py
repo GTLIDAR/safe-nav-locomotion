@@ -776,7 +776,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
 
     file.write('\n[ENV_LIVENESS]\n')
-    # file.write("st' = {}".format(allstates[-2]))
+    file.write("st' = {}".format(allstates[-2]))
 
     # stri = ""
     # for visstate in set(nonbeliefstates):
@@ -784,22 +784,27 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # stri = stri[:-4]
     # file.write(stri)
 
-    stri = "("
-
-    for visstate in set(nonbeliefstates):
-        stri += "st = {} \/ ".format(visstate)
-    stri = stri[:-4]
-
-    stri += ') /\\ ('
-
-    for visstate in set(nonbeliefstates):
-        stri += "st' != {} /\\ ".format(visstate)
-    stri = stri[:-4]
-
-    stri += ")"
 
 
-    file.write(stri)
+
+    # stri = "("
+
+    # for visstate in set(nonbeliefstates):
+    #     stri += "st = {} \/ ".format(visstate)
+    # stri = stri[:-4]
+
+    # stri += ') /\\ ('
+
+    # for visstate in set(nonbeliefstates):
+    #     stri += "st' != {} /\\ ".format(visstate)
+    # stri = stri[:-4]
+
+    # stri += ")"
+
+    # file.write(stri)
+
+
+
 
 
     # file.write('\n')

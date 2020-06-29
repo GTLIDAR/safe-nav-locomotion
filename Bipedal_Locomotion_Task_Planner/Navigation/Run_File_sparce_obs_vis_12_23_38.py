@@ -76,7 +76,7 @@ if __name__ == '__main__':
     image = cv2.resize(image,dsize=(colnum,rownum),interpolation=cv2.INTER_AREA)
     h, w = image.shape[:2]
     folder_locn = 'Examples/'
-    example_name = 'Jonas_Belief_Evasion_Terminal_foot_stance_yingke_23_38_vis_12'
+    example_name = 'Jonas_Belief_Evasion_Terminal_Aziz_23_38_vis_12'
     trial_name = folder_locn + example_name
     version = '01'
     slugs = '../../slugs-master/src/slugs' # Path to slugs
