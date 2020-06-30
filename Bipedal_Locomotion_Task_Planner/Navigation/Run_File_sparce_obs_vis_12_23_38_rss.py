@@ -78,6 +78,7 @@ if __name__ == '__main__':
     h, w = image.shape[:2]
     folder_locn = 'Examples/'
     example_name = 'Jonas_Belief_Evasion_Terminal_Aziz_23_38_vis_12'
+    jsonfile_name = example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
     slugs = '../../slugs-master/src/slugs' # Path to slugs
