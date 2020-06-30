@@ -907,6 +907,6 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # stri = stri[:-4]
     # file.write(stri)
 
-    file.write("st' = {}".format(allstates[-2]))
+    # file.write("st' = {}".format(allstates[-2]))
 
     # file.write("st' = {}".format(83))
