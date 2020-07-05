@@ -257,58 +257,70 @@ import cv2
 
 
 #
-# os.chdir(r'/home/jwarnke3/Documents/Slugs/Surveillance-Synthesis-Robot_realizability/exploration/figures')
-#
-# filename = 'chicago4_45_2454_5673_map.png'
-# # image = cv2.imread(specFile, cv2.IMREAD_GRAYSCALE)
-# # print(image)
-#
-# pngfile2 = Image.open(filename)
-# img2=pngfile2.resize((38,23),PIL.Image.ANTIALIAS)
-# img2.paste((255),(0,0,38,23))
-# # img2.show()
-# pixels=img2.load()
-#
-#
-# pixels[2,5] = 0
-# pixels[3,5] = 0
-# pixels[4,5] = 0
-# pixels[5,5] = 0
-# pixels[2,6] = 0
-# pixels[3,6] = 0
-# pixels[4,6] = 0
-# pixels[5,6] = 0
-# pixels[2,7] = 0
-# pixels[3,7] = 0
-# pixels[4,7] = 0
-# pixels[5,7] = 0
-#
-# pixels[16,6] = 0
-# pixels[17,6] = 0
-# pixels[16,7] = 0
-# pixels[17,7] = 0
-# pixels[16,8] = 0
-# pixels[17,8] = 0
-# pixels[16,9] = 0
-# pixels[17,9] = 0
-# pixels[16,10] = 0
-# pixels[17,10] = 0
-# pixels[16,11] = 0
-# pixels[17,11] = 0
-# pixels[16,12] = 0
-# pixels[17,12] = 0
-# pixels[16,13] = 0
-# pixels[17,13] = 0
-# pixels[16,14] = 0
-# pixels[17,14] = 0
-#
-#
-# pixels[30,17] = 0
-# pixels[31,17] = 0
-# pixels[30,18] = 0
-# pixels[31,18] = 0
-#
-#
+os.chdir(r'/home/jwarnke3/Documents/Slugs/Surveillance-Synthesis-Robot_realizability/exploration/figures')
+
+filename = 'chicago4_45_2454_5673_map.png'
+# image = cv2.imread(specFile, cv2.IMREAD_GRAYSCALE)
+# print(image)
+
+pngfile2 = Image.open(filename)
+img2=pngfile2.resize((38,23),PIL.Image.ANTIALIAS)
+img2.paste((255),(0,0,38,23))
+# img2.show()
+pixels=img2.load()
+
+
+pixels[2,5] = 0
+pixels[3,5] = 0
+pixels[4,5] = 0
+pixels[5,5] = 0
+pixels[2,6] = 0
+pixels[3,6] = 0
+pixels[4,6] = 0
+pixels[5,6] = 0
+pixels[2,7] = 0
+pixels[3,7] = 0
+pixels[4,7] = 0
+pixels[5,7] = 0
+
+pixels[16,6] = 0
+pixels[17,6] = 0
+pixels[16,7] = 0
+pixels[17,7] = 0
+pixels[16,8] = 0
+pixels[17,8] = 0
+pixels[16,9] = 0
+pixels[17,9] = 0
+pixels[16,10] = 0
+pixels[17,10] = 0
+pixels[16,11] = 0
+pixels[17,11] = 0
+pixels[16,12] = 0
+pixels[17,12] = 0
+pixels[16,13] = 0
+pixels[17,13] = 0
+pixels[16,14] = 0
+pixels[17,14] = 0
+
+
+pixels[30,17] = 0
+pixels[31,17] = 0
+pixels[30,18] = 0
+pixels[31,18] = 0
+
+pixels[25,6] = 0
+pixels[26,6] = 0
+pixels[27,6] = 0
+pixels[28,6] = 0
+pixels[29,6] = 0
+pixels[30,6] = 0
+
+pixels[25,13] = 0
+pixels[26,13] = 0
+pixels[27,13] = 0
+pixels[28,13] = 0
+pixels[29,13] = 0
+pixels[30,13] = 0
 #
 #
 #
@@ -335,9 +347,9 @@ import cv2
 #
 #
 #
-# img2.show()
+img2.show()
 #
-# img2.save("BelieEvasion_38_23_height.png")
+img2.save("BelieEvasion_38_23_Extra_obs.png")
 
 
 
@@ -367,27 +379,27 @@ import cv2
 #
 # img2.save("BelieEvasion_15_12_height_2.png")
 
-os.chdir(r'../Bipedal_Locomotion_Task_Planner/Navigation/figures')
-
-filename = 'chicago4_45_2454_5673_map.png'
-# image = cv2.imread(specFile, cv2.IMREAD_GRAYSCALE)
-# print(image)
-
-pngfile2 = Image.open(filename)
-img2=pngfile2.resize((15,12),PIL.Image.ANTIALIAS)
-img2.paste((255),(0,0,15,12))
+# os.chdir(r'../Bipedal_Locomotion_Task_Planner/Navigation/figures')
+#
+# filename = 'chicago4_45_2454_5673_map.png'
+# # image = cv2.imread(specFile, cv2.IMREAD_GRAYSCALE)
+# # print(image)
+#
+# pngfile2 = Image.open(filename)
+# img2=pngfile2.resize((15,12),PIL.Image.ANTIALIAS)
+# img2.paste((255),(0,0,15,12))
+# # img2.show()
+# pixels=img2.load()
+#
+# pixels[4,4] = 0
+# pixels[5,4] = 0
+# pixels[6,4] = 0
+#
+#
+#
+#
+#
+#
 # img2.show()
-pixels=img2.load()
-
-pixels[4,4] = 0
-pixels[5,4] = 0
-pixels[6,4] = 0
-
-
-
-
-
-
-img2.show()
-
-img2.save("BelieEvasion_15_12_new_3_stat_obs.png")
+#
+# img2.save("BelieEvasion_15_12_new_3_stat_obs.png")
