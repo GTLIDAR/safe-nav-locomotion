@@ -367,7 +367,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     #                     stri = stri[:-3]
     #                     stri += '\n'
     #                     file.write(stri)
-    file.write("st'=st\n")
+    file.write("st' = {}\n".format(initmovetarget))
 
     ##################### Jonas Action Based Specs ###################
     print 'Writing Action Based Environment Transitions'
@@ -560,10 +560,9 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=2 /\\ stanceFoot=1 -> !turnRight\n")
     # # ^last updates for yignke's new velocity picking
 
-    # file.write('\n')
-    # # turned off to test
-    # # file.write('turnRight \/ turnLeft -> stepL != 1 /\ stepL !=2\n')
-    # file.write('\n')
+    file.write('\n')
+    file.write('turnRight \/ turnLeft -> stepL != 1 /\ stepL !=2\n')
+    file.write('\n')
 
     stri = ""
     for row in range(gw.nrows-1):
@@ -732,8 +731,8 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     #     if obs in allowed_states:
     #         file.write('!s = {}\n'.format(obs))
 
-    for obs in gw.obstacles:
-        file.write('!s = {}\n'.format(obs))
+    # for obs in gw.obstacles:
+    #     file.write('!s = {}\n'.format(obs))
 
     # for s in set(allowed_states):
     #     # stri = 'st = {} -> !s = {}\n'.format(s,s)

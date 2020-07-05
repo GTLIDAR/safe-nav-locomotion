@@ -559,10 +559,10 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ pastTurnStanceMatchFoot=2 /\\ stanceFoot=1 -> !turnRight\n")
     # # ^last updates for yignke's new velocity picking
 
-    # file.write('\n')
-    # # turned off to test
-    # # file.write('turnRight \/ turnLeft -> stepL != 1 /\ stepL !=2\n')
-    # file.write('\n')
+    file.write('\n')
+    # turned off to test
+    file.write('turnRight \/ turnLeft -> stepL != 1 /\ stepL !=2\n')
+    file.write('\n')
 
     stri = ""
     for row in range(gw.nrows-1):

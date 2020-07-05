@@ -2,7 +2,7 @@ from gridworld import *
 import argparse
 # import write_structured_slugs_copy_2
 # import write_structured_slugs_past_action_foot_stance_MP_specs_step_height_23_38_no_step_over
-import write_structured_slugs_past_action_foot_stance_MP_specs_no_obs_env_live_not_visible_state_step_height
+import write_structured_slugs_rss_no_obs_foot_stance
 import compute_all_vis
 import cv2
 # import visibility
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     image = cv2.resize(image,dsize=(colnum,rownum),interpolation=cv2.INTER_AREA)
     h, w = image.shape[:2]
     folder_locn = 'Examples/'
-    example_name = 'Jonas_Belief_Evasion_Terminal_Aziz_23_38_vis_12_no_obs_enforcement_step_height_old_static_obs_spec'
+    example_name = 'Belief_Evasion_rss_no_obs_foot_stance_TEST'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
@@ -227,7 +227,7 @@ if __name__ == '__main__':
         #                                                            visdist =  visdist[n], allowed_states = allowed_states[n],
         #                                                            partitionGrid = pg[n])
 
-        write_structured_slugs_past_action_foot_stance_MP_specs_no_obs_env_live_not_visible_state_step_height.write_to_slugs_part_dist(infile, gwg, initial[n], moveobstacles[0], iset, PUDO_targets = PUDO_t,
+        write_structured_slugs_rss_no_obs_foot_stance.write_to_slugs_part_dist(infile, gwg, initial[n], moveobstacles[0], iset, PUDO_targets = PUDO_t,
                                                                    visdist =  visdist[n], allowed_states = allowed_states[n],
                                                                    partitionGrid = pg[n])
         
