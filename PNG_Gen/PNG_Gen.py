@@ -257,7 +257,7 @@ import cv2
 
 
 #
-os.chdir(r'/home/jwarnke3/Documents/Slugs/Surveillance-Synthesis-Robot_realizability/exploration/figures')
+os.chdir(r'/home/jwarnke3/Documents/github/Beliefspace_Planning/Bipedal_Locomotion_Task_Planner/Navigation/figures')
 
 filename = 'chicago4_45_2454_5673_map.png'
 # image = cv2.imread(specFile, cv2.IMREAD_GRAYSCALE)
