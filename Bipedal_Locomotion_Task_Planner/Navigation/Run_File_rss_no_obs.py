@@ -60,7 +60,8 @@ if __name__ == '__main__':
     # mapname = 'BelieEvasion_64_30'
     # mapname = 'BelieEvasion_fifteen'
     # mapname = 'BelieEvasion_15_20_sparse_obs'
-    mapname = 'BelieEvasion_38_23_height'
+    # mapname = 'BelieEvasion_38_23_height'
+    mapname = 'BelieEvasion_38_23_Extra_obs'
     scale = (int(40*2.8),40)
     # rownum = 15
     # colnum = 20
@@ -77,11 +78,12 @@ if __name__ == '__main__':
     image = cv2.resize(image,dsize=(colnum,rownum),interpolation=cv2.INTER_AREA)
     h, w = image.shape[:2]
     folder_locn = 'Examples/'
-    example_name = 'Belief_Evasion_rss_no_obs_foot_stance_TEST'
+    example_name = 'Belief_Evasion_rss_no_obs_foot_stance_TEST2'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
-    slugs = '../../slugs-master/src/slugs' # Path to slugs
+    # slugs = '../../slugs-master/src/slugs' # Path to slugs
+    slugs = '/home/sa-zhao/Documents/Jonas/Slugs/slugs-master/src/slugs'
     save_to_Gazebo = False
     outfile = trial_name + '.json'
     infile = copy.deepcopy(trial_name)

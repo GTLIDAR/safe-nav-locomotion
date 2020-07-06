@@ -757,7 +757,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     for obs in gw.obstacles:
         if obs in allowed_states:
-            file.write('!s = {}\n'.format(obs))
+            file.write('s != {}\n'.format(obs))
 
     # for obs in gw.obstacles:
     #     file.write('!s = {}\n'.format(obs))
@@ -773,8 +773,8 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
 
 
-        stri = 'st\' = {} -> !s = {}\n'.format(s,s)
-        file.write(stri)
+        # stri = 'st\' = {} -> !s = {}\n'.format(s,s)
+        # file.write(stri)
 
     #     # stri = 'st\' = {} -> (s\' != {}) /\\ (s\' + 1 != {}) /\\ (s\' != {}) /\\ (s\' + {} != {})\n'.format(s,s+1,s,s+gw.ncols,gw.ncols,s)
     #     # file.write(stri)
@@ -937,4 +937,4 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # file.write("st' = {}".format(allstates[-2]))
 
     # file.write("st' = {}".format(83))
-    file.write("st' = {}".format(40))
+    file.write("st' = {}".format(80))

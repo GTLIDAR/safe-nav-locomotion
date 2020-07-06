@@ -143,6 +143,11 @@ class Gridworld():
             # tempobs.append(self.coords2state_works(row-2,col-2))
             tempobs.append(self.coords2state_works(row-2,col-1))
 
+            tempobs.append(self.coords2state_works(row-2,col+2))
+            tempobs.append(self.coords2state_works(row+2,col+2))
+            tempobs.append(self.coords2state_works(row+2,col-2))
+            tempobs.append(self.coords2state_works(row-2,col-2))
+
             for location in tempobs:
                 if location in self.states:
                     self.obsborder.add(location)

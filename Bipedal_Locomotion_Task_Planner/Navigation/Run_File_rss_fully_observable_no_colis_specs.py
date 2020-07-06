@@ -2,7 +2,7 @@ from gridworld import *
 import argparse
 # import write_structured_slugs_copy_2
 # import write_structured_slugs_past_action_foot_stance_MP_specs_step_height_23_38_no_step_over
-import write_structured_slugs_rss_fully_observable
+import write_structured_slugs_rss_fully_observable_no_colis_specs
 import compute_all_vis
 import cv2
 # import visibility
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     image = cv2.resize(image,dsize=(colnum,rownum),interpolation=cv2.INTER_AREA)
     h, w = image.shape[:2]
     folder_locn = 'Examples/'
-    example_name = 'Belief_Evasion_rss_fully_observable_colission_enforced_liveness_extra_obs_test222'
+    example_name = 'Belief_Evasion_rss_fully_observable_no_colission_enforced'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
@@ -228,7 +228,7 @@ if __name__ == '__main__':
         #                                                            visdist =  visdist[n], allowed_states = allowed_states[n],
         #                                                            partitionGrid = pg[n])
 
-        write_structured_slugs_rss_fully_observable.write_to_slugs_part_dist(infile, gwg, initial[n], moveobstacles[0], iset, PUDO_targets = PUDO_t,
+        write_structured_slugs_rss_fully_observable_no_colis_specs.write_to_slugs_part_dist(infile, gwg, initial[n], moveobstacles[0], iset, PUDO_targets = PUDO_t,
                                                                    visdist =  visdist[n], allowed_states = allowed_states[n],
                                                                    partitionGrid = pg[n])
         
