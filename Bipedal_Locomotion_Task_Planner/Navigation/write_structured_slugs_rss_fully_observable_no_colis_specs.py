@@ -476,10 +476,15 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write(stri)
 
     # stri = "!forward -> st' != s'\n"
-    stri = "!forward -> st' != s\n"
+    # stri = "!forward -> st' != s\n"
     # stri += "!forward -> st != s\n"
+
+    stri = "st' != s\n"
+
     stri += "\n"
     file.write(stri)
+
+    
 
     # footstance based navigation:
     # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ turnLeft /\\ stanceFoot=0 -> pastTurnStanceMatchFoot' = 1\n")
@@ -541,7 +546,9 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # stri = "!forward' -> (!turnLeft' & !turnRight')\n\n"
     
     # stri += "!forward -> (!turnLeft' & !turnRight')\n\n"
-    stri = "!forward' -> turn'=2\n\n"
+    # stri = "!forward' -> turn'=2\n\n"
+    # stri += "turn' != 1\n"
+    # stri += "turn' != 3\n"
 
     # stri += "turnLeft' -> !turnRight'\n"
     # stri += "turnRight' -> !turnLeft'\n\n"
@@ -611,6 +618,8 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
         stri += "s' != {}\n".format(state)
     stri += "\n"
     file.write(stri)
+
+    file.write("s' != {}\n".format(39))
 
     # stri = ""
     # for s in tqdm(allowed_states):
@@ -937,4 +946,4 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # file.write("st' = {}".format(allstates[-2]))
 
     # file.write("st' = {}".format(83))
-    file.write("st' = {}".format(80))
+    file.write("st' = {}".format(39))
