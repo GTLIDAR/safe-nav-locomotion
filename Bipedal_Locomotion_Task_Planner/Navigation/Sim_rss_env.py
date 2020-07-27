@@ -5,6 +5,7 @@ import compute_all_vis
 import cv2
 
 mapname = 'BelieEvasion_38_23_Extra_obs'
+mapname = 'BelieEvasion_38_23_height'
 rownum = 23
 colnum = 38
 filename = 'figures/'+mapname+'.png'
@@ -13,7 +14,7 @@ image = cv2.resize(image,dsize=(colnum,rownum),interpolation=cv2.INTER_AREA)
 h, w = image.shape[:2]
 
 folder_locn = 'Examples/'
-example_name = 'Belief_Evasion_rss_fully_observable_no_obstacle_3_step_only_obs_collision_rule'
+example_name = 'Belief_Evasion_rss_fully_observable_no_colission_enforced'
 trial_name = folder_locn + example_name
 
 outfile = trial_name + '.json'

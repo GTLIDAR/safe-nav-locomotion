@@ -247,28 +247,28 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('\n[ENV_TRANS]\n')
     print 'Writing ENV_TRANS'
     ########START
-    for st in tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states))): #Only allowed states and belief states
-        if st in allowed_states:
-            repeat = set()
-            stri = "st = {} -> ".format(st)
-            beliefset = set()
-            for a in range(gw.nactionsMO):
-                for t in np.nonzero(gw.probMO[gw.actlistMO[a]][st])[0]:
-                    if t in allowed_states and t not in repeat:
-                        stri += 'st\' = {} \\/'.format(t)
-                        repeat.add(t)
-                    elif t not in allowed_states and t not in gw.obstacles and allstates[-1] not in repeat: # Error state????
-                        stri += 'st\' = {} \\/'.format(allstates[-1])
-                        # t should always be in allowed state or in obstacle state
-                        repeat.add(allstates[-1])
-    #             if len(beliefset) > 0:
-    #                 b2 = allstates[len(nonbeliefstates) + beliefcombs.index(beliefset)]
-    #                 if b2 not in repeat:
-    #                     stri += ' st\' = {} \\/'.format(b2)
-    #                     repeat.add(b2)
-            stri = stri[:-3]
-            stri += '\n'
-            file.write(stri)
+    # for st in tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states))): #Only allowed states and belief states
+    #     if st in allowed_states:
+    #         repeat = set()
+    #         stri = "st = {} -> ".format(st)
+    #         beliefset = set()
+    #         for a in range(gw.nactionsMO):
+    #             for t in np.nonzero(gw.probMO[gw.actlistMO[a]][st])[0]:
+    #                 if t in allowed_states and t not in repeat:
+    #                     stri += 'st\' = {} \\/'.format(t)
+    #                     repeat.add(t)
+    #                 elif t not in allowed_states and t not in gw.obstacles and allstates[-1] not in repeat: # Error state????
+    #                     stri += 'st\' = {} \\/'.format(allstates[-1])
+    #                     # t should always be in allowed state or in obstacle state
+    #                     repeat.add(allstates[-1])
+    # #             if len(beliefset) > 0:
+    # #                 b2 = allstates[len(nonbeliefstates) + beliefcombs.index(beliefset)]
+    # #                 if b2 not in repeat:
+    # #                     stri += ' st\' = {} \\/'.format(b2)
+    # #                     repeat.add(b2)
+    #         stri = stri[:-3]
+    #         stri += '\n'
+    #         file.write(stri)
     ##########END
     # for st in tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states))): #Only allowed states and belief states
     #     if st in allowed_states:
@@ -405,11 +405,11 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     # walking straight or exiting turn
     # can I get rid of border cases if I add a system condition that the state can't go from the left to the right or from the right to the left?
-    stri =""
-    for edgeS in gw.edges:
-        stri += "st' != {}\n".format(edgeS)
-    stri += "\n"
-    file.write(stri)
+    # stri =""
+    # for edgeS in gw.edges:
+    #     stri += "st' != {}\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
 
     # for s in allowed_states:
     #     file.write("s = {} -> sOld' = {}".format(s,s))
@@ -428,6 +428,21 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     stri += "(orientation=3 | orientation=4 | orientation=2) & forward & stepL=0 -> s'=s+1\n"
     stri += "(orientation=3 | orientation=4 | orientation=2) & forward & stepL=1 -> s'=s+2\n"
     stri += "(orientation=3 | orientation=4 | orientation=2) & forward & stepL=2 -> s'=s+3\n\n"
+
+    stri += "(orientation=9 | orientation=10 | orientation=8) & "
+    for row in range(gw.nrows):
+        stri += "s != {} & ".format((row+1)*gw.ncols-1)
+    stri += "forward & stepL=0 -> s' + 1 = s\n"
+
+    stri += "(orientation=9 | orientation=10 | orientation=8) & "
+    for row in range(gw.nrows):
+        stri += "s != {} & s != {} & ".format(row*gw.ncols+1 , row*gw.ncols)
+    stri += "forward & stepL=1 -> s' + 2 = s\n"
+
+    stri += "(orientation=9 | orientation=10 | orientation=8) & "
+    for row in range(gw.nrows):
+        stri += "s != {} & s != {} & s != {} & ".format(row*gw.ncols+2 , row*gw.ncols+1 , row*gw.ncols)
+    stri += "forward & stepL=2 -> s' + 3 = s\n"
 
     # ##################### Jonas test ###################
 

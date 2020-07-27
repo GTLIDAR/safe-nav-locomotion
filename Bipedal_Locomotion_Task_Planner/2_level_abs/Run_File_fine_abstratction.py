@@ -2,7 +2,7 @@ from gridworld import *
 import argparse
 # import write_structured_slugs_copy_2
 # import write_structured_slugs_past_action_foot_stance_MP_specs_step_height_23_38_no_step_over
-import write_structured_slugs_rss_fully_observable_no_colis_specs_3_step_only
+import write_structured_slugs_rss_fine_grid
 import compute_all_vis
 import cv2
 # import visibility
@@ -55,13 +55,13 @@ if __name__ == '__main__':
     # mapname = '3ne'
     # mapname = 'BeliefTestEvasion'
     # mapname = 'BelieEvasionTwenty'
-    # mapname = 'BelieEvasionFifteen_w'
+    mapname = 'BelieEvasionFifteen_w'
     # mapname = 'chicago4_45_2454_5673_map'
     # mapname = 'BelieEvasion_64_30'
     # mapname = 'BelieEvasion_fifteen'
     # mapname = 'BelieEvasion_15_20_sparse_obs'
     # mapname = 'BelieEvasion_38_23_height'
-    mapname = 'BelieEvasion_38_23_Extra_obs'
+    # mapname = 'BelieEvasion_38_23_Extra_obs'
     scale = (int(40*2.8),40)
     # rownum = 15
     # colnum = 20
@@ -69,8 +69,8 @@ if __name__ == '__main__':
     # colnum = 64
     # rownum = 15
     # colnum = 15
-    rownum = 23
-    colnum = 38
+    rownum = 7
+    colnum = 7
     filename = ['figures/' + mapname + '.pgm',scale,cv2.INTER_LINEAR_EXACT]
 
     filename = 'figures/'+mapname+'.png'
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     image = cv2.resize(image,dsize=(colnum,rownum),interpolation=cv2.INTER_AREA)
     h, w = image.shape[:2]
     folder_locn = 'Examples/'
-    example_name = 'Belief_Evasion_rss_fully_observable_collision_enforced'
+    example_name = 'Belief_Evasion_fine_abstraction'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
@@ -101,10 +101,10 @@ if __name__ == '__main__':
     # # PUDO_t = [1162,818]
     # PUDO_t = [842,818]
 
-    # 38_23
-    initial = [812]
-    moveobstacles = [191]
-    PUDO_t = [408,611]
+    # 7_7
+    initial = [24]
+    moveobstacles = [0]
+    PUDO_t = [3,27,45,21]
 
     # PUDO_t = [84,147]
     # PUDO_t = [189,53]
@@ -228,7 +228,7 @@ if __name__ == '__main__':
         #                                                            visdist =  visdist[n], allowed_states = allowed_states[n],
         #                                                            partitionGrid = pg[n])
 
-        write_structured_slugs_rss_fully_observable_no_colis_specs_3_step_only.write_to_slugs_part_dist(infile, gwg, initial[n], moveobstacles[0], iset, PUDO_targets = PUDO_t,
+        write_structured_slugs_rss_fine_grid.write_to_slugs_part_dist(infile, gwg, initial[n], moveobstacles[0], iset, PUDO_targets = PUDO_t,
                                                                    visdist =  visdist[n], allowed_states = allowed_states[n],
                                                                    partitionGrid = pg[n])
         

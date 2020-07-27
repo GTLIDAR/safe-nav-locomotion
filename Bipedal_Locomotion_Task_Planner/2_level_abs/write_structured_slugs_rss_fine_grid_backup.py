@@ -247,28 +247,28 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('\n[ENV_TRANS]\n')
     print 'Writing ENV_TRANS'
     ########START
-    for st in tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states))): #Only allowed states and belief states
-        if st in allowed_states:
-            repeat = set()
-            stri = "st = {} -> ".format(st)
-            beliefset = set()
-            for a in range(gw.nactionsMO):
-                for t in np.nonzero(gw.probMO[gw.actlistMO[a]][st])[0]:
-                    if t in allowed_states and t not in repeat:
-                        stri += 'st\' = {} \\/'.format(t)
-                        repeat.add(t)
-                    elif t not in allowed_states and t not in gw.obstacles and allstates[-1] not in repeat: # Error state????
-                        stri += 'st\' = {} \\/'.format(allstates[-1])
-                        # t should always be in allowed state or in obstacle state
-                        repeat.add(allstates[-1])
-    #             if len(beliefset) > 0:
-    #                 b2 = allstates[len(nonbeliefstates) + beliefcombs.index(beliefset)]
-    #                 if b2 not in repeat:
-    #                     stri += ' st\' = {} \\/'.format(b2)
-    #                     repeat.add(b2)
-            stri = stri[:-3]
-            stri += '\n'
-            file.write(stri)
+    # for st in tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states))): #Only allowed states and belief states
+    #     if st in allowed_states:
+    #         repeat = set()
+    #         stri = "st = {} -> ".format(st)
+    #         beliefset = set()
+    #         for a in range(gw.nactionsMO):
+    #             for t in np.nonzero(gw.probMO[gw.actlistMO[a]][st])[0]:
+    #                 if t in allowed_states and t not in repeat:
+    #                     stri += 'st\' = {} \\/'.format(t)
+    #                     repeat.add(t)
+    #                 elif t not in allowed_states and t not in gw.obstacles and allstates[-1] not in repeat: # Error state????
+    #                     stri += 'st\' = {} \\/'.format(allstates[-1])
+    #                     # t should always be in allowed state or in obstacle state
+    #                     repeat.add(allstates[-1])
+    # #             if len(beliefset) > 0:
+    # #                 b2 = allstates[len(nonbeliefstates) + beliefcombs.index(beliefset)]
+    # #                 if b2 not in repeat:
+    # #                     stri += ' st\' = {} \\/'.format(b2)
+    # #                     repeat.add(b2)
+    #         stri = stri[:-3]
+    #         stri += '\n'
+    #         file.write(stri)
     ##########END
     # for st in tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states))): #Only allowed states and belief states
     #     if st in allowed_states:
@@ -393,7 +393,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     #                     stri = stri[:-3]
     #                     stri += '\n'
     #                     file.write(stri)
-    # file.write("st' = {}\n".format(initmovetarget))
+    file.write("st' = {}\n".format(initmovetarget))
 
     ##################### Jonas Action Based Specs ###################
     print 'Writing Action Based Environment Transitions'
@@ -405,39 +405,99 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     # walking straight or exiting turn
     # can I get rid of border cases if I add a system condition that the state can't go from the left to the right or from the right to the left?
-    stri =""
-    for edgeS in gw.edges:
-        stri += "st' != {}\n".format(edgeS)
-    stri += "\n"
-    file.write(stri)
+    # stri =""
+    # for edgeS in gw.edges:
+    #     stri += "st' != {}\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
 
     # for s in allowed_states:
     #     file.write("s = {} -> sOld' = {}".format(s,s))
 
     # file.write("sOld' = s\n\n")
 
+    #### Walking North ####
     stri = "(orientation=0 | orientation=11 | orientation=1)  & s>{} & forward & stepL=0 -> s' + {} = s\n".format(gw.ncols-1, gw.ncols)
     stri += "(orientation=0 | orientation=11 | orientation=1) & s>{} & forward & stepL=1 -> s' + {} = s\n".format(2*gw.ncols-1, 2*gw.ncols)
     stri += "(orientation=0 | orientation=11 | orientation=1) & s>{} & forward & stepL=2 -> s' + {} = s\n\n".format(3*gw.ncols-1, 3*gw.ncols)
     
+    stri += "(orientation=0 | orientation=11 | orientation=1) & "
+    stri += "s<{} & ".format(gw.ncols)
+    stri += "forward & stepL=0 -> s' = s + {}\n".format((gw.nrows-1)*(gw.ncols))
 
-    ##################### Jonas test ###################
+    stri += "(orientation=0 | orientation=11 | orientation=1) & "
+    stri += "s<{} & ".format(2*gw.ncols)
+    stri += "forward & stepL=1 -> s' = s + {}\n".format((gw.nrows-2)*(gw.ncols))
+
+    stri += "(orientation=0 | orientation=11 | orientation=1) & "
+    stri += "s<{} & ".format(3*gw.ncols)
+    stri += "forward & stepL=2 -> s' = s + {}\n".format((gw.nrows-3)*(gw.ncols))
+
+
+    #### Walking East ####
+    # stri += "(orientation=3 | orientation=4 | orientation=2) & forward & stepL=0 -> s'=s+1\n"
+    # stri += "(orientation=3 | orientation=4 | orientation=2) & forward & stepL=1 -> s'=s+2\n"
+    # stri += "(orientation=3 | orientation=4 | orientation=2) & forward & stepL=2 -> s'=s+3\n\n"
+
+    stri += "\n(orientation=3 | orientation=4 | orientation=2) & "
+    for row in range(gw.nrows):
+        stri += "s != {} & ".format((row+1)*gw.ncols-1)
+    stri += "forward & stepL=0 -> s' = s+1\n"
+
+    stri += "(orientation=3 | orientation=4 | orientation=2) & "
+    for row in range(gw.nrows):
+        stri += "s != {} & s != {} & ".format((row+1)*gw.ncols-2, (row+1)*gw.ncols-1)
+    stri += "forward & stepL=1 -> s' = s+2\n"
+
+    stri += "(orientation=3 | orientation=4 | orientation=2) & "
+    for row in range(gw.nrows):
+        stri += "s != {} & s != {} & s != {} & ".format((row+1)*gw.ncols-3, (row+1)*gw.ncols-2, (row+1)*gw.ncols-1)
+    stri += "forward & stepL=2 -> s' = s+3\n"
+
+
+    stri += "\n(orientation=3 | orientation=4 | orientation=2) & ("
+    for row in range(gw.nrows):
+        stri += "s = {} \\/ ".format((row+1)*gw.ncols-1)
+    stri = stri[:-4]
+    stri += ") & forward & stepL=0 -> s' + {} = s\n".format(gw.ncols-1)
+
+    stri += "(orientation=3 | orientation=4 | orientation=2) & ("
+    for row in range(gw.nrows):
+        stri += "s = {} \\/ s = {}  \\/ ".format((row+1)*gw.ncols-2, (row+1)*gw.ncols-1)
+    stri = stri[:-4]
+    stri += ") & forward & stepL=1 -> s' + {} = s\n".format(gw.ncols-2)
+
+    stri += "(orientation=3 | orientation=4 | orientation=2) & ("
+    for row in range(gw.nrows):
+        stri += "s = {} \\/ s = {} \\/ s = {} \\/ ".format((row+1)*gw.ncols-3, (row+1)*gw.ncols-2, (row+1)*gw.ncols-1)
+    stri = stri[:-4]
+    stri += ") & forward & stepL=2 -> s' + {} = s\n".format(gw.ncols-3)
 
 
 
-    stri += "(orientation=3 | orientation=4 | orientation=2) & forward & stepL=0 -> s'=s+1\n"
-    stri += "(orientation=3 | orientation=4 | orientation=2) & forward & stepL=1 -> s'=s+2\n"
-    stri += "(orientation=3 | orientation=4 | orientation=2) & forward & stepL=2 -> s'=s+3\n\n"
 
     # ##################### Jonas test ###################
 
 
-
+    #### Walking South ####
     stri += "\n(orientation=6 | orientation=7 | orientation=5) & s<{} & forward & stepL=0 -> s' = s + {}\n".format((gw.nrows-1)*gw.ncols, gw.ncols)
     stri += "(orientation=6 | orientation=7 | orientation=5) & s<{} & forward & stepL=1 -> s' = s + {}\n".format((gw.nrows-2)*gw.ncols, 2*gw.ncols)
     stri += "(orientation=6 | orientation=7 | orientation=5) & s<{} & forward & stepL=2 -> s' = s + {}\n".format((gw.nrows-3)*gw.ncols, 3*gw.ncols)
 
-    stri += "(orientation=9 | orientation=10 | orientation=8) & "
+    stri += "\n(orientation=6 | orientation=7 | orientation=5) & "
+    stri += "s>{} &".format((gw.nrows-1)*gw.ncols-1)
+    stri += "forward & stepL=0 -> s' + {} = s\n".format(gw.ncols*(gw.nrows-1))
+
+    stri += "(orientation=6 | orientation=7 | orientation=5) & "
+    stri += "s>{} &".format((gw.nrows-2)*gw.ncols-1)
+    stri += "forward & stepL=1 -> s' + {} = s\n".format(gw.ncols*(gw.nrows-2))
+
+    stri += "(orientation=6 | orientation=7 | orientation=5) & "
+    stri += "s>{} &".format((gw.nrows-3)*gw.ncols-1)
+    stri += "forward & stepL=2 -> s' + {} = s\n".format(gw.ncols*(gw.nrows-3))
+
+    #### Walking West ####
+    stri += "\n(orientation=9 | orientation=10 | orientation=8) & "
     for row in range(gw.nrows):
         stri += "s != {} & ".format(row*gw.ncols)
     stri += "forward & stepL=0 -> s' + 1 = s\n"
@@ -451,6 +511,25 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     for row in range(gw.nrows):
         stri += "s != {} & s != {} & s != {} & ".format(row*gw.ncols+2 , row*gw.ncols+1 , row*gw.ncols)
     stri += "forward & stepL=2 -> s' + 3 = s\n"
+
+
+    stri += "\n(orientation=9 | orientation=10 | orientation=8) & ("
+    for row in range(gw.nrows):
+        stri += "s = {} \\/ ".format(row*gw.ncols)
+    stri = stri[:-4]
+    stri += ") & forward & stepL=0 -> s' = s + {}\n".format(gw.ncols-1)
+
+    stri += "(orientation=9 | orientation=10 | orientation=8) & ("
+    for row in range(gw.nrows):
+        stri += "s = {} \\/ s = {} \\/ ".format(row*gw.ncols+1 , row*gw.ncols)
+    stri = stri[:-4]
+    stri += ")  &forward & stepL=1 -> s' = s + {}\n".format(gw.ncols-2)
+
+    stri += "(orientation=9 | orientation=10 | orientation=8) & ("
+    for row in range(gw.nrows):
+        stri += "s = {} \\/ s = {} \\/ s = {} \\/ ".format(row*gw.ncols+2 , row*gw.ncols+1 , row*gw.ncols)
+    stri = stri[:-4]
+    stri += ") & forward & stepL=2 -> s' = s + {}\n".format(gw.ncols-3)
     
     file.write(stri)
 
@@ -596,10 +675,10 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     stri += "(turn=0 & (orientation'!=0 & orientation'!=3  & orientation'!=6 & orientation'!=9)) -> turn'=0\n"
     stri += "\n"
     file.write(stri)
-    stri = "(s = {}) & (s' = {}) -> ! requestPending1'\n".format(PUDO_targets[0],PUDO_targets[0])
-    stri += "!((s = {}) & (s' = {})) ->(requestPending1' <-> (requestPending1 | deliveryrequest))\n\n".format(PUDO_targets[0],PUDO_targets[0])
-    stri += "(s = {}) & (s' = {}) -> !requestPending2'\n".format(PUDO_targets[1],PUDO_targets[1])
-    stri += "!((s = {}) & (s' = {})) -> (requestPending2' <-> ((s = {} & requestPending1) | requestPending2))\n\n".format(PUDO_targets[1],PUDO_targets[1],PUDO_targets[0])
+    stri = "(s = {}) -> ! requestPending1'\n".format(PUDO_targets[0])
+    stri += "!(s = {}) ->(requestPending1' <-> (requestPending1 | deliveryrequest))\n\n".format(PUDO_targets[0])
+    stri += "(s = {}) -> !requestPending2'\n".format(PUDO_targets[1])
+    stri += "!(s = {}) -> (requestPending2' <-> ((s = {} & requestPending1) | requestPending2))\n\n".format(PUDO_targets[1],PUDO_targets[0])
     file.write(stri)
 
 
@@ -629,25 +708,31 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('turn !=2 -> stepL != 1 /\ stepL !=2\n')
     file.write('\n')
 
-    stri = ""
-    for row in range(gw.nrows-1):
-        stri += "s = {} \\/ s = {} \\/ s = {} -> s' != {} & s' != {} & s' != {}\n".format(((row+1)*gw.ncols -3),((row+1)*gw.ncols -2),((row+1)*gw.ncols -1),((row+1)*gw.ncols),((row+1)*gw.ncols +1),((row+1)*gw.ncols +2))
-    # need opposit of this aswell
-
-    file.write(stri)
-
     stri =""
     for edgeS in gw.edges:
-        stri += "s' != {}\n".format(edgeS)
+        stri += "s' = {} -> turn' = 2\n".format(edgeS)
     stri += "\n"
     file.write(stri)
+
+    # stri = ""
+    # for row in range(gw.nrows-1):
+    #     stri += "s = {} \\/ s = {} \\/ s = {} -> s' != {} & s' != {} & s' != {}\n".format(((row+1)*gw.ncols -3),((row+1)*gw.ncols -2),((row+1)*gw.ncols -1),((row+1)*gw.ncols),((row+1)*gw.ncols +1),((row+1)*gw.ncols +2))
+    # # need opposit of this aswell
+
+    # file.write(stri)
+
+    # stri =""
+    # for edgeS in gw.edges:
+    #     stri += "s' != {}\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
     
-    stri =""
-    obsborderlist = list(gw.obsborder)
-    for state in obsborderlist:
-        stri += "s' != {}\n".format(state)
-    stri += "\n"
-    file.write(stri)
+    # stri =""
+    # obsborderlist = list(gw.obsborder)
+    # for state in obsborderlist:
+    #     stri += "s' != {}\n".format(state)
+    # stri += "\n"
+    # file.write(stri)
 
     # stri = ""
     # for s in tqdm(allowed_states):
@@ -684,109 +769,110 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # stri +="\n"
     # file.write(stri)
 
-    stri = "("
-    for state0 in gw.level0states:
-        stri += " s = {} \\/".format(state0)
-    stri = stri[:-3]
-    stri += ") /\\ ("
-    for state0 in gw.level0states:
-        stri += " s' = {} \\/".format(state0)
-    stri = stri[:-3]
-    stri += ") -> stepH = 2\n\n"
-    file.write(stri)
+    # stri = "("
+    # for state0 in gw.level0states:
+    #     stri += " s = {} \\/".format(state0)
+    # stri = stri[:-3]
+    # stri += ") /\\ ("
+    # for state0 in gw.level0states:
+    #     stri += " s' = {} \\/".format(state0)
+    # stri = stri[:-3]
+    # stri += ") -> stepH = 2\n\n"
+    # file.write(stri)
 
-    stri = "("
-    for state0 in gw.level1states:
-        stri += " s = {} \\/".format(state0)
-    stri = stri[:-3]
-    stri += ") /\\ ("
-    for state0 in gw.level1states:
-        stri += " s' = {} \\/".format(state0)
-    stri = stri[:-3]
-    stri += ") -> stepH = 2\n\n"
-    file.write(stri)
+    # stri = "("
+    # for state0 in gw.level1states:
+    #     stri += " s = {} \\/".format(state0)
+    # stri = stri[:-3]
+    # stri += ") /\\ ("
+    # for state0 in gw.level1states:
+    #     stri += " s' = {} \\/".format(state0)
+    # stri = stri[:-3]
+    # stri += ") -> stepH = 2\n\n"
+    # file.write(stri)
 
-    stri = "("
-    for state0 in gw.level2states:
-        stri += " s = {} \\/".format(state0)
-    stri = stri[:-3]
-    stri += ") /\\ ("
-    for state0 in gw.level2states:
-        stri += " s' = {} \\/".format(state0)
-    stri = stri[:-3]
-    stri += ") -> stepH = 2\n\n"
-    file.write(stri)
+    # stri = "("
+    # for state0 in gw.level2states:
+    #     stri += " s = {} \\/".format(state0)
+    # stri = stri[:-3]
+    # stri += ") /\\ ("
+    # for state0 in gw.level2states:
+    #     stri += " s' = {} \\/".format(state0)
+    # stri = stri[:-3]
+    # stri += ") -> stepH = 2\n\n"
+    # file.write(stri)
 
 
 
-    stri = "("
-    for state0 in gw.level0states:
-        stri += " s = {} \\/".format(state0)
-    stri = stri[:-3]
-    stri += ") /\\ ("
-    for state0 in gw.level1states:
-        stri += " s' = {} \\/".format(state0)
-    stri = stri[:-3]
-    stri += ") -> stepH = 3\n\n"
-    file.write(stri)
+    # stri = "("
+    # for state0 in gw.level0states:
+    #     stri += " s = {} \\/".format(state0)
+    # stri = stri[:-3]
+    # stri += ") /\\ ("
+    # for state0 in gw.level1states:
+    #     stri += " s' = {} \\/".format(state0)
+    # stri = stri[:-3]
+    # stri += ") -> stepH = 3\n\n"
+    # file.write(stri)
 
-    stri = "("
-    for state0 in gw.level0states:
-        stri += " s = {} \\/".format(state0)
-    stri = stri[:-3]
-    stri += ") /\\ ("
-    for state0 in gw.level2states:
-        stri += " s' = {} \\/".format(state0)
-    stri = stri[:-3]
-    stri += ") -> stepH = 4\n\n"
-    file.write(stri)
+    # stri = "("
+    # for state0 in gw.level0states:
+    #     stri += " s = {} \\/".format(state0)
+    # stri = stri[:-3]
+    # stri += ") /\\ ("
+    # for state0 in gw.level2states:
+    #     stri += " s' = {} \\/".format(state0)
+    # stri = stri[:-3]
+    # stri += ") -> stepH = 4\n\n"
+    # file.write(stri)
 
-    stri = "("
-    for state0 in gw.level1states:
-        stri += " s = {} \\/".format(state0)
-    stri = stri[:-3]
-    stri += ") /\\ ("
-    for state0 in gw.level0states:
-        stri += " s' = {} \\/".format(state0)
-    stri = stri[:-3]
-    stri += ") -> stepH = 1\n\n"
-    file.write(stri)
+    # stri = "("
+    # for state0 in gw.level1states:
+    #     stri += " s = {} \\/".format(state0)
+    # stri = stri[:-3]
+    # stri += ") /\\ ("
+    # for state0 in gw.level0states:
+    #     stri += " s' = {} \\/".format(state0)
+    # stri = stri[:-3]
+    # stri += ") -> stepH = 1\n\n"
+    # file.write(stri)
 
-    stri = "("
-    for state0 in gw.level1states:
-        stri += " s = {} \\/".format(state0)
-    stri = stri[:-3]
-    stri += ") /\\ ("
-    for state0 in gw.level2states:
-        stri += " s' = {} \\/".format(state0)
-    stri = stri[:-3]
-    stri += ") -> stepH = 3\n\n"
-    file.write(stri)
+    # stri = "("
+    # for state0 in gw.level1states:
+    #     stri += " s = {} \\/".format(state0)
+    # stri = stri[:-3]
+    # stri += ") /\\ ("
+    # for state0 in gw.level2states:
+    #     stri += " s' = {} \\/".format(state0)
+    # stri = stri[:-3]
+    # stri += ") -> stepH = 3\n\n"
+    # file.write(stri)
 
-    stri = "("
-    for state0 in gw.level2states:
-        stri += " s = {} \\/".format(state0)
-    stri = stri[:-3]
-    stri += ") /\\ ("
-    for state0 in gw.level1states:
-        stri += " s' = {} \\/".format(state0)
-    stri = stri[:-3]
-    stri += ") -> stepH = 1\n\n"
-    file.write(stri)
+    # stri = "("
+    # for state0 in gw.level2states:
+    #     stri += " s = {} \\/".format(state0)
+    # stri = stri[:-3]
+    # stri += ") /\\ ("
+    # for state0 in gw.level1states:
+    #     stri += " s' = {} \\/".format(state0)
+    # stri = stri[:-3]
+    # stri += ") -> stepH = 1\n\n"
+    # file.write(stri)
 
-    stri = "("
-    for state0 in gw.level2states:
-        stri += " s = {} \\/".format(state0)
-    stri = stri[:-3]
-    stri += ") /\\ ("
-    for state0 in gw.level0states:
-        stri += " s' = {} \\/".format(state0)
-    stri = stri[:-3]
-    stri += ") -> stepH = 0\n\n"
+    # stri = "("
+    # for state0 in gw.level2states:
+    #     stri += " s = {} \\/".format(state0)
+    # stri = stri[:-3]
+    # stri += ") /\\ ("
+    # for state0 in gw.level0states:
+    #     stri += " s' = {} \\/".format(state0)
+    # stri = stri[:-3]
+    # stri += ") -> stepH = 0\n\n"
 
-    file.write(stri)
+    # file.write(stri)
 
     file.write("stepH != 2 -> turn=2\n\n")
+    file.write("stepH' = 2\n\n")
 
     ####################################### JONAS ############################
 
@@ -799,14 +885,14 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # for obs in gw.obstacles:
     #     file.write('!s = {}\n'.format(obs))
 
-    for s in set(allowed_states):
+    # for s in set(allowed_states):
     #     # stri = 'st = {} -> !s = {}\n'.format(s,s)
     #     # file.write(stri)
-        stri = 'st = {} -> !s\' = {}\n'.format(s,s)
-        file.write(stri)
-    #     ####################################### JONAS ############################
-        stri = 'st\' = {} -> !s\' = {}\n'.format(s,s)
-        file.write(stri)
+    #     stri = 'st = {} -> !s\' = {}\n'.format(s,s)
+    #     file.write(stri)
+    # #     ####################################### JONAS ############################
+    #     stri = 'st\' = {} -> !s\' = {}\n'.format(s,s)
+    #     file.write(stri)
 
 
 
@@ -973,4 +1059,4 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     # file.write("st' = {}".format(allstates[-2]))
 
-    file.write("st' = {}".format(115))
+    # file.write("st' = {}".format(115))

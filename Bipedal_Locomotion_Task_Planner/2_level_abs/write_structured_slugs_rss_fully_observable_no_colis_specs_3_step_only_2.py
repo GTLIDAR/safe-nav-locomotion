@@ -511,9 +511,9 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     stri += "\n"
     file.write(stri)
 
-    
-    # stri = "!forward -> st' != s\n"
-    stri = "st' != s\n"
+    # stri = "!forward -> st' != s'\n"
+    stri = "!forward -> st' != s\n"
+    # stri += "!forward -> st != s\n"
     stri += "\n"
     file.write(stri)
 
@@ -792,21 +792,21 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
 
 
-    for obs in gw.obstacles:
-        if obs in allowed_states:
-            file.write('!s = {}\n'.format(obs))
+    # for obs in gw.obstacles:
+    #     if obs in allowed_states:
+    #         file.write('!s = {}\n'.format(obs))
 
     # for obs in gw.obstacles:
     #     file.write('!s = {}\n'.format(obs))
 
-    for s in set(allowed_states):
+    # for s in set(allowed_states):
     #     # stri = 'st = {} -> !s = {}\n'.format(s,s)
     #     # file.write(stri)
-        stri = 'st = {} -> !s\' = {}\n'.format(s,s)
-        file.write(stri)
+    #     # stri = 'st = {} -> !s\' = {}\n'.format(s,s)
+    #     # file.write(stri)
     #     ####################################### JONAS ############################
-        stri = 'st\' = {} -> !s\' = {}\n'.format(s,s)
-        file.write(stri)
+    #     stri = 'st\' = {} -> !s\' = {}\n'.format(s,s)
+    #     file.write(stri)
 
 
 
@@ -973,4 +973,4 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     # file.write("st' = {}".format(allstates[-2]))
 
-    file.write("st' = {}".format(115))
+    # file.write("st' = {}".format(83))
