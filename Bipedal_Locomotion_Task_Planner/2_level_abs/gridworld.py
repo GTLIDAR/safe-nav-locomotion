@@ -8,6 +8,7 @@ from skimage import io
 import cv2
 import pygame.locals as pgl
 import copy
+from collections import OrderedDict
 
 
 class Gridworld():
@@ -88,6 +89,17 @@ class Gridworld():
         self.right_edge = []
         self.top_edge = []
         self.bottom_edge = []
+        
+        self.left_edge2 = []
+        self.right_edge2 = []
+        self.top_edge2 = []
+        self.bottom_edge2 = []
+
+        self.left_edge3 = []
+        self.right_edge3 = []
+        self.top_edge3 = []
+        self.bottom_edge3 = []
+
         self.regions = regions
         self.moveobstacles = moveobstacles
         self.states = range(nrows*ncols)
@@ -96,14 +108,29 @@ class Gridworld():
             # note that edges are not disjoint, so we cannot use elif
             if x % self.ncols == 0:
                 self.left_edge.append(x)
+                self.left_edge2.append(x+1)
+                self.left_edge3.append(x+2)
             if 0 <= x < self.ncols:
                 self.top_edge.append(x)
+                self.top_edge2.append(x+self.ncols)
+                self.top_edge3.append(x+2*self.ncols)
             if x % self.ncols == self.ncols - 1:
                 self.right_edge.append(x)
+                self.right_edge2.append(x-1)
+                self.right_edge3.append(x-2)
             if (self.nrows - 1) * self.ncols <= x <= self.nstates:
                 self.bottom_edge.append(x)
+                self.bottom_edge2.append(x-self.ncols)
+                self.bottom_edge3.append(x-2*self.ncols)
         self.edges = self.left_edge + self.top_edge + self.right_edge + self.bottom_edge
         self.walls = self.edges + obstacles
+
+        edges2_temp = self.left_edge2 + self.top_edge2 + self.right_edge2 + self.bottom_edge2
+        edges2_temp = [x for x in edges2_temp if x not in self.edges]
+        self.edges2 = list( OrderedDict.fromkeys(edges2_temp) )
+        edges3_temp = self.left_edge3 + self.top_edge3 + self.right_edge3 + self.bottom_edge3
+        edges3_temp = [x for x in edges3_temp if x not in self.edges and x not in self.edges2]
+        self.edges3 = list( OrderedDict.fromkeys(edges3_temp) )
 
         self.obsborder = set()
         for obs in obstacles:

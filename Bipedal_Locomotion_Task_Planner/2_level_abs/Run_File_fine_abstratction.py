@@ -52,31 +52,27 @@ if __name__ == '__main__':
     then = time.time()
     print 'time: ' + str(datetime.datetime.now().time())
     ######     1) Choose Environment input figure name:     #####
-    # mapname = '3ne'
-    # mapname = 'BeliefTestEvasion'
-    # mapname = 'BelieEvasionTwenty'
-    mapname = 'BelieEvasionFifteen_w'
-    # mapname = 'chicago4_45_2454_5673_map'
-    # mapname = 'BelieEvasion_64_30'
-    # mapname = 'BelieEvasion_fifteen'
-    # mapname = 'BelieEvasion_15_20_sparse_obs'
-    # mapname = 'BelieEvasion_38_23_height'
-    # mapname = 'BelieEvasion_38_23_Extra_obs'
+    mapname_fine = 'fine_abstraction'
     scale = (int(40*2.8),40)
-    # rownum = 15
-    # colnum = 20
-    # rownum = 30
-    # colnum = 64
-    # rownum = 15
-    # colnum = 15
-    rownum = 7
-    colnum = 7
-    filename = ['figures/' + mapname + '.pgm',scale,cv2.INTER_LINEAR_EXACT]
+    rownum_f = 7
+    rownum_f = 7
 
-    filename = 'figures/'+mapname+'.png'
-    image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
-    image = cv2.resize(image,dsize=(colnum,rownum),interpolation=cv2.INTER_AREA)
-    h, w = image.shape[:2]
+    mapname_coarse = 'BelieEvasion_38_23_Extra_obs'
+    rownum_c = 7
+    colnum_c = 7
+
+
+
+    filename_f = 'figures/'+mapname_fine+'.png'
+    image_f = cv2.imread(filename_f, cv2.IMREAD_GRAYSCALE)
+    image_f = cv2.resize(image_f,dsize=(rownum_f,rownum_f),interpolation=cv2.INTER_AREA)
+    h_f, w_f = image_f.shape[:2]
+
+    filename_c = 'figures/'+mapname_coarse+'.png'
+    image_c = cv2.imread(filename_c, cv2.IMREAD_GRAYSCALE)
+    image_c = cv2.resize(image_c,dsize=(rownum_c,rownum_c),interpolation=cv2.INTER_AREA)
+    h_c, w_c = image_c.shape[:2]
+    
     folder_locn = 'Examples/'
     example_name = 'Belief_Evasion_fine_abstraction'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
@@ -92,114 +88,26 @@ if __name__ == '__main__':
     targets = [[]]
 
     #####     4) pick initial location for robot and dynamic obstacle, pick goal locations     #####
-    # initial = [54]
-    # moveobstacles = [47]
-    # PUDO_t = [84,143]
-
-    # initial = [1076]
-    # moveobstacles = [75]
-    # # PUDO_t = [1162,818]
-    # PUDO_t = [842,818]
 
     # 7_7
-    initial = [24]
-    moveobstacles = [0]
+    initial_fine = [24]
+    moveobstacles_fine = [0]
     PUDO_t = [3,27,45,21]
 
-    # PUDO_t = [84,147]
-    # PUDO_t = [189,53]
-
-    # initial = [54]
-    # moveobstacles = [47]
-    # PUDO_t = [92,100]
-
-    # initial = [42]
-    # moveobstacles = [278]
-    # PUDO_t = [115,203]
-
-    filename = [filename,(colnum,rownum),cv2.INTER_AREA]
-    gwg = Gridworld(filename,nagents=nagents, targets=targets, initial=initial, moveobstacles=moveobstacles)
-    gwg.colorstates = [set(), set()]
-    gwg.render()
-    gwg.save(gwfile)
+    filename_f = [filename_f,(rownum_f,rownum_f),cv2.INTER_AREA]
+    gwgfine = Gridworld(filename_f,nagents=nagents, targets=targets, initial=initial_fine, moveobstacles=moveobstacles_fine)
+    gwgfine.colorstates = [set(), set()]
+    gwgfine.render()
+    gwgfine.save(gwfile)
     partition = dict()
     allowed_states = [[None]] * nagents
     pg = [[None]]*nagents
-    # allowed_states[0] = list(set(gwg.states) - set(gwg.obstacles)-set(gwg.obsborder))
-    allowed_states[0] = list(set(gwg.states) - set(gwg.obstacles))
+    # allowed_states[0] = list(set(gwgfine.states) - set(gwgfine.obstacles)-set(gwgfine.obsborder))
+    allowed_states[0] = list(set(gwgfine.states) - set(gwgfine.obstacles))
 
     #####     5) Pick belief state partitions     #####
     pg[0] = {0:allowed_states[0]}
  
-    # pg[0] = {0: set.union(*[set(range(0,10))])  - set(gwg.obstacles), 1: set.union(*[set(range(10,20))])  - set(gwg.obstacles), 2: set.union(*[set(range(20,30))])  - set(gwg.obstacles),
-    # 		 3: set.union(*[set(range(30,40))])  - set(gwg.obstacles), 4: set.union(*[set(range(40,50))])  - set(gwg.obstacles), 5: set.union(*[set(range(50,60))])  - set(gwg.obstacles),
-    # 		 6: set.union(*[set(range(60,70))])  - set(gwg.obstacles), 7: set.union(*[set(range(70,80))])  - set(gwg.obstacles), 8: set.union(*[set(range(80,90))])  - set(gwg.obstacles),
-    # 		 9: set.union(*[set(range(90,100))])  - set(gwg.obstacles)}
-             
-    # pg[0] = {0: set.union(*[set(range(0,30))])  - set(gwg.obstacles), 1: set.union(*[set(range(30,60))])  - set(gwg.obstacles), 2: set.union(*[set(range(60,90))])  - set(gwg.obstacles),
-    # 		 3: set.union(*[set(range(90,120))])  - set(gwg.obstacles), 4: set.union(*[set(range(120,150))])  - set(gwg.obstacles), 5: set.union(*[set(range(150,180))])  - set(gwg.obstacles),
-    # 		 6: set.union(*[set(range(180,210))])  - set(gwg.obstacles), 7: set.union(*[set(range(210,225))])  - set(gwg.obstacles)}
-    
-    
-    # pg[0] = {0: set.union(*[set(range(0,15))])  - set(gwg.obstacles), 1: set.union(*[set(range(15,30))])  - set(gwg.obstacles), 2: set.union(*[set(range(30,45))])  - set(gwg.obstacles),
-    # 		 3: set.union(*[set(range(45,60))])  - set(gwg.obstacles), 4: set.union(*[set(range(60,75))])  - set(gwg.obstacles), 5: set.union(*[set(range(75,90))])  - set(gwg.obstacles),
-    # 		 6: set.union(*[set(range(90,105))])  - set(gwg.obstacles), 7: set.union(*[set(range(105,120))])  - set(gwg.obstacles), 8: set.union(*[set(range(120,135))])  - set(gwg.obstacles),
-    #           9: set.union(*[set(range(135,150))])  - set(gwg.obstacles), 10: set.union(*[set(range(150,165))])  - set(gwg.obstacles), 11: set.union(*[set(range(165,180))])  - set(gwg.obstacles),
-    #            12: set.union(*[set(range(180,195))])  - set(gwg.obstacles), 13: set.union(*[set(range(195,210))])  - set(gwg.obstacles), 14: set.union(*[set(range(210,225))])  - set(gwg.obstacles)}
-
-
-
-    # block1 = []
-    # block2 = []
-    # block3 = []
-    # block4 = []   
-    # block5 = []
-    # block6 = []
-    # block7 = []
-    # block8 = []
-    # block9 = []
-
-    # for s in gwg.states:
-    #     (row,col)=gwg.coords(s)
-    #     if row<5:
-    #         if col<5:
-    #             block1.append(s)
-    #         elif col<10:
-    #             block2.append(s)
-    #         else:
-    #             block3.append(s)
-    #     elif row<10:
-    #         if col<5:
-    #             block4.append(s)
-    #         elif col<10:
-    #             block5.append(s)
-    #         else:
-    #             block6.append(s)
-    #     else:
-    #         if col<5:
-    #             block7.append(s)
-    #         elif col<10:
-    #             block8.append(s)
-    #         else:
-    #             block9.append(s)
-
-    # pg[0] = {0: set.union(*[set(block1)])  - set(gwg.obstacles), 1: set.union(*[set(block2)])  - set(gwg.obstacles), 2: set.union(*[set(block3)])  - set(gwg.obstacles),
-    # 		 3: set.union(*[set(block4)])  - set(gwg.obstacles), 4: set.union(*[set(block5)])  - set(gwg.obstacles), 5: set.union(*[set(block6)])  - set(gwg.obstacles),
-    # 		 6: set.union(*[set(block7)])  - set(gwg.obstacles), 7: set.union(*[set(block8)])  - set(gwg.obstacles), 8: set.union(*[set(block9)])  - set(gwg.obstacles)}
-
-
-   
-    #pg[0] = dict()
-    #i = 0
-    # #26 seems to be the max
-    #b = range(1,25)
-    #for state in b:
-    #    pg[0][i]=set([state])
-    #    i += 1
-
-    # for state in allowed_states[0]:
-    #     pg[0][i]=set([state])
-    #     i += 1
         
     #########################################################
     # print('pg: ' + str(pg[0]))
@@ -208,17 +116,22 @@ if __name__ == '__main__':
     vel = [1,2,2,2]
     invisibilityset = []
     sensor_uncertainty = 1
-    filename = []
+    filename_f = []
 
     for n in [0]:
         # obj is a list of states that are static obstacle cells
-        obj = compute_all_vis.img2obj(image)
+        obj = compute_all_vis.img2obj(image_f)
         # compute visibility for each state
         # iset is a dict that has all the states listed that are not visible from the current state
-        iset = compute_all_vis.compute_visibility_for_all(obj, h, w, radius=visdist[n])
+        if len(gwgfine.obstacles)>0:
+            iset = compute_all_vis.compute_visibility_for_all(obj, h_f, w_f, radius=visdist[n])
+        else:
+            iset = {}
+            for state in gwgfine.states:
+                iset[state] = set()
         invisibilityset.append(iset)
         outfile = trial_name+'agent'+str(n) +'.json'
-        filename.append(outfile)
+        filename_f.append(outfile)
         print 'output file: ', outfile
         print 'input file name:', infile
 
@@ -228,7 +141,7 @@ if __name__ == '__main__':
         #                                                            visdist =  visdist[n], allowed_states = allowed_states[n],
         #                                                            partitionGrid = pg[n])
 
-        write_structured_slugs_rss_fine_grid.write_to_slugs_part_dist(infile, gwg, initial[n], moveobstacles[0], iset, PUDO_targets = PUDO_t,
+        write_structured_slugs_rss_fine_grid.write_to_slugs_part_dist(infile, gwgfine, initial_fine[n], moveobstacles_fine[0], iset, PUDO_targets = PUDO_t,
                                                                    visdist =  visdist[n], allowed_states = allowed_states[n],
                                                                    partitionGrid = pg[n])
         
@@ -246,4 +159,4 @@ if __name__ == '__main__':
     print('Synthesis took ', now - then, ' seconds')
     print('Actual synthesis took ', now - noww, ' seconds')
 
-    Simulator.userControlled_partition(filename[0], gwg, pg[0], moveobstacles, invisibilityset, jsonfile_name)
+    Simulator.userControlled_partition(filename_f[0], gwgfine, pg[0], moveobstacles_fine, invisibilityset, jsonfile_name)

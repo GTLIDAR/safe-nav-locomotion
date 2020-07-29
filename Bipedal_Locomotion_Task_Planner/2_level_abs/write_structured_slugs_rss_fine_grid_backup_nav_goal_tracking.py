@@ -220,7 +220,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('\n[ENV_INIT]\n')
     file.write('s = {}\n'.format(init))
     file.write('orientation = 3\n')
-    file.write('deliveryrequest = 2\n')
+    file.write('deliveryrequest = 1\n')
     # file.write('pastTurnStanceMatchFoot = 2\n')
 
     if initmovetarget in allowed_states:
@@ -619,14 +619,6 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     stri += "deliveryrequest = 4 -> ((s' = {} & deliveryrequest' = 0) \/ (s' != {} & deliveryrequest' = 4))\n".format(PUDO_targets[3],PUDO_targets[3])
     file.write(stri)
     
-    file.write("deliveryrequest = 0 -> deliveryrequest' !=0\n\n")
-
-    ##### Attempt to elliminate stop when entering each new coarse grid #####:
-    file.write("deliveryrequest = 0 & orientation = 0 -> deliveryrequest' !=3\n")
-    file.write("deliveryrequest = 0 & orientation = 3 -> deliveryrequest' !=4\n")
-    file.write("deliveryrequest = 0 & orientation = 6 -> deliveryrequest' !=1\n")
-    file.write("deliveryrequest = 0 & orientation = 9 -> deliveryrequest' !=3\n")
-
 
     ##################### Some Suda Stuff ###################
     # if target_reachability:
@@ -735,85 +727,13 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('turn !=2 -> stepL != 1 /\ stepL !=2\n')
     file.write('\n')
 
-    ##### Fine Specific Specs #####
     stri =""
     for edgeS in gw.edges:
         stri += "s' = {} -> turn' = 2\n".format(edgeS)
     stri += "\n"
     file.write(stri)
 
-    # stri =""
-    # for edgeS in gw.edges:
-    #     stri += "s' = {} & deliveryrequest' != 0-> !forward\n".format(edgeS)
-    # stri += "\n"
-    # file.write(stri)
-
     file.write("requestPending1' = deliveryrequest\n")
-
-    ##### Ensure the robot doesn't leave cell before completing nav goal #####
-    stri =""
-    for edgeS in gw.top_edge:
-        stri += "s' = {} & orientation' = 0 & deliveryrequest' != 0 -> !forward'\n".format(edgeS)
-    stri += "\n"
-    file.write(stri)
-    stri =""
-    for edgeS in gw.right_edge:
-        stri += "s' = {} & orientation' = 3 & deliveryrequest' != 0 -> !forward'\n".format(edgeS)
-    stri += "\n"
-    file.write(stri)
-    stri =""
-    for edgeS in gw.bottom_edge:
-        stri += "s' = {} & orientation' = 6 & deliveryrequest' != 0 -> !forward'\n".format(edgeS)
-    stri += "\n"
-    file.write(stri)
-    stri =""
-    for edgeS in gw.left_edge:
-        stri += "s' = {} & orientation' = 9 & deliveryrequest' != 0 -> !forward'\n".format(edgeS)
-    stri += "\n"
-    file.write(stri)
-
-    stri =""
-    for edgeS in gw.top_edge2:
-        stri += "s' = {} & orientation' = 0 & deliveryrequest' != 0 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
-    stri += "\n"
-    file.write(stri)
-    stri =""
-    for edgeS in gw.right_edge2:
-        stri += "s' = {} & orientation' = 3 & deliveryrequest' != 0 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
-    stri += "\n"
-    file.write(stri)
-    stri =""
-    for edgeS in gw.bottom_edge2:
-        stri += "s' = {} & orientation' = 6 & deliveryrequest' != 0 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
-    stri += "\n"
-    file.write(stri)
-    stri =""
-    for edgeS in gw.left_edge2:
-        stri += "s' = {} & orientation' = 9 & deliveryrequest' != 0 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
-    stri += "\n"
-    file.write(stri)
-
-    stri =""
-    for edgeS in gw.top_edge3:
-        stri += "s' = {} & orientation' = 0 & deliveryrequest' != 0 -> stepL' != 2\n".format(edgeS)
-    stri += "\n"
-    file.write(stri)
-    stri =""
-    for edgeS in gw.right_edge3:
-        stri += "s' = {} & orientation' = 3 & deliveryrequest' != 0 -> stepL' != 2\n".format(edgeS)
-    stri += "\n"
-    file.write(stri)
-    stri =""
-    for edgeS in gw.bottom_edge3:
-        stri += "s' = {} & orientation' = 6 & deliveryrequest' != 0 -> stepL' != 2\n".format(edgeS)
-    stri += "\n"
-    file.write(stri)
-    stri =""
-    for edgeS in gw.left_edge3:
-        stri += "s' = {} & orientation' = 9 & deliveryrequest' != 0 -> stepL' != 2\n".format(edgeS)
-    stri += "\n"
-    file.write(stri)
-
 
 
 

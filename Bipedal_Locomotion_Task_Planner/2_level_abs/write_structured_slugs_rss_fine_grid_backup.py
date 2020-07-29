@@ -198,7 +198,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('st:0...{}\n'.format(len(allstates) -1))
     file.write('orientation:0...11\n')
     file.write('s:0...{}\n'.format(len(gw.states)-1))
-    file.write('deliveryrequest\n')
+    file.write('deliveryrequest:0...4\n')
     # file.write('sOld:0...{}\n'.format(len(gw.states)-1))
     # file.write('pastTurnStanceMatchFoot:0...2\n')
 
@@ -208,8 +208,8 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # file.write('turnRight\n')
     file.write('stepL:0...3\n')
     file.write('stop\n')
-    file.write('requestPending1\n')
-    file.write('requestPending2\n')
+    file.write('requestPending1:0...4\n')
+    # file.write('requestPending2\n')
     file.write('stepH:0...4\n')
     file.write('turn:0...4\n')
     # file.write('stanceFoot:0...2\n')
@@ -220,7 +220,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('\n[ENV_INIT]\n')
     file.write('s = {}\n'.format(init))
     file.write('orientation = 3\n')
-    file.write('deliveryrequest\n')
+    file.write('deliveryrequest = 2\n')
     # file.write('pastTurnStanceMatchFoot = 2\n')
 
     if initmovetarget in allowed_states:
@@ -612,6 +612,22 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
         if obs in allowed_states:
             file.write('!st = {}\n'.format(obs))
 
+    ##### Navigation goal tracking
+    stri = "deliveryrequest = 1 -> ((s' = {} & deliveryrequest' = 0) \/ (s' != {} & deliveryrequest' = 1))\n".format(PUDO_targets[0],PUDO_targets[0])
+    stri += "deliveryrequest = 2 -> ((s' = {} & deliveryrequest' = 0) \/ (s' != {} & deliveryrequest' = 2))\n".format(PUDO_targets[1],PUDO_targets[1])
+    stri += "deliveryrequest = 3 -> ((s' = {} & deliveryrequest' = 0) \/ (s' != {} & deliveryrequest' = 3))\n".format(PUDO_targets[2],PUDO_targets[2])
+    stri += "deliveryrequest = 4 -> ((s' = {} & deliveryrequest' = 0) \/ (s' != {} & deliveryrequest' = 4))\n".format(PUDO_targets[3],PUDO_targets[3])
+    file.write(stri)
+    
+    file.write("deliveryrequest = 0 -> deliveryrequest' !=0\n\n")
+
+    ##### Attempt to elliminate stop when entering each new coarse grid #####:
+    file.write("deliveryrequest = 0 & orientation = 0 -> deliveryrequest' !=3\n")
+    file.write("deliveryrequest = 0 & orientation = 3 -> deliveryrequest' !=4\n")
+    file.write("deliveryrequest = 0 & orientation = 6 -> deliveryrequest' !=1\n")
+    file.write("deliveryrequest = 0 & orientation = 9 -> deliveryrequest' !=3\n")
+
+
     ##################### Some Suda Stuff ###################
     # if target_reachability:
     #     for t in targets:
@@ -675,15 +691,26 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     stri += "(turn=0 & (orientation'!=0 & orientation'!=3  & orientation'!=6 & orientation'!=9)) -> turn'=0\n"
     stri += "\n"
     file.write(stri)
-    stri = "(s = {}) -> ! requestPending1'\n".format(PUDO_targets[0])
-    stri += "!(s = {}) ->(requestPending1' <-> (requestPending1 | deliveryrequest))\n\n".format(PUDO_targets[0])
-    stri += "(s = {}) -> !requestPending2'\n".format(PUDO_targets[1])
-    stri += "!(s = {}) -> (requestPending2' <-> ((s = {} & requestPending1) | requestPending2))\n\n".format(PUDO_targets[1],PUDO_targets[0])
-    file.write(stri)
+
+
+    ##### navigation goal tracking specs #####
+    # stri = "(s = {}) -> ! requestPending1'\n".format(PUDO_targets[0])
+    # stri += "!(s = {}) ->(requestPending1' <-> (requestPending1 | deliveryrequest))\n\n".format(PUDO_targets[0])
+    # stri += "(s = {}) -> !requestPending2'\n".format(PUDO_targets[1])
+    # stri += "!(s = {}) -> (requestPending2' <-> ((s = {} & requestPending1) | requestPending2))\n\n".format(PUDO_targets[1],PUDO_targets[0])
+    # file.write(stri)
+    # stri = "deliveryrequest = 1 -> ((s = {} & deliveryrequest' = 0) \/ deliveryrequest' = 1)\n".format(PUDO_targets[0])
+    # stri += "deliveryrequest = 2 -> ((s = {} & deliveryrrequest' = 0) \/ deliveryrequest' = 2)\n".format(PUDO_targets[1])
+    # stri += "deliveryrequest = 3 -> ((s = {} & deliveryrequest' = 0) \/ deliveryrequest' = 3)\n".format(PUDO_targets[2])
+    # stri += "deliveryrequest = 4 -> ((s = {} & deliveryrequest' = 0) \/ deliveryrequest' = 4)\n".format(PUDO_targets[3])
+    # file.write(stri)
+
+
+
 
 
     # footstance based navigation:
-    file.write('\n')
+    # file.write('\n')
     # file.write("forward & !stop & stanceFoot=0 -> stanceFoot'=1\n")
     # file.write("forward & !stop & stanceFoot=1 -> stanceFoot'=0\n")
 
@@ -708,11 +735,87 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('turn !=2 -> stepL != 1 /\ stepL !=2\n')
     file.write('\n')
 
+    ##### Fine Specific Specs #####
     stri =""
     for edgeS in gw.edges:
         stri += "s' = {} -> turn' = 2\n".format(edgeS)
     stri += "\n"
     file.write(stri)
+
+    # stri =""
+    # for edgeS in gw.edges:
+    #     stri += "s' = {} & deliveryrequest' != 0-> !forward\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+
+    file.write("requestPending1' = deliveryrequest\n")
+
+    ##### Ensure the robot doesn't leave cell before completing nav goal #####
+    stri =""
+    for edgeS in gw.top_edge:
+        stri += "s' = {} & orientation' = 0 & deliveryrequest' != 0 -> !forward'\n".format(edgeS)
+    stri += "\n"
+    file.write(stri)
+    stri =""
+    for edgeS in gw.right_edge:
+        stri += "s' = {} & orientation' = 3 & deliveryrequest' != 0 -> !forward'\n".format(edgeS)
+    stri += "\n"
+    file.write(stri)
+    stri =""
+    for edgeS in gw.bottom_edge:
+        stri += "s' = {} & orientation' = 6 & deliveryrequest' != 0 -> !forward'\n".format(edgeS)
+    stri += "\n"
+    file.write(stri)
+    stri =""
+    for edgeS in gw.left_edge:
+        stri += "s' = {} & orientation' = 9 & deliveryrequest' != 0 -> !forward'\n".format(edgeS)
+    stri += "\n"
+    file.write(stri)
+
+    stri =""
+    for edgeS in gw.top_edge2:
+        stri += "s' = {} & orientation' = 0 & deliveryrequest' != 0 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
+    stri += "\n"
+    file.write(stri)
+    stri =""
+    for edgeS in gw.right_edge2:
+        stri += "s' = {} & orientation' = 3 & deliveryrequest' != 0 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
+    stri += "\n"
+    file.write(stri)
+    stri =""
+    for edgeS in gw.bottom_edge2:
+        stri += "s' = {} & orientation' = 6 & deliveryrequest' != 0 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
+    stri += "\n"
+    file.write(stri)
+    stri =""
+    for edgeS in gw.left_edge2:
+        stri += "s' = {} & orientation' = 9 & deliveryrequest' != 0 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
+    stri += "\n"
+    file.write(stri)
+
+    stri =""
+    for edgeS in gw.top_edge3:
+        stri += "s' = {} & orientation' = 0 & deliveryrequest' != 0 -> stepL' != 2\n".format(edgeS)
+    stri += "\n"
+    file.write(stri)
+    stri =""
+    for edgeS in gw.right_edge3:
+        stri += "s' = {} & orientation' = 3 & deliveryrequest' != 0 -> stepL' != 2\n".format(edgeS)
+    stri += "\n"
+    file.write(stri)
+    stri =""
+    for edgeS in gw.bottom_edge3:
+        stri += "s' = {} & orientation' = 6 & deliveryrequest' != 0 -> stepL' != 2\n".format(edgeS)
+    stri += "\n"
+    file.write(stri)
+    stri =""
+    for edgeS in gw.left_edge3:
+        stri += "s' = {} & orientation' = 9 & deliveryrequest' != 0 -> stepL' != 2\n".format(edgeS)
+    stri += "\n"
+    file.write(stri)
+
+
+
 
     # stri = ""
     # for row in range(gw.nrows-1):
@@ -908,42 +1011,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
 
 
-    # if belief_safety > 0:
-    #     #beliefcombs is all possible combination of belief states defined in main file
-    #     for b in beliefcombs:
-    #         beliefset = set()
-    #         for beliefstate in b:
-    #             beliefset = beliefset.union(partitionGrid[beliefstate])
-    #         beliefset =  beliefset -set(gw.targets[0])
-    #         if len(beliefset) > belief_safety:
-    #             stri = 'st = {} -> '.format(len(nonbeliefstates)+beliefcombs.index(b))
-    #             counter = 0
-    #             stri += '('
-    #             for x in allowed_states:
-    #                 invisstates = invisibilityset[x]
-    #                 beliefset_invis = beliefset.intersection(invisstates)
-    #                 if len(beliefset_invis) > belief_safety:
-    #                     stri += '!s = {} /\\ '.format(nonbeliefstates.index(x)) # <--- why??
-    #                     counter += 1
-    #             stri = stri[:-3]
-    #             stri += ')\n'
-    #             if counter > 0:
-    #                 file.write(stri)
-
-    # if target_reachability:
-    #     stri = 'c = 0 /\\ ('
-    #     for t in targets:
-    #         stri += ('s = {} \\/ '.format(nonbeliefstates.index(t)))
-    #     stri = stri[:-3]
-    #     stri += ') -> c\' = 1'
-    #     stri += '\n'
-    #     stri += '!('
-    #     for t in targets:
-    #         stri += ('s = {} \\/ '.format(nonbeliefstates.index(t)))
-    #     stri = stri[:-3]
-    #     stri += ') -> c\' = 0\n'
-    #     stri += 'c = 1 -> c\' = 0 \n'
-    #     file.write(stri)
+    
 
 #################################### -- Orientation stuff -- ##############################################
     # if target_has_vision:
@@ -997,8 +1065,10 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     # Writing sys_liveness
     file.write('\n[SYS_LIVENESS]\n')
-    file.write("!requestPending1\n")
-    file.write("!requestPending2\n")
+    # file.write("!requestPending1\n")
+    # file.write("!requestPending2\n")
+    file.write("requestPending1 = 0\n")
+
 
     # if target_reachability:
     #     file.write('c = 1\n')
