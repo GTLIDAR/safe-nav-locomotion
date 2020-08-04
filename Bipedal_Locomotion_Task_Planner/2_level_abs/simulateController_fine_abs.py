@@ -75,7 +75,7 @@ def getGridstate(gwg,currstate,dirn):
         return currstate - gwg.ncols
 
 
-def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibilityset,jsonfile):
+def userControlled_partition(filename,gwg,partitionGrid,moveobstacles_f,invisibilityset,jsonfile):
     automaton = parseJson(filename)
     # for s in automaton:
     #     print automaton[s]['State']['s']
@@ -87,7 +87,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
     for i in range(gwg.nstates,gwg.nstates+ len(beliefcombs)):
         allstates.append(i)
     gwg.colorstates = [set(), set()]
-    gridstate = copy.deepcopy(moveobstacles[0])
+    gridstate = copy.deepcopy(moveobstacles_f[0])
     output = BeliefIOParser(jsonfile)
     while True:
         output.saveState(gwg, automaton, automaton_state,gridstate)
@@ -98,7 +98,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         #     print 'nothingyet'
 
         
-        gwg.moveobstacles[0] = copy.deepcopy(gridstate)
+        gwg.moveobstacles_f[0] = copy.deepcopy(gridstate)
         gwg.render()
         # -----------------Jonas Robot Waits For Key Stroke To Take Action-----------------
         # while True:
@@ -107,10 +107,10 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         #                 break
         # ---------------------------------------------------------------------------------
         
-        agentstate = automaton[automaton_state]['State']['s_c']
+        agentstate = automaton[automaton_state]['State']['s']
         print 'Agent state is ', agentstate
         gwg.render()
-        # gwg.moveobstacles[0] = copy.deepcopy(gridstate)
+        # gwg.moveobstacles_f[0] = copy.deepcopy(gridstate)
 
         gwg.render()
         gwg.current = [copy.deepcopy(agentstate)]
@@ -124,19 +124,35 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         nextstatedirn = {'W':None,'E':None,'S':None,'N':None,'R':None, 'Belief':set()}
         # Need to Change this to add multiple next automaton states for one moving obstacle action (based on delivery request only I think, in this case only consider delivery request to be true). Need to add correct obstacle transition to specifications
         for n in nextstates:
-            nenvstate = automaton[n]['State']['st']
-            if nenvstate == gwg.moveobstacles[0] - 1:
+            nenvstate = automaton[n]['State']['directionrequest']
+            if nenvstate == 4:
                 nextstatedirn['W'] = n
-            if nenvstate == gwg.moveobstacles[0] + 1:
+            if nenvstate == 2:
                 nextstatedirn['E'] = n
-            if nenvstate == gwg.moveobstacles[0] + gwg.ncols:
+            if nenvstate == 3:
                 nextstatedirn['S'] = n
-            if nenvstate == gwg.moveobstacles[0] - gwg.ncols:
+            if nenvstate == 1:
                 nextstatedirn['N'] = n
-            if nenvstate == gwg.moveobstacles[0]:
+            if nenvstate == 0:
                 nextstatedirn['R'] = n
             if nenvstate not in xstates:
                 nextstatedirn['Belief'].add(n)
+
+
+        # for n in nextstates:
+        #     nenvstate = automaton[n]['State']['st']
+        #     if nenvstate == gwg.moveobstacles_f[0] - 1:
+        #         nextstatedirn['W'] = n
+        #     if nenvstate == gwg.moveobstacles_f[0] + 1:
+        #         nextstatedirn['E'] = n
+        #     if nenvstate == gwg.moveobstacles_f[0] + gwg.ncols:
+        #         nextstatedirn['S'] = n
+        #     if nenvstate == gwg.moveobstacles_f[0] - gwg.ncols:
+        #         nextstatedirn['N'] = n
+        #     if nenvstate == gwg.moveobstacles_f[0]:
+        #         nextstatedirn['R'] = n
+        #     if nenvstate not in xstates:
+        #         nextstatedirn['Belief'].add(n)
         while True:
             nextstate = None
             while nextstate == None:
@@ -147,15 +163,15 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                 nextstate = nextstatedirn[arrow]
                 if nextstate == None:
                     if arrow == 'W':
-                        gridstate = gwg.moveobstacles[0] - 1
+                        gridstate = gwg.moveobstacles_f[0] - 1
                     elif arrow == 'E':
-                        gridstate = gwg.moveobstacles[0] + 1
+                        gridstate = gwg.moveobstacles_f[0] + 1
                     elif arrow == 'S':
-                        gridstate = gwg.moveobstacles[0] + gwg.ncols
+                        gridstate = gwg.moveobstacles_f[0] + gwg.ncols
                     elif arrow == 'N':
-                        gridstate = gwg.moveobstacles[0] - gwg.ncols
+                        gridstate = gwg.moveobstacles_f[0] - gwg.ncols
                     elif arrow == 'R':
-                        gridstate = gwg.moveobstacles[0]
+                        gridstate = gwg.moveobstacles_f[0]
                     
                     for n in nextstatedirn['Belief']:
                         nenvstate = automaton[n]['State']['st']
@@ -164,7 +180,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                             nextstate = copy.deepcopy(n)
                             print 'Environment state in automaton is', allstates.index(nenvstate)
                             print 'Belief state is', beliefcombs[allstates.index(nenvstate) - len(xstates)]
-                            nextagentstate = automaton[n]['State']['s_c']
+                            nextagentstate = automaton[n]['State']['s']
                             # Jonas
                             invisstates = invisibilityset[0][nextagentstate]
                             # visstates = set(xstates) - invisstates
@@ -188,11 +204,6 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                     gwg.colorstates[1] = set()
                     gwg.render()
 
-            try:
-                print 'orientation is', automaton[automaton_state]['State']['orientation']
-                print 'directionrequest is ', automaton[automaton_state]['State']['directionrequest']
-            except:
-                break
 
             if len(automaton[nextstate]['Successors']) > 0:
                 break
@@ -206,7 +217,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         automaton_state = copy.deepcopy(nextstate)
 
 
-# def userControlled_imperfect_sensor(filename,gwg,partitionGrid,moveobstacles,allowed_states,invisibilityset,belief_gridstates,sensor_uncertainty,saveImage=None):
+# def userControlled_imperfect_sensor(filename,gwg,partitionGrid,moveobstacles_f,allowed_states,invisibilityset,belief_gridstates,sensor_uncertainty,saveImage=None):
 #     automaton = [None]*gwg.nagents
 #     automaton_state = [None]*gwg.nagents
 #     agentstate = [None]*gwg.nagents
@@ -227,7 +238,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 #             allstates[n].append(i)
 #         allstates[n].append(len(allstates[n]))  # nominal state if target leaves allowed region
 #     gwg.colorstates = [set(), set()]
-#     gridstate = copy.deepcopy(moveobstacles[0])
+#     gridstate = copy.deepcopy(moveobstacles_f[0])
 
 #     while True:
 #         gazeboOutput(gwg)
@@ -245,7 +256,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 #                 activeagents.remove(n)
 
 #         gwg.render()
-#         gwg.moveobstacles[0] = copy.deepcopy(gridstate)
+#         gwg.moveobstacles_f[0] = copy.deepcopy(gridstate)
 
 #         gwg.render()
 #         gwg.current = copy.deepcopy(agentstate)
@@ -272,15 +283,15 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 #                 if nexttargetstate[m] >= belief_nrows*belief_ncols:
 #                     nextstatedirn[m]['Belief'].add(n)
 #                 else:
-#                     if gwg.moveobstacles[0] - 1 in belief_gridstates[nexttargetstate[m]]:
+#                     if gwg.moveobstacles_f[0] - 1 in belief_gridstates[nexttargetstate[m]]:
 #                         nextstatedirn[m]['W'].add(n)
-#                     if gwg.moveobstacles[0] + 1 in belief_gridstates[nexttargetstate[m]]:
+#                     if gwg.moveobstacles_f[0] + 1 in belief_gridstates[nexttargetstate[m]]:
 #                         nextstatedirn[m]['E'].add(n)
-#                     if gwg.moveobstacles[0] + gwg.ncols in belief_gridstates[nexttargetstate[m]]:
+#                     if gwg.moveobstacles_f[0] + gwg.ncols in belief_gridstates[nexttargetstate[m]]:
 #                         nextstatedirn[m]['S'].add(n)
-#                     if gwg.moveobstacles[0] - gwg.ncols in belief_gridstates[nexttargetstate[m]]:
+#                     if gwg.moveobstacles_f[0] - gwg.ncols in belief_gridstates[nexttargetstate[m]]:
 #                         nextstatedirn[m]['N'].add(n)
-#                     if gwg.moveobstacles[0] in belief_gridstates[nexttargetstate[m]]:
+#                     if gwg.moveobstacles_f[0] in belief_gridstates[nexttargetstate[m]]:
 #                         nextstatedirn[m]['R'].add(n)
 #         for m in set(range(gwg.nagents)) - activeagents:
 #             nextstatedirn[m] = {'W':None,'E':None,'S':None,'N':None,'R':None,'Belief':set(),'Out':None,'Incoming':set()}
@@ -312,7 +323,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 #                         targetcanbeinregion[m] = True
 #                     sensor = sensor>0
 #                     nextstate[m] = nextstatedirn[m][arrow]
-#                     gridstate = getGridstate(gwg, moveobstacles[0], arrow)
+#                     gridstate = getGridstate(gwg, moveobstacles_f[0], arrow)
 #                     if not sensor:
 #                         if targetcanbeinregion[m]:
 #                             for n in nextstatedirn[m]['Belief']:
@@ -415,7 +426,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 #         automaton_state = copy.deepcopy(nextstate)
 
 
-# def userControlled_imperfect_sensor_Permissive(automaton,gwg,partitionGrid,moveobstacles,allowed_states,invisibilityset,belief_gridstates,sensor_uncertainty,agentpath,folderlocn):
+# def userControlled_imperfect_sensor_Permissive(automaton,gwg,partitionGrid,moveobstacles_f,allowed_states,invisibilityset,belief_gridstates,sensor_uncertainty,agentpath,folderlocn):
 #     automaton_state = [None] * gwg.nagents
 #     agentstate = [None] * gwg.nagents
 #     targetstate = [None] * gwg.nagents
@@ -425,7 +436,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 #     xstates = list(set(gwg.states))
 #     belief_ncols = gwg.ncols - sensor_uncertainty + 1
 #     belief_nrows = gwg.nrows - sensor_uncertainty + 1
-#     initial = {'s': gwg.current[0], 'st': moveobstacles[0]}
+#     initial = {'s': gwg.current[0], 'st': moveobstacles_f[0]}
 #     for n in range(gwg.nagents):
 #         automaton_state[n] = findstate(automaton[n], initial).pop()
 #         beliefcombs[n] = powerset(partitionGrid[n].keys())
@@ -435,7 +446,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 #         allstates.append(len(allstates))  # nominal state if target leaves allowed region
 #     gwg.colorstates = [set(), set()]
 #     gwg.targets = [[int(state) for state in agentpath]]
-#     gridstate = copy.deepcopy(moveobstacles[0])
+#     gridstate = copy.deepcopy(moveobstacles_f[0])
 #     allow = True
 #     tstep = folderlocn[1]
 #     for desiredstate in agentpath:
@@ -455,7 +466,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 #                 activeagents.remove(n)
 
 #         gwg.render()
-#         gwg.moveobstacles[0] = copy.deepcopy(gridstate)
+#         gwg.moveobstacles_f[0] = copy.deepcopy(gridstate)
 
 #         gwg.render()
 #         gwg.current = copy.deepcopy(agentstate)
@@ -482,15 +493,15 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 #                 if nexttargetstate[m] >= belief_nrows * belief_ncols:
 #                     nextstatedirn[m]['Belief'].add(n)
 #                 else:
-#                     if gwg.moveobstacles[0] - 1 in belief_gridstates[nexttargetstate[m]]:
+#                     if gwg.moveobstacles_f[0] - 1 in belief_gridstates[nexttargetstate[m]]:
 #                         nextstatedirn[m]['W'].add(n)
-#                     if gwg.moveobstacles[0] + 1 in belief_gridstates[nexttargetstate[m]]:
+#                     if gwg.moveobstacles_f[0] + 1 in belief_gridstates[nexttargetstate[m]]:
 #                         nextstatedirn[m]['E'].add(n)
-#                     if gwg.moveobstacles[0] + gwg.ncols in belief_gridstates[nexttargetstate[m]]:
+#                     if gwg.moveobstacles_f[0] + gwg.ncols in belief_gridstates[nexttargetstate[m]]:
 #                         nextstatedirn[m]['S'].add(n)
-#                     if gwg.moveobstacles[0] - gwg.ncols in belief_gridstates[nexttargetstate[m]]:
+#                     if gwg.moveobstacles_f[0] - gwg.ncols in belief_gridstates[nexttargetstate[m]]:
 #                         nextstatedirn[m]['N'].add(n)
-#                     if gwg.moveobstacles[0] in belief_gridstates[nexttargetstate[m]]:
+#                     if gwg.moveobstacles_f[0] in belief_gridstates[nexttargetstate[m]]:
 #                         nextstatedirn[m]['R'].add(n)
 
 #         while True:
@@ -506,7 +517,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 #                         sensor = 1
 #                     sensor = sensor > 0
 #                     nextstate[m] = nextstatedirn[m][arrow]
-#                     gridstate = getGridstate(gwg, moveobstacles[0], arrow)
+#                     gridstate = getGridstate(gwg, moveobstacles_f[0], arrow)
 #                     if not sensor:
 #                         if gridstate in allowed_states[m]:
 #                             for n in nextstatedirn[m]['Belief']:
@@ -593,7 +604,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 #             gwg.colorstates[0] = gwg.colorstates[0].union(invisibilityset[n][agentstate[n]])
 
 #             gwg.render()
-#             gwg.moveobstacles[0] = copy.deepcopy(gridstate)
+#             gwg.moveobstacles_f[0] = copy.deepcopy(gridstate)
 
 #             gwg.render()
 #             gwg.current = copy.deepcopy(agentstate)
@@ -610,11 +621,11 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 #         filename = 'statehistorypatrol{}.txt'.format(n)
 #         with open(filename,'a') as file:
 #             s = gwg.current[n]
-#             file.write('{},{}\n'.format(gwg.current[n],gwg.moveobstacles[0]))
+#             file.write('{},{}\n'.format(gwg.current[n],gwg.moveobstacles_f[0]))
 #             file.close()
-#     # for n in range(len(gwg.moveobstacles)):
+#     # for n in range(len(gwg.moveobstacles_f)):
 #     #     filename = 'statehistory_target{}.txt'.format(n)
-#     #     y_obs,x_obs = gwg.coords(gwg.moveobstacles[n])
+#     #     y_obs,x_obs = gwg.coords(gwg.moveobstacles_f[n])
 #     #     with open(filename,'a') as file:
 #     #         file.write('{},{}\n'.format(x_obs,y_obs))
 #     #         file.close()

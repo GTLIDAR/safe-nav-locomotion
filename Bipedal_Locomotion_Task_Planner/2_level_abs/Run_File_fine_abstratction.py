@@ -1,4 +1,4 @@
-from gridworld import *
+from gridworld_fine import *
 import argparse
 # import write_structured_slugs_copy_2
 # import write_structured_slugs_past_action_foot_stance_MP_specs_step_height_23_38_no_step_over
@@ -12,7 +12,7 @@ import time
 import copy
 import cPickle as pickle
 from tqdm import *
-import simulateController as Simulator
+import simulateController_fine_abs as Simulator
 import itertools
 import Control_Parser
 import json
@@ -90,20 +90,25 @@ if __name__ == '__main__':
     #####     4) pick initial location for robot and dynamic obstacle, pick goal locations     #####
 
     # 7_7
-    initial_fine = [24]
-    moveobstacles_fine = [0]
-    PUDO_t = [3,27,45,21]
+    initial_f = [24]
+    moveobstacles_f = [0]
+    PUDO_t = [3,27,45,21,24]
+
+    initial_c = [812]
+    moveobstacles_c = [191]
+    PUDO_t_c = [408,611]
 
     filename_f = [filename_f,(rownum_f,rownum_f),cv2.INTER_AREA]
-    gwgfine = Gridworld(filename_f,nagents=nagents, targets=targets, initial=initial_fine, moveobstacles=moveobstacles_fine)
-    gwgfine.colorstates = [set(), set()]
-    gwgfine.render()
-    gwgfine.save(gwfile)
+    filename_c = [filename_c,(rownum_c,rownum_c),cv2.INTER_AREA]
+    gwg_f = Gridworld(filename_f,nagents=nagents, targets=targets, initial_f=initial_f, moveobstacles_f=moveobstacles_f, filename_c = filename_c, initial_c=initial_c, moveobstacles_c=moveobstacles_c)
+    gwg_f.colorstates = [set(), set()]
+    gwg_f.render()
+    gwg_f.save(gwfile)
     partition = dict()
     allowed_states = [[None]] * nagents
     pg = [[None]]*nagents
-    # allowed_states[0] = list(set(gwgfine.states) - set(gwgfine.obstacles)-set(gwgfine.obsborder))
-    allowed_states[0] = list(set(gwgfine.states) - set(gwgfine.obstacles))
+    # allowed_states[0] = list(set(gwg_f.states) - set(gwg_f.obstacles)-set(gwg_f.obsborder))
+    allowed_states[0] = list(set(gwg_f.states) - set(gwg_f.obstacles))
 
     #####     5) Pick belief state partitions     #####
     pg[0] = {0:allowed_states[0]}
@@ -123,11 +128,11 @@ if __name__ == '__main__':
         obj = compute_all_vis.img2obj(image_f)
         # compute visibility for each state
         # iset is a dict that has all the states listed that are not visible from the current state
-        if len(gwgfine.obstacles)>0:
+        if len(gwg_f.obstacles)>0:
             iset = compute_all_vis.compute_visibility_for_all(obj, h_f, w_f, radius=visdist[n])
         else:
             iset = {}
-            for state in gwgfine.states:
+            for state in gwg_f.states:
                 iset[state] = set()
         invisibilityset.append(iset)
         outfile = trial_name+'agent'+str(n) +'.json'
@@ -141,7 +146,7 @@ if __name__ == '__main__':
         #                                                            visdist =  visdist[n], allowed_states = allowed_states[n],
         #                                                            partitionGrid = pg[n])
 
-        write_structured_slugs_rss_fine_grid.write_to_slugs_part_dist(infile, gwgfine, initial_fine[n], moveobstacles_fine[0], iset, PUDO_targets = PUDO_t,
+        write_structured_slugs_rss_fine_grid.write_to_slugs_part_dist(infile, gwg_f, initial_f[n], moveobstacles_f[0], iset, PUDO_targets = PUDO_t,
                                                                    visdist =  visdist[n], allowed_states = allowed_states[n],
                                                                    partitionGrid = pg[n])
         
@@ -159,4 +164,4 @@ if __name__ == '__main__':
     print('Synthesis took ', now - then, ' seconds')
     print('Actual synthesis took ', now - noww, ' seconds')
 
-    Simulator.userControlled_partition(filename_f[0], gwgfine, pg[0], moveobstacles_fine, invisibilityset, jsonfile_name)
+    Simulator.userControlled_partition(filename_f[0], gwg_f, pg[0], moveobstacles_f, invisibilityset, jsonfile_name)

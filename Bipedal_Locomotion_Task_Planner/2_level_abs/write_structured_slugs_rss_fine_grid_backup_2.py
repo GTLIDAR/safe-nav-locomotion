@@ -208,7 +208,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # file.write('turnRight\n')
     file.write('stepL:0...3\n')
     file.write('stop\n')
-    file.write('requestPending1:0...5\n')
+    file.write('requestPending1:0...4\n')
     # file.write('requestPending2\n')
     file.write('stepH:0...4\n')
     file.write('turn:0...4\n')
@@ -622,19 +622,18 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # file.write("directionrequest = 0 -> directionrequest' !=0\n\n")
 
     ##### Attempt to elliminate stop when entering each new coarse grid #####:
-    file.write("directionrequest = 0 & orientation = 0 & requestPending1 = 5 -> directionrequest' =1 \/ directionrequest' =0\n")
-    file.write("directionrequest = 0 & orientation = 3 & requestPending1 = 5 -> directionrequest' =2 \/ directionrequest' =0\n")
-    file.write("directionrequest = 0 & orientation = 6 & requestPending1 = 5 -> directionrequest' =3 \/ directionrequest' =0\n")
-    file.write("directionrequest = 0 & orientation = 9 & requestPending1 = 5 -> directionrequest' =4 \/ directionrequest' =0\n")
+    # file.write("directionrequest = 0 & orientation = 0 -> directionrequest' !=3\n")
+    # file.write("directionrequest = 0 & orientation = 3 -> directionrequest' !=4\n")
+    # file.write("directionrequest = 0 & orientation = 6 -> directionrequest' !=1\n")
+    # file.write("directionrequest = 0 & orientation = 9 -> directionrequest' !=3\n")
 
     file.write("directionrequest = 1 -> directionrequest' !=3\n")
     file.write("directionrequest = 2 -> directionrequest' !=4\n")
     file.write("directionrequest = 3 -> directionrequest' !=1\n")
     file.write("directionrequest = 4 -> directionrequest' !=2\n")
 
-    file.write("requestPending1 != 5 -> directionrequest' = directionrequest\n")
-    # file.write("requestPending1 = 5 -> directionrequest' != 0\n\n")
-
+    file.write("requestPending1 != 0 -> directionrequest' = directionrequest\n")
+    file.write("requestPending1 = 0 -> directionrequest' != 0\n\n")
 
     ##################### Some Suda Stuff ###################
     # if target_reachability:
@@ -759,77 +758,76 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # file.write("requestPending1' = directionrequest\n")
 
     ##### Test #####
-    stri = "requestPending1 = 1 -> ((s' = {} & requestPending1' = 5) \/ (s' != {} & requestPending1' = 1))\n".format(PUDO_targets[0],PUDO_targets[0])
-    stri += "requestPending1 = 2 -> ((s' = {} & requestPending1' = 5) \/ (s' != {} & requestPending1' = 2))\n".format(PUDO_targets[1],PUDO_targets[1])
-    stri += "requestPending1 = 3 -> ((s' = {} & requestPending1' = 5) \/ (s' != {} & requestPending1' = 3))\n".format(PUDO_targets[2],PUDO_targets[2])
-    stri += "requestPending1 = 4 -> ((s' = {} & requestPending1' = 5) \/ (s' != {} & requestPending1' = 4))\n".format(PUDO_targets[3],PUDO_targets[3])
-    stri += "requestPending1 = 0 -> ((s = {} & s' = {} & requestPending1' = 5) \/ ( requestPending1' = 0))\n".format(PUDO_targets[4],PUDO_targets[4],PUDO_targets[4])
+    stri = "requestPending1 = 1 -> ((s' = {} & requestPending1' = 0) \/ (s' != {} & requestPending1' = 1))\n".format(PUDO_targets[0],PUDO_targets[0])
+    stri += "requestPending1 = 2 -> ((s' = {} & requestPending1' = 0) \/ (s' != {} & requestPending1' = 2))\n".format(PUDO_targets[1],PUDO_targets[1])
+    stri += "requestPending1 = 3 -> ((s' = {} & requestPending1' = 0) \/ (s' != {} & requestPending1' = 3))\n".format(PUDO_targets[2],PUDO_targets[2])
+    stri += "requestPending1 = 4 -> ((s' = {} & requestPending1' = 0) \/ (s' != {} & requestPending1' = 4))\n".format(PUDO_targets[3],PUDO_targets[3])
     file.write(stri)
 
-    file.write("requestPending1 = 5 -> requestPending1' = directionrequest'\n")
+    file.write("requestPending1 = 0 -> requestPending1' = directionrequest'\n")
     ##### Test #####
 
     ##### Ensure the robot doesn't leave cell before completing nav goal #####
     stri =""
     for edgeS in gw.top_edge:
-        stri += "s' = {} & orientation' = 0 & requestPending1' != 5 -> !forward'\n".format(edgeS)
+        stri += "s' = {} & orientation' = 0 & requestPending1' != 0 -> !forward'\n".format(edgeS)
     stri += "\n"
     file.write(stri)
     stri =""
     for edgeS in gw.right_edge:
-        stri += "s' = {} & orientation' = 3 & requestPending1' != 5 -> !forward'\n".format(edgeS)
+        stri += "s' = {} & orientation' = 3 & requestPending1' != 0 -> !forward'\n".format(edgeS)
     stri += "\n"
     file.write(stri)
     stri =""
     for edgeS in gw.bottom_edge:
-        stri += "s' = {} & orientation' = 6 & requestPending1' != 5 -> !forward'\n".format(edgeS)
+        stri += "s' = {} & orientation' = 6 & requestPending1' != 0 -> !forward'\n".format(edgeS)
     stri += "\n"
     file.write(stri)
     stri =""
     for edgeS in gw.left_edge:
-        stri += "s' = {} & orientation' = 9 & requestPending1' != 5 -> !forward'\n".format(edgeS)
+        stri += "s' = {} & orientation' = 9 & requestPending1' != 0 -> !forward'\n".format(edgeS)
     stri += "\n"
     file.write(stri)
 
     stri =""
     for edgeS in gw.top_edge2:
-        stri += "s' = {} & orientation' = 0 & requestPending1' != 5 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
+        stri += "s' = {} & orientation' = 0 & requestPending1' != 0 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
     stri += "\n"
     file.write(stri)
     stri =""
     for edgeS in gw.right_edge2:
-        stri += "s' = {} & orientation' = 3 & requestPending1' != 5 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
+        stri += "s' = {} & orientation' = 3 & requestPending1' != 0 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
     stri += "\n"
     file.write(stri)
     stri =""
     for edgeS in gw.bottom_edge2:
-        stri += "s' = {} & orientation' = 6 & requestPending1' != 5 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
+        stri += "s' = {} & orientation' = 6 & requestPending1' != 0 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
     stri += "\n"
     file.write(stri)
     stri =""
     for edgeS in gw.left_edge2:
-        stri += "s' = {} & orientation' = 9 & requestPending1' != 5 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
+        stri += "s' = {} & orientation' = 9 & requestPending1' != 0 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
     stri += "\n"
     file.write(stri)
 
     stri =""
     for edgeS in gw.top_edge3:
-        stri += "s' = {} & orientation' = 0 & requestPending1' != 5 -> stepL' != 2\n".format(edgeS)
+        stri += "s' = {} & orientation' = 0 & requestPending1' != 0 -> stepL' != 2\n".format(edgeS)
     stri += "\n"
     file.write(stri)
     stri =""
     for edgeS in gw.right_edge3:
-        stri += "s' = {} & orientation' = 3 & requestPending1' != 5 -> stepL' != 2\n".format(edgeS)
+        stri += "s' = {} & orientation' = 3 & requestPending1' != 0 -> stepL' != 2\n".format(edgeS)
     stri += "\n"
     file.write(stri)
     stri =""
     for edgeS in gw.bottom_edge3:
-        stri += "s' = {} & orientation' = 6 & requestPending1' != 5 -> stepL' != 2\n".format(edgeS)
+        stri += "s' = {} & orientation' = 6 & requestPending1' != 0 -> stepL' != 2\n".format(edgeS)
     stri += "\n"
     file.write(stri)
     stri =""
     for edgeS in gw.left_edge3:
-        stri += "s' = {} & orientation' = 9 & requestPending1' != 5 -> stepL' != 2\n".format(edgeS)
+        stri += "s' = {} & orientation' = 9 & requestPending1' != 0 -> stepL' != 2\n".format(edgeS)
     stri += "\n"
     file.write(stri)
     ##### Test #####
@@ -1086,7 +1084,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('\n[SYS_LIVENESS]\n')
     # file.write("!requestPending1\n")
     # file.write("!requestPending2\n")
-    file.write("requestPending1 = 5\n")
+    file.write("requestPending1 = 0\n")
 
 
     # if target_reachability:

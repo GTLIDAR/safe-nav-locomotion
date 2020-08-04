@@ -20,7 +20,11 @@ class BeliefIOParser():
 
     def saveState(self, gwg, automaton, automaton_state, gridstate):
         env_state = automaton[automaton_state]['State']['st']
-        agent_state = automaton[automaton_state]['State']['s']
+        try:
+            agent_state = automaton[automaton_state]['State']['s_c']
+        except:
+            agent_state = automaton[automaton_state]['State']['s']
+
         agent_location = gwg.coords(agent_state) 
         # env_location = gwg.coords(env_state)
         obs_location = gwg.coords(gridstate)

@@ -404,6 +404,48 @@ import cv2
 #
 # img2.save("BelieEvasion_15_12_new_3_stat_obs.png")
 
+# os.chdir(r'/home/sa-zhao/Documents/Jonas/Beliefspace_Planning/Bipedal_Locomotion_Task_Planner/2_level_abs/figures')
+#
+# filename = 'chicago4_45_2454_5673_map.png'
+# # image = cv2.imread(specFile, cv2.IMREAD_GRAYSCALE)
+# # print(image)
+#
+# pngfile2 = Image.open(filename)
+# img2=pngfile2.resize((15,15),PIL.Image.ANTIALIAS)
+# img2.paste((255),(0,0,15,15))
+# # img2.show()
+# pixels=img2.load()
+#
+# # pixels[4,5] = 0
+# # pixels[9,7] = 0
+# # pixels[3,11] = 0
+# #
+# # pixels[16,6] = 0
+# # pixels[16,7] = 0
+# # pixels[17,6] = 0
+# # pixels[17,7] = 0
+# #
+# # pixels[47,12] = 0
+# # pixels[47,13] = 0
+# # pixels[48,12] = 0
+# # pixels[48,13] = 0
+# #
+# # pixels[60,20] = 0
+# # pixels[60,21] = 0
+# # pixels[61,20] = 0
+# # pixels[61,21] = 0
+# #
+# # pixels[41,18] = 0
+# # pixels[40,19] = 0
+# # pixels[41,19] = 0
+#
+#
+#
+# img2.show()
+#
+# img2.save("fine_abstraction.png")
+
+
 os.chdir(r'/home/sa-zhao/Documents/Jonas/Beliefspace_Planning/Bipedal_Locomotion_Task_Planner/2_level_abs/figures')
 
 filename = 'chicago4_45_2454_5673_map.png'
@@ -411,36 +453,89 @@ filename = 'chicago4_45_2454_5673_map.png'
 # print(image)
 
 pngfile2 = Image.open(filename)
-img2=pngfile2.resize((15,15),PIL.Image.ANTIALIAS)
-img2.paste((255),(0,0,15,15))
+img2=pngfile2.resize((38,23),PIL.Image.ANTIALIAS)
+img2.paste((255),(0,0,38,23))
 # img2.show()
 pixels=img2.load()
 
-# pixels[4,5] = 0
-# pixels[9,7] = 0
-# pixels[3,11] = 0
-#
-# pixels[16,6] = 0
-# pixels[16,7] = 0
-# pixels[17,6] = 0
-# pixels[17,7] = 0
-#
-# pixels[47,12] = 0
-# pixels[47,13] = 0
-# pixels[48,12] = 0
-# pixels[48,13] = 0
-#
-# pixels[60,20] = 0
-# pixels[60,21] = 0
-# pixels[61,20] = 0
-# pixels[61,21] = 0
-#
-# pixels[41,18] = 0
-# pixels[40,19] = 0
-# pixels[41,19] = 0
+
+pixels[2,5] = 0
+pixels[3,5] = 0
+pixels[4,5] = 0
+pixels[5,5] = 0
+pixels[2,6] = 0
+pixels[3,6] = 0
+pixels[4,6] = 0
+pixels[5,6] = 0
+pixels[2,7] = 0
+pixels[3,7] = 0
+pixels[4,7] = 0
+pixels[5,7] = 0
+
+pixels[16,6] = 0
+pixels[17,6] = 0
+pixels[16,7] = 0
+pixels[17,7] = 0
+pixels[16,8] = 0
+pixels[17,8] = 0
+pixels[16,9] = 0
+pixels[17,9] = 0
+pixels[16,10] = 0
+pixels[17,10] = 0
+pixels[16,11] = 0
+pixels[17,11] = 0
+pixels[16,12] = 0
+pixels[17,12] = 0
+pixels[16,13] = 0
+pixels[17,13] = 0
+pixels[16,14] = 0
+pixels[17,14] = 0
 
 
+pixels[30,17] = 0
+pixels[31,17] = 0
+pixels[30,18] = 0
+pixels[31,18] = 0
 
+pixels[25,6] = 0
+pixels[26,6] = 0
+pixels[27,6] = 0
+pixels[28,6] = 0
+pixels[29,6] = 0
+pixels[30,6] = 0
+
+pixels[25,13] = 0
+pixels[26,13] = 0
+pixels[27,13] = 0
+pixels[28,13] = 0
+pixels[29,13] = 0
+pixels[30,13] = 0
+#
+#
+#
+#
+# #
+# # pixels[16,6] = 0
+# # pixels[16,7] = 0
+# # pixels[17,6] = 0
+# # pixels[17,7] = 0
+# #
+# # pixels[47,12] = 0
+# # pixels[47,13] = 0
+# # pixels[48,12] = 0
+# # pixels[48,13] = 0
+# #
+# # pixels[60,20] = 0
+# # pixels[60,21] = 0
+# # pixels[61,20] = 0
+# # pixels[61,21] = 0
+# #
+# # pixels[41,18] = 0
+# # pixels[40,19] = 0
+# # pixels[41,19] = 0
+#
+#
+#
 img2.show()
-
-img2.save("fine_abstraction.png")
+#
+img2.save("BelieEvasion_coarse.png")
