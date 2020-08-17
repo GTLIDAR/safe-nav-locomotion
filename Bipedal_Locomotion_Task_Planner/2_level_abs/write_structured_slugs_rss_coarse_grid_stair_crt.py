@@ -235,7 +235,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     file.write('\n[ENV_TRANS]\n') #write specifications on how the environment state can transition at each step with "'" indicating the next state
     print 'Writing ENV_TRANS'
-    for st in tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states))): #iterate through allowed states and belief states (tqdm displays a progress bar)
+    for st in tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states)) - set(gw.stair_states)): #iterate through allowed states and belief states (tqdm displays a progress bar)
         if st in allowed_states: #write transitions if the dynamic obstacle (st) is visible
             for s in allowed_states:
                 repeat = set()
@@ -489,6 +489,9 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
         stri += "st' != {}\n".format(edgeS)
     stri += "\n"
     file.write(stri)
+    
+    for obs in gw.no_obs:
+        file.write('st\' != {}\n'.format(obs))
 
     # for s in allowed_states:
     #     file.write("s = {} -> sOld' = {}".format(s,s))
@@ -602,12 +605,18 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     stri += "\n"
     file.write(stri)
 
+
+
     for stair in gw.stair_states:
         file.write("s_c' = {} -> stairs'\n".format(stair))
+
+    for obs in gw.no_robot:
+        file.write('s_c != {}\n'.format(obs))
 
     # for stair in gw.stair_states:
     #     file.write("s_c' = {} -> directionrequest' = 2 \/ directionrequest' = 4\n".format(stair))
     file.write("stairs' -> directionrequest' = 2 \/ directionrequest' = 4\n")
+    file.write("stairs' -> directionrequest = 2 \/ directionrequest = 4\n")
     
     # stri =""
     # obsborderlist = list(gw.obsborder)
@@ -800,7 +809,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # stri = stri[:-4]
     # file.write(stri)
 
-    file.write("st' = {}".format(allstates[-2]))
+    # file.write("st' = {}".format(allstates[-2]))
 
     # file.write("st' = {} \\/ st' = {} \\/ st' = {}".format(68,80,allstates[-2]))
     # file.write("st' = {}".format(80))

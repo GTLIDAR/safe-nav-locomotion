@@ -182,6 +182,13 @@ class Gridworld():
         self.level1states = [291,292,293,294,295,296,329,334,367,372,405,410,443,448,481,482,483,484,485,486]
         self.level2states = [330,331,332,333,368,369,370,371,406,407,408,409,444,445,446,447]
         self.level0states = set(self.states) - set(self.level1states) - set(self.level2states)
+        # self.stair_states = [35,36]
+        # self.no_robot = [3,11,19,27,30,31,38,39]
+        # self.no_obs = [0,1,2,8,9,10,16,17,18,24,25,26,32,33,34,35,36]
+
+        self.stair_states = [54,55]
+        self.no_robot = [14,24,34,44,47,48,57,58]
+        self.no_obs = [11,12,13,21,22,23,31,32,33,41,42,43,51,52,53,54,55]
         # self.level1states.append
             
 

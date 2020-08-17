@@ -209,7 +209,6 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('stop\n')
     file.write('requestPending1\n')
     file.write('requestPending2\n')
-    file.write('stairs\n')
 
     file.write('\n[ENV_INIT]\n')
     file.write('s_c = {}\n'.format(init))
@@ -471,8 +470,6 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     #                     stri += '\n'
     #                     file.write(stri)
     # file.write("st' = {}\n".format(initmovetarget))
-    for stair in gw.stair_states:
-        file.write("st' != {}\n".format(stair))
 
     ##################### Jonas Action Based Specs ###################
     print 'Writing Action Based Environment Transitions'
@@ -585,10 +582,10 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     file.write(stri)
 
-    file.write("orientation' = 0 -> directionrequest' !=3\n")
-    file.write("orientation' = 1 -> directionrequest' !=4\n")
-    file.write("orientation' = 2 -> directionrequest' !=1\n")
-    file.write("orientation' = 3 -> directionrequest' !=2\n")
+    file.write("orientation = 0 -> directionrequest' !=3\n")
+    file.write("orientation = 1 -> directionrequest' !=4\n")
+    file.write("orientation = 2 -> directionrequest' !=1\n")
+    file.write("orientation = 3 -> directionrequest' !=2\n")
 
     file.write("orientation = 0 & directionrequest = 0 -> directionrequest' = 0 \/ directionrequest' = 1\n")
     file.write("orientation = 1 & directionrequest = 0 -> directionrequest' = 0 \/ directionrequest' = 2\n")
@@ -601,13 +598,6 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
         stri += "s_c' != {}\n".format(edgeS)
     stri += "\n"
     file.write(stri)
-
-    for stair in gw.stair_states:
-        file.write("s_c' = {} -> stairs'\n".format(stair))
-
-    # for stair in gw.stair_states:
-    #     file.write("s_c' = {} -> directionrequest' = 2 \/ directionrequest' = 4\n".format(stair))
-    file.write("stairs' -> directionrequest' = 2 \/ directionrequest' = 4\n")
     
     # stri =""
     # obsborderlist = list(gw.obsborder)

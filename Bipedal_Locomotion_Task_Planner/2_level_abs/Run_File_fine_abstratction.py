@@ -2,7 +2,7 @@ from gridworld_fine import *
 import argparse
 # import write_structured_slugs_copy_2
 # import write_structured_slugs_past_action_foot_stance_MP_specs_step_height_23_38_no_step_over
-import write_structured_slugs_rss_fine_grid
+import write_structured_slugs_rss_fine_grid_stair
 import compute_all_vis
 import cv2
 # import visibility
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     h_c, w_c = image_c.shape[:2]
     
     folder_locn = 'Examples/'
-    example_name = 'Belief_Evasion_fine_abstraction'
+    example_name = 'Belief_Evasion_fine_abstraction_stair'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
@@ -146,7 +146,7 @@ if __name__ == '__main__':
         #                                                            visdist =  visdist[n], allowed_states = allowed_states[n],
         #                                                            partitionGrid = pg[n])
 
-        write_structured_slugs_rss_fine_grid.write_to_slugs_part_dist(infile, gwg_f, initial_f[n], moveobstacles_f[0], iset, PUDO_targets = PUDO_t,
+        write_structured_slugs_rss_fine_grid_stair.write_to_slugs_part_dist(infile, gwg_f, initial_f[n], moveobstacles_f[0], iset, PUDO_targets = PUDO_t,
                                                                    visdist =  visdist[n], allowed_states = allowed_states[n],
                                                                    partitionGrid = pg[n])
         

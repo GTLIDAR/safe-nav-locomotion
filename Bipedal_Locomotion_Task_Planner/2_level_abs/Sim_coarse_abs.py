@@ -15,7 +15,7 @@ image = cv2.resize(image,dsize=(colnum,rownum),interpolation=cv2.INTER_AREA)
 h, w = image.shape[:2]
 
 folder_locn = 'Examples/'
-example_name = 'Belief_Evasion_coarse_test'
+example_name = 'Belief_Evasion_coarse_test_2'
 trial_name = folder_locn + example_name
 
 outfile = trial_name + '.json'

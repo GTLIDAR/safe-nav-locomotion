@@ -213,7 +213,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     file.write('\n[ENV_INIT]\n')
     file.write('s_c = {}\n'.format(init))
-    file.write('orientation = 1\n')
+    file.write('orientation = 2\n')
     file.write('deliveryrequest\n')
     # file.write('pastTurnStanceMatchFoot = 2\n')
 
@@ -227,7 +227,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     file.write('\n[SYS_INIT]\n')
     file.write('stop\n')
-    file.write('directionrequest = 2\n')
+    file.write('directionrequest = 3\n')
 
     # writing env_trans
     file.write('\n[ENV_TRANS]\n')
@@ -235,7 +235,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     file.write('\n[ENV_TRANS]\n') #write specifications on how the environment state can transition at each step with "'" indicating the next state
     print 'Writing ENV_TRANS'
-    for st in tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states))): #iterate through allowed states and belief states (tqdm displays a progress bar)
+    for st in tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states)) - set(gw.stair_states)): #iterate through allowed states and belief states (tqdm displays a progress bar)
         if st in allowed_states: #write transitions if the dynamic obstacle (st) is visible
             for s in allowed_states:
                 repeat = set()
@@ -473,6 +473,9 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # file.write("st' = {}\n".format(initmovetarget))
     for stair in gw.stair_states:
         file.write("st' != {}\n".format(stair))
+    
+    for obs in gw.no_obs:
+        file.write('st\' != {}\n'.format(obs))
 
     ##################### Jonas Action Based Specs ###################
     print 'Writing Action Based Environment Transitions'
@@ -484,11 +487,11 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     # walking straight or exiting turn
     # can I get rid of border cases if I add a system condition that the state can't go from the left to the right or from the right to the left?
-    stri =""
-    for edgeS in gw.edges:
-        stri += "st' != {}\n".format(edgeS)
-    stri += "\n"
-    file.write(stri)
+    # stri =""
+    # for edgeS in gw.edges:
+    #     stri += "st' != {}\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
 
     # for s in allowed_states:
     #     file.write("s = {} -> sOld' = {}".format(s,s))
@@ -596,11 +599,11 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write("orientation = 3 & directionrequest = 0 -> directionrequest' = 0 \/ directionrequest' = 4\n")
 
 
-    stri =""
-    for edgeS in gw.edges:
-        stri += "s_c' != {}\n".format(edgeS)
-    stri += "\n"
-    file.write(stri)
+    # stri =""
+    # for edgeS in gw.edges:
+    #     stri += "s_c' != {}\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
 
     for stair in gw.stair_states:
         file.write("s_c' = {} -> stairs'\n".format(stair))
@@ -623,6 +626,9 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
 
     for obs in gw.obstacles:
+        file.write('s_c != {}\n'.format(obs))
+    
+    for obs in gw.no_robot:
         file.write('s_c != {}\n'.format(obs))
 
     # for obs in gw.obstacles:
@@ -800,7 +806,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # stri = stri[:-4]
     # file.write(stri)
 
-    file.write("st' = {}".format(allstates[-2]))
+    # file.write("st' = {}".format(allstates[-2]))
 
     # file.write("st' = {} \\/ st' = {} \\/ st' = {}".format(68,80,allstates[-2]))
-    # file.write("st' = {}".format(80))
+    # file.write("st' = {}".format(39))

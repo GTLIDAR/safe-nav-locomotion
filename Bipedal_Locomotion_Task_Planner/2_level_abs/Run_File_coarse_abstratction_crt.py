@@ -2,7 +2,7 @@ from gridworld import *
 import argparse
 # import write_structured_slugs_copy_2
 # import write_structured_slugs_past_action_foot_stance_MP_specs_step_height_23_38_no_step_over
-import write_structured_slugs_rss_coarse_grid_stair
+import write_structured_slugs_rss_coarse_grid_stair_crt
 import compute_all_vis
 import cv2
 # import visibility
@@ -59,7 +59,7 @@ if __name__ == '__main__':
 
     # mapname_coarse = 'BeliefEvasion_coarse_14_10'
     # mapname_coarse = 'BelieEvasion_38_23_Extra_obs'
-    mapname_coarse = 'BeliefEvasion_CRT'
+    mapname_coarse = 'BeliefEvasion_CRT_boarder'
     # mapname_coarse = 'BelieEvasionFifteen_w'
     rownum_c = 28
     colnum_c = 42
@@ -69,8 +69,11 @@ if __name__ == '__main__':
     colnum_c = 12
     # rownum_c = 10
     # colnum_c = 14
-    rownum_c = 5
-    colnum_c = 8
+    # rownum_c = 5
+    # colnum_c = 8
+    rownum_c = 7
+    colnum_c = 10
+    
 
 
 
@@ -85,7 +88,7 @@ if __name__ == '__main__':
     h_c, w_c = image_c.shape[:2]
     
     folder_locn = 'Examples/'
-    example_name = 'Belief_Evasion_coarse_crt_test'
+    example_name = 'Belief_Evasion_coarse_crt'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
@@ -117,9 +120,12 @@ if __name__ == '__main__':
     # PUDO_t_c = [79,85]
 
     #CRT
-    initial_c = [17]
-    moveobstacles_c = [11]
-    PUDO_t_c = [13,9]
+    # initial_c = [17]
+    # moveobstacles_c = [11]
+    # PUDO_t_c = [13,9]
+    initial_c = [32]
+    moveobstacles_c = [24]
+    PUDO_t_c = [26,22]
 
     filename_c = [filename_c,(colnum_c,rownum_c),cv2.INTER_AREA]
     gwg_c = Gridworld(filename_c,nagents=nagents, targets=targets, initial=initial_c, moveobstacles=moveobstacles_c)
@@ -168,7 +174,7 @@ if __name__ == '__main__':
         #                                                            visdist =  visdist[n], allowed_states = allowed_states[n],
         #                                                            partitionGrid = pg[n])
 
-        write_structured_slugs_rss_coarse_grid_stair.write_to_slugs_part_dist(infile, gwg_c, initial_c[n], moveobstacles_c[0], iset, PUDO_targets = PUDO_t_c,
+        write_structured_slugs_rss_coarse_grid_stair_crt.write_to_slugs_part_dist(infile, gwg_c, initial_c[n], moveobstacles_c[0], iset, PUDO_targets = PUDO_t_c,
                                                                    visdist =  visdist[n], allowed_states = allowed_states[n],
                                                                    partitionGrid = pg[n])
         

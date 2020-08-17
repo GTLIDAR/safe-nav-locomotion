@@ -2,7 +2,7 @@ from gridworld import *
 import argparse
 # import write_structured_slugs_copy_2
 # import write_structured_slugs_past_action_foot_stance_MP_specs_step_height_23_38_no_step_over
-import write_structured_slugs_rss_coarse_grid_stair
+import write_structured_slugs_rss_coarse_grid
 import compute_all_vis
 import cv2
 # import visibility
@@ -57,20 +57,14 @@ if __name__ == '__main__':
     rownum_f = 7
     colnum_f = 7
 
-    # mapname_coarse = 'BeliefEvasion_coarse_14_10'
-    # mapname_coarse = 'BelieEvasion_38_23_Extra_obs'
-    mapname_coarse = 'BeliefEvasion_CRT'
-    # mapname_coarse = 'BelieEvasionFifteen_w'
+    mapname_coarse = 'BelieEvasion_38_23_Extra_obs'
+    mapname_coarse = 'BelieEvasionFifteen_w'
     rownum_c = 28
     colnum_c = 42
     rownum_c = 23
     colnum_c = 38
     rownum_c = 8
     colnum_c = 12
-    # rownum_c = 10
-    # colnum_c = 14
-    rownum_c = 5
-    colnum_c = 8
 
 
 
@@ -85,7 +79,7 @@ if __name__ == '__main__':
     h_c, w_c = image_c.shape[:2]
     
     folder_locn = 'Examples/'
-    example_name = 'Belief_Evasion_coarse_crt_test'
+    example_name = 'Belief_Evasion_coarse_test_2'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
@@ -110,16 +104,11 @@ if __name__ == '__main__':
     # PUDO_t_c = [408,611]
     initial_c = [74]
     moveobstacles_c = [15]
-    PUDO_t_c = [34,61]
+    PUDO_t_c = [44,61]
 
-    # initial_c = [114]
-    # moveobstacles_c = [17]
-    # PUDO_t_c = [79,85]
-
-    #CRT
-    initial_c = [17]
-    moveobstacles_c = [11]
-    PUDO_t_c = [13,9]
+    # initial_c = [77]
+    # moveobstacles_c = [30]
+    # PUDO_t_c = [185,195]
 
     filename_c = [filename_c,(colnum_c,rownum_c),cv2.INTER_AREA]
     gwg_c = Gridworld(filename_c,nagents=nagents, targets=targets, initial=initial_c, moveobstacles=moveobstacles_c)
@@ -138,7 +127,7 @@ if __name__ == '__main__':
         
     #########################################################
     # print('pg: ' + str(pg[0]))
-    visdist = [12,20,3500,3500]
+    visdist = [5,20,3500,3500]
     target_vis_dist = 2
     vel = [1,2,2,2]
     invisibilityset = []
@@ -168,7 +157,7 @@ if __name__ == '__main__':
         #                                                            visdist =  visdist[n], allowed_states = allowed_states[n],
         #                                                            partitionGrid = pg[n])
 
-        write_structured_slugs_rss_coarse_grid_stair.write_to_slugs_part_dist(infile, gwg_c, initial_c[n], moveobstacles_c[0], iset, PUDO_targets = PUDO_t_c,
+        write_structured_slugs_rss_coarse_grid.write_to_slugs_part_dist(infile, gwg_c, initial_c[n], moveobstacles_c[0], iset, PUDO_targets = PUDO_t_c,
                                                                    visdist =  visdist[n], allowed_states = allowed_states[n],
                                                                    partitionGrid = pg[n])
         

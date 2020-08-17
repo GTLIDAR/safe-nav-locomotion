@@ -235,7 +235,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     file.write('\n[ENV_TRANS]\n') #write specifications on how the environment state can transition at each step with "'" indicating the next state
     print 'Writing ENV_TRANS'
-    for st in tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states))): #iterate through allowed states and belief states (tqdm displays a progress bar)
+    for st in tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states)) - set(gw.stair_states)): #iterate through allowed states and belief states (tqdm displays a progress bar)
         if st in allowed_states: #write transitions if the dynamic obstacle (st) is visible
             for s in allowed_states:
                 repeat = set()
