@@ -642,6 +642,9 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write("requestPending1 != 5 -> directionrequest' = directionrequest\n")
     # file.write("requestPending1 = 5 -> directionrequest' != 0\n\n")
 
+    ###### Can't use specs below since the robot tries to brake env specs by turning 
+    # file.write("requestPending1 != 5 & stair-> stair' \n")
+    # file.write("requestPending1 != 5 & !stair-> !stair' \n")
 
     ##################### Some Suda Stuff ###################
     # if target_reachability:
@@ -901,6 +904,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write("\nstair' & orientation' = 3 & directionrequest' = 2 -> (stepL' = 0 & stepH' = 4) \/ ((stepL' = 1 & stepH' = 5)) \/ ((stepL' = 2 & stepH' = 6))\n")
     file.write("stair' & orientation' = 9 & directionrequest' = 4 -> (stepL' = 0 & stepH' = 2) \/ ((stepL' = 1 & stepH' = 1)) \/ ((stepL' = 2 & stepH' = 0))\n\n")
     file.write("!stair' -> stepH' = 3\n\n")
+    
 
     # stri = "("
     # for state0 in gw.level0states:

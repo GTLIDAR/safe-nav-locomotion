@@ -10,10 +10,12 @@ scale = (int(40*2.8),40)
 rownum_f = 7
 colnum_f = 7
 
-mapname_coarse = 'BelieEvasion_38_23_Extra_obs'
-rownum_c = 8
-colnum_c = 12
-
+# mapname_coarse = 'BelieEvasion_38_23_Extra_obs'
+# rownum_c = 8
+# colnum_c = 12
+mapname_coarse = 'BeliefEvasion_CRT_boarder'
+rownum_c = 7
+colnum_c = 10
 
 
 filename_f = 'figures/'+mapname_fine+'.png'
@@ -29,7 +31,7 @@ h_c, w_c = image_c.shape[:2]
 folder_locn = 'Examples/'
 
 
-example_name_c = 'Belief_Evasion_coarse_test_3'
+example_name_c = 'Belief_Evasion_coarse_crt'
 jsonfile_name_c = folder_locn + "Integration/" + example_name_c + ".json"
 trial_name_c = folder_locn + example_name_c
 
@@ -38,7 +40,7 @@ infile_c = copy.deepcopy(trial_name_c)
 gwfile_c = folder_locn + '/figs/gridworldfig_' + example_name_c + '.png'
 
 
-example_name_f = 'Belief_Evasion_fine_abstraction'
+example_name_f = 'Belief_Evasion_fine_abstraction_stair'
 jsonfile_name_f = folder_locn + "Integration/" + example_name_f + ".json"
 trial_name_f = folder_locn + example_name_f
 

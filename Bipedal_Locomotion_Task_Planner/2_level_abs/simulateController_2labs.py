@@ -159,28 +159,44 @@ def userControlled_partition(filename_c,gwg_c,partitionGrid_c,moveobstacles_c,in
             # gwg_f.render()
 
             nextstates_f = automaton_f[automaton_state_f]['Successors']
-            nextstatedirn_f = {'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}
-
+            # nextstatedirn_f = {'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}
+            nextstatedirn_f = {"1":{'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}, "0":{'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}}
+            ### nextstatedirn_f first number is stair boolean, second number is direcion request
             for n in nextstates_f:
-                nenvstate_f = automaton_f[n]['State']['directionrequest']
-                if nenvstate_f == 4:
-                    nextstatedirn_f['4'] = n
-                if nenvstate_f == 2:
-                    nextstatedirn_f['2'] = n
-                if nenvstate_f == 3:
-                    nextstatedirn_f['3'] = n
-                if nenvstate_f == 1:
-                    nextstatedirn_f['1'] = n
-                if nenvstate_f == 0:
-                    nextstatedirn_f['0'] = n
-                if nenvstate_f not in xstates:
-                    nextstatedirn_f['Belief'].add(n)
-
+                nenv_dir_req = automaton_f[n]['State']['directionrequest']
+                nenv_stair_req = automaton_f[n]['State']['stair']
+                if nenv_stair_req ==1:
+                    if nenv_dir_req == 4:
+                        nextstatedirn_f["1"]['4'] = n
+                    if nenv_dir_req == 2:
+                        nextstatedirn_f["1"]['2'] = n
+                    if nenv_dir_req == 3:
+                        nextstatedirn_f["1"]['3'] = n
+                    if nenv_dir_req == 1:
+                        nextstatedirn_f["1"]['1'] = n
+                    if nenv_dir_req == 0:
+                        nextstatedirn_f["1"]['0'] = n
+                    if nenv_dir_req not in xstates:
+                        nextstatedirn_f["1"]['Belief'].add(n)
+                else:
+                    if nenv_dir_req == 4:
+                        nextstatedirn_f["0"]['4'] = n
+                    if nenv_dir_req == 2:
+                        nextstatedirn_f["0"]['2'] = n
+                    if nenv_dir_req == 3:
+                        nextstatedirn_f["0"]['3'] = n
+                    if nenv_dir_req == 1:
+                        nextstatedirn_f["0"]['1'] = n
+                    if nenv_dir_req == 0:
+                        nextstatedirn_f["0"]['0'] = n
+                    if nenv_dir_req not in xstates:
+                        nextstatedirn_f["0"]['Belief'].add(n)
+              
             while True:
                 nextstate_f = None
                 while nextstate_f == None:
                     time.sleep(0.5)
-                    nextstate_f = nextstatedirn_f[str(automaton[automaton_state]['State']['directionrequest'])]
+                    nextstate_f = nextstatedirn_f[str(automaton[automaton_state]['State']['stairs'])][str(automaton[automaton_state]['State']['directionrequest'])]
                     # if nextstate_f == None:
                     #     if arrow == 'W':
                     #         gridstate = gwg_f.moveobstacles_f[0] - 1
@@ -194,13 +210,14 @@ def userControlled_partition(filename_c,gwg_c,partitionGrid_c,moveobstacles_c,in
                     #         gridstate = gwg_f.moveobstacles_f[0]
                         
                     #     for n in nextstatedirn_f['Belief']:
-                    #         nenvstate_f = automaton_f[n]['State']['st']
-                    #         nextbeliefs_f = beliefcombs_f[len(beliefcombs_f) - (len(allstates_f) - allstates_f.index(nenvstate_f))]
+                    #         nenv_dir_req = automaton_f[n]['State']['st']
+                    #         nextbeliefs_f = beliefcombs_f[len(beliefcombs_f) - (len(allstates_f) - allstates_f.index(nenv_dir_req))]
                     # else:
-                    nenvstate_f = automaton_f[nextstate_f]['State']['st']
-                    print 'Environment state in fine automaton is', allstates.index(nenvstate_f)
-                    print 'Environment state in fine grid is', nenvstate_f
-                    gridstate_f = copy.deepcopy(nenvstate_f)
+                    nenv_dir_req = automaton_f[nextstate_f]['State']['st']
+                    print 'Environment state in fine automaton is', allstates.index(nenv_dir_req)
+                    print 'Environment state in fine grid is', nenv_dir_req
+                    print 'Stair Boolean is ', automaton_f[nextstate_f]['State']['stair']
+                    gridstate_f = copy.deepcopy(nenv_dir_req)
                     gwg_f.colorstates[1] = set()
                     # gwg_f.render()
 
