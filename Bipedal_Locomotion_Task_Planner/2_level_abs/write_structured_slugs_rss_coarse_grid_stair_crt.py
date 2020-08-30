@@ -213,7 +213,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     file.write('\n[ENV_INIT]\n')
     file.write('s_c = {}\n'.format(init))
-    file.write('orientation = 1\n')
+    file.write('orientation = 2\n')
     file.write('deliveryrequest\n')
     # file.write('pastTurnStanceMatchFoot = 2\n')
 
@@ -227,7 +227,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     file.write('\n[SYS_INIT]\n')
     file.write('stop\n')
-    file.write('directionrequest = 2\n')
+    file.write('directionrequest = 0\n')
 
     # writing env_trans
     file.write('\n[ENV_TRANS]\n')

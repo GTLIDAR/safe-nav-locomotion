@@ -550,25 +550,93 @@ import cv2
 # #
 # img2.save("BeliefEvasion_CRT.png")
 
-os.chdir(r'/home/sa-zhao/Documents/Jonas/Beliefspace_Planning/Bipedal_Locomotion_Task_Planner/2_level_abs/figures')
+# os.chdir(r'/home/sa-zhao/Documents/Jonas/Beliefspace_Planning/Bipedal_Locomotion_Task_Planner/2_level_abs/figures')
+#
+# filename = 'chicago4_45_2454_5673_map.png'
+# # image = cv2.imread(specFile, cv2.IMREAD_GRAYSCALE)
+# # print(image)
+#
+# pngfile2 = Image.open(filename)
+# img2=pngfile2.resize((10,7),PIL.Image.ANTIALIAS)
+# img2.paste((255),(0,0,10,7))
+# # img2.show()
+# pixels=img2.load()
+#
+#
+# pixels[7,1] = 0
+# pixels[8,1] = 0
+# pixels[7,2] = 0
+# pixels[8,2] = 0
+# pixels[7,3] = 0
+# pixels[8,3] = 0
+#
+# pixels[0,0] = 0
+# pixels[0,1] = 0
+# pixels[0,2] = 0
+# pixels[0,3] = 0
+# pixels[0,4] = 0
+# pixels[0,5] = 0
+# pixels[0,6] = 0
+# pixels[1,0] = 0
+# pixels[2,0] = 0
+# pixels[3,0] = 0
+# pixels[4,0] = 0
+# pixels[5,0] = 0
+# pixels[6,0] = 0
+# pixels[7,0] = 0
+# pixels[8,0] = 0
+# pixels[9,0] = 0
+# pixels[9,1] = 0
+# pixels[9,2] = 0
+# pixels[9,3] = 0
+# pixels[9,4] = 0
+# pixels[9,5] = 0
+# pixels[9,6] = 0
+# pixels[8,6] = 0
+# pixels[7,6] = 0
+# pixels[6,6] = 0
+# pixels[5,6] = 0
+# pixels[4,6] = 0
+# pixels[3,6] = 0
+# pixels[2,6] = 0
+# pixels[1,6] = 0
+#
+#
+#
+#
+# #
+# img2.show()
+# #
+# img2.save("BeliefEvasion_CRT_boarder.png")
+
+
+os.chdir(r'/home/sa-zhao/Documents/Jonas/Beliefspace_Planning/Bipedal_Locomotion_Task_Planner/2_level_finer_abs/figures')
 
 filename = 'chicago4_45_2454_5673_map.png'
 # image = cv2.imread(specFile, cv2.IMREAD_GRAYSCALE)
 # print(image)
 
 pngfile2 = Image.open(filename)
-img2=pngfile2.resize((10,7),PIL.Image.ANTIALIAS)
-img2.paste((255),(0,0,10,7))
+img2=pngfile2.resize((13,7),PIL.Image.ANTIALIAS)
+img2.paste((255),(0,0,13,7))
 # img2.show()
 pixels=img2.load()
 
+
+pixels[2,1] = 0
+pixels[4,3] = 0
+pixels[4,5] = 0
 
 pixels[7,1] = 0
 pixels[8,1] = 0
 pixels[7,2] = 0
 pixels[8,2] = 0
-pixels[7,3] = 0
-pixels[8,3] = 0
+
+pixels[7,4] = 0
+pixels[8,4] = 0
+pixels[7,5] = 0
+pixels[8,5] = 0
+
 
 pixels[0,0] = 0
 pixels[0,1] = 0
@@ -577,6 +645,15 @@ pixels[0,3] = 0
 pixels[0,4] = 0
 pixels[0,5] = 0
 pixels[0,6] = 0
+
+pixels[12,0] = 0
+pixels[12,1] = 0
+pixels[12,2] = 0
+pixels[12,3] = 0
+pixels[12,4] = 0
+pixels[12,5] = 0
+pixels[12,6] = 0
+
 pixels[1,0] = 0
 pixels[2,0] = 0
 pixels[3,0] = 0
@@ -586,20 +663,26 @@ pixels[6,0] = 0
 pixels[7,0] = 0
 pixels[8,0] = 0
 pixels[9,0] = 0
-pixels[9,1] = 0
-pixels[9,2] = 0
-pixels[9,3] = 0
-pixels[9,4] = 0
-pixels[9,5] = 0
-pixels[9,6] = 0
-pixels[8,6] = 0
-pixels[7,6] = 0
-pixels[6,6] = 0
-pixels[5,6] = 0
-pixels[4,6] = 0
-pixels[3,6] = 0
-pixels[2,6] = 0
+pixels[10,0] = 0
+pixels[11,0] = 0
+pixels[12,0] = 0
+
 pixels[1,6] = 0
+pixels[2,6] = 0
+pixels[3,6] = 0
+pixels[4,6] = 0
+pixels[5,6] = 0
+pixels[6,6] = 0
+pixels[7,6] = 0
+pixels[8,6] = 0
+pixels[9,6] = 0
+pixels[10,6] = 0
+pixels[11,6] = 0
+pixels[12,6] = 0
+
+
+
+
 
 
 
@@ -607,4 +690,4 @@ pixels[1,6] = 0
 #
 img2.show()
 #
-img2.save("BeliefEvasion_CRT_boarder.png")
+img2.save("BeliefEvasion_CDC.png")

@@ -217,6 +217,7 @@ def userControlled_partition(filename_c,gwg_c,partitionGrid_c,moveobstacles_c,in
                     print 'Environment state in fine automaton is', allstates.index(nenv_dir_req)
                     print 'Environment state in fine grid is', nenv_dir_req
                     print 'Stair Boolean is ', automaton_f[nextstate_f]['State']['stair']
+                    print 'Step Length is ', automaton_f[nextstate_f]['State']['stepL']
                     gridstate_f = copy.deepcopy(nenv_dir_req)
                     gwg_f.colorstates[1] = set()
                     # gwg_f.render()

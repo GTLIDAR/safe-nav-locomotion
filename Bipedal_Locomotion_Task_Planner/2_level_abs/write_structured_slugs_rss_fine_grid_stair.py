@@ -220,8 +220,8 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     file.write('\n[ENV_INIT]\n')
     file.write('s = {}\n'.format(init))
-    file.write('orientation = 3\n')
-    file.write('directionrequest = 2\n')
+    file.write('orientation = 6\n')
+    file.write('directionrequest = 0\n')
     file.write('!stair\n')
     # file.write('pastTurnStanceMatchFoot = 2\n')
 
@@ -557,19 +557,222 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     ###45deg change###
 
     ###45deg change###
-    stri = "((orientation=0 | orientation=1) & turn=3 & stepL=3) -> s' + {} = s\n".format(gw.ncols-1)
-    stri += "((orientation=3 | orientation=4) & turn=3 & stepL=3) -> s' = s + {}\n".format(gw.ncols+1)
-    stri += "((orientation=6 | orientation=7) & turn=3 & stepL=3) -> s' = s + {}\n".format(gw.ncols-1)
-    stri += "((orientation=9 | orientation=10) & turn=3 & stepL=3) -> s' + {} = s\n".format(gw.ncols+1)
-    stri += "\n"
+    # stri = "((orientation=0 | orientation=1) & turn=3 & stepL=3) -> s' + {} = s\n".format(gw.ncols-1)
+    # stri += "((orientation=3 | orientation=4) & turn=3 & stepL=3) -> s' = s + {}\n".format(gw.ncols+1)
+    # stri += "((orientation=6 | orientation=7) & turn=3 & stepL=3) -> s' = s + {}\n".format(gw.ncols-1)
+    # stri += "((orientation=9 | orientation=10) & turn=3 & stepL=3) -> s' + {} = s\n".format(gw.ncols+1)
+    # stri += "\n"
 
-    stri += "((orientation=0 | orientation=11) & turn=1 & stepL=3) -> s' + {} = s\n".format(gw.ncols+1)
-    stri += "((orientation=3 | orientation=2) & turn=1 & stepL=3) -> s' + {} = s\n".format(gw.ncols-1)
-    stri += "((orientation=6 | orientation=5) & turn=1 & stepL=3) -> s' = s + {}\n".format(gw.ncols+1)
-    stri += "((orientation=9 | orientation=8) & turn=1 & stepL=3) -> s' = s + {}\n".format(gw.ncols-1)
-    stri += "\n"
-    file.write(stri)
+    # stri += "((orientation=0 | orientation=11) & turn=1 & stepL=3) -> s' + {} = s\n".format(gw.ncols+1)
+    # stri += "((orientation=3 | orientation=2) & turn=1 & stepL=3) -> s' + {} = s\n".format(gw.ncols-1)
+    # stri += "((orientation=6 | orientation=5) & turn=1 & stepL=3) -> s' = s + {}\n".format(gw.ncols+1)
+    # stri += "((orientation=9 | orientation=8) & turn=1 & stepL=3) -> s' = s + {}\n".format(gw.ncols-1)
+    # stri += "\n"
+    # file.write(stri)
     ###45deg change###
+    # stri = "(s > {} & (orientation=0 | orientation=1) & turn=3 & stepL=3) -> s' + {} = s\n".format(gw.ncols-1,gw.ncols-1)
+    # stri = "(s < {} & (orientation=0 | orientation=1) & turn=3 & stepL=3) -> s' + {} = s\n".format(gw.ncols,gw.ncols-1)
+    # stri = ""
+    # for edgeS in gw.top_edge:
+    #     stri += "s' = {} \/ ".format(edgeS)
+    # stri = stri[:-4]
+    # stri+= ") & requestPending1' = 5) \/ (("
+
+
+    file.write("\n\n\n #specs_for_turning\n\n")
+    ##### Grid transitions when turning right with orientation 0 or 1
+    top_right_edge = gw.top_edge+gw.right_edge
+    stri = "\n("
+    for edgeS in top_right_edge:
+        stri += "s != {} & ".format(edgeS)
+    stri += "(orientation=0 | orientation=1) & turn=3 & stepL=3) -> s' + {} = s\n".format(gw.ncols-1)
+    file.write(stri)
+
+    top_edge_minus_right = list(set(gw.top_edge) - set(gw.right_edge))
+    stri = "("
+    for edgeS in top_edge_minus_right:
+        stri += "s = {} | ".format(edgeS)
+    stri = stri[:-3]
+    stri += ") & (orientation=0 | orientation=1) & turn=3 & stepL=3 -> s' = s + {}\n".format(gw.ncols*(gw.nrows-1)+1)
+    file.write(stri)
+
+    right_edge_minus_top = list(set(gw.right_edge) - set(gw.top_edge))
+    stri = "("
+    for edgeS in right_edge_minus_top:
+        stri += "s = {} | ".format(edgeS)
+    stri = stri[:-3]
+    stri += ") & (orientation=0 | orientation=1) & turn=3 & stepL=3 -> s' + {} = s\n".format(gw.ncols*2-1)
+    file.write(stri)
+    
+    ##### Grid transitions when turning right with orientation 3 or 4
+    right_bottom_edge = gw.right_edge + gw.bottom_edge
+    stri = "\n("
+    for edgeS in right_bottom_edge:
+        stri += "s != {} & ".format(edgeS)
+    stri += "(orientation=3 | orientation=4) & turn=3 & stepL=3) -> s' = s + {}\n".format(gw.ncols+1)
+    file.write(stri)
+
+    right_edge_minus_bottom = list(set(gw.right_edge) - set(gw.bottom_edge))
+    stri = "("
+    for edgeS in right_edge_minus_bottom:
+        stri += "s = {} | ".format(edgeS)
+    stri = stri[:-3]
+    stri += ") & (orientation=3 | orientation=4) & turn=3 & stepL=3 -> s' = s + 1\n"
+    file.write(stri)
+
+    bottom_edge_minus_right = list(set(gw.bottom_edge) - set(gw.right_edge))
+    stri = "("
+    for edgeS in bottom_edge_minus_right:
+        stri += "s = {} | ".format(edgeS)
+    stri = stri[:-3]
+    stri += ") & (orientation=3 | orientation=4) & turn=3 & stepL=3 -> s' + {} = s\n".format(gw.ncols*(gw.nrows-1))
+    file.write(stri)
+
+    ##### Grid transitions when turning right with orientation 6 or 7
+    bottom_left_edge = gw.bottom_edge + gw.left_edge
+    stri = "\n("
+    for edgeS in bottom_left_edge:
+        stri += "s != {} & ".format(edgeS)
+    stri += "(orientation=6 | orientation=7) & turn=3 & stepL=3) -> s' = s + {}\n".format(gw.ncols-1)
+    file.write(stri)
+
+    bottom_edge_minus_left = list(set(gw.bottom_edge) - set(gw.left_edge))
+    stri = "("
+    for edgeS in bottom_edge_minus_left:
+        stri += "s = {} | ".format(edgeS)
+    stri = stri[:-3]
+    stri += ") & (orientation=6 | orientation=7) & turn=3 & stepL=3 -> s' + {} = s\n".format(gw.ncols*(gw.nrows-1)+1)
+    file.write(stri)
+
+    left_edge_minus_bottom = list(set(gw.left_edge) - set(gw.bottom_edge))
+    stri = "("
+    for edgeS in left_edge_minus_bottom:
+        stri += "s = {} | ".format(edgeS)
+    stri = stri[:-3]
+    stri += ") & (orientation=6 | orientation=7) & turn=3 & stepL=3 -> s' = s + {}\n".format(2*gw.ncols-1)
+    file.write(stri)
+    
+    ##### Grid transitions when turning right with orientation 9 or 10
+    left_top_edge = gw.left_edge + gw.top_edge
+    stri = "\n("
+    for edgeS in left_top_edge:
+        stri += "s != {} & ".format(edgeS)
+    stri += "(orientation=9 | orientation=10) & turn=3 & stepL=3) -> s' + {} = s\n".format(gw.ncols+1)
+    file.write(stri)
+
+    left_edge_minus_top = list(set(gw.left_edge) - set(gw.top_edge))
+    stri = "("
+    for edgeS in left_edge_minus_top:
+        stri += "s = {} | ".format(edgeS)
+    stri = stri[:-3]
+    stri += ") & (orientation=9 | orientation=10) & turn=3 & stepL=3 -> s' + 1 = s\n"
+    file.write(stri)
+
+    top_edge_minus_left = list(set(gw.top_edge) - set(gw.left_edge))
+    stri = "("
+    for edgeS in top_edge_minus_left:
+        stri += "s = {} | ".format(edgeS)
+    stri = stri[:-3]
+    stri += ") & (orientation=9 | orientation=10) & turn=3 & stepL=3 -> s' = s + {}\n".format((gw.nrows-1)*gw.ncols-1)
+    file.write(stri)
+
+    
+
+
+
+
+    ##### Grid transitions when turning left with orientation 0 or 11
+    # stri += "((orientation=0 | orientation=11) & turn=1 & stepL=3) -> s' + {} = s\n".format(gw.ncols+1)
+    stri = "\n("
+    for edgeS in left_top_edge:
+        stri += "s != {} & ".format(edgeS)
+    stri += "(orientation=0 | orientation=11) & turn=1 & stepL=3) -> s' + {} = s\n".format(gw.ncols+1)
+    file.write(stri)
+
+    stri = "("
+    for edgeS in top_edge_minus_left:
+        stri += "s = {} | ".format(edgeS)
+    stri = stri[:-3]
+    stri += ") & (orientation=0 | orientation=11) & turn=1 & stepL=3 -> s' = s + {}\n".format((gw.nrows-1)*gw.ncols-1)
+    file.write(stri)
+
+    stri = "("
+    for edgeS in left_edge_minus_top:
+        stri += "s = {} | ".format(edgeS)
+    stri = stri[:-3]
+    stri += ") & (orientation=0 | orientation=11) & turn=1 & stepL=3 -> s' + 1 = s\n"
+    file.write(stri)
+    
+    ##### Grid transitions when turning left with orientation 3 or 2
+    # stri += "((orientation=3 | orientation=2) & turn=1 & stepL=3) -> s' + {} = s\n".format(gw.ncols-1)
+    stri = "\n("
+    for edgeS in top_right_edge:
+        stri += "s != {} & ".format(edgeS)
+    stri += "(orientation=3 | orientation=2) & turn=1 & stepL=3) -> s' + {} = s\n".format(gw.ncols-1)
+    file.write(stri)
+
+    stri = "("
+    for edgeS in top_edge_minus_right:
+        stri += "s = {} | ".format(edgeS)
+    stri = stri[:-3]
+    stri += ") & (orientation=3 | orientation=2) & turn=1 & stepL=3 -> s' = s + {}\n".format(gw.ncols*(gw.nrows-1)+1)
+    file.write(stri)
+
+    stri = "("
+    for edgeS in right_edge_minus_top:
+        stri += "s = {} | ".format(edgeS)
+    stri = stri[:-3]
+    stri += ") & (orientation=3 | orientation=2) & turn=1 & stepL=3 -> s' + {} = s\n".format(gw.ncols*2-1)
+    file.write(stri)
+
+    ##### Grid transitions when turning left with orientation 6 or 5
+    # stri += "((orientation=6 | orientation=5) & turn=1 & stepL=3) -> s' = s + {}\n".format(gw.ncols+1)
+    stri = "\n("
+    for edgeS in right_bottom_edge:
+        stri += "s != {} & ".format(edgeS)
+    stri += "(orientation=6 | orientation=5) & turn=1 & stepL=3) -> s' = s + {}\n".format(gw.ncols+1)
+    file.write(stri)
+
+    stri = "("
+    for edgeS in right_edge_minus_bottom:
+        stri += "s = {} | ".format(edgeS)
+    stri = stri[:-3]
+    stri += ") & (orientation=6 | orientation=5) & turn=1 & stepL=3 -> s' = s + 1\n"
+    file.write(stri)
+
+    stri = "("
+    for edgeS in bottom_edge_minus_right:
+        stri += "s = {} | ".format(edgeS)
+    stri = stri[:-3]
+    stri += ") & (orientation=6 | orientation=5) & turn=1 & stepL=3 -> s' + {} = s\n".format(gw.ncols*(gw.nrows-1))
+    file.write(stri)
+    
+    
+    ##### Grid transitions when turning left with orientation 9 or 8
+    # stri += "((orientation=9 | orientation=8) & turn=1 & stepL=3) -> s' = s + {}\n".format(gw.ncols-1)
+    stri = "\n("
+    for edgeS in bottom_left_edge:
+        stri += "s != {} & ".format(edgeS)
+    stri += "(orientation=9 | orientation=8) & turn=1 & stepL=3) -> s' = s + {}\n".format(gw.ncols-1)
+    file.write(stri)
+
+    stri = "("
+    for edgeS in bottom_edge_minus_left:
+        stri += "s = {} | ".format(edgeS)
+    stri = stri[:-3]
+    stri += ") & (orientation=9 | orientation=8) & turn=1 & stepL=3 -> s' + {} = s\n".format(gw.ncols*(gw.nrows-1)+1)
+    file.write(stri)
+
+    stri = "("
+    for edgeS in left_edge_minus_bottom:
+        stri += "s = {} | ".format(edgeS)
+    stri = stri[:-3]
+    stri += ") & (orientation=9 | orientation=8) & turn=1 & stepL=3 -> s' = s + {}\n".format(2*gw.ncols-1)
+    file.write(stri)
+
+
+
+
 
     ###45deg change###
     stri = "((orientation=0 | orientation=1) & turn=4 & stepL=3) -> s' + {} = s\n".format(gw.ncols-1)
@@ -754,11 +957,11 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('\n')
 
     ##### Fine Specific Specs #####
-    stri =""
-    for edgeS in gw.edges:
-        stri += "s' = {} -> turn' = 2\n".format(edgeS)
-    stri += "\n"
-    file.write(stri)
+    # stri =""
+    # for edgeS in gw.edges:
+    #     stri += "s' = {} -> turn' = 2\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
 
     # stri =""
     # for edgeS in gw.edges:
@@ -768,18 +971,206 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     # file.write("requestPending1' = directionrequest\n")
 
-    ##### Test #####
-    stri = "requestPending1 = 1 -> ((s' = {} & requestPending1' = 5) \/ (s' != {} & requestPending1' = 1))\n".format(PUDO_targets[0],PUDO_targets[0])
-    stri += "requestPending1 = 2 -> ((s' = {} & requestPending1' = 5) \/ (s' != {} & requestPending1' = 2))\n".format(PUDO_targets[1],PUDO_targets[1])
-    stri += "requestPending1 = 3 -> ((s' = {} & requestPending1' = 5) \/ (s' != {} & requestPending1' = 3))\n".format(PUDO_targets[2],PUDO_targets[2])
-    stri += "requestPending1 = 4 -> ((s' = {} & requestPending1' = 5) \/ (s' != {} & requestPending1' = 4))\n".format(PUDO_targets[3],PUDO_targets[3])
-    stri += "requestPending1 = 0 -> ((s = {} & s' = {} & requestPending1' = 5) \/ ( requestPending1' = 0))\n".format(PUDO_targets[4],PUDO_targets[4],PUDO_targets[4])
+    ##### Specs that govern how liveness specs can be met #####
+    # stri = "requestPending1 = 1 -> ((s' = {} & requestPending1' = 5) \/ (s' != {} & requestPending1' = 1))\n".format(PUDO_targets[0],PUDO_targets[0])
+    # stri += "requestPending1 = 2 -> ((s' = {} & requestPending1' = 5) \/ (s' != {} & requestPending1' = 2))\n".format(PUDO_targets[1],PUDO_targets[1])
+    # stri += "requestPending1 = 3 -> ((s' = {} & requestPending1' = 5) \/ (s' != {} & requestPending1' = 3))\n".format(PUDO_targets[2],PUDO_targets[2])
+    # stri += "requestPending1 = 4 -> ((s' = {} & requestPending1' = 5) \/ (s' != {} & requestPending1' = 4))\n".format(PUDO_targets[3],PUDO_targets[3])
+    # stri += "requestPending1 = 0 -> ((s = {} & s' = {} & requestPending1' = 5) \/ ( requestPending1' = 0))\n".format(PUDO_targets[4],PUDO_targets[4],PUDO_targets[4])
+    # file.write(stri)
+
+    stri = "requestPending1 = 1 -> ((("
+    for edgeS in gw.top_edge:
+        stri += "s' = {} \/ ".format(edgeS)
+    stri = stri[:-4]
+    stri+= ") & requestPending1' = 5) \/ (("
+    for edgeS in gw.top_edge:
+        stri += "s' != {} \/ ".format(edgeS)
+    stri = stri[:-4]
+    stri+= ") & requestPending1' = 1))\n"
+    file.write(stri)
+
+    stri = "requestPending1 = 2 -> ((("
+    for edgeS in gw.right_edge:
+        stri += "s' = {} \/ ".format(edgeS)
+    stri = stri[:-4]
+    stri+= ") & requestPending1' = 5) \/ (("
+    for edgeS in gw.right_edge:
+        stri += "s' != {} \/ ".format(edgeS)
+    stri = stri[:-4]
+    stri+= ") & requestPending1' = 2))\n"
+    file.write(stri)
+
+    stri = "requestPending1 = 3 -> ((("
+    for edgeS in gw.bottom_edge:
+        stri += "s' = {} \/ ".format(edgeS)
+    stri = stri[:-4]
+    stri+= ") & requestPending1' = 5) \/ (("
+    for edgeS in gw.bottom_edge:
+        stri += "s' != {} \/ ".format(edgeS)
+    stri = stri[:-4]
+    stri+= ") & requestPending1' = 3))\n"
+    file.write(stri)
+
+    stri = "requestPending1 = 4 -> ((("
+    for edgeS in gw.left_edge:
+        stri += "s' = {} \/ ".format(edgeS)
+    stri = stri[:-4]
+    stri+= ") & requestPending1' = 5) \/ (("
+    for edgeS in gw.left_edge:
+        stri += "s' != {} \/ ".format(edgeS)
+    stri = stri[:-4]
+    stri+= ") & requestPending1' = 4))\n"
+    file.write(stri)
+
+    stri = "requestPending1 = 0 -> ((s = {} & s' = {} & requestPending1' = 5) \/ ( requestPending1' = 0))\n".format(PUDO_targets[4],PUDO_targets[4],PUDO_targets[4])
     file.write(stri)
 
     file.write("requestPending1 = 5 -> requestPending1' = directionrequest'\n")
     ##### Test #####
 
     ##### Ensure the robot doesn't leave cell before completing nav goal #####
+
+    ##### outside Edge #####
+    # stri =""
+    # for edgeS in gw.top_edge:
+    #     stri += "s' = {} & orientation' = 0 & requestPending1' != 5 -> !forward'\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+    # stri =""
+    # for edgeS in gw.top_edge:
+    #     stri += "requestPending1 = 1 & s' = {} & forward'  -> requestPending1' = 5\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+
+    # stri =""
+    # for edgeS in gw.right_edge:
+    #     stri += "s' = {} & orientation' = 3 & requestPending1' != 5 -> !forward'\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+    # stri =""
+    # for edgeS in gw.right_edge:
+    #     stri += "requestPending1 = 2 & s' = {} & forward'  -> requestPending1' = 5\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+
+    # stri =""
+    # for edgeS in gw.bottom_edge:
+    #     stri += "s' = {} & orientation' = 6 & requestPending1' != 5 -> !forward'\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+    # stri =""
+    # for edgeS in gw.bottom_edge:
+    #     stri += "requestPending1 = 3 & s' = {} & forward'  -> requestPending1' = 5\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+
+    # stri =""
+    # for edgeS in gw.left_edge:
+    #     stri += "s' = {} & orientation' = 9 & requestPending1' != 5 -> !forward'\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+    # stri =""
+    # for edgeS in gw.left_edge:
+    #     stri += "requestPending1 = 4 & s' = {} & forward'  -> requestPending1' = 5\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+
+    # ##### second edge from the outside#####
+    # stri =""
+    # for edgeS in gw.top_edge2:
+    #     stri += "s' = {} & orientation' = 0 & requestPending1' != 5 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+    # stri =""
+    # for edgeS in gw.top_edge2:
+    #     stri += "requestPending1 = 1 & s' = {} & orientation' = 0 & (stepL' = 1 \/ stepL' = 2) -> requestPending1' = 5\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+
+    # stri =""
+    # for edgeS in gw.right_edge2:
+    #     stri += "s' = {} & orientation' = 3 & requestPending1' != 5 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+    # stri =""
+    # for edgeS in gw.right_edge2:
+    #     stri += "requestPending1 = 2 & s' = {} & orientation' = 3 & (stepL' = 1 \/ stepL' = 2) -> requestPending1' = 5\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+
+    # stri =""
+    # for edgeS in gw.bottom_edge2:
+    #     stri += "s' = {} & orientation' = 6 & requestPending1' != 5 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+    # stri =""
+    # for edgeS in gw.bottom_edge2:
+    #     stri += "requestPending1 = 3 & s' = {} & orientation' = 6 & (stepL' = 1 \/ stepL' = 2) -> requestPending1' = 5\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+
+    # stri =""
+    # for edgeS in gw.left_edge2:
+    #     stri += "s' = {} & orientation' = 9 & requestPending1' != 5 -> stepL' != 2 & stepL' != 1\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+    # stri =""
+    # for edgeS in gw.left_edge2:
+    #     stri += "requestPending1 = 3 & s' = {} & orientation' = 6 & (stepL' = 1 \/ stepL' = 2) -> requestPending1' = 5\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+
+    # ##### Third Edge from the outside #####
+    # stri =""
+    # for edgeS in gw.top_edge3:
+    #     stri += "s' = {} & orientation' = 0 & requestPending1' != 5 -> stepL' != 2\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+    # stri =""
+    # for edgeS in gw.top_edge3:
+    #     stri += "requestPending1 = 1 & s' = {} & orientation' = 0 & stepL' = 2 -> requestPending1' = 5\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+
+    # stri =""
+    # for edgeS in gw.right_edge3:
+    #     stri += "s' = {} & orientation' = 3 & requestPending1' != 5 -> stepL' != 2\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+    # stri =""
+    # for edgeS in gw.right_edge3:
+    #     stri += "requestPending1 = 2 & s' = {} & orientation' = 3 & stepL' = 2 -> requestPending1' = 5\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+
+    # stri =""
+    # for edgeS in gw.bottom_edge3:
+    #     stri += "s' = {} & orientation' = 6 & requestPending1' != 5 -> stepL' != 2\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+    # stri =""
+    # for edgeS in gw.bottom_edge3:
+    #     stri += "requestPending1 = 3 & s' = {} & orientation' = 6 & stepL' = 2 -> requestPending1' = 5\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+
+    # stri =""
+    # for edgeS in gw.left_edge3:
+    #     stri += "s' = {} & orientation' = 9 & requestPending1' != 5 -> stepL' != 2\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+    # stri =""
+    # for edgeS in gw.left_edge3:
+    #     stri += "requestPending1 = 4 & s' = {} & orientation' = 9 & stepL' = 2 -> requestPending1' = 5\n".format(edgeS)
+    # stri += "\n"
+    # file.write(stri)
+
+
+
+
+
+
     stri =""
     for edgeS in gw.top_edge:
         stri += "s' = {} & orientation' = 0 & requestPending1' != 5 -> !forward'\n".format(edgeS)
