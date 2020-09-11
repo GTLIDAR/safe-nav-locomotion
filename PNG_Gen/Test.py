@@ -1,5 +1,0 @@
-x = set.union(*[set(range(10,20))])
-print(x)
-scale = (int(40*2.8),40)
-z = set.union(*[set(range(1026 + x * scale[0], 1026 + x * scale[0] + 14)) for x in range(14)])
-print(z)
