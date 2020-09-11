@@ -117,7 +117,7 @@ def userControlled_partition(filename_c,gwg_c,partitionGrid_c,moveobstacles_c,in
 
         gwg_f.moveobstacles_f[0] = copy.deepcopy(gridstate_f)
         # gwg_f.render()
-        # -----------------Jonas Robot Waits For Key Stroke To Take Action-----------------
+        # -----------------Robot Waits For Key Stroke To Take Action-----------------
         # while True:
         #             arrow = gwg_c.getkeyinput()
         #             if arrow != None:
@@ -138,31 +138,14 @@ def userControlled_partition(filename_c,gwg_c,partitionGrid_c,moveobstacles_c,in
         gwg_c.current = [copy.deepcopy(agentstate)]
         gwg_c.render()
 
-        # gwg_f.render()
-        # gwg_f.current = [copy.deepcopy(agentstate_f)]
-
-        # gwg_c.colorstates[0] = set()
-        # gwg_c.colorstates[0].update(invisibilityset_c[0][agentstate])
-        # gwg_c.render()
-
         time.sleep(0.3)
-
-        # gwg_f.colorstates[0] = set()
-        # gwg_f.colorstates[0].update(invisibilityset_f[0][agentstate_f])
-        # gwg_f.render()
-        # gwg_c.draw_state_labels()
         
         while True:
             output.saveState(gwg_f, automaton_f, automaton_state_f,gridstate_f)
             agentstate_f = automaton_f[automaton_state_f]['State']['s']
-            # gwg_f.render()
-            # gwg_f.current = [copy.deepcopy(agentstate_f)]
-            # gwg_f.colorstates[0] = set()
-            # gwg_f.colorstates[0].update(invisibilityset_f[0][agentstate_f])
-            # gwg_f.render()
+          
 
             nextstates_f = automaton_f[automaton_state_f]['Successors']
-            # nextstatedirn_f = {'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}
             nextstatedirn_f = {"1":{'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}, "0":{'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}}
             ### nextstatedirn_f first number is stair boolean, second number is direcion request
             for n in nextstates_f:
@@ -298,10 +281,7 @@ def userControlled_partition(filename_c,gwg_c,partitionGrid_c,moveobstacles_c,in
                             print 'Environment state in automaton is', allstates.index(nenvstate)
                             print 'Belief state is', beliefcombs[allstates.index(nenvstate) - len(xstates)]
                             nextagentstate = automaton[n]['State']['s_c']
-                            # Jonas
                             invisstates = invisibilityset_c[0][nextagentstate]
-                            # visstates = set(xstates) - invisstates
-                            # Jonas
                             visstates = set(xstates) - set(invisstates)
                             if nenvstate not in xstates:
                                 beliefcombstate = beliefcombs[allstates.index(nenvstate) - len(xstates)]

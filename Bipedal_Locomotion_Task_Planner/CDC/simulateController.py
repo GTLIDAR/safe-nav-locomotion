@@ -100,7 +100,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         
         gwg.moveobstacles[0] = copy.deepcopy(gridstate)
         gwg.render()
-        # -----------------Jonas Robot Waits For Key Stroke To Take Action-----------------
+        # ----------------- Robot Waits For Key Stroke To Take Action-----------------
         # while True:
         #             arrow = gwg.getkeyinput()
         #             if arrow != None:
@@ -165,10 +165,8 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                             print 'Environment state in automaton is', allstates.index(nenvstate)
                             print 'Belief state is', beliefcombs[allstates.index(nenvstate) - len(xstates)]
                             nextagentstate = automaton[n]['State']['s_c']
-                            # Jonas
                             invisstates = invisibilityset[0][nextagentstate]
-                            # visstates = set(xstates) - invisstates
-                            # Jonas
+                    
                             visstates = set(xstates) - set(invisstates)
                             if nenvstate not in xstates:
                                 beliefcombstate = beliefcombs[allstates.index(nenvstate) - len(xstates)]

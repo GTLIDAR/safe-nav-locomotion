@@ -5,7 +5,6 @@ import compute_all_vis
 import cv2
 
 mapname = 'BeliefEvasion_CDC'
-# mapname = 'BelieEvasionFifteen_w'
 
 rownum = 7
 colnum = 13

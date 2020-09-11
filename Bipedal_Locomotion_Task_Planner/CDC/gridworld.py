@@ -40,8 +40,6 @@ class Gridworld():
         self.regions = regions
         self.nagents = nagents
         self.nstates = nrows * ncols
-        # self.obstacles = obstacles
-        ########## Jonas ##########
         self.actlistMO = ['R','N', 'S', 'W', 'E']
         self.actlistR = ['forward','turnLeft','turnRight','stepL0','stepL1','stepL2','stepL3','stop']
         self.robotState = ['forward','turnLeft','turnRight','stepL0','stepL1','stepL2','stepL3','stop', 'O0', 'O1', 'O2', 'O3', 'O4', 'O5', 'O6', 'O7', 'O8', 'O9', 'O10', 'O11']
@@ -56,34 +54,10 @@ class Gridworld():
         self.norientations = len((self.orientation))
         # self.actioncomb = powerset(self.actlistR)
 
-        # iteractcomb = copy.deepcopy(self.actioncomb)
-        # for comb in range(len(iteractcomb)): #returns all possible combinations of actions
-        #     if 'stepL0' not in iteractcomb[comb] and 'stepL1' not in iteractcomb[comb] and 'stepL2' not in iteractcomb[comb] and 'stepL3' not in iteractcomb[comb] and iteractcomb[comb] in self.actioncomb:
-        #         self.actioncomb.remove(iteractcomb[comb])
-        #     elif 'stepL0' in iteractcomb[comb] and ('stepL1' in iteractcomb[comb] or 'stepL2' in iteractcomb[comb] or 'stepL3' in iteractcomb[comb]) and iteractcomb[comb] in self.actioncomb:
-        #         self.actioncomb.remove(iteractcomb[comb])
-        #     elif 'stepL1' in iteractcomb[comb] and ('stepL2' in iteractcomb[comb] or 'stepL3' in iteractcomb[comb]) and iteractcomb[comb] in self.actioncomb:
-        #         self.actioncomb.remove(iteractcomb[comb])
-        #     elif 'stepL2' in iteractcomb[comb] and 'stepL3' in iteractcomb[comb] and iteractcomb[comb] in self.actioncomb:
-        #         self.actioncomb.remove(iteractcomb[comb])
-        #     elif 'turnLeft' in iteractcomb[comb] and 'turnRight' in iteractcomb[comb] and iteractcomb[comb] in self.actioncomb:
-        #         self.actioncomb.remove(iteractcomb[comb])
-        #     elif 'forward' not in iteractcomb[comb] and ('stepL1' in iteractcomb[comb] or 'stepL2' in iteractcomb[comb] or 'stepL3' in iteractcomb[comb] or 'turnLeft' in iteractcomb[comb] or 'turnRight' in iteractcomb[comb]) and iteractcomb[comb] in self.actioncomb:
-        #         self.actioncomb.remove(iteractcomb[comb])
-        #     elif 'turnLeft' not in iteractcomb[comb] and 'turnRight' not in iteractcomb[comb] and 'stepL3' in iteractcomb[comb] and iteractcomb[comb] in self.actioncomb:
-        #         self.actioncomb.remove(iteractcomb[comb])
-        # self.Ractcomb = dict()
-        # iteractcomb = copy.deepcopy(self.actioncomb)
-        # i = 0
-        # for comb in range(len(iteractcomb)):
-        #     self.Ractcomb[i] = self.actioncomb[comb]
-        #     i += 1
-
 
     
         self.nactionsMO = len(self.actlistMO)
         self.nactionsR = len(self.actlistR)
-        ########## Jonas ##########
         self.targets = targets
         self.left_edge = []
         self.right_edge = []
@@ -182,37 +156,24 @@ class Gridworld():
         self.level1states = [291,292,293,294,295,296,329,334,367,372,405,410,443,448,481,482,483,484,485,486]
         self.level2states = [330,331,332,333,368,369,370,371,406,407,408,409,444,445,446,447]
         self.level0states = set(self.states) - set(self.level1states) - set(self.level2states)
-        # self.stair_states = [35,36]
-        # self.no_robot = [3,11,19,27,30,31,38,39]
-        # self.no_obs = [0,1,2,8,9,10,16,17,18,24,25,26,32,33,34,35,36]
 
-        # self.stair_states = [54,55]
-        # self.no_robot = [14,24,34,44,47,48,57,58]
-        # self.no_obs = [11,12,13,21,22,23,31,32,33,41,42,43,51,52,53,54,55]
 
         self.stair_states = [47]
         self.no_robot = []
         self.no_obs = [22,23,24,35,36,37,48,49,50,61,62,63,74,75,76,46]
 
-        # self.level1states.append
             
 
-        ########## Jonas ##########
+
         self.probMO = {a: np.zeros((self.nstates, self.nstates)) for a in self.actlistMO}
         self.probR = {a: np.zeros((self.nstates, self.nstates)) for a in self.actlistR}
-        #####################################################################################################deal with this. How to take into accont that your possible actions depedn on actions in previous state
-        # self.probR = {a: np.zeros((self.nstates, self.nstates,self.nstates)) for a in self.actlistR}
-        ########## Jonas ##########
 
-        # self.probOfSuccess = dict([])
-        # self.getProbRegions()
-        # self.getProbRegionsMO()
-        # self.getProbRegionsR()
+  
 
         for s in self.states:
             for a in self.actlistMO:
                 self.getProbsMO(s, a)
-        ########## Jonas ##########
+
         # need to add actlistR version
         # see below
         for s in self.states:
@@ -238,29 +199,12 @@ class Gridworld():
             return self.rcoords((row,col))
         return returnState
 
-    # def getProbRegionsMO(self):
-    #     probOfSuccessMO = dict([])
-    #     for ground in self.regions.keys():
-    #         for direction in ['N', 'S', 'E', 'W']:
-    #             probOfSuccessMO[(ground, direction)] = [1, 0, 0]
-    #     self.probOfSuccessMO = probOfSuccessMO
-    #     return
-    
-    # def getProbRegionsR(self):
-    #     probOfSuccessR = dict([])
-    #     for ground in self.regions.keys():
-    #         for direction in ['N', 'S', 'E', 'W']:
-    #             probOfSuccessR[(ground, direction)] = [1, 0, 0]
-    #     self.probOfSuccessR = probOfSuccessR
-    #     return
 
     def rcoords(self, coords):
         s = coords[0] * self.ncols + coords[1]
         return s
 
-    # def getSuccRobot(self, state, forward, stop, turn, lastTurn, setpL, orientation):
-    #     test = 0
-    #     return test
+
 
     def getProbsMO(self, state, action):
         successors = []
@@ -269,8 +213,6 @@ class Gridworld():
             successors = [(state, 1)]
             for (next_state, p) in successors:
                 self.probMO[action][state, next_state] = p
-                ########## Jonas ##########
-                # need to add for self.probR
                 return
         row,col = self.coords(state)
         northState = self.isAllowedState((row-1,col),state)
@@ -304,11 +246,8 @@ class Gridworld():
 
         if state in self.obstacles:
             successorsR = [(state, 1)]
-            # Jonas why is 1 a successors
             for (next_state, p) in successorsR:
                 self.probR[action][state, next_state] = p
-                ########## Jonas ##########
-                # need to add for self.probR
                 return
         row,col = self.coords(state)
         northState = self.isAllowedState((row-1,col),state)
@@ -337,9 +276,7 @@ class Gridworld():
             successorsR.append((state,1))
 
         for (next_state, p) in successorsR:
-            self.probR[action][state, next_state] += p
-            ########## Jonas ##########
-            # need to add for self.probR    
+            self.probR[action][state, next_state] += p  
 
     def getStateRegion(self, state):
         if state in self.regions['deterministic']:

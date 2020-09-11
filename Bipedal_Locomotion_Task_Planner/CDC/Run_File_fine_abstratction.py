@@ -1,7 +1,4 @@
 from gridworld_fine import *
-import argparse
-# import write_structured_slugs_copy_2
-# import write_structured_slugs_past_action_foot_stance_MP_specs_step_height_23_38_no_step_over
 import write_structured_slugs_rss_fine_grid_CDC_longer_stepL
 import compute_all_vis
 import cv2
@@ -17,61 +14,19 @@ import itertools
 import Control_Parser
 import json
 import datetime
-def parseArguments():
-    #### From --> https://stackoverflow.com/questions/28479543/run-python-script-with-some-of-the-argument-that-are-optional
-    #### EVEN BETTER --> https://pymotw.com/2/argparse/
-    # # Create argument parser
-    parser = argparse.ArgumentParser()
-
-    # # Positional mandatory arguments
-    # parser.add_argument("SynthesisFlag", help="Include this boolean to run the synthesis", type=bool)
-
-    #  # Optional arguments
-    parser.add_argument("-synF", action='store_true', default=False, dest='synFlag',
-                        help="Include this boolean to run the synthesis")
-    parser.add_argument("-cvF", action='store_true', default=False, dest='visFlag',
-                        help="Include this boolean to compute belief visibility of the target")
-    parser.add_argument("-noVisF", action='store_false', default=True, dest='noVisFlag',
-                        help="Include this boolean to run synthesis without any target vision")
-
-    # # Parse arguments
-    args = parser.parse_args()
-
-    return args
-
 
 if __name__ == '__main__':
-
-    args = parseArguments()
-    print 'Synthesis Flag is: ', args.synFlag
-    if not args.noVisFlag:
-        print '--> Target has No vision'
-    if args.noVisFlag and args.synFlag:
-        print 'Compute Vision Flag is: ', args.visFlag
-
     then = time.time()
     print 'time: ' + str(datetime.datetime.now().time())
-    ######     1) Choose Environment input figure name:     #####
     mapname_fine = 'fine_abstraction'
     scale = (int(40*2.8),40)
     rownum_f = 26
     rownum_f = 26
 
-    mapname_coarse = 'BelieEvasion_38_23_Extra_obs'
-    rownum_c = 7
-    colnum_c = 7
-
-
-
     filename_f = 'figures/'+mapname_fine+'.png'
     image_f = cv2.imread(filename_f, cv2.IMREAD_GRAYSCALE)
     image_f = cv2.resize(image_f,dsize=(rownum_f,rownum_f),interpolation=cv2.INTER_AREA)
     h_f, w_f = image_f.shape[:2]
-
-    filename_c = 'figures/'+mapname_coarse+'.png'
-    image_c = cv2.imread(filename_c, cv2.IMREAD_GRAYSCALE)
-    image_c = cv2.resize(image_c,dsize=(rownum_c,rownum_c),interpolation=cv2.INTER_AREA)
-    h_c, w_c = image_c.shape[:2]
     
     folder_locn = 'Examples/'
     example_name = 'Belief_Evasion_fine_abstraction_size_26_longer_stepL_test'
@@ -87,30 +42,21 @@ if __name__ == '__main__':
     nagents = 1
     targets = [[]]
 
-    #####     4) pick initial location for robot and dynamic obstacle, pick goal locations     #####
-
-    # 7_7
     initial_f = [351]
     moveobstacles_f = [0]
     PUDO_t = [3,27,45,21,24]
 
-    initial_c = [812]
-    moveobstacles_c = [191]
-    PUDO_t_c = [408,611]
-
     filename_f = [filename_f,(rownum_f,rownum_f),cv2.INTER_AREA]
-    filename_c = [filename_c,(rownum_c,rownum_c),cv2.INTER_AREA]
-    gwg_f = Gridworld(filename_f,nagents=nagents, targets=targets, initial_f=initial_f, moveobstacles_f=moveobstacles_f, filename_c = filename_c, initial_c=initial_c, moveobstacles_c=moveobstacles_c)
+    gwg_f = Gridworld(filename_f,nagents=nagents, targets=targets, initial_f=initial_f, moveobstacles_f=moveobstacles_f)
     gwg_f.colorstates = [set(), set()]
     gwg_f.render()
     gwg_f.save(gwfile)
     partition = dict()
     allowed_states = [[None]] * nagents
     pg = [[None]]*nagents
-    # allowed_states[0] = list(set(gwg_f.states) - set(gwg_f.obstacles)-set(gwg_f.obsborder))
+   
     allowed_states[0] = list(set(gwg_f.states) - set(gwg_f.obstacles))
 
-    #####     5) Pick belief state partitions     #####
     pg[0] = {0:allowed_states[0]}
  
         
@@ -140,12 +86,6 @@ if __name__ == '__main__':
         print 'output file: ', outfile
         print 'input file name:', infile
 
-        #####     6) chose specification writing file     #####
-
-        # write_structured_slugs_past_action_foot_stance_MP_specs_step_height_23_38_no_step_over.write_to_slugs_part_dist(infile, gwg, initial[n], moveobstacles[0], iset, PUDO_targets = PUDO_t,
-        #                                                            visdist =  visdist[n], allowed_states = allowed_states[n],
-        #                                                            partitionGrid = pg[n])
-
         write_structured_slugs_rss_fine_grid_CDC_longer_stepL.write_to_slugs_part_dist(infile, gwg_f, initial_f[n], moveobstacles_f[0], iset, PUDO_targets = PUDO_t,
                                                                    visdist =  visdist[n], allowed_states = allowed_states[n],
                                                                    partitionGrid = pg[n])
@@ -161,7 +101,7 @@ if __name__ == '__main__':
         sp.wait()
 
     now = time.time()
-    print('Synthesis took ', now - then, ' seconds')
+    print('Total synthesis took ', now - then, ' seconds')
     print('Actual synthesis took ', now - noww, ' seconds')
 
     Simulator.userControlled_partition(filename_f[0], gwg_f, pg[0], moveobstacles_f, invisibilityset, jsonfile_name)

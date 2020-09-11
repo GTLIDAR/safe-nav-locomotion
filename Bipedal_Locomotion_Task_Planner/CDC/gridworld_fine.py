@@ -26,16 +26,6 @@ class Gridworld():
             regions = dict.fromkeys(regionkeys, {-1})
             regions['deterministic'] = range(nrows * ncols)
 
-        if filename_c[0] != None:
-            data_c = io.imread(filename_c[0])
-            data_c = cv2.resize(data_c, filename_c[1], interpolation=filename_c[2])
-            regionkeys = {'deterministic'}
-            (nrows_c,ncols_c) = data_c.shape[:2]
-            data_c = data_c.flatten()
-            obstacles_c = list(np.where(data<254)[0])
-            regions_c = dict.fromkeys(regionkeys, {-1})
-            regions_c['deterministic'] = range(nrows_c * ncols_c)
-
         def powerset(s):
             x = len(s)
             a = []
@@ -43,24 +33,17 @@ class Gridworld():
                 a.append(list({s[j] for j in range(x) if (i &(1<<j))}))
             return a
 
-        self.current = initial_c
+        self.current = initial_f
         self.nrows = nrows
         self.ncols = ncols
-        self.nrows_c = nrows_c
-        self.ncols_c = ncols_c
         self.obstacles = obstacles
         self.regions = regions
         self.nagents = nagents
         self.nstates = nrows * ncols
-        # self.obstacles = obstacles
-        ########## Jonas ##########
+
         self.actlistMO = ['R','N', 'S', 'W', 'E']
         self.actlistR = ['forward','turnLeft','turnRight','stepL0','stepL1','stepL2','stepL3','stop']
-        # self.robotState = ['forward','turnLeft','turnRight','stepL0','stepL1','stepL2','stepL3','stop', 'O0', 'O1', 'O2', 'O3', 'O4', 'O5', 'O6', 'O7', 'O8', 'O9', 'O10', 'O11']
-        # ['requestPending1','requestPending2']
-        # self.RobotTurn = ['none','turnLeft','turnRight']
-        # self.RobotTurnLast = ['none','turnLeft','turnRight']
-        # self.RobotStepL = ['short', 'medium', 'long', 'special']
+
         self.RobotStepL = [0,1,2,3]
         self.RobotForward = ['forward', 'notForward']
         self.robotStop = ['stop', 'notStop']
@@ -68,34 +51,12 @@ class Gridworld():
         self.norientations = len((self.orientation))
         # self.actioncomb = powerset(self.actlistR)
 
-        # iteractcomb = copy.deepcopy(self.actioncomb)
-        # for comb in range(len(iteractcomb)): #returns all possible combinations of actions
-        #     if 'stepL0' not in iteractcomb[comb] and 'stepL1' not in iteractcomb[comb] and 'stepL2' not in iteractcomb[comb] and 'stepL3' not in iteractcomb[comb] and iteractcomb[comb] in self.actioncomb:
-        #         self.actioncomb.remove(iteractcomb[comb])
-        #     elif 'stepL0' in iteractcomb[comb] and ('stepL1' in iteractcomb[comb] or 'stepL2' in iteractcomb[comb] or 'stepL3' in iteractcomb[comb]) and iteractcomb[comb] in self.actioncomb:
-        #         self.actioncomb.remove(iteractcomb[comb])
-        #     elif 'stepL1' in iteractcomb[comb] and ('stepL2' in iteractcomb[comb] or 'stepL3' in iteractcomb[comb]) and iteractcomb[comb] in self.actioncomb:
-        #         self.actioncomb.remove(iteractcomb[comb])
-        #     elif 'stepL2' in iteractcomb[comb] and 'stepL3' in iteractcomb[comb] and iteractcomb[comb] in self.actioncomb:
-        #         self.actioncomb.remove(iteractcomb[comb])
-        #     elif 'turnLeft' in iteractcomb[comb] and 'turnRight' in iteractcomb[comb] and iteractcomb[comb] in self.actioncomb:
-        #         self.actioncomb.remove(iteractcomb[comb])
-        #     elif 'forward' not in iteractcomb[comb] and ('stepL1' in iteractcomb[comb] or 'stepL2' in iteractcomb[comb] or 'stepL3' in iteractcomb[comb] or 'turnLeft' in iteractcomb[comb] or 'turnRight' in iteractcomb[comb]) and iteractcomb[comb] in self.actioncomb:
-        #         self.actioncomb.remove(iteractcomb[comb])
-        #     elif 'turnLeft' not in iteractcomb[comb] and 'turnRight' not in iteractcomb[comb] and 'stepL3' in iteractcomb[comb] and iteractcomb[comb] in self.actioncomb:
-        #         self.actioncomb.remove(iteractcomb[comb])
-        # self.Ractcomb = dict()
-        # iteractcomb = copy.deepcopy(self.actioncomb)
-        # i = 0
-        # for comb in range(len(iteractcomb)):
-        #     self.Ractcomb[i] = self.actioncomb[comb]
-        #     i += 1
+
 
 
     
         self.nactionsMO = len(self.actlistMO)
         self.nactionsR = len(self.actlistR)
-        ########## Jonas ##########
         self.targets = targets
         self.left_edge = []
         self.right_edge = []
@@ -209,12 +170,10 @@ class Gridworld():
         # self.level1states.append
             
 
-        ########## Jonas ##########
+  
         self.probMO = {a: np.zeros((self.nstates, self.nstates)) for a in self.actlistMO}
         self.probR = {a: np.zeros((self.nstates, self.nstates)) for a in self.actlistR}
-        #####################################################################################################deal with this. How to take into accont that your possible actions depedn on actions in previous state
-        # self.probR = {a: np.zeros((self.nstates, self.nstates,self.nstates)) for a in self.actlistR}
-        ########## Jonas ##########
+
 
         # self.probOfSuccess = dict([])
         # self.getProbRegions()
@@ -224,11 +183,8 @@ class Gridworld():
         for s in self.states:
             for a in self.actlistMO:
                 self.getProbsMO(s, a)
-        ########## Jonas ##########
-        # need to add actlistR version
-        # see below
+
         for s in self.states:
-            # for a in self.actioncomb:
             for a in self.actlistR:
                 for o in self.orientation:
                     self.getProbsR(s, a, o)
@@ -250,29 +206,11 @@ class Gridworld():
             return self.rcoords((row,col))
         return returnState
 
-    # def getProbRegionsMO(self):
-    #     probOfSuccessMO = dict([])
-    #     for ground in self.regions.keys():
-    #         for direction in ['N', 'S', 'E', 'W']:
-    #             probOfSuccessMO[(ground, direction)] = [1, 0, 0]
-    #     self.probOfSuccessMO = probOfSuccessMO
-    #     return
-    
-    # def getProbRegionsR(self):
-    #     probOfSuccessR = dict([])
-    #     for ground in self.regions.keys():
-    #         for direction in ['N', 'S', 'E', 'W']:
-    #             probOfSuccessR[(ground, direction)] = [1, 0, 0]
-    #     self.probOfSuccessR = probOfSuccessR
-    #     return
+
 
     def rcoords(self, coords):
         s = coords[0] * self.ncols + coords[1]
         return s
-
-    # def getSuccRobot(self, state, forward, stop, turn, lastTurn, setpL, orientation):
-    #     test = 0
-    #     return test
 
     def getProbsMO(self, state, action):
         successors = []
@@ -281,8 +219,6 @@ class Gridworld():
             successors = [(state, 1)]
             for (next_state, p) in successors:
                 self.probMO[action][state, next_state] = p
-                ########## Jonas ##########
-                # need to add for self.probR
                 return
         row,col = self.coords(state)
         northState = self.isAllowedState((row-1,col),state)
@@ -316,11 +252,8 @@ class Gridworld():
 
         if state in self.obstacles:
             successorsR = [(state, 1)]
-            # Jonas why is 1 a successors
             for (next_state, p) in successorsR:
-                self.probR[action][state, next_state] = p
-                ########## Jonas ##########
-                # need to add for self.probR
+                self.probR[action][state, next_state] = p\
                 return
         row,col = self.coords(state)
         northState = self.isAllowedState((row-1,col),state)
@@ -349,9 +282,7 @@ class Gridworld():
             successorsR.append((state,1))
 
         for (next_state, p) in successorsR:
-            self.probR[action][state, next_state] += p
-            ########## Jonas ##########
-            # need to add for self.probR    
+            self.probR[action][state, next_state] += p 
 
     def getStateRegion(self, state):
         if state in self.regions['deterministic']:
@@ -364,8 +295,6 @@ class Gridworld():
         self.width = self.ncols * size + self.ncols + 1
         self.size = size
 
-        self.height_c = self.nrows_c * size + self.nrows_c + 1
-        self.width_c = self.ncols_c * size + self.ncols_c + 1
         #       # initialize pygame ( SDL extensions )
         pygame.init()
         screenA = pygame.display.set_mode((self.width, self.height))

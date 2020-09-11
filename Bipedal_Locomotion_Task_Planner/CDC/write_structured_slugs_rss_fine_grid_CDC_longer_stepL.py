@@ -43,18 +43,16 @@ def reach_statesMO(gw,states):
     t =set()
     for state in states:
         for action in gw.actlistMO:
-            ########## Jonas ##########
             t.update(set(np.nonzero(gw.probMO[action][state])[0]))
     return t
 
-########## Jonas ##########
 def reach_statesR(gw,states):
     t =set()
     for state in states:
         for action in gw.actlistR:
             t.update(set(np.nonzero(gw.probR[action][state])[0]))
     return t
-########## Jonas ##########
+
 
 def powerset(s):
     x = len(s)
@@ -65,16 +63,7 @@ def powerset(s):
     now_PS = time.time()
     print 'Power set took ', now_PS - then_PS, ' seconds'
     return a
-    #then_PS = time.time()
-    #pow_set_lists = reduce(lambda result, x: result + [subset + [x] for subset in result],s, [[]])
-    #pow_set_lists.remove([])
-    #i = 0
-    #for specific_list in pow_set_lists:
-    #    pow_set_lists[i] = set(specific_list)
-    #    i +=1
-    #now_PS = time.time()
-   # print 'Power set took ', now_PS - then_PS, ' seconds'
-    #return pow_set_lists
+
 
 def cartesian (lists):
     if lists == []: return [()]
@@ -187,35 +176,27 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
         allstates.append(i)
     allstates.append(len(allstates)) # nominal state if target leaves allowed region
 
-    # target_total_vis = target_visibility(gw)
 
     filename = infile+'.structuredslugs'
     file = open(filename,'w')
     file.write('[INPUT]\n')
-    # print('nonbeliefstates: ' + str(nonbeliefstates))
-    # print('allstates: ' + str(allstates))
-    # print('len(allstates): ' + str(len(allstates)))
+
     file.write('st:0...{}\n'.format(len(allstates) -1))
     file.write('orientation:0...15\n')
     file.write('s:0...{}\n'.format(len(gw.states)-1))
     file.write('directionrequest:0...4\n')
     file.write('stair\n')
-    # file.write('border_trans\n')
-    # file.write('sOld:0...{}\n'.format(len(gw.states)-1))
-    # file.write('pastTurnStanceMatchFoot:0...2\n')
+
 
     file.write('\n[OUTPUT]\n')
     file.write('forward\n')
-    # file.write('turnLeft\n')
-    # file.write('turnRight\n')
     file.write('stepL:0...3\n')
     file.write('stop\n')
     file.write('requestPending1:0...5\n')
-    # file.write('requestPending2\n')
     file.write('stepH:0...6\n')
     file.write('turn:1...3\n')
     file.write('stanceFoot:0...2\n')
-    # file.write('s:0...{}\n'.format(len(gw.states)-1))
+
     if target_reachability:
         file.write('c:0...1\n')
 
@@ -224,28 +205,24 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('orientation = 4\n')
     file.write('directionrequest = 2\n')
     file.write('!stair\n')
-    # file.write('pastTurnStanceMatchFoot = 2\n')
+
 
     if initmovetarget in allowed_states:
         file.write('st = {}\n'.format(initmovetarget))
     else:
         file.write('st = {}\n'.format(allstates[-1]))
 
-    # file.write('sOld = {}\n'.format(init))
     
 
     file.write('\n[SYS_INIT]\n')
-    # file.write('s = {}\n'.format(init))
     if target_reachability:
         file.write('c = 0\n')
 
     file.write('!forward\n')
-    # file.write('!turnLeft\n')
-    # file.write('!turnRight\n')
+
     file.write('turn = 2\n')
     file.write('stop\n')
     file.write('stepH = 3\n')
-    # file.write('!stop\n')
     file.write('requestPending1=2\n')
 
     # writing env_trans
@@ -253,7 +230,6 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     print 'Writing ENV_TRANS'
     file.write("st' = {}\n".format(initmovetarget))
 
-    ##################### Jonas Action Based Specs ###################
     print 'Writing Action Based Environment Transitions'
     stri = ''
     stri += '\n'
@@ -348,11 +324,6 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     stri += ") & forward & (stepL=0 | stepL=1) -> s' = s + {}\n".format(gw.ncols-3)
     file.write(stri)
 
-
-
-
-
-
     stri = "\nforward & turn=1 & orientation>0 -> orientation'+1 = orientation\n"
     stri += "forward & turn=3 & orientation<15 -> orientation' = orientation+1\n"
     stri += "forward & turn=1 & orientation=0 -> orientation' = 15\n"
@@ -360,8 +331,6 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     stri += "\n"
     file.write(stri)
     ###45deg change###
-
-
 
     file.write("\n\n\n #specs_for_turning\n\n")
     top3_edge = gw.top_edge+gw.top_edge2+gw.top_edge3
@@ -529,9 +498,6 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write(stri)
 
 
-
-
-
     ##### Grid transitions when turning right with orientation 8, 9, or 10
     ##### first step of turn #####
     edge_comb = bottom3_edge+left2_edge
@@ -683,13 +649,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write(stri)
     
 
-
-
-
-
-
     ##### Grid transitions when turning left with orientation 0, 15, or 14
-    # stri += "((orientation=0 | orientation=11) & turn=1 & stepL=3) -> s' + {} = s\n".format(gw.ncols+1)
     ##### first step of turn
     edge_comb = top3_edge + left2_edge
     stri = "\n("
@@ -764,9 +724,6 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
 
     ##### Grid transitions when turning left with orientation 4, 3, or 2
-    # stri += "((orientation=3 | orientation=2) & turn=1 & stepL=3) -> s' + {} = s\n".format(gw.ncols-1)
-    
-
     ##### first step of turn
     edge_comb = top2_edge+right3_edge
     stri = "\n("
@@ -843,7 +800,6 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
 
     ##### Grid transitions when turning left with orientation 8, 7, or 6
-    # stri += "((orientation=6 | orientation=5) & turn=1 & stepL=3) -> s' = s + {}\n".format(gw.ncols+1)
     ##### third step of turn #####
     edge_comb = right2_edge + bottom3_edge
     stri = "\n("
@@ -917,7 +873,6 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write(stri)
     
     ##### Grid transitions when turning left with orientation 12, 11, or 10
-    # stri += "((orientation=9 | orientation=8) & turn=1 & stepL=3) -> s' = s + {}\n".format(gw.ncols-1)
     ##### first step of turn #####
     edge_comb = bottom2_edge+left3_edge
     stri = "\n("
@@ -996,32 +951,16 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     
 
     stri = "!forward -> s' = s\n"
-    ###45deg change###
     stri += "turn=2 -> orientation' = orientation"
-    ###45deg change###
     stri += "\n"
     file.write(stri)
 
     
-    # stri = "!forward -> st' != s\n"
     stri = "st' != s\n"
     stri += "\n"
     file.write(stri)
-
-    # file.write("(orientation != 1 & directionrequest' != 2) /\ (orientation != 3 & directionrequest' != 4) -> !stair'\n")
-    # file.write("(orientation' != 3 & directionrequest' != 2) & (orientation' != 9 & directionrequest' != 4) -> !stair'\n")
-    # file.write("(orientation' != 4 & orientation' != 12) \/ (directionrequest' != 4 & directionrequest' != 2) -> !stair'\n")
-    # file.write(" (directionrequest' != 4 & directionrequest' != 2) -> !stair'\n")
     file.write(" (directionrequest' != 4 & directionrequest' != 2) | (directionrequest != 4 & directionrequest != 2)-> !stair'\n")
 
-    # footstance based navigation:
-    # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ turnLeft /\\ stanceFoot=0 -> pastTurnStanceMatchFoot' = 1\n")
-    # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ turnLeft /\\ stanceFoot=1 -> pastTurnStanceMatchFoot' = 0\n")
-    # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ turnRight /\\ stanceFoot=0 -> pastTurnStanceMatchFoot' = 0\n")
-    # file.write("(orientation=0 | orientation=3 |orientation=6 | orientation=9) /\\ turnRight /\\ stanceFoot=1 -> pastTurnStanceMatchFoot' = 1\n")
-    # file.write("forward /\\ ((orientation !=0 /\\ orientation!=3 /\\ orientation != 6 /\\ orientation != 9) \/ (!turnLeft /\\ !turnRight)) -> pastTurnStanceMatchFoot' = pastTurnStanceMatchFoot\n")
-    # file.write("!forward -> pastTurnStanceMatchFoot' = 2\n")
-    ##################### Jonas Action Based Specs ###################
 
 
     # Writing env_safety
@@ -1031,8 +970,6 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
             file.write('!st = {}\n'.format(obs))
 
     ##### Navigation goal tracking
-
-    ##### Attempt to elliminate stop when entering each new coarse grid #####:
     file.write("directionrequest = 0 & orientation = 0 & requestPending1 = 5 -> directionrequest' =1 \/ directionrequest' =0\n")
     file.write("directionrequest = 0 & orientation = 4 & requestPending1 = 5 -> directionrequest' =2 \/ directionrequest' =0\n")
     file.write("directionrequest = 0 & orientation = 8 & requestPending1 = 5 -> directionrequest' =3 \/ directionrequest' =0\n")
@@ -1044,40 +981,21 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write("directionrequest = 4 -> directionrequest' !=2\n")
 
     file.write("requestPending1 != 5 -> directionrequest' = directionrequest\n")
-    # file.write("requestPending1 = 5 -> directionrequest' != 0\n\n")
 
-    ###### Can't use specs below since the robot tries to brake env specs by turning 
     file.write("requestPending1 != 5 & stair-> stair' \n")
     file.write("requestPending1 != 5 & !stair-> !stair' \n")
 
-    ##################### Some Suda Stuff ###################
-    # if target_reachability:
-    #     for t in targets:
-    #         file.write('!st = {}\n'.format(t))
-    ##################### Some Suda Stuff ###################
 
     # writing sys_trans
     file.write('\n[SYS_TRANS]\n')
-    # all this code does is check what states there is a probability greater than 0 of getting to from the current state. Need to include orientation in that probability map
-    # not sure how to deal with actions relying on previous actions. Should I just include actions in the spec file?
-    #In general do not need to rely on previous actions/next actions other than to tell the system to stop ahead of time, how to deal with this?
-
     print 'Writing SYS_TRANS'
     
-
-    ####################################### JONAS ############################
     stri = "!forward' -> turn'=2\n\n"
     stri += "stop -> stepL=0\n"
     stri += "!forward -> (stepL=0 & turn=2)\n\n"
     stri += "stop <-> !forward'\n\n"
 
-    ##### NEED TO REPLACE #######
-    # stri += "(orientation'!=0 & orientation'!=3  & orientation'!=6 & orientation'!=9) -> stepL=3\n"
-    # stri += "(orientation'=0 | orientation'=3  | orientation'=6 | orientation'=9) -> stepL!=3\n\n"
 
-
-    # stri += "(orientation'=0 | orientation'=4  | orientation'=8 | orientation'=12) -> stepL=0\n\n"
-    ##### NEED TO REPLACE #######
 
 
     stri += "(turn=3 & (orientation'!=0 & orientation'!=4  & orientation'!=8 & orientation'!=12)) -> turn'=3\n"
@@ -1091,12 +1009,6 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write("stepL = 0 -> turn' = 2\n")
     file.write("turn = 2 & stepL = 1 -> turn' != 2\n")
 
-    # file.write("turn' = 2 -> stepL' !=2 \n")
-    # file.write("stepL=1 -> turn' !=2 \n")
-    # file.write("stepL = 1 & (orientation = 0 | orientation = 4 | orientation = 8 | orientation = 12) -> turn !=2\n")
-
-
-
     stri = ""
     stri += ""
 
@@ -1108,42 +1020,6 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write("!forward' -> stanceFoot' =stanceFoot\n")
     file.write("(orientation = 0 | orientation = 4 | orientation = 8 | orientation = 12) & stanceFoot = 0 -> turn !=1\n")
     file.write("(orientation = 0 | orientation = 4 | orientation = 8 | orientation = 12) & stanceFoot = 1 -> turn !=3\n")
-
-
-
-    # file.write("!forward' -> stanceFoot' =2\n")
-    # file.write("forward' -> stanceFoot' !=2\n")
-
-    # # file.write("forward & stanceFoot=0 -> stanceFoot'=1\n")
-    # # file.write("forward & stanceFoot=1 -> stanceFoot'=0\n")
-
-    ##### NEED TO REPLACE #######
-    # file.write('\n')
-    # file.write('turn !=2 -> stepL != 1 /\ stepL !=2\n')
-    # file.write('\n')
-
-    file.write('\n')
-    # file.write("turn'=2 -> stepL'=0\n")
-    file.write('\n')
-    ##### NEED TO REPLACE   -DONE? #######
-
-    ##### Fine Specific Specs #####
-    # stri =""
-    # for edgeS in gw.edges:
-    #     stri += "s' = {} -> turn' = 2\n".format(edgeS)
-    # stri += "\n"
-    # file.write(stri)
-
-    # stri =""
-    # for edgeS in gw.edges:
-    #     stri += "s' = {} & directionrequest' != 0-> !forward\n".format(edgeS)
-    # stri += "\n"
-    # file.write(stri)
-
-    # file.write("requestPending1' = directionrequest\n")
-
-
-
 
 
     ##### Specs that govern how liveness specs can be met #####
@@ -1238,13 +1114,6 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     stri+= ") & requestPending1' = 4))\n"
     file.write(stri)
 
-    # stri = "requestPending1 = 0 -> ((!forward & requestPending1' = 5) \/ (forward & requestPending1' = 0))\n"
-    # stri = "requestPending1 = 0 -> ((!forward & ("
-    # for edgeS in gw.edges3+gw.edges2+gw.edges:
-    #     stri += "s != {} & ".format(edgeS)
-    # stri = stri[:-3]
-    # stri+= ") & requestPending1' = 5) \/ (forward & requestPending1' = 0))\n"
-    # file.write(stri)
 
     stri = "requestPending1 = 0 -> ((!forward' & ("
     for edgeS in gw.edges3+gw.edges2+gw.edges+gw.edges4:
@@ -1286,26 +1155,8 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     corner_states = TL_Corner+TR_Corner+BR_Corner+BL_Corner
 
-    #####Jonas Turn Back on
-    # stri =""
-    # for edgeS in corner_states:
-    #     stri += "s' != {}\n".format(edgeS)
-    # stri += "\n"
-    # file.write(stri)
-    #####Jonas Turn Back on
-
-    ##### Ensure the robot doesn't leave cell before completing nav goal #####
 
     file.write("\n\n #specs to stay in coarse cell until goal is completed\n\n")
-
-    ######Need to Fix
-    # stri =""
-    # for edgeS in gw.edges + gw.edges2+gw.edges3:
-    #     stri += "s' = {} | ".format(edgeS)
-    #     stri = stri[:-3]
-    #     stri += " & requestPending1' != 5 -> !forward'\n"
-    # stri += "\n"
-    # file.write(stri)
 
     stri ="("
     for edgeS in gw.top_edge+gw.top_edge2+gw.top_edge3+gw.top_edge4:
@@ -1373,21 +1224,12 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     stri += ") & (orientation = 8 | orientation = 9 | orientation = 10 | orientation = 11 | orientation = 12 | orientation = 13 | orientation = 14 | orientation = 15 | orientation = 0) & requestPending1' != 5 & turn' != 2 -> !forward'\n"
     stri += "\n"
     file.write(stri)
-
-    ######Need to Fix
-
-
-
     
-    #####Jonas Turn Back on
-    # file.write("\nstair' & orientation' = 4 & directionrequest' = 2 -> (stepL' = 0 & stepH' = 4) \/ ((stepL' = 1 & stepH' = 5)) \/ ((stepL' = 2 & stepH' = 6))\n")
-    # file.write("stair' & orientation' = 12 & directionrequest' = 4 -> (stepL' = 0 & stepH' = 2) \/ ((stepL' = 1 & stepH' = 1)) \/ ((stepL' = 2 & stepH' = 0))\n\n")
-    
+   
     file.write("\nstair'  & directionrequest' = 2 -> (stepL' = 0 & stepH' = 4) \/ ((stepL' = 1 & stepH' = 4)) \/ ((stepL' = 2 & stepH' = 6))\n")
     file.write("stair' & directionrequest' = 4 -> (stepL' = 0 & stepH' = 2) \/ ((stepL' = 1 & stepH' = 1)) \/ ((stepL' = 2 & stepH' = 0))\n\n")
     
     file.write("!stair' -> stepH' = 3\n\n")
-    #####Jonas Turn Back on
 
 
 
@@ -1397,7 +1239,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # Writing sys_liveness
     file.write('\n[SYS_LIVENESS]\n')
     file.write("requestPending1 = 5\n")
-    # file.write("turn != 2\n")
+
 
 
 
@@ -1405,18 +1247,3 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     file.write('\n[ENV_LIVENESS]\n')
    
-    # stri = ""
-    # for visstate in set(nonbeliefstates):
-    #     stri += "st != {} /\\ ".format(visstate)
-    # stri = stri[:-4]
-    # file.write(stri)
-
-    # stri = ""
-    # for Bstate in (set(allstates) - set(nonbeliefstates)):
-    #     stri += "st = {} \/ ".format(Bstate)
-    # stri = stri[:-4]
-    # file.write(stri)
-
-    # file.write("st' = {}".format(allstates[-2]))
-
-    # file.write("st' = {}".format(115))
