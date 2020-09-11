@@ -5,4 +5,7 @@ Bipedal_Locomotion_Task_Planner/Navigation/Joans_Vis_Studio.code-workspace
 **/Examples
 *.code-workspace
 **/2_level_abs/
-**/2_level_finer_abs
+**/2_level_finer_abs/
+**/Backup/
+**/Examples/
+**/Legacy/
