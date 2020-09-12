@@ -1,0 +1,127 @@
+# -*- python -*-
+
+load(
+    "@drake//tools/skylark:drake_cc.bzl",
+    "drake_cc_googletest",
+    "drake_cc_library",
+    "drake_cc_package_library",
+)
+load("//tools/lint:lint.bzl", "add_lint_tests")
+
+package(default_visibility = ["//visibility:public"])
+
+drake_cc_package_library(
+    name = "trajectory_optimization",
+    deps = [
+        ":direct_collocation",
+        ":direct_transcription",
+        ":multiple_shooting",
+        ":sequential_expression_manager",
+    ],
+)
+
+drake_cc_library(
+    name = "sequential_expression_manager",
+    srcs = ["sequential_expression_manager.cc"],
+    hdrs = [
+        "sequential_expression_manager.h",
+    ],
+    deps = [
+        "//common:essential",
+        "//common:symbolic",
+    ],
+)
+
+drake_cc_library(
+    name = "multiple_shooting",
+    srcs = ["multiple_shooting.cc"],
+    hdrs = ["multiple_shooting.h"],
+    deps = [
+        ":sequential_expression_manager",
+        "//common:essential",
+        "//common/trajectories:piecewise_polynomial",
+        "//solvers:ipopt_solver",
+        "//solvers:mathematical_program_lite",
+    ],
+)
+
+drake_cc_library(
+    name = "direct_collocation",
+    srcs = [
+        "direct_collocation.cc",
+    ],
+    hdrs = [
+        "direct_collocation.h",
+    ],
+    deps = [
+        ":multiple_shooting",
+        "//math:autodiff",
+        "//math:gradient",
+        "//systems/framework",
+    ],
+)
+
+drake_cc_library(
+    name = "direct_transcription",
+    srcs = [
+        "direct_transcription.cc",
+    ],
+    hdrs = [
+        "direct_transcription.h",
+    ],
+    deps = [
+        ":multiple_shooting",
+        "//common/trajectories:piecewise_polynomial",
+        "//math:autodiff",
+        "//math:gradient",
+        "//systems/framework",
+        "//systems/primitives:linear_system",
+    ],
+)
+
+# === test/ ===
+
+drake_cc_googletest(
+    name = "multiple_shooting_test",
+    deps = [
+        ":multiple_shooting",
+        "//common/test_utilities:eigen_matrix_compare",
+        "//solvers:solve",
+    ],
+)
+
+drake_cc_googletest(
+    name = "direct_collocation_test",
+    deps = [
+        ":direct_collocation",
+        "//common/test_utilities:eigen_matrix_compare",
+        "//examples/rimless_wheel",
+        "//multibody/benchmarks/pendulum",
+        "//solvers:solve",
+        "//systems/primitives:linear_system",
+    ],
+)
+
+drake_cc_googletest(
+    name = "direct_transcription_test",
+    data = ["//examples/pendulum:prod_models"],
+    deps = [
+        ":direct_transcription",
+        "//common/test_utilities:eigen_matrix_compare",
+        "//multibody/parsing",
+        "//multibody/plant",
+        "//solvers:solve",
+        "//systems/primitives:symbolic_vector_system",
+        "//systems/primitives:trajectory_linear_system",
+    ],
+)
+
+drake_cc_googletest(
+    name = "sequential_expression_manager_test",
+    deps = [
+        ":sequential_expression_manager",
+        "@fmt",
+    ],
+)
+
+add_lint_tests()

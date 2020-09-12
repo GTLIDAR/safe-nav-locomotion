@@ -1,0 +1,230 @@
+# -*- python -*-
+
+load(
+    "@drake//tools/workspace:cmake_configure_file.bzl",
+    "cmake_configure_file",
+)
+load(
+    "@drake//tools/workspace:generate_export_header.bzl",
+    "generate_export_header",
+)
+load(
+    "@drake//tools/workspace:generate_include_header.bzl",
+    "drake_generate_include_header",
+)
+load(
+    "@drake//tools/install:install.bzl",
+    "install",
+)
+
+licenses(["notice"])  # Apache-2.0 AND BSD-3-Clause
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "urdfdom",
+    srcs = [
+        "src/urdf/urdf_parser/joint.cpp",
+        "src/urdf/urdf_parser/link.cpp",
+        "src/urdf/urdf_parser/model.cpp",
+        "src/urdf/urdf_parser/pose.cpp",
+        "src/urdf/urdf_parser/twist.cpp",
+        "src/urdf/urdf_parser/urdf_model_state.cpp",
+        "src/urdf/urdf_parser/urdf_sensor.cpp",
+        "src/urdf/urdf_parser/world.cpp",
+    ],
+    hdrs = [
+        "src/urdf/urdf_exception/exception.h",
+        "src/urdf/urdf_model/color.h",
+        "src/urdf/urdf_model/joint.h",
+        "src/urdf/urdf_model/link.h",
+        "src/urdf/urdf_model/model.h",
+        "src/urdf/urdf_model/pose.h",
+        "src/urdf/urdf_model/twist.h",
+        "src/urdf/urdf_model/types.h",
+        "src/urdf/urdf_model/utils.h",
+        "src/urdf/urdf_model_state/model_state.h",
+        "src/urdf/urdf_model_state/twist.h",
+        "src/urdf/urdf_model_state/types.h",
+        "src/urdf/urdf_parser/exportdecl.h",
+        "src/urdf/urdf_parser/urdf_parser.h",
+        "src/urdf/urdf_sensor/sensor.h",
+        "src/urdf/urdf_sensor/types.h",
+        "src/urdf/urdf_world/types.h",
+        "src/urdf/urdf_world/world.h",
+    ],
+    # TODO(jamiesnape): Enable visibility after resolving warnings such as
+    # "Direct access in function means the weak symbol cannot be overridden at
+    # runtime. This was likely caused by different translation units being
+    # compiled with different visibility settings."
+    copts = ["-w"],
+    defines = ["URDFDOM_STATIC"],
+    includes = ["src/urdf"],
+    linkstatic = 1,
+    visibility = ["//visibility:private"],
+    deps = ["@tinyxml"],
+)
+
+# Generates sdf_config.h based on the version numbers in CMake code.
+cmake_configure_file(
+    name = "config",
+    src = "cmake/sdf_config.h.in",
+    out = "include/sdf/sdf_config.h",
+    cmakelists = ["CMakeLists.txt"],
+    defines = [
+        "PROJECT_NAME=SDFormat",
+        "SDF_VERSION_NAME=",
+        "SDF_PKG_VERSION=",
+        "CMAKE_INSTALL_FULL_DATAROOTDIR=does/not/exist",
+    ],
+    visibility = ["//visibility:private"],
+)
+
+# Public headers are indicated in sdformat's `include/sdf/CMakeLists.txt`.
+SDFORMAT_MOST_PUBLIC_HDRS = [
+    "include/sdf/Assert.hh",
+    "include/sdf/Atmosphere.hh",
+    "include/sdf/Box.hh",
+    "include/sdf/Collision.hh",
+    "include/sdf/Console.hh",
+    "include/sdf/Cylinder.hh",
+    "include/sdf/Element.hh",
+    "include/sdf/Error.hh",
+    "include/sdf/Exception.hh",
+    "include/sdf/Filesystem.hh",
+    "include/sdf/Geometry.hh",
+    "include/sdf/Gui.hh",
+    "include/sdf/Joint.hh",
+    "include/sdf/JointAxis.hh",
+    "include/sdf/Light.hh",
+    "include/sdf/Link.hh",
+    "include/sdf/Material.hh",
+    "include/sdf/Mesh.hh",
+    "include/sdf/Model.hh",
+    "include/sdf/Param.hh",
+    "include/sdf/parser.hh",
+    "include/sdf/Physics.hh",
+    "include/sdf/Plane.hh",
+    "include/sdf/Root.hh",
+    "include/sdf/SDFImpl.hh",
+    "include/sdf/Sensor.hh",
+    "include/sdf/Sphere.hh",
+    "include/sdf/Types.hh",
+    "include/sdf/Visual.hh",
+    "include/sdf/World.hh",
+    "include/sdf/system_util.hh",
+]
+
+# Generates sdf.hh, which consists of #include statements for all of the public
+# headers in the library.  There is one line like '#include <sdf/Assert.hh>'
+# for each non-generated header, followed at the end by a
+# single '#include <sdf/sdf_config.h>'.
+drake_generate_include_header(
+    name = "sdfhh_genrule",
+    out = "include/sdf/sdf.hh",
+    hdrs = SDFORMAT_MOST_PUBLIC_HDRS + [":config"],
+    visibility = ["//visibility:private"],
+)
+
+# Generates EmbeddedSdf.hh.
+# TODO(jwnimmer-tri) Since the ruby code uses globbing to decide which files to
+# stringize, ideally we should create a temporary folder, copy the declared
+# `srcs` there, and then run the codegen tool -- so that its glob only finds
+# our declared `srcs`.  However, for now just relying on Bazel's runfiles tree
+# being reasonably well-defined seems good enough.
+genrule(
+    name = "embed_sdf",
+    srcs = [
+        "sdf/embedSdf.rb",
+    ] + glob([
+        "sdf/**/*.sdf",
+        "sdf/**/*.convert",
+    ]),
+    outs = ["include/sdf/EmbeddedSdf.hh"],
+    cmd = "$(location @ruby) -C$$(dirname $(location sdf/embedSdf.rb)) embedSdf.rb > $@",  # noqa
+    tools = [
+        "@ruby",
+    ],
+)
+
+SDFORMAT_ALL_PUBLIC_HDRS = SDFORMAT_MOST_PUBLIC_HDRS + [
+    "include/sdf/sdf.hh",  # from genrule above
+    "include/sdf/sdf_config.h",  # from cmake_configure_file above
+]
+
+SDFORMAT_DATA = glob(["sdf/1.6/*.sdf"])
+
+# Generates the library exported to users. The explicitly listed srcs= matches
+# upstream's explicitly listed sources. The explicitly listed hdrs= matches
+# upstream's private headers. We exclude the irrelevant ign.hh and ign.cc.
+cc_library(
+    name = "sdformat",
+    srcs = [
+        "include/sdf/Converter.hh",
+        "include/sdf/EmbeddedSdf.hh",
+        "include/sdf/ExceptionPrivate.hh",
+        "include/sdf/SDFExtension.hh",
+        "include/sdf/SDFImplPrivate.hh",
+        "include/sdf/parser_private.hh",
+        "include/sdf/parser_urdf.hh",
+        "src/Atmosphere.cc",
+        "src/Box.cc",
+        "src/Collision.cc",
+        "src/Console.cc",
+        "src/Converter.cc",
+        "src/Cylinder.cc",
+        "src/Element.cc",
+        "src/Error.cc",
+        "src/Exception.cc",
+        "src/Filesystem.cc",
+        "src/Geometry.cc",
+        "src/Gui.cc",
+        "src/Joint.cc",
+        "src/JointAxis.cc",
+        "src/Light.cc",
+        "src/Link.cc",
+        "src/Material.cc",
+        "src/Mesh.cc",
+        "src/Model.cc",
+        "src/Param.cc",
+        "src/Physics.cc",
+        "src/Plane.cc",
+        "src/Root.cc",
+        "src/SDF.cc",
+        "src/SDFExtension.cc",
+        "src/Sensor.cc",
+        "src/Sphere.cc",
+        "src/Types.cc",
+        "src/Utils.cc",
+        "src/Utils.hh",
+        "src/Visual.cc",
+        "src/World.cc",
+        "src/parser.cc",
+        "src/parser_urdf.cc",
+    ],
+    hdrs = SDFORMAT_ALL_PUBLIC_HDRS,
+    # TODO(jamiesnape): Enable visibility after resolving warnings such as
+    # "Direct access in function means the weak symbol cannot be overridden at
+    # runtime. This was likely caused by different translation units being
+    # compiled with different visibility settings."
+    copts = ["-w"],
+    data = SDFORMAT_DATA,
+    defines = ["SDFORMAT_STATIC_DEFINE"],
+    includes = ["include"],
+    linkstatic = 1,
+    deps = [
+        ":urdfdom",
+        "@boost//:boost_headers",
+        "@ignition_math",
+        "@tinyxml",
+    ],
+)
+
+install(
+    name = "install",
+    data = SDFORMAT_DATA,
+    docs = [
+        "COPYING",
+        "LICENSE",
+    ],
+)

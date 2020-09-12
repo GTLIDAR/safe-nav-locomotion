@@ -1,0 +1,57 @@
+# -*- python -*-
+
+load(
+    "@drake//tools/skylark:drake_cc.bzl",
+    "drake_cc_googletest",
+    "drake_cc_library",
+    "drake_cc_package_library",
+)
+load("//tools/lint:lint.bzl", "add_lint_tests")
+
+package(default_visibility = ["//visibility:public"])
+
+drake_cc_package_library(
+    name = "acrobot",
+    deps = [
+        ":analytical_acrobot",
+        ":make_acrobot_plant",
+    ],
+)
+
+drake_cc_library(
+    name = "analytical_acrobot",
+    srcs = ["acrobot.cc"],
+    hdrs = ["acrobot.h"],
+    deps = [
+        "//common:autodiff",
+        "//common:extract_double",
+        "//math:geometric_transform",
+    ],
+)
+
+filegroup(
+    name = "models",
+    srcs = glob([
+        "**/*.obj",
+        "**/*.sdf",
+        "**/*.urdf",
+        "**/*.xml",
+    ]),
+)
+
+drake_cc_library(
+    name = "make_acrobot_plant",
+    srcs = [
+        "make_acrobot_plant.cc",
+    ],
+    hdrs = [
+        "make_acrobot_plant.h",
+    ],
+    deps = [
+        "//geometry:scene_graph",
+        "//math:geometric_transform",
+        "//multibody/plant",
+    ],
+)
+
+add_lint_tests()

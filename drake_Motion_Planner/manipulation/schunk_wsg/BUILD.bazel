@@ -1,0 +1,172 @@
+# -*- python -*-
+
+load(
+    "@drake//tools/skylark:drake_cc.bzl",
+    "drake_cc_googletest",
+    "drake_cc_library",
+    "drake_cc_package_library",
+)
+load(
+    "@drake//tools/vector_gen:vector_gen.bzl",
+    "drake_cc_vector_gen_library",
+)
+load("//tools/lint:lint.bzl", "add_lint_tests")
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+drake_cc_package_library(
+    name = "schunk_wsg",
+    deps = [
+        ":schunk_wsg_constants",
+        ":schunk_wsg_controller",
+        ":schunk_wsg_lcm",
+        ":schunk_wsg_plain_controller",
+        ":schunk_wsg_position_controller",
+        ":schunk_wsg_trajectory_generator",
+        ":schunk_wsg_trajectory_generator_state_vector",
+    ],
+)
+
+drake_cc_library(
+    name = "schunk_wsg_constants",
+    hdrs = ["schunk_wsg_constants.h"],
+    deps = [
+        "//common:essential",
+        "//systems/primitives:matrix_gain",
+    ],
+)
+
+drake_cc_library(
+    name = "schunk_wsg_lcm",
+    srcs = ["schunk_wsg_lcm.cc"],
+    hdrs = ["schunk_wsg_lcm.h"],
+    deps = [
+        "//lcmtypes:schunk",
+        "//systems/framework:leaf_system",
+        "//systems/primitives:matrix_gain",
+    ],
+)
+
+drake_cc_vector_gen_library(
+    name = "schunk_wsg_trajectory_generator_state_vector",
+    srcs = ["schunk_wsg_trajectory_generator_state_vector.named_vector"],
+    visibility = [":__subpackages__"],
+)
+
+drake_cc_library(
+    name = "schunk_wsg_trajectory_generator",
+    srcs = ["schunk_wsg_trajectory_generator.cc"],
+    hdrs = ["schunk_wsg_trajectory_generator.h"],
+    deps = [
+        ":schunk_wsg_trajectory_generator_state_vector",
+        "//common/trajectories:piecewise_polynomial",
+        "//common/trajectories:trajectory",
+        "//systems/framework:leaf_system",
+    ],
+)
+
+drake_cc_library(
+    name = "schunk_wsg_plain_controller",
+    srcs = ["schunk_wsg_plain_controller.cc"],
+    hdrs = ["schunk_wsg_plain_controller.h"],
+    deps = [
+        ":schunk_wsg_constants",
+        ":schunk_wsg_lcm",
+        "//common:essential",
+        "//systems/controllers:pid_controller",
+        "//systems/framework:diagram",
+        "//systems/framework:diagram_builder",
+        "//systems/primitives",
+    ],
+)
+
+drake_cc_library(
+    name = "schunk_wsg_position_controller",
+    srcs = ["schunk_wsg_position_controller.cc"],
+    hdrs = ["schunk_wsg_position_controller.h"],
+    deps = [
+        "//math:saturate",
+        "//systems/framework:leaf_system",
+        "//systems/primitives:discrete_derivative",
+    ],
+)
+
+drake_cc_library(
+    name = "schunk_wsg_controller",
+    srcs = ["schunk_wsg_controller.cc"],
+    hdrs = ["schunk_wsg_controller.h"],
+    deps = [
+        ":schunk_wsg_constants",
+        ":schunk_wsg_lcm",
+        ":schunk_wsg_plain_controller",
+        ":schunk_wsg_trajectory_generator",
+        "//common:essential",
+        "//systems/framework:diagram",
+        "//systems/framework:diagram_builder",
+    ],
+)
+
+# === test/ ===
+
+drake_cc_googletest(
+    name = "schunk_wsg_constants_test",
+    data = [
+        "//manipulation/models/wsg_50_description:models",
+    ],
+    deps = [
+        ":schunk_wsg_constants",
+        "//common:find_resource",
+        "//multibody/parsing",
+        "//multibody/plant",
+    ],
+)
+
+drake_cc_googletest(
+    name = "schunk_wsg_controller_test",
+    deps = [
+        ":schunk_wsg_constants",
+        ":schunk_wsg_controller",
+        "//systems/analysis:simulator",
+    ],
+)
+
+drake_cc_googletest(
+    name = "schunk_wsg_position_controller_test",
+    data = [
+        "//manipulation/models/wsg_50_description:models",
+    ],
+    deps = [
+        ":schunk_wsg_position_controller",
+        "//common/test_utilities:eigen_matrix_compare",
+        "//multibody/parsing",
+        "//multibody/plant",
+        "//systems/analysis:simulator",
+    ],
+)
+
+drake_cc_googletest(
+    name = "schunk_wsg_lcm_test",
+    data = [
+        "//manipulation/models/wsg_50_description:models",
+    ],
+    deps = [
+        ":schunk_wsg_lcm",
+        "//common/test_utilities:eigen_matrix_compare",
+        "//systems/analysis:simulator",
+    ],
+)
+
+drake_cc_googletest(
+    name = "schunk_wsg_trajectory_generator_test",
+    data = [
+        "//manipulation/models/wsg_50_description:models",
+    ],
+    deps = [
+        ":schunk_wsg_trajectory_generator",
+        "//systems/analysis:simulator",
+    ],
+)
+
+add_lint_tests()

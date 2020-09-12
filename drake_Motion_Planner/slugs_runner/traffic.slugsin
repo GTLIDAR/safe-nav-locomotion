@@ -1,0 +1,26 @@
+[INPUT]
+car1
+car2
+
+[OUTPUT]
+light1
+light2
+
+[ENV_INIT]
+& ! car1 ! car2
+
+[ENV_TRANS]
+| ! & car1 ! light1 car1'
+| ! & car2 ! light2 car2'
+| ! light1 ! car1' 
+| ! light2 ! car2' 
+
+[SYS_INIT]
+& light1 ! light2
+
+[SYS_TRANS]
+^ light1' light2'
+
+[SYS_LIVENESS]
+light1
+light2

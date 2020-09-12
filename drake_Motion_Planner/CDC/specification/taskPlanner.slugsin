@@ -1,0 +1,221 @@
+[INPUT]
+x@0.0.63
+x@1
+x@2
+x@3
+x@4
+x@5
+y@0.0.29
+y@1
+y@2
+y@3
+y@4
+deliveryrequest
+orientation@0.0.11
+orientation@1
+orientation@2
+orientation@3
+mox@0.0.63
+mox@1
+mox@2
+mox@3
+mox@4
+mox@5
+moy@0.0.29
+moy@1
+moy@2
+moy@3
+moy@4
+
+
+[OUTPUT]
+forward
+turnLeft
+turnRight
+stepL@0.0.3
+stepL@1
+stop
+requestPending1
+requestPending2
+
+
+
+[ENV_TRANS]
+# Update robot position according to requirements
+| ! & & & | | $ 1 & ! orientation@3 & ! orientation@2 & ! orientation@1 & ! orientation@0.0.11 1 $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 1 1 $ 1 & ! orientation@3 & ! orientation@2 & ! orientation@1 & ! ^ orientation@0.0.11 1 1 $ 1 | y@4 | y@3 | y@2 | y@1 | y@0.0.29 0 forward $ 1 & ! stepL@1 & ! stepL@0.0.3 1 $ 11 ^ 1 y@0.0.29' & 1 y@0.0.29' ^ y@1' ? 1 & y@1' ? 1 ^ y@2' ? 3 & y@2' ? 3 ^ y@3' ? 5 & y@3' ? 5 ^ y@4' ? 7 & y@4' ? 7 & ! ? 9 & ! ^ ? 8 y@4 & ! ^ ? 6 y@3 & ! ^ ? 4 y@2 & ! ^ ? 2 y@1 & ! ^ ? 0 y@0.0.29 1
+| ! & & & | | $ 1 & ! orientation@3 & ! orientation@2 & ! orientation@1 & ! orientation@0.0.11 1 $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 1 1 $ 1 & ! orientation@3 & ! orientation@2 & ! orientation@1 & ! ^ orientation@0.0.11 1 1 $ 1 | y@4 | y@3 | y@2 | y@1 | & y@0.0.29 ! 1 & | ! 1 y@0.0.29 0 forward $ 1 & ! stepL@1 & ! ^ stepL@0.0.3 1 1 $ 11 ^ 0 y@0.0.29' & 0 y@0.0.29' ^ ^ 1 y@1' ? 1 | | & 1 y@1' & ? 1 1 & ? 1 y@1' ^ y@2' ? 3 & y@2' ? 3 ^ y@3' ? 5 & y@3' ? 5 ^ y@4' ? 7 & y@4' ? 7 & ! ? 9 & ! ^ ? 8 y@4 & ! ^ ? 6 y@3 & ! ^ ? 4 y@2 & ! ^ ? 2 y@1 & ! ^ ? 0 y@0.0.29 1
+| ! & & & | | $ 1 & ! orientation@3 & ! orientation@2 & ! orientation@1 & ! orientation@0.0.11 1 $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 1 1 $ 1 & ! orientation@3 & ! orientation@2 & ! orientation@1 & ! ^ orientation@0.0.11 1 1 $ 1 | y@4 | y@3 | y@2 | & y@1 ! 1 & | ! 1 y@1 | & y@0.0.29 ! 0 & | ! 0 y@0.0.29 0 forward $ 1 & ! ^ stepL@1 1 & ! ^ stepL@0.0.3 0 1 $ 11 ^ 1 y@0.0.29' & 1 y@0.0.29' ^ ^ 1 y@1' ? 1 | | & 1 y@1' & ? 1 1 & ? 1 y@1' ^ y@2' ? 3 & y@2' ? 3 ^ y@3' ? 5 & y@3' ? 5 ^ y@4' ? 7 & y@4' ? 7 & ! ? 9 & ! ^ ? 8 y@4 & ! ^ ? 6 y@3 & ! ^ ? 4 y@2 & ! ^ ? 2 y@1 & ! ^ ? 0 y@0.0.29 1
+| ! & & & | | $ 1 & ! orientation@3 & ! orientation@2 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 1 1 $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 0 1 $ 1 & ! orientation@3 & ! orientation@2 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 0 1 $ 1 | & ! x@5 1 & | 1 ! x@5 | & ! x@4 1 & | 1 ! x@4 | & ! x@3 1 & | 1 ! x@3 | & ! x@2 1 & | 1 ! x@2 | & ! x@1 1 & | 1 ! x@1 | & ! x@0.0.63 1 & | 1 ! x@0.0.63 0 forward $ 1 & ! stepL@1 & ! stepL@0.0.3 1 $ 13 ^ 1 x@0.0.63 & 1 x@0.0.63 ^ x@1 ? 1 & x@1 ? 1 ^ x@2 ? 3 & x@2 ? 3 ^ x@3 ? 5 & x@3 ? 5 ^ x@4 ? 7 & x@4 ? 7 ^ x@5 ? 9 & x@5 ? 9 & ! ? 11 & ! ^ x@5' ? 10 & ! ^ x@4' ? 8 & ! ^ x@3' ? 6 & ! ^ x@2' ? 4 & ! ^ x@1' ? 2 & ! ^ x@0.0.63' ? 0 1
+| ! & & & | | $ 1 & ! orientation@3 & ! orientation@2 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 1 1 $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 0 1 $ 1 & ! orientation@3 & ! orientation@2 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 0 1 $ 1 | & ! x@5 1 & | 1 ! x@5 | & ! x@4 1 & | 1 ! x@4 | & ! x@3 1 & | 1 ! x@3 | & ! x@2 1 & | 1 ! x@2 | & ! x@1 1 & | 1 ! x@1 | & ! x@0.0.63 0 & | 0 ! x@0.0.63 0 forward $ 1 & ! stepL@1 & ! ^ stepL@0.0.3 1 1 $ 13 ^ 0 x@0.0.63 & 0 x@0.0.63 ^ ^ 1 x@1 ? 1 | | & 1 x@1 & ? 1 1 & ? 1 x@1 ^ x@2 ? 3 & x@2 ? 3 ^ x@3 ? 5 & x@3 ? 5 ^ x@4 ? 7 & x@4 ? 7 ^ x@5 ? 9 & x@5 ? 9 & ! ? 11 & ! ^ x@5' ? 10 & ! ^ x@4' ? 8 & ! ^ x@3' ? 6 & ! ^ x@2' ? 4 & ! ^ x@1' ? 2 & ! ^ x@0.0.63' ? 0 1
+| ! & & & | | $ 1 & ! orientation@3 & ! orientation@2 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 1 1 $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 0 1 $ 1 & ! orientation@3 & ! orientation@2 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 0 1 $ 1 | & ! x@5 1 & | 1 ! x@5 | & ! x@4 1 & | 1 ! x@4 | & ! x@3 1 & | 1 ! x@3 | & ! x@2 1 & | 1 ! x@2 | & ! x@1 0 & | 0 ! x@1 | & ! x@0.0.63 1 & | 1 ! x@0.0.63 0 forward $ 1 & ! ^ stepL@1 1 & ! ^ stepL@0.0.3 0 1 $ 13 ^ 1 x@0.0.63 & 1 x@0.0.63 ^ ^ 1 x@1 ? 1 | | & 1 x@1 & ? 1 1 & ? 1 x@1 ^ x@2 ? 3 & x@2 ? 3 ^ x@3 ? 5 & x@3 ? 5 ^ x@4 ? 7 & x@4 ? 7 ^ x@5 ? 9 & x@5 ? 9 & ! ? 11 & ! ^ x@5' ? 10 & ! ^ x@4' ? 8 & ! ^ x@3' ? 6 & ! ^ x@2' ? 4 & ! ^ x@1' ? 2 & ! ^ x@0.0.63' ? 0 1
+| ! & & & | | $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 0 1 $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 1 1 $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 1 1 $ 1 | & ! y@4 1 & | 1 ! y@4 | & ! y@3 1 & | 1 ! y@3 | & ! y@2 1 & | 1 ! y@2 | & ! y@1 0 & | 0 ! y@1 | & ! y@0.0.29 1 & | 1 ! y@0.0.29 0 forward $ 1 & ! stepL@1 & ! stepL@0.0.3 1 $ 11 ^ 1 y@0.0.29 & 1 y@0.0.29 ^ y@1 ? 1 & y@1 ? 1 ^ y@2 ? 3 & y@2 ? 3 ^ y@3 ? 5 & y@3 ? 5 ^ y@4 ? 7 & y@4 ? 7 & ! ? 9 & ! ^ y@4' ? 8 & ! ^ y@3' ? 6 & ! ^ y@2' ? 4 & ! ^ y@1' ? 2 & ! ^ y@0.0.29' ? 0 1
+| ! & & & | | $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 0 1 $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 1 1 $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 1 1 $ 1 | & ! y@4 1 & | 1 ! y@4 | & ! y@3 1 & | 1 ! y@3 | & ! y@2 1 & | 1 ! y@2 | & ! y@1 0 & | 0 ! y@1 | & ! y@0.0.29 0 & | 0 ! y@0.0.29 0 forward $ 1 & ! stepL@1 & ! ^ stepL@0.0.3 1 1 $ 11 ^ 0 y@0.0.29 & 0 y@0.0.29 ^ ^ 1 y@1 ? 1 | | & 1 y@1 & ? 1 1 & ? 1 y@1 ^ y@2 ? 3 & y@2 ? 3 ^ y@3 ? 5 & y@3 ? 5 ^ y@4 ? 7 & y@4 ? 7 & ! ? 9 & ! ^ y@4' ? 8 & ! ^ y@3' ? 6 & ! ^ y@2' ? 4 & ! ^ y@1' ? 2 & ! ^ y@0.0.29' ? 0 1
+| ! & & & | | $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 0 1 $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 1 1 $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 1 1 $ 1 | & ! y@4 1 & | 1 ! y@4 | & ! y@3 1 & | 1 ! y@3 | & ! y@2 0 & | 0 ! y@2 | & ! y@1 1 & | 1 ! y@1 | & ! y@0.0.29 1 & | 1 ! y@0.0.29 0 forward $ 1 & ! ^ stepL@1 1 & ! ^ stepL@0.0.3 0 1 $ 11 ^ 1 y@0.0.29 & 1 y@0.0.29 ^ ^ 1 y@1 ? 1 | | & 1 y@1 & ? 1 1 & ? 1 y@1 ^ y@2 ? 3 & y@2 ? 3 ^ y@3 ? 5 & y@3 ? 5 ^ y@4 ? 7 & y@4 ? 7 & ! ? 9 & ! ^ y@4' ? 8 & ! ^ y@3' ? 6 & ! ^ y@2' ? 4 & ! ^ y@1' ? 2 & ! ^ y@0.0.29' ? 0 1
+| ! & & & | | $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 1 1 $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 0 1 $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 0 1 $ 1 | x@5 | x@4 | x@3 | x@2 | x@1 | x@0.0.63 0 forward $ 1 & ! stepL@1 & ! stepL@0.0.3 1 $ 13 ^ 1 x@0.0.63' & 1 x@0.0.63' ^ x@1' ? 1 & x@1' ? 1 ^ x@2' ? 3 & x@2' ? 3 ^ x@3' ? 5 & x@3' ? 5 ^ x@4' ? 7 & x@4' ? 7 ^ x@5' ? 9 & x@5' ? 9 & ! ? 11 & ! ^ ? 10 x@5 & ! ^ ? 8 x@4 & ! ^ ? 6 x@3 & ! ^ ? 4 x@2 & ! ^ ? 2 x@1 & ! ^ ? 0 x@0.0.63 1
+| ! & & & | | $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 1 1 $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 0 1 $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 0 1 $ 1 | x@5 | x@4 | x@3 | x@2 | x@1 | & x@0.0.63 ! 1 & | ! 1 x@0.0.63 0 forward $ 1 & ! stepL@1 & ! ^ stepL@0.0.3 1 1 $ 13 ^ 0 x@0.0.63' & 0 x@0.0.63' ^ ^ 1 x@1' ? 1 | | & 1 x@1' & ? 1 1 & ? 1 x@1' ^ x@2' ? 3 & x@2' ? 3 ^ x@3' ? 5 & x@3' ? 5 ^ x@4' ? 7 & x@4' ? 7 ^ x@5' ? 9 & x@5' ? 9 & ! ? 11 & ! ^ ? 10 x@5 & ! ^ ? 8 x@4 & ! ^ ? 6 x@3 & ! ^ ? 4 x@2 & ! ^ ? 2 x@1 & ! ^ ? 0 x@0.0.63 1
+| ! & & & | | $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 1 1 $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 0 1 $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 0 1 $ 1 | x@5 | x@4 | x@3 | x@2 | & x@1 ! 1 & | ! 1 x@1 | & x@0.0.63 ! 0 & | ! 0 x@0.0.63 0 forward $ 1 & ! ^ stepL@1 1 & ! ^ stepL@0.0.3 0 1 $ 13 ^ 1 x@0.0.63' & 1 x@0.0.63' ^ ^ 1 x@1' ? 1 | | & 1 x@1' & ? 1 1 & ? 1 x@1' ^ x@2' ? 3 & x@2' ? 3 ^ x@3' ? 5 & x@3' ? 5 ^ x@4' ? 7 & x@4' ? 7 ^ x@5' ? 9 & x@5' ? 9 & ! ? 11 & ! ^ ? 10 x@5 & ! ^ ? 8 x@4 & ! ^ ? 6 x@3 & ! ^ ? 4 x@2 & ! ^ ? 2 x@1 & ! ^ ? 0 x@0.0.63 1
+
+
+
+
+
+#orientation=0 & y>0 & forward & stepL=0 -> y'+1=y
+#orientation=0 & y>1 & forward & stepL=1 -> y'+2=y
+#orientation=0 & y>2 & forward & stepL=2 -> y'+3=y
+#orientation=3 & x<63 & forward & stepL=0 -> x'=x+1
+#orientation=3 & x<62 & forward & stepL=1 -> x'=x+2
+#orientation=3 & x<61 & forward & stepL=2 -> x'=x+3
+#orientation=6 & y<29 & forward & stepL=0 -> y'=y+1
+#orientation=6 & y<28 & forward & stepL=1 -> y'=y+2
+#orientation=6 & y<27 & forward & stepL=2 -> y'=y+3
+#orientation=9 & x>0 & forward & stepL=0 -> x'+1=x
+#orientation=9 & x>1 & forward & stepL=1 -> x'+2=x
+#orientation=9 & x>2 & forward & stepL=2 -> x'+3=x
+
+| ! & & forward turnLeft $ 1 | orientation@3 | orientation@2 | orientation@1 | orientation@0.0.11 0 $ 9 ^ 1 orientation@0.0.11' & 1 orientation@0.0.11' ^ orientation@1' ? 1 & orientation@1' ? 1 ^ orientation@2' ? 3 & orientation@2' ? 3 ^ orientation@3' ? 5 & orientation@3' ? 5 & ! ? 7 & ! ^ ? 6 orientation@3 & ! ^ ? 4 orientation@2 & ! ^ ? 2 orientation@1 & ! ^ ? 0 orientation@0.0.11 1
+| ! & & forward turnRight $ 1 | & ! orientation@3 1 & | 1 ! orientation@3 | & ! orientation@2 0 & | 0 ! orientation@2 | & ! orientation@1 1 & | 1 ! orientation@1 | & ! orientation@0.0.11 1 & | 1 ! orientation@0.0.11 0 $ 9 ^ 1 orientation@0.0.11 & 1 orientation@0.0.11 ^ orientation@1 ? 1 & orientation@1 ? 1 ^ orientation@2 ? 3 & orientation@2 ? 3 ^ orientation@3 ? 5 & orientation@3 ? 5 & ! ? 7 & ! ^ orientation@3' ? 6 & ! ^ orientation@2' ? 4 & ! ^ orientation@1' ? 2 & ! ^ orientation@0.0.11' ? 0 1
+| ! & & forward turnLeft $ 1 & ! orientation@3 & ! orientation@2 & ! orientation@1 & ! orientation@0.0.11 1 $ 9 ^ orientation@0.0.11 1 & orientation@0.0.11 1 ^ ^ orientation@1 1 ? 1 | | & orientation@1 1 & ? 1 orientation@1 & ? 1 1 ^ ^ orientation@2 0 ? 3 | | & orientation@2 0 & ? 3 orientation@2 & ? 3 0 ^ ^ orientation@3 1 ? 5 | | & orientation@3 1 & ? 5 orientation@3 & ? 5 1 & ! ? 7 & ! ^ orientation@3' ? 6 & ! ^ orientation@2' ? 4 & ! ^ orientation@1' ? 2 & ! ^ orientation@0.0.11' ? 0 1
+| ! & & forward turnRight $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 1 1 $ 9 ^ orientation@0.0.11' 1 & orientation@0.0.11' 1 ^ ^ orientation@1' 1 ? 1 | | & orientation@1' 1 & ? 1 orientation@1' & ? 1 1 ^ ^ orientation@2' 0 ? 3 | | & orientation@2' 0 & ? 3 orientation@2' & ? 3 0 ^ ^ orientation@3' 1 ? 5 | | & orientation@3' 1 & ? 5 orientation@3' & ? 5 1 & ! ? 7 & ! ^ ? 6 orientation@3 & ! ^ ? 4 orientation@2 & ! ^ ? 2 orientation@1 & ! ^ ? 0 orientation@0.0.11 1
+
+
+| ! & | | $ 1 & ! orientation@3 & ! orientation@2 & ! orientation@1 & ! orientation@0.0.11 1 $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 1 1 $ 1 & ! orientation@3 & ! orientation@2 & ! orientation@1 & ! ^ orientation@0.0.11 1 1 $ 1 | & ! stepL@1 1 & | 1 ! stepL@1 | & ! stepL@0.0.3 1 & | 1 ! stepL@0.0.3 0 $ 1 & ! ^ x@5' x@5 & ! ^ x@4' x@4 & ! ^ x@3' x@3 & ! ^ x@2' x@2 & ! ^ x@1' x@1 & ! ^ x@0.0.63' x@0.0.63 1
+| ! & | | $ 1 & ! orientation@3 & ! orientation@2 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 1 1 $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 0 1 $ 1 & ! orientation@3 & ! orientation@2 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 0 1 $ 1 | & ! stepL@1 1 & | 1 ! stepL@1 | & ! stepL@0.0.3 1 & | 1 ! stepL@0.0.3 0 $ 1 & ! ^ y@4' y@4 & ! ^ y@3' y@3 & ! ^ y@2' y@2 & ! ^ y@1' y@1 & ! ^ y@0.0.29' y@0.0.29 1
+| ! & | | $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 0 1 $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 1 1 $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 1 1 $ 1 | & ! stepL@1 1 & | 1 ! stepL@1 | & ! stepL@0.0.3 1 & | 1 ! stepL@0.0.3 0 $ 1 & ! ^ x@5' x@5 & ! ^ x@4' x@4 & ! ^ x@3' x@3 & ! ^ x@2' x@2 & ! ^ x@1' x@1 & ! ^ x@0.0.63' x@0.0.63 1
+| ! & | | $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 1 1 $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 0 1 $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 0 1 $ 1 | & ! stepL@1 1 & | 1 ! stepL@1 | & ! stepL@0.0.3 1 & | 1 ! stepL@0.0.3 0 $ 1 & ! ^ y@4' y@4 & ! ^ y@3' y@3 & ! ^ y@2' y@2 & ! ^ y@1' y@1 & ! ^ y@0.0.29' y@0.0.29 1
+
+
+
+#(orientation=0 & stepL<3) -> x'=x
+#(orientation=3 & stepL<3) -> y'=y
+#(orientation=6 & stepL<3) -> x'=x
+#(orientation=9 & stepL<3) -> y'=y
+
+| ! & & | $ 1 & ! orientation@3 & ! orientation@2 & ! orientation@1 & ! orientation@0.0.11 1 $ 1 & ! orientation@3 & ! orientation@2 & ! orientation@1 & ! ^ orientation@0.0.11 1 1 turnRight $ 1 & ! ^ stepL@1 1 & ! ^ stepL@0.0.3 1 1 & $ 13 ^ 1 x@0.0.63 & 1 x@0.0.63 ^ x@1 ? 1 & x@1 ? 1 ^ x@2 ? 3 & x@2 ? 3 ^ x@3 ? 5 & x@3 ? 5 ^ x@4 ? 7 & x@4 ? 7 ^ x@5 ? 9 & x@5 ? 9 & ! ? 11 & ! ^ x@5' ? 10 & ! ^ x@4' ? 8 & ! ^ x@3' ? 6 & ! ^ x@2' ? 4 & ! ^ x@1' ? 2 & ! ^ x@0.0.63' ? 0 1 $ 11 ^ 1 y@0.0.29' & 1 y@0.0.29' ^ y@1' ? 1 & y@1' ? 1 ^ y@2' ? 3 & y@2' ? 3 ^ y@3' ? 5 & y@3' ? 5 ^ y@4' ? 7 & y@4' ? 7 & ! ? 9 & ! ^ ? 8 y@4 & ! ^ ? 6 y@3 & ! ^ ? 4 y@2 & ! ^ ? 2 y@1 & ! ^ ? 0 y@0.0.29 1
+| ! & & | $ 1 & ! orientation@3 & ! orientation@2 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 1 1 $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 0 1 turnRight $ 1 & ! ^ stepL@1 1 & ! ^ stepL@0.0.3 1 1 & $ 13 ^ 1 x@0.0.63 & 1 x@0.0.63 ^ x@1 ? 1 & x@1 ? 1 ^ x@2 ? 3 & x@2 ? 3 ^ x@3 ? 5 & x@3 ? 5 ^ x@4 ? 7 & x@4 ? 7 ^ x@5 ? 9 & x@5 ? 9 & ! ? 11 & ! ^ x@5' ? 10 & ! ^ x@4' ? 8 & ! ^ x@3' ? 6 & ! ^ x@2' ? 4 & ! ^ x@1' ? 2 & ! ^ x@0.0.63' ? 0 1 $ 11 ^ 1 y@0.0.29 & 1 y@0.0.29 ^ y@1 ? 1 & y@1 ? 1 ^ y@2 ? 3 & y@2 ? 3 ^ y@3 ? 5 & y@3 ? 5 ^ y@4 ? 7 & y@4 ? 7 & ! ? 9 & ! ^ y@4' ? 8 & ! ^ y@3' ? 6 & ! ^ y@2' ? 4 & ! ^ y@1' ? 2 & ! ^ y@0.0.29' ? 0 1
+| ! & & | $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 0 1 $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 1 1 turnRight $ 1 & ! ^ stepL@1 1 & ! ^ stepL@0.0.3 1 1 & $ 13 ^ 1 x@0.0.63' & 1 x@0.0.63' ^ x@1' ? 1 & x@1' ? 1 ^ x@2' ? 3 & x@2' ? 3 ^ x@3' ? 5 & x@3' ? 5 ^ x@4' ? 7 & x@4' ? 7 ^ x@5' ? 9 & x@5' ? 9 & ! ? 11 & ! ^ ? 10 x@5 & ! ^ ? 8 x@4 & ! ^ ? 6 x@3 & ! ^ ? 4 x@2 & ! ^ ? 2 x@1 & ! ^ ? 0 x@0.0.63 1 $ 11 ^ 1 y@0.0.29 & 1 y@0.0.29 ^ y@1 ? 1 & y@1 ? 1 ^ y@2 ? 3 & y@2 ? 3 ^ y@3 ? 5 & y@3 ? 5 ^ y@4 ? 7 & y@4 ? 7 & ! ? 9 & ! ^ y@4' ? 8 & ! ^ y@3' ? 6 & ! ^ y@2' ? 4 & ! ^ y@1' ? 2 & ! ^ y@0.0.29' ? 0 1
+| ! & & | $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 1 1 $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 0 1 turnRight $ 1 & ! ^ stepL@1 1 & ! ^ stepL@0.0.3 1 1 & $ 13 ^ 1 x@0.0.63' & 1 x@0.0.63' ^ x@1' ? 1 & x@1' ? 1 ^ x@2' ? 3 & x@2' ? 3 ^ x@3' ? 5 & x@3' ? 5 ^ x@4' ? 7 & x@4' ? 7 ^ x@5' ? 9 & x@5' ? 9 & ! ? 11 & ! ^ ? 10 x@5 & ! ^ ? 8 x@4 & ! ^ ? 6 x@3 & ! ^ ? 4 x@2 & ! ^ ? 2 x@1 & ! ^ ? 0 x@0.0.63 1 $ 11 ^ 1 y@0.0.29' & 1 y@0.0.29' ^ y@1' ? 1 & y@1' ? 1 ^ y@2' ? 3 & y@2' ? 3 ^ y@3' ? 5 & y@3' ? 5 ^ y@4' ? 7 & y@4' ? 7 & ! ? 9 & ! ^ ? 8 y@4 & ! ^ ? 6 y@3 & ! ^ ? 4 y@2 & ! ^ ? 2 y@1 & ! ^ ? 0 y@0.0.29 1
+
+| ! & & | $ 1 & ! orientation@3 & ! orientation@2 & ! orientation@1 & ! orientation@0.0.11 1 $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 1 1 turnLeft $ 1 & ! ^ stepL@1 1 & ! ^ stepL@0.0.3 1 1 & $ 13 ^ 1 x@0.0.63' & 1 x@0.0.63' ^ x@1' ? 1 & x@1' ? 1 ^ x@2' ? 3 & x@2' ? 3 ^ x@3' ? 5 & x@3' ? 5 ^ x@4' ? 7 & x@4' ? 7 ^ x@5' ? 9 & x@5' ? 9 & ! ? 11 & ! ^ ? 10 x@5 & ! ^ ? 8 x@4 & ! ^ ? 6 x@3 & ! ^ ? 4 x@2 & ! ^ ? 2 x@1 & ! ^ ? 0 x@0.0.63 1 $ 11 ^ 1 y@0.0.29' & 1 y@0.0.29' ^ y@1' ? 1 & y@1' ? 1 ^ y@2' ? 3 & y@2' ? 3 ^ y@3' ? 5 & y@3' ? 5 ^ y@4' ? 7 & y@4' ? 7 & ! ? 9 & ! ^ ? 8 y@4 & ! ^ ? 6 y@3 & ! ^ ? 4 y@2 & ! ^ ? 2 y@1 & ! ^ ? 0 y@0.0.29 1
+| ! & & | $ 1 & ! orientation@3 & ! orientation@2 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 1 1 $ 1 & ! orientation@3 & ! orientation@2 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 0 1 turnLeft $ 1 & ! ^ stepL@1 1 & ! ^ stepL@0.0.3 1 1 & $ 13 ^ 1 x@0.0.63 & 1 x@0.0.63 ^ x@1 ? 1 & x@1 ? 1 ^ x@2 ? 3 & x@2 ? 3 ^ x@3 ? 5 & x@3 ? 5 ^ x@4 ? 7 & x@4 ? 7 ^ x@5 ? 9 & x@5 ? 9 & ! ? 11 & ! ^ x@5' ? 10 & ! ^ x@4' ? 8 & ! ^ x@3' ? 6 & ! ^ x@2' ? 4 & ! ^ x@1' ? 2 & ! ^ x@0.0.63' ? 0 1 $ 11 ^ 1 y@0.0.29' & 1 y@0.0.29' ^ y@1' ? 1 & y@1' ? 1 ^ y@2' ? 3 & y@2' ? 3 ^ y@3' ? 5 & y@3' ? 5 ^ y@4' ? 7 & y@4' ? 7 & ! ? 9 & ! ^ ? 8 y@4 & ! ^ ? 6 y@3 & ! ^ ? 4 y@2 & ! ^ ? 2 y@1 & ! ^ ? 0 y@0.0.29 1
+| ! & & | $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 0 1 $ 1 & ! orientation@3 & ! ^ orientation@2 1 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 1 1 turnLeft $ 1 & ! ^ stepL@1 1 & ! ^ stepL@0.0.3 1 1 & $ 13 ^ 1 x@0.0.63 & 1 x@0.0.63 ^ x@1 ? 1 & x@1 ? 1 ^ x@2 ? 3 & x@2 ? 3 ^ x@3 ? 5 & x@3 ? 5 ^ x@4 ? 7 & x@4 ? 7 ^ x@5 ? 9 & x@5 ? 9 & ! ? 11 & ! ^ x@5' ? 10 & ! ^ x@4' ? 8 & ! ^ x@3' ? 6 & ! ^ x@2' ? 4 & ! ^ x@1' ? 2 & ! ^ x@0.0.63' ? 0 1 $ 11 ^ 1 y@0.0.29 & 1 y@0.0.29 ^ y@1 ? 1 & y@1 ? 1 ^ y@2 ? 3 & y@2 ? 3 ^ y@3 ? 5 & y@3 ? 5 ^ y@4 ? 7 & y@4 ? 7 & ! ? 9 & ! ^ y@4' ? 8 & ! ^ y@3' ? 6 & ! ^ y@2' ? 4 & ! ^ y@1' ? 2 & ! ^ y@0.0.29' ? 0 1
+| ! & & | $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 1 1 $ 1 & ! ^ orientation@3 1 & ! ^ orientation@2 0 & ! ^ orientation@1 0 & ! ^ orientation@0.0.11 0 1 turnLeft $ 1 & ! ^ stepL@1 1 & ! ^ stepL@0.0.3 1 1 & $ 13 ^ 1 x@0.0.63' & 1 x@0.0.63' ^ x@1' ? 1 & x@1' ? 1 ^ x@2' ? 3 & x@2' ? 3 ^ x@3' ? 5 & x@3' ? 5 ^ x@4' ? 7 & x@4' ? 7 ^ x@5' ? 9 & x@5' ? 9 & ! ? 11 & ! ^ ? 10 x@5 & ! ^ ? 8 x@4 & ! ^ ? 6 x@3 & ! ^ ? 4 x@2 & ! ^ ? 2 x@1 & ! ^ ? 0 x@0.0.63 1 $ 11 ^ 1 y@0.0.29 & 1 y@0.0.29 ^ y@1 ? 1 & y@1 ? 1 ^ y@2 ? 3 & y@2 ? 3 ^ y@3 ? 5 & y@3 ? 5 ^ y@4 ? 7 & y@4 ? 7 & ! ? 9 & ! ^ y@4' ? 8 & ! ^ y@3' ? 6 & ! ^ y@2' ? 4 & ! ^ y@1' ? 2 & ! ^ y@0.0.29' ? 0 1
+
+| ! ! forward & $ 1 & ! ^ x@5' x@5 & ! ^ x@4' x@4 & ! ^ x@3' x@3 & ! ^ x@2' x@2 & ! ^ x@1' x@1 & ! ^ x@0.0.63' x@0.0.63 1 $ 1 & ! ^ y@4' y@4 & ! ^ y@3' y@3 & ! ^ y@2' y@2 & ! ^ y@1' y@1 & ! ^ y@0.0.29' y@0.0.29 1
+| ! & ! turnLeft ! turnRight $ 1 & ! ^ orientation@3' orientation@3 & ! ^ orientation@2' orientation@2 & ! ^ orientation@1' orientation@1 & ! ^ orientation@0.0.11' orientation@0.0.11 1
+
+#Obstacle moving rules
+#mox' <= mox+1
+#moy' <= moy+1
+#mox <= mox'+1
+#moy <= moy'+1
+#mox'=mox | moy'=moy
+& $ 1 & ! ^ mox@5' mox@5 & ! ^ mox@4' mox@4 & ! ^ mox@3' mox@3 & ! ^ mox@2' mox@2 & ! ^ mox@1' mox@1 & ! ^ mox@0.0.63' mox@0.0.63 1 $ 1 & ! ^ moy@4' moy@4 & ! ^ moy@3' moy@3 & ! ^ moy@2' moy@2 & ! ^ moy@1' moy@1 & ! ^ moy@0.0.29' moy@0.0.29 1
+
+## Variable limits: 0<=y'<=29
+| ! y@4' | ! y@3' | ! y@2' | ! y@1' & ! y@0.0.29' 0
+## Variable limits: 0<=orientation'<=11
+| ! orientation@3' | ! orientation@2' & ! orientation@1' & ! orientation@0.0.11' 0
+## Variable limits: 0<=moy'<=29
+| ! moy@4' | ! moy@3' | ! moy@2' | ! moy@1' & ! moy@0.0.29' 0
+
+[ENV_INIT]
+$ 1 & ! ^ x@5 1 & ! ^ x@4 1 & ! ^ x@3 0 & ! ^ x@2 1 & ! ^ x@1 0 & ! ^ x@0.0.63 0 1
+$ 1 & ! ^ y@4 1 & ! ^ y@3 0 & ! ^ y@2 0 & ! ^ y@1 0 & ! ^ y@0.0.29 0 1
+$ 1 & ! orientation@3 & ! orientation@2 & ! ^ orientation@1 1 & ! ^ orientation@0.0.11 1 1
+deliveryrequest
+$ 1 & ! ^ mox@5 1 & ! ^ mox@4 1 & ! ^ mox@3 1 & ! ^ mox@2 1 & ! ^ mox@1 1 & ! ^ mox@0.0.63 1 1
+$ 1 & ! ^ moy@4 1 & ! ^ moy@3 1 & ! ^ moy@2 1 & ! ^ moy@1 0 & ! ^ moy@0.0.29 1 1
+
+## Variable limits: 0<=y<=29
+| ! y@4 | ! y@3 | ! y@2 | ! y@1 & ! y@0.0.29 0
+## Variable limits: 0<=orientation<=11
+| ! orientation@3 | ! orientation@2 & ! orientation@1 & ! orientation@0.0.11 0
+## Variable limits: 0<=moy<=29
+| ! moy@4 | ! moy@3 | ! moy@2 | ! moy@1 & ! moy@0.0.29 0
+
+[SYS_TRANS]
+| ! ! forward' & ! turnLeft' ! turnRight'
+
+| ! turnLeft' ! turnRight'
+| ! turnRight' ! turnLeft'
+
+# Shouldn't need these, should be able to be any step length
+# turnRight' | turnLeft' -> stepL'=0
+# turnRight | turnLeft -> stepL'=1
+
+# Need to avoid contradicting other turnX specsssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+# stop -> (stepL=0 & !turnRight' & !turnLeft')
+| ! stop $ 1 & ! stepL@1 & ! stepL@0.0.3 1
+| ! ! forward & & $ 1 & ! stepL@1 & ! stepL@0.0.3 1 ! turnRight ! turnLeft
+
+# Need to fixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+#shouldn't need these, can turn succesive steps as long as it finishes turn
+#turnRight -> (! turnRight' & ! turnLeft')
+#turnLeft -> (! turnRight' & ! turnLeft')
+
+#!forward' | !stop
+#forward' | stop
+# Inspecttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+| & ! stop ! ! forward' & stop ! forward'
+
+# Inspecttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+# Can't do this for when obstacle/human is in the way?
+# Actually should be able to stop with obstacle while requestPending1 or requestPending2 are true
+#requestPending1' | requestPending2' | stop
+| ! & ! requestPending1 ! requestPending2 ! forward
+
+#Think Aboutttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+| ! & & & $ 1 ! & ! orientation@3' & ! orientation@2' & ! orientation@1' & ! orientation@0.0.11' 1 $ 1 ! & ! orientation@3' & ! orientation@2' & ! ^ orientation@1' 1 & ! ^ orientation@0.0.11' 1 1 $ 1 ! & ! orientation@3' & ! ^ orientation@2' 1 & ! ^ orientation@1' 1 & ! ^ orientation@0.0.11' 0 1 $ 1 ! & ! ^ orientation@3' 1 & ! ^ orientation@2' 0 & ! ^ orientation@1' 0 & ! ^ orientation@0.0.11' 1 1 $ 1 & ! ^ stepL@1 1 & ! ^ stepL@0.0.3 1 1
+| ! | | | $ 1 & ! orientation@3' & ! orientation@2' & ! orientation@1' & ! orientation@0.0.11' 1 $ 1 & ! orientation@3' & ! orientation@2' & ! ^ orientation@1' 1 & ! ^ orientation@0.0.11' 1 1 $ 1 & ! orientation@3' & ! ^ orientation@2' 1 & ! ^ orientation@1' 1 & ! ^ orientation@0.0.11' 0 1 $ 1 & ! ^ orientation@3' 1 & ! ^ orientation@2' 0 & ! ^ orientation@1' 0 & ! ^ orientation@0.0.11' 1 1 $ 1 ! & ! ^ stepL@1 1 & ! ^ stepL@0.0.3 1 1
+
+| ! & & & & turnRight $ 1 ! & ! orientation@3' & ! orientation@2' & ! orientation@1' & ! orientation@0.0.11' 1 $ 1 ! & ! orientation@3' & ! orientation@2' & ! ^ orientation@1' 1 & ! ^ orientation@0.0.11' 1 1 $ 1 ! & ! orientation@3' & ! ^ orientation@2' 1 & ! ^ orientation@1' 1 & ! ^ orientation@0.0.11' 0 1 $ 1 ! & ! ^ orientation@3' 1 & ! ^ orientation@2' 0 & ! ^ orientation@1' 0 & ! ^ orientation@0.0.11' 1 1 turnRight'
+| ! & & & & turnLeft $ 1 ! & ! orientation@3' & ! orientation@2' & ! orientation@1' & ! orientation@0.0.11' 1 $ 1 ! & ! orientation@3' & ! orientation@2' & ! ^ orientation@1' 1 & ! ^ orientation@0.0.11' 1 1 $ 1 ! & ! orientation@3' & ! ^ orientation@2' 1 & ! ^ orientation@1' 1 & ! ^ orientation@0.0.11' 0 1 $ 1 ! & ! ^ orientation@3' 1 & ! ^ orientation@2' 0 & ! ^ orientation@1' 0 & ! ^ orientation@0.0.11' 1 1 turnLeft'
+
+# No crash of robot with obstacle
+| | | $ 1 | & ! x@5 1 & | 1 ! x@5 | & ! x@4 0 & | 0 ! x@4 | & ! x@3 0 & | 0 ! x@3 | & ! x@2 1 & | 1 ! x@2 | & ! x@1 1 & | 1 ! x@1 | & ! x@0.0.63 1 & | 1 ! x@0.0.63 0 $ 1 | & x@5 ! 1 & | ! 1 x@5 | & x@4 ! 0 & | ! 0 x@4 | & x@3 ! 1 & | ! 1 x@3 | & x@2 ! 0 & | ! 0 x@2 | & x@1 ! 1 & | ! 1 x@1 | & x@0.0.63 ! 0 & | ! 0 x@0.0.63 0 $ 1 & ! y@4 & ! y@3 | & ! y@2 1 & | 1 ! y@2 | & ! y@1 0 & | 0 ! y@1 | & ! y@0.0.29 1 & | 1 ! y@0.0.29 0 $ 1 | & y@4 ! 1 & | ! 1 y@4 | & y@3 ! 0 & | ! 0 y@3 | & y@2 ! 1 & | ! 1 y@2 | & y@1 ! 0 & | ! 0 y@1 | & y@0.0.29 ! 0 & | ! 0 y@0.0.29 0
+| | | $ 1 & ! x@5 & ! x@4 | & ! x@3 1 & | 1 ! x@3 | & ! x@2 1 & | 1 ! x@2 | & ! x@1 1 & | 1 ! x@1 | & ! x@0.0.63 1 & | 1 ! x@0.0.63 0 $ 1 | x@5 | & x@4 ! 1 & | ! 1 x@4 | & x@3 ! 0 & | ! 0 x@3 | & x@2 ! 0 & | ! 0 x@2 | & x@1 ! 1 & | ! 1 x@1 | & x@0.0.63 ! 0 & | ! 0 x@0.0.63 0 $ 1 & ! y@4 & ! y@3 | & ! y@2 1 & | 1 ! y@2 | & ! y@1 0 & | 0 ! y@1 | & ! y@0.0.29 1 & | 1 ! y@0.0.29 0 $ 1 | y@4 | & y@3 ! 1 & | ! 1 y@3 | & y@2 ! 0 & | ! 0 y@2 | & y@1 ! 0 & | ! 0 y@1 | & y@0.0.29 ! 0 & | ! 0 y@0.0.29 0
+| | $ 1 | & ! x@5 1 & | 1 ! x@5 | & ! x@4 1 & | 1 ! x@4 | & ! x@3 1 & | 1 ! x@3 | & ! x@2 0 & | 0 ! x@2 | & ! x@1 1 & | 1 ! x@1 | & ! x@0.0.63 1 & | 1 ! x@0.0.63 0 $ 1 | & ! y@4 1 & | 1 ! y@4 | & ! y@3 0 & | 0 ! y@3 | & ! y@2 0 & | 0 ! y@2 | & ! y@1 1 & | 1 ! y@1 | & ! y@0.0.29 1 & | 1 ! y@0.0.29 0 $ 1 | & y@4 ! 1 & | ! 1 y@4 | & y@3 ! 0 & | ! 0 y@3 | & y@2 ! 1 & | ! 1 y@2 | & y@1 ! 1 & | ! 1 y@1 | & y@0.0.29 ! 0 & | ! 0 y@0.0.29 0
+
+| | | $ 1 & ! x@5 & ! x@4 | & ! x@3 1 & | 1 ! x@3 | & ! x@2 0 & | 0 ! x@2 | & ! x@1 0 & | 0 ! x@1 | & ! x@0.0.63 1 & | 1 ! x@0.0.63 0 $ 1 | x@5 | x@4 | & x@3 ! 1 & | ! 1 x@3 | & x@2 ! 1 & | ! 1 x@2 | & x@1 ! 0 & | ! 0 x@1 | & x@0.0.63 ! 0 & | ! 0 x@0.0.63 0 $ 1 | & ! y@4 1 & | 1 ! y@4 | & ! y@3 0 & | 0 ! y@3 | & ! y@2 1 & | 1 ! y@2 | & ! y@1 0 & | 0 ! y@1 | & ! y@0.0.29 0 & | 0 ! y@0.0.29 0 $ 1 | & y@4 ! 1 & | ! 1 y@4 | & y@3 ! 0 & | ! 0 y@3 | & y@2 ! 1 & | ! 1 y@2 | & y@1 ! 1 & | ! 1 y@1 | & y@0.0.29 ! 0 & | ! 0 y@0.0.29 0
+| | | $ 1 | & ! x@5 1 & | 1 ! x@5 | & ! x@4 0 & | 0 ! x@4 | & ! x@3 1 & | 1 ! x@3 | & ! x@2 1 & | 1 ! x@2 | & ! x@1 1 & | 1 ! x@1 | & ! x@0.0.63 1 & | 1 ! x@0.0.63 0 $ 1 | & x@5 ! 1 & | ! 1 x@5 | & x@4 ! 1 & | ! 1 x@4 | & x@3 ! 0 & | ! 0 x@3 | & x@2 ! 0 & | ! 0 x@2 | & x@1 ! 0 & | ! 0 x@1 | & x@0.0.63 ! 1 & | ! 1 x@0.0.63 0 $ 1 & ! y@4 | & ! y@3 1 & | 1 ! y@3 | & ! y@2 0 & | 0 ! y@2 | & ! y@1 1 & | 1 ! y@1 | & ! y@0.0.29 1 & | 1 ! y@0.0.29 0 $ 1 | y@4 | & y@3 ! 1 & | ! 1 y@3 | & y@2 ! 1 & | ! 1 y@2 | & y@1 ! 1 & | ! 1 y@1 | & y@0.0.29 ! 0 & | ! 0 y@0.0.29 0
+#y=9 & orientation=2 & (x<7 | x>3) -> !forward
+#y=11 & orientation=0 & (x<7 | x>3) -> !forward
+#x=25 & orientation=3 & (y<8 | y>4) -> !forward
+#x=23 & orientation=1 & (y<8 | y>4) -> !forward
+
+# No crash of robot with wall
+$ 1 ! & ! x@5' & ! x@4' & ! x@3' & ! x@2' & ! x@1' & ! x@0.0.63' 1
+$ 1 ! & ! y@4' & ! y@3' & ! y@2' & ! y@1' & ! y@0.0.29' 1
+$ 1 ! & ! ^ x@5' 1 & ! ^ x@4' 1 & ! ^ x@3' 1 & ! ^ x@2' 1 & ! ^ x@1' 1 & ! ^ x@0.0.63' 1 1
+$ 1 ! & ! ^ y@4' 1 & ! ^ y@3' 1 & ! ^ y@2' 1 & ! ^ y@1' 0 & ! ^ y@0.0.29' 1 1
+
+# Track delivery requests - Part 1
+| ! & & & $ 1 & ! x@5 & ! x@4 & ! ^ x@3 1 & ! ^ x@2 0 & ! ^ x@1 1 & ! ^ x@0.0.63 0 1 $ 1 & ! ^ y@4 1 & ! ^ y@3 0 & ! ^ y@2 0 & ! ^ y@1 1 & ! ^ y@0.0.29 1 1 $ 1 & ! x@5' & ! x@4' & ! ^ x@3' 1 & ! ^ x@2' 0 & ! ^ x@1' 1 & ! ^ x@0.0.63' 0 1 $ 1 & ! ^ y@4' 1 & ! ^ y@3' 0 & ! ^ y@2' 0 & ! ^ y@1' 1 & ! ^ y@0.0.29' 1 1 ! requestPending1'
+| ! ! & & & $ 1 & ! x@5 & ! x@4 & ! ^ x@3 1 & ! ^ x@2 0 & ! ^ x@1 1 & ! ^ x@0.0.63 0 1 $ 1 & ! ^ y@4 1 & ! ^ y@3 0 & ! ^ y@2 0 & ! ^ y@1 1 & ! ^ y@0.0.29 1 1 $ 1 & ! x@5' & ! x@4' & ! ^ x@3' 1 & ! ^ x@2' 0 & ! ^ x@1' 1 & ! ^ x@0.0.63' 0 1 $ 1 & ! ^ y@4' 1 & ! ^ y@3' 0 & ! ^ y@2' 0 & ! ^ y@1' 1 & ! ^ y@0.0.29' 1 1 | & ! requestPending1' ! | requestPending1 deliveryrequest & requestPending1' | requestPending1 deliveryrequest
+
+| ! & & & $ 1 & ! ^ x@5 1 & ! ^ x@4 1 & ! ^ x@3 0 & ! ^ x@2 0 & ! ^ x@1 1 & ! ^ x@0.0.63 0 1 $ 1 & ! y@4 & ! ^ y@3 1 & ! ^ y@2 1 & ! ^ y@1 0 & ! ^ y@0.0.29 0 1 $ 1 & ! ^ x@5' 1 & ! ^ x@4' 1 & ! ^ x@3' 0 & ! ^ x@2' 0 & ! ^ x@1' 1 & ! ^ x@0.0.63' 0 1 $ 1 & ! y@4' & ! ^ y@3' 1 & ! ^ y@2' 1 & ! ^ y@1' 0 & ! ^ y@0.0.29' 0 1 ! requestPending2'
+| ! ! & & & $ 1 & ! ^ x@5 1 & ! ^ x@4 1 & ! ^ x@3 0 & ! ^ x@2 0 & ! ^ x@1 1 & ! ^ x@0.0.63 0 1 $ 1 & ! y@4 & ! ^ y@3 1 & ! ^ y@2 1 & ! ^ y@1 0 & ! ^ y@0.0.29 0 1 $ 1 & ! ^ x@5' 1 & ! ^ x@4' 1 & ! ^ x@3' 0 & ! ^ x@2' 0 & ! ^ x@1' 1 & ! ^ x@0.0.63' 0 1 $ 1 & ! y@4' & ! ^ y@3' 1 & ! ^ y@2' 1 & ! ^ y@1' 0 & ! ^ y@0.0.29' 0 1 | & ! requestPending2' ! | & & $ 1 & ! x@5 & ! x@4 & ! ^ x@3 1 & ! ^ x@2 0 & ! ^ x@1 1 & ! ^ x@0.0.63 0 1 $ 1 & ! ^ y@4 1 & ! ^ y@3 0 & ! ^ y@2 0 & ! ^ y@1 1 & ! ^ y@0.0.29 1 1 requestPending1 requestPending2 & requestPending2' | & & $ 1 & ! x@5 & ! x@4 & ! ^ x@3 1 & ! ^ x@2 0 & ! ^ x@1 1 & ! ^ x@0.0.63 0 1 $ 1 & ! ^ y@4 1 & ! ^ y@3 0 & ! ^ y@2 0 & ! ^ y@1 1 & ! ^ y@0.0.29 1 1 requestPending1 requestPending2
+
+
+# No crash with moving obstacle
+#x' < mox' | y' < moy' | x' > mox'+1 | y' > moy'+1
+
+
+[SYS_INIT]
+! forward
+! turnLeft
+! turnRight
+! stop
+
+
+[ENV_LIVENESS]
+
+
+[SYS_LIVENESS]
+# Cycling between the goals
+! requestPending1
+! requestPending2
+
+
+
+

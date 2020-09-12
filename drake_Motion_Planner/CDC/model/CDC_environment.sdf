@@ -1,0 +1,200 @@
+<?xml version="1.0"?>
+<sdf version='1.6'>
+<model name="navigation_environment">
+  <link name="floor">
+    <pose>0 0 0 0 0 0 </pose>
+    <inertial>
+      <mass>1</mass>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+    </inertial>
+
+    <visual name='ground'>
+      <pose> 6.758775 14.869305 -0.25 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>13.51755 29.73861 0.5</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='place'>
+      <pose>9.462285  1.351755 -0.25 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>2.70351 2.70351 .501</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>216 250 222 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='ground_2'>
+      <pose> 6.758775 25.683345 0.2 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>13.51755 8.11053 .8</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+        <visual name='pick'>
+      <pose> 4.055265 28.386855 0.2 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>2.70351 2.70351 .801</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>216 250 222 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='wall_1'>
+      <pose>2.70351 20.276325 0.5 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>5.40702 2.70351 1</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1</diffuse>
+      </material>
+    </visual>
+
+    <visual name='wall_2'>
+      <pose>10.81404 20.276325 0.5 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>5.40702 2.70351 1</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1</diffuse>
+      </material>
+    </visual>
+
+    <visual name='box_1'>
+      <pose>1.351755 4.055265 0.5 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>2.70351 2.70351 1</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='box_2'>
+      <pose>6.75877551 9.462285 0.5 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>2.70351 2.70351 1</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='box_3'>
+      <pose>12.165795 9.462285 0.5 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>2.70351 2.70351 1</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='step_1'>
+      <pose>6.75877 20.484325 0 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>2.70351 2.2875 0.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>50 205 50 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='step_2'>
+      <pose>6.75877 20.692325 0 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>2.70351 1.87151 0.4</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>50 205 50 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='step_3'>
+      <pose>6.75877 20.900325 0 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>2.70351 1.45551 0.6</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>50 205 50 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='step_4'>
+      <pose>6.75877 21.108325 0 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>2.70351 1.03951 0.8</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>50 205 50 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='step_5'>
+      <pose>6.75877 21.316325 0 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>2.70351 0.62351 1</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>50 205 50 1.0</diffuse>
+      </material>
+    </visual>
+
+  <visual name='step_6'>
+      <pose>6.75877 21.524325 0 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>2.70351 0.20751 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>50 205 50 1.0</diffuse>
+      </material>
+    </visual>
+
+   </link>
+</model>
+</sdf>

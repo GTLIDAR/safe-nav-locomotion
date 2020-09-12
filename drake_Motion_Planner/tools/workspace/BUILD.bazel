@@ -1,0 +1,99 @@
+# -*- python -*-
+
+load("@drake//tools/install:check_licenses.bzl", "check_licenses")
+load("@drake//tools/install:install.bzl", "install")
+load(
+    "@drake//tools/skylark:drake_py.bzl",
+    "drake_py_binary",
+)
+load("//tools/lint:lint.bzl", "add_lint_tests")
+
+py_library(
+    name = "module_py",
+    srcs = ["__init__.py"],
+    visibility = [":__subpackages__"],
+    deps = ["//tools:module_py"],
+)
+
+drake_py_binary(
+    name = "mirror_to_s3",
+    srcs = [
+        "metadata.py",
+        "mirror_to_s3.py",
+    ],
+    python_version = "PY3",
+    srcs_version = "PY3",
+    visibility = ["//visibility:private"],
+    deps = [":module_py"],
+)
+
+drake_py_binary(
+    name = "new_release",
+    srcs = [
+        "metadata.py",
+        "new_release.py",
+    ],
+    visibility = ["//visibility:private"],
+    deps = [
+        ":module_py",
+        "@github3_py",
+    ],
+)
+
+drake_py_binary(
+    name = "cmake_configure_file",
+    srcs = ["cmake_configure_file.py"],
+    visibility = ["//visibility:public"],
+)
+
+_DRAKE_EXTERNAL_PACKAGE_INSTALLS = ["@%s//:install" % p for p in [
+    "bullet",
+    "ccd",
+    "csdp",
+    "drake_visualizer",
+    "eigen",
+    "fcl",
+    "fmt",
+    "ignition_math",
+    "ignition_rndf",
+    "json",
+    "lcm",
+    "lcmtypes_bot2_core",
+    "lcmtypes_robotlocomotion",
+    "meshcat",
+    "meshcat_python",
+    "octomap",
+    "osqp",
+    "pybind11",
+    "qdldl",
+    "scs",
+    "sdformat",
+    "spdlog",
+    "spruce",
+    "stx",
+    "tinydir",
+    "tinyobjloader",
+    "u_msgpack_python",
+    "vtk",
+]] + ["//tools/workspace/%s:install" % p for p in [
+    "dreal",
+    "net_sf_jchart2d",
+    "find_protobuf_cmake",
+    "optitrack_driver",
+]] + select({
+    "//tools:with_gurobi": ["@gurobi//:install"],
+    "//conditions:default": [],
+}) + select({
+    "//tools:with_mosek": ["@mosek//:install"],
+    "//conditions:default": [],
+})
+
+install(
+    name = "install_external_packages",
+    visibility = ["//:__pkg__"],
+    deps = _DRAKE_EXTERNAL_PACKAGE_INSTALLS,
+)
+
+check_licenses(_DRAKE_EXTERNAL_PACKAGE_INSTALLS)
+
+add_lint_tests()

@@ -1,0 +1,287 @@
+# -*- python -*-
+
+load(
+    "@drake//tools/skylark:drake_cc.bzl",
+    "drake_cc_binary",
+    "drake_cc_googletest",
+    "drake_cc_library",
+)
+load("//tools/install:install_data.bzl", "install_data")
+load(
+    "@drake//tools/vector_gen:vector_gen.bzl",
+    "drake_cc_vector_gen_library",
+)
+load("//tools/lint:lint.bzl", "add_lint_tests")
+
+package(default_visibility = ["//visibility:private"])
+
+drake_cc_vector_gen_library(
+    name = "acrobot_input",
+    srcs = ["acrobot_input.named_vector"],
+    visibility = ["//visibility:public"],
+)
+
+drake_cc_vector_gen_library(
+    name = "acrobot_params",
+    srcs = ["acrobot_params.named_vector"],
+    visibility = ["//visibility:public"],
+)
+
+drake_cc_vector_gen_library(
+    name = "acrobot_state",
+    srcs = ["acrobot_state.named_vector"],
+    visibility = ["//visibility:public"],
+)
+
+drake_cc_vector_gen_library(
+    name = "spong_controller_params",
+    srcs = ["spong_controller_params.named_vector"],
+    visibility = ["//visibility:public"],
+)
+
+drake_cc_library(
+    name = "acrobot_lcm",
+    srcs = ["acrobot_lcm.cc"],
+    hdrs = ["acrobot_lcm.h"],
+    deps = [
+        ":acrobot_state",
+        "//lcmtypes:acrobot",
+        "//systems/framework:leaf_system",
+        "//systems/framework:vector",
+    ],
+)
+
+drake_cc_library(
+    name = "acrobot_plant",
+    srcs = ["acrobot_plant.cc"],
+    hdrs = ["acrobot_plant.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":acrobot_input",
+        ":acrobot_params",
+        ":acrobot_state",
+        "//common:default_scalars",
+        "//systems/controllers:linear_quadratic_regulator",
+        "//systems/framework",
+        "//systems/sensors:rotary_encoders",
+    ],
+)
+
+drake_cc_library(
+    name = "spong_controller",
+    srcs = ["spong_controller.cc"],
+    hdrs = ["spong_controller.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":acrobot_plant",
+        ":spong_controller_params",
+        "//common:default_scalars",
+        "//math:wrap_to",
+        "//systems/controllers:linear_quadratic_regulator",
+        "//systems/framework:leaf_system",
+        "//systems/framework:vector",
+        "//systems/primitives:linear_system",
+    ],
+)
+
+# Note: This is a development tool for testing LCM communication
+# but does not actually provide test coverage as a stand-alone
+# executable.
+drake_cc_binary(
+    name = "acrobot_lcm_msg_generator",
+    testonly = 1,
+    srcs = ["test/acrobot_lcm_msg_generator.cc"],
+    deps = [
+        "//lcm",
+        "//lcmtypes:acrobot",
+        "//systems/analysis:simulator",
+    ],
+)
+
+drake_cc_binary(
+    name = "run_lqr",
+    srcs = ["run_lqr.cc"],
+    add_test_rule = 1,
+    data = [":models"],
+    test_rule_args = [
+        "-simulation_sec=1.0",
+        "-realtime_factor=0.0",
+    ],
+    deps = [
+        ":acrobot_plant",
+        "//attic/multibody:rigid_body_tree",
+        "//attic/multibody/parsers",
+        "//attic/multibody/rigid_body_plant:drake_visualizer",
+        "//common:find_resource",
+        "//lcm",
+        "//systems/analysis:simulator",
+        "@gflags",
+    ],
+)
+
+drake_cc_binary(
+    name = "run_lqr_w_estimator",
+    testonly = 1,
+    srcs = ["run_lqr_w_estimator.cc"],
+    add_test_rule = 1,
+    data = [":models"],
+    test_rule_args = [
+        "-simulation_sec=1.0",
+        "-realtime_factor=0.0",
+    ],
+    deps = [
+        ":acrobot_plant",
+        "//attic/multibody:rigid_body_tree",
+        "//attic/multibody/joints",
+        "//attic/multibody/parsers",
+        "//attic/multibody/rigid_body_plant:drake_visualizer",
+        "//common:find_resource",
+        "//common/proto:call_matlab",
+        "//lcm",
+        "//systems/analysis:simulator",
+        "//systems/estimators:kalman_filter",
+        "//systems/framework:diagram",
+        "//systems/primitives:linear_system",
+        "//systems/primitives:signal_logger",
+        "//systems/sensors:rotary_encoders",
+        "@gflags",
+    ],
+)
+
+drake_cc_binary(
+    name = "run_passive",
+    srcs = ["run_passive.cc"],
+    add_test_rule = 1,
+    data = [":models"],
+    test_rule_args = [
+        "-simulation_sec=1.0",
+        "-realtime_factor=0.0",
+    ],
+    deps = [
+        ":acrobot_plant",
+        "//attic/multibody:rigid_body_tree",
+        "//attic/multibody/joints",
+        "//attic/multibody/parsers",
+        "//attic/multibody/rigid_body_plant:drake_visualizer",
+        "//common:find_resource",
+        "//lcm",
+        "//systems/analysis:simulator",
+        "//systems/framework:diagram",
+        "@gflags",
+    ],
+)
+
+drake_cc_binary(
+    name = "run_swing_up",
+    srcs = [
+        "run_swing_up.cc",
+    ],
+    add_test_rule = 1,
+    data = [":models"],
+    test_rule_args = [
+        # N.B. We can't set -simulation_sec here, because the demo program has
+        # success criteria that it asserts after the simulation expires.
+        "-realtime_factor=0.0",
+    ],
+    deps = [
+        ":acrobot_plant",
+        ":spong_controller",
+        ":spong_controller_params",
+        "//attic/multibody:rigid_body_tree",
+        "//attic/multibody/joints",
+        "//attic/multibody/parsers",
+        "//attic/multibody/rigid_body_plant:drake_visualizer",
+        "//common:find_resource",
+        "//lcm",
+        "//systems/analysis",
+        "@gflags",
+    ],
+)
+
+drake_cc_binary(
+    name = "run_swing_up_traj_optimization",
+    srcs = ["test/run_swing_up_traj_optimization.cc"],
+    add_test_rule = 1,
+    data = [":models"],
+    test_rule_args = ["-realtime_factor=0.0"],
+    # Non-deterministic IPOPT-related failures on macOS, see #10276.
+    test_rule_flaky = 1,
+    deps = [
+        ":acrobot_plant",
+        "//attic/multibody:rigid_body_tree",
+        "//attic/multibody/joints",
+        "//attic/multibody/parsers",
+        "//attic/multibody/rigid_body_plant:drake_visualizer",
+        "//common:find_resource",
+        "//lcm",
+        "//solvers:solve",
+        "//systems/analysis",
+        "//systems/controllers:linear_quadratic_regulator",
+        "//systems/primitives:trajectory_source",
+        "//systems/trajectory_optimization:direct_collocation",
+        "@gflags",
+    ],
+)
+
+drake_cc_binary(
+    name = "spong_controller_w_lcm",
+    srcs = [
+        "spong_controller_w_lcm.cc",
+    ],
+    add_test_rule = 1,
+    test_rule_args = [
+        "-time_limit_sec=1.0",
+    ],
+    deps = [
+        ":acrobot_lcm",
+        ":acrobot_plant",
+        ":spong_controller",
+        ":spong_controller_params",
+        "//attic/multibody:rigid_body_tree",
+        "//attic/multibody/rigid_body_plant:drake_visualizer",
+        "//lcm",
+        "//systems/analysis",
+        "@gflags",
+    ],
+)
+
+drake_cc_binary(
+    name = "run_plant_w_lcm",
+    srcs = ["run_plant_w_lcm.cc"],
+    add_test_rule = 1,
+    data = [":models"],
+    test_rule_args = [
+        "-simulation_sec=1.0",
+        "-realtime_factor=0.0",
+    ],
+    test_rule_size = "medium",
+    deps = [
+        ":acrobot_lcm",
+        ":acrobot_plant",
+        "//attic/multibody/parsers",
+        "//attic/multibody/rigid_body_plant",
+        "//attic/multibody/rigid_body_plant:drake_visualizer",
+        "//common:find_resource",
+        "//lcm",
+        "//systems/analysis",
+        "//systems/controllers:linear_quadratic_regulator",
+        "@gflags",
+    ],
+)
+
+drake_cc_googletest(
+    name = "urdf_dynamics_test",
+    data = [":models"],
+    deps = [
+        ":acrobot_plant",
+        "//attic/multibody/joints",
+        "//attic/multibody/parsers",
+        "//attic/multibody/rigid_body_plant",
+        "//common:find_resource",
+        "//common/test_utilities:eigen_matrix_compare",
+    ],
+)
+
+install_data()
+
+add_lint_tests()

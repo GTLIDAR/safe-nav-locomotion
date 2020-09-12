@@ -1,0 +1,6 @@
+boto3; python_version >= "3.3"
+pygame
+# Constrain Sphinx due to hack customizations for templates in
+# `pydrake_sphinx_extension`.
+Sphinx < 2.0.0
+sphinx_rtd_theme

@@ -1,0 +1,140 @@
+# -*- python -*-
+
+load(
+    "@drake//tools/skylark:drake_cc.bzl",
+    "drake_cc_binary",
+    "drake_cc_googletest",
+    "drake_cc_library",
+)
+load("//tools/install:install_data.bzl", "install_data")
+load("//tools/lint:lint.bzl", "add_lint_tests")
+load(
+    "@drake//tools/vector_gen:vector_gen.bzl",
+    "drake_cc_vector_gen_library",
+)
+
+package(default_visibility = ["//visibility:private"])
+
+drake_cc_library(
+    name = "slugs_interface",
+    srcs = [
+        "src/slugs_interface.cc",
+    ],
+    hdrs = [
+        "include/slugs_interface.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//common:default_scalars",
+        "//common:essential",
+    ],
+)
+
+drake_cc_library(
+    name = "beliefIOParser",
+    srcs = [
+        "src/beliefIOParser.cc",
+    ],
+    hdrs = [
+        "include/beliefIOParser.h",
+        "include/json.hpp",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//common:default_scalars",
+        "//common:essential",
+    ],
+)
+
+
+drake_cc_library(
+    name = "phase_space_planner",
+    srcs = ["src/phase_space_planner.cc"],
+    hdrs = [
+        "include/phase_space_planner.h",
+        "include/utils.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//common:default_scalars",
+        "//common:essential",
+    ],
+)
+
+
+drake_cc_binary(
+    name = "simulate_psp",
+    srcs = ["src/simulate_psp.cc"],
+    data = ["vis/actions_CDC_Sub.json"],
+    deps = [
+        ":beliefIOParser",
+        ":phase_space_planner",
+        "@gflags",
+    ],
+)
+
+
+drake_cc_library(
+    name = "cassie",
+    srcs = ["src/cassie.cc"],
+    hdrs = [
+        "include/cassie.h",
+    ],
+    data = ["model/cassie.urdf",
+            "model/cart.urdf",
+            "model/meshes",
+            ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//common:default_scalars",
+        "//common:essential",
+        "//common:find_resource",
+        "//systems/framework",
+        "//systems/analysis",
+        "//multibody/plant",
+        "//multibody/parsing",
+        "//multibody/inverse_kinematics",
+        "//solvers:constraint",
+        "//solvers:gurobi_qp",
+        "//solvers:gurobi_solver",
+        "//solvers:mathematical_program",
+        "//solvers:mathematical_program_result",
+        "//solvers:osqp_solver",
+        "//solvers:solve",
+    ],
+)
+
+drake_cc_binary(
+    name = "run_cassie_follow",
+    srcs = ["src/run_cassie_follow.cc"],
+    data = [
+        "model/cassie.urdf",
+        "model/cart.urdf",
+        "model/CDC_environment.sdf",
+        "model/meshes",
+         "model/environment_floor_1.sdf",
+        "model/environment_floor_2.sdf",
+        "model/stairs.sdf",      
+    ],
+    deps = [
+        ":cassie",
+        ":slugs_interface",
+        ":phase_space_planner",
+        "//common:text_logging_gflags",
+        "//common:find_resource",
+        "//geometry:geometry_visualization",
+        "//multibody/parsing",
+        "//systems/analysis:simulator",
+        "//systems/framework:diagram",
+        "//systems/rendering:multibody_position_to_geometry_pose",
+        "@gflags",
+        "//attic/multibody/parsers",
+        "//attic/multibody:rigid_body_tree",
+        "//attic/multibody/rigid_body_plant:drake_visualizer",
+
+    ],
+)
+
+install_data()
+
+add_lint_tests()

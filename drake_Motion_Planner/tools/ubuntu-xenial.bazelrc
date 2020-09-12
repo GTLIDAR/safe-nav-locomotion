@@ -1,0 +1,13 @@
+# Explicit configuration for Python 2.
+build:python2 --python_path=/usr/bin/python2
+build:python2 --action_env=DRAKE_PYTHON_BIN_PATH=/usr/bin/python2
+
+# N.B. Python 3 is not supported on this platform.
+
+# Use Python 2 by default.
+build --python_path=/usr/bin/python2
+build --action_env=DRAKE_PYTHON_BIN_PATH=/usr/bin/python2
+
+# Configure ${PATH} for actions.
+# N.B. Ensure this is consistent with `execute.bzl`.
+build --action_env=PATH=/usr/bin:/bin

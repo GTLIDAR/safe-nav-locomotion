@@ -1,0 +1,322 @@
+# -*- python -*-
+
+load(
+    "@drake//tools/skylark:drake_cc.bzl",
+    "drake_cc_binary",
+    "drake_cc_googletest",
+    "drake_cc_library",
+)
+load(
+    "@drake//tools/skylark:drake_py.bzl",
+    "drake_py_unittest",
+)
+load("@drake//tools/install:install.bzl", "install")
+load("@drake//tools/install:install_data.bzl", "install_data")
+load("//tools/lint:lint.bzl", "add_lint_tests")
+load(
+    "@drake//tools/skylark:drake_py.bzl",
+    "drake_py_test",
+)
+
+package(
+    default_visibility = [":__subpackages__"],
+)
+
+drake_cc_library(
+    name = "iiwa_common",
+    srcs = [
+        "iiwa_common.cc",
+    ],
+    hdrs = [
+        "iiwa_common.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//attic/multibody:rigid_body_tree",
+        "//attic/multibody/parsers",
+        "//common:find_resource",
+        "//common/trajectories:piecewise_polynomial",
+        "//manipulation/kuka_iiwa:iiwa_constants",
+        "@lcmtypes_bot2_core",
+        "@lcmtypes_robotlocomotion",
+    ],
+)
+
+drake_cc_library(
+    name = "iiwa_lcm",
+    srcs = ["iiwa_lcm.cc"],
+    hdrs = ["iiwa_lcm.h"],
+    # TODO(hongkai.dai): move this package to manipulation folder.
+    visibility = ["//visibility:public"],
+    deps = [
+        ":iiwa_common",
+        "//attic/multibody:inverse_kinematics",
+        "//attic/multibody:rigid_body_tree",
+        "//attic/multibody/rigid_body_plant:contact_results",
+        "//common/trajectories:piecewise_polynomial",
+        "//lcmtypes:iiwa",
+        "//manipulation/kuka_iiwa",
+        "//systems/framework:leaf_system",
+        "//systems/lcm:lcm_pubsub_system",
+    ],
+)
+
+drake_cc_library(
+    name = "oracular_state_estimator",
+    srcs = ["oracular_state_estimator.cc"],
+    hdrs = ["oracular_state_estimator.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//attic/manipulation/util:robot_state_msg_translator",
+        "//systems/framework:leaf_system",
+        "@lcmtypes_bot2_core",
+    ],
+)
+
+drake_cc_library(
+    name = "lcm_plan_interpolator",
+    srcs = ["lcm_plan_interpolator.cc"],
+    hdrs = [
+        "lcm_plan_interpolator.h",
+    ],
+    # TODO(hongkai.dai): move this package to manipulation folder.
+    visibility = ["//visibility:public"],
+    deps = [
+        ":iiwa_common",
+        ":iiwa_lcm",
+        "//manipulation/planner:robot_plan_interpolator",
+        "//systems/framework:diagram_builder",
+        "//systems/primitives:demultiplexer",
+    ],
+)
+
+drake_cc_library(
+    name = "kuka_torque_controller",
+    srcs = ["kuka_torque_controller.cc"],
+    hdrs = ["kuka_torque_controller.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//attic/multibody:rigid_body_tree",
+        "//attic/systems/controllers:rbt_inverse_dynamics",
+        "//systems/controllers:pid_controller",
+        "//systems/controllers:state_feedback_controller_interface",
+        "//systems/framework:diagram_builder",
+        "//systems/framework:leaf_system",
+        "//systems/primitives:adder",
+        "//systems/primitives:pass_through",
+    ],
+)
+
+drake_cc_binary(
+    name = "iiwa_controller",
+    srcs = ["iiwa_controller.cc"],
+    data = [
+        ":models",
+        "//manipulation/models/iiwa_description:models",
+    ],
+    deps = [
+        ":iiwa_common",
+        ":lcm_plan_interpolator",
+        "//common:text_logging_gflags",
+        "//lcm:drake_lcm",
+        "//systems/analysis:simulator",
+    ],
+)
+
+drake_cc_binary(
+    name = "iiwa_wsg_simulation",
+    srcs = ["iiwa_wsg_simulation.cc"],
+    add_test_rule = 1,
+    data = [
+        ":models",
+        "//manipulation/models/iiwa_description:models",
+        "//manipulation/models/wsg_50_description:models",
+    ],
+    # TODO(kyle.edwards@kitware.com): Re-enable this test when it no longer
+    # causes timeouts in kcov.
+    tags = ["no_kcov"],
+    test_rule_args = ["--simulation_sec=0.01"],
+    deps = [
+        ":iiwa_common",
+        ":iiwa_lcm",
+        ":oracular_state_estimator",
+        "//common:text_logging_gflags",
+        "//examples/kuka_iiwa_arm/iiwa_world:iiwa_wsg_diagram_factory",
+        "//lcm",
+        "//manipulation/schunk_wsg",
+        "//systems/analysis",
+        "//systems/primitives:constant_vector_source",
+        "//systems/primitives:demultiplexer",
+        "//systems/primitives:discrete_derivative",
+    ],
+)
+
+drake_cc_binary(
+    name = "kuka_simulation",
+    srcs = ["kuka_simulation.cc"],
+    add_test_rule = 1,
+    data = [
+        ":models",
+        "//manipulation/models/iiwa_description:models",
+    ],
+    # TODO(kyle.edwards@kitware.com): Re-enable this test when it no longer
+    # causes timeouts in kcov.
+    tags = ["no_kcov"],
+    test_rule_args = ["--simulation_sec=0.1 --target_realtime_rate=0.0"],
+    deps = [
+        ":iiwa_common",
+        ":iiwa_lcm",
+        ":kuka_torque_controller",
+        "//attic/manipulation/util:sim_diagram_builder",
+        "//attic/multibody:rigid_body_tree_construction",
+        "//attic/multibody/rigid_body_plant:frame_visualizer",
+        "//attic/systems/controllers:rbt_inverse_dynamics_controller",
+        "//common:text_logging_gflags",
+        "//lcm",
+        "//systems/analysis",
+        "//systems/controllers:state_feedback_controller_interface",
+        "//systems/primitives:constant_vector_source",
+        "//systems/primitives:demultiplexer",
+        "//systems/primitives:discrete_derivative",
+    ],
+)
+
+drake_cc_binary(
+    name = "kuka_plan_runner",
+    srcs = ["kuka_plan_runner.cc"],
+    data = [
+        ":models",
+        "//manipulation/models/iiwa_description:models",
+    ],
+    deps = [
+        ":iiwa_common",
+        ":iiwa_lcm",
+        "@lcmtypes_bot2_core",
+        "@lcmtypes_robotlocomotion",
+    ],
+)
+
+drake_cc_binary(
+    name = "move_iiwa_ee",
+    srcs = ["move_iiwa_ee.cc"],
+    data = [
+        ":models",
+        "//manipulation/models/iiwa_description:models",
+    ],
+    deps = [
+        ":iiwa_common",
+        "//attic/manipulation/planner:constraint_relaxing_ik",
+        "//attic/multibody/parsers",
+        "//common:text_logging_gflags",
+        "//lcmtypes:iiwa",
+        "//math:geometric_transform",
+        "@lcm",
+        "@lcmtypes_bot2_core",
+        "@lcmtypes_robotlocomotion",
+    ],
+)
+
+alias(
+    name = "models",
+    actual = "//examples/kuka_iiwa_arm/models:models",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "prod_models",
+    actual = "//examples/kuka_iiwa_arm/models:prod_models",
+    visibility = ["//visibility:public"],
+)
+
+# === test/ ===
+
+drake_cc_googletest(
+    name = "iiwa_lcm_test",
+    data = [
+        "//manipulation/models/iiwa_description:models",
+    ],
+    deps = [
+        ":iiwa_lcm",
+        "//attic/manipulation/util:world_sim_tree_builder",
+        "//systems/framework",
+    ],
+)
+
+drake_cc_googletest(
+    name = "kuka_torque_controller_test",
+    data = [
+        "//manipulation/models/iiwa_description:models",
+    ],
+    deps = [
+        ":iiwa_common",
+        ":kuka_torque_controller",
+        "//attic/multibody:rigid_body_tree",
+        "//attic/multibody:rigid_body_tree_construction",
+        "//common/test_utilities:eigen_matrix_compare",
+    ],
+)
+
+drake_cc_googletest(
+    name = "optitrack_test",
+    deps = [
+        "@optitrack_driver//lcmtypes:optitrack_lcmtypes",
+    ],
+)
+
+alias(
+    name = "dual_iiwa14_polytope_collision.urdf",
+    actual = "//manipulation/models/iiwa_description:urdf/dual_iiwa14_polytope_collision.urdf",  # noqa
+)
+
+# Test that kuka_simulation can load the dual arm urdf
+sh_test(
+    name = "dual_kuka_simulation_test",
+    size = "small",
+    srcs = ["kuka_simulation"],
+    args = [
+        "$(location :kuka_simulation)",
+        "--urdf",
+        "$(location :dual_iiwa14_polytope_collision.urdf)",
+        "--simulation_sec=0.01",
+        "--novisualize_frames",
+    ],
+    data = [
+        ":dual_iiwa14_polytope_collision.urdf",
+    ],
+    # TODO(kyle.edwards@kitware.com): Re-enable this test when it no longer
+    # causes timeouts in kcov.
+    tags = ["no_kcov"],
+)
+
+# This examples needs to be install for external projects such as Spartan.
+install(
+    name = "install",
+    install_tests = [
+        ":test/iiwa_wsg_simulation_installed_test.py",
+        ":test/kuka_plan_runner_installed_test.py",
+        ":test/kuka_simulation_installed_test.py",
+    ],
+    targets = [
+        ":iiwa_wsg_simulation",
+        ":kuka_plan_runner",
+        ":kuka_simulation",
+    ],
+    runtime_dest = "share/drake/examples/kuka_iiwa_arm",
+    visibility = ["//visibility:public"],
+)
+
+install(
+    name = "install_data",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//examples/kuka_iiwa_arm/models:install_data",
+    ],
+)
+
+add_lint_tests(
+    python_lint_extra_srcs = [
+        ":test/iiwa_wsg_simulation_installed_test.py",
+        ":test/kuka_plan_runner_installed_test.py",
+        ":test/kuka_simulation_installed_test.py",
+    ],
+)

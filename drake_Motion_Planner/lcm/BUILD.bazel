@@ -1,0 +1,156 @@
+# -*- python -*-
+
+load(
+    "@drake//tools/skylark:drake_cc.bzl",
+    "drake_cc_googletest",
+    "drake_cc_library",
+    "drake_cc_package_library",
+)
+load("@drake//tools/skylark:drake_py.bzl", "drake_py_test")
+load("//tools/lint:lint.bzl", "add_lint_tests")
+
+package(default_visibility = ["//visibility:public"])
+
+drake_cc_package_library(
+    name = "lcm",
+    deps = [
+        ":drake_lcm",
+        ":interface",
+        ":lcm_log",
+        ":lcm_receive_thread",
+        ":mock",
+        ":real",
+    ],
+)
+
+drake_cc_library(
+    name = "interface",
+    srcs = ["drake_lcm_interface.cc"],
+    hdrs = ["drake_lcm_interface.h"],
+    deps = [
+        "//common:essential",
+    ],
+)
+
+drake_cc_library(
+    name = "mock",
+    srcs = ["drake_mock_lcm.cc"],
+    hdrs = ["drake_mock_lcm.h"],
+    deps = [
+        ":interface",
+    ],
+)
+
+# TODO(jwnimmer-tri) Deprecate this compatibility shim.
+drake_cc_library(
+    name = "real",
+    deps = [
+        ":drake_lcm",
+        ":lcm_receive_thread",
+    ],
+)
+
+drake_cc_library(
+    name = "drake_lcm",
+    srcs = ["drake_lcm.cc"],
+    hdrs = ["drake_lcm.h"],
+    deps = [
+        ":interface",
+        "//common:essential",
+        "@lcm",
+    ],
+)
+
+drake_cc_library(
+    name = "lcm_receive_thread",
+    srcs = ["lcm_receive_thread.cc"],
+    hdrs = ["lcm_receive_thread.h"],
+    deps = [
+        "//common:essential",
+        "@lcm",
+    ],
+)
+
+drake_cc_library(
+    name = "lcm_log",
+    srcs = ["drake_lcm_log.cc"],
+    hdrs = ["drake_lcm_log.h"],
+    deps = [
+        ":interface",
+        "//common:essential",
+        "@lcm",
+    ],
+)
+
+drake_cc_library(
+    name = "lcmt_drake_signal_utils",
+    testonly = 1,
+    srcs = ["lcmt_drake_signal_utils.cc"],
+    hdrs = ["lcmt_drake_signal_utils.h"],
+    deps = [
+        "//common:essential",
+        "//lcmtypes:drake_signal",
+    ],
+)
+
+# === test/ ===
+
+drake_cc_googletest(
+    name = "drake_lcm_interface_test",
+    deps = [
+        ":lcmt_drake_signal_utils",
+        ":mock",
+        "//common/test_utilities",
+    ],
+)
+
+drake_cc_googletest(
+    name = "drake_lcm_test",
+    flaky = True,
+    deps = [
+        ":drake_lcm",
+        ":lcmt_drake_signal_utils",
+        "//common/test_utilities:expect_throws_message",
+    ],
+)
+
+drake_cc_googletest(
+    name = "drake_lcm_thread_test",
+    flaky = True,
+    deps = [
+        ":drake_lcm",
+        ":lcmt_drake_signal_utils",
+    ],
+)
+
+drake_cc_googletest(
+    name = "drake_lcm_log_test",
+    deps = [
+        ":lcm_log",
+        ":lcmt_drake_signal_utils",
+    ],
+)
+
+drake_cc_googletest(
+    name = "drake_mock_lcm_test",
+    deps = [
+        ":lcmt_drake_signal_utils",
+        ":mock",
+    ],
+)
+
+drake_cc_googletest(
+    name = "lcmt_drake_signal_utils_test",
+    deps = [
+        ":lcmt_drake_signal_utils",
+    ],
+)
+
+drake_py_test(
+    name = "import_lcm_test",
+    # TODO(jwnimmer-tri) Port this to drake_py_unittest.
+    allow_import_unittest = True,
+    deps = ["@lcm//:lcm-python"],
+)
+
+add_lint_tests()

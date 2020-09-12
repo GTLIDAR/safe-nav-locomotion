@@ -1,0 +1,57 @@
+# -*- python -*-
+
+load(
+    "@drake//tools/install:install.bzl",
+    "install",
+)
+
+licenses(["by_exception_only"])  # Gurobi
+
+# This rule is only built if a glob() call fails.
+genrule(
+    name = "error-message",
+    outs = ["error-message.h"],
+    cmd = "echo 'error: Gurobi 8.0.1 is not installed at {gurobi_path}' && false",  # noqa
+    visibility = ["//visibility:private"],
+)
+
+GUROBI_C_HDRS = glob([
+    "gurobi-distro/include/gurobi_c.h",
+]) or [":error-message.h"]
+
+GUROBI_CXX_HDRS = glob([
+    "gurobi-distro/include/gurobi_c.h",
+    "gurobi-distro/include/gurobi_c++.h",
+]) or [":error-message.h"]
+
+cc_library(
+    name = "gurobi_c",
+    hdrs = GUROBI_C_HDRS,
+    includes = ["gurobi-distro/include"],
+    linkopts = [
+        "-L{gurobi_path}/lib",
+        "-lgurobi80",
+        "-Wl,-rpath,{gurobi_path}/lib",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "gurobi_cxx",
+    hdrs = GUROBI_CXX_HDRS,
+    includes = ["gurobi-distro/include"],
+    linkopts = [
+        "-L{gurobi_path}/lib",
+        "-lgurobi80",
+        "-lgurobi_stdc++",
+        "-Wl,-rpath,{gurobi_path}/lib",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+# For macOS, the Drake install step does not need any additional actions to
+# install Gurobi, since Gurobi was already installed system-wide in /Library.
+install(
+    name = "install",
+    visibility = ["//visibility:public"],
+)

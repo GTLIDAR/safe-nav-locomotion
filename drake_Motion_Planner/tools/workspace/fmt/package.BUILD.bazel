@@ -1,0 +1,50 @@
+# -*- python -*-
+
+load(
+    "@drake//tools/install:install.bzl",
+    "cmake_config",
+    "install",
+    "install_cmake_config",
+)
+
+licenses(["notice"])  # BSD-2-Clause
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "fmt",
+    hdrs = glob([
+        "include/fmt/*.h",
+    ], exclude = [
+        # The POSIX bindings are not header-only.
+        "include/fmt/posix.h",
+    ]),
+    defines = [
+        "FMT_HEADER_ONLY=1",
+        "FMT_NO_FMT_STRING_ALIAS=1",  # Avoid macro pollution.
+    ],
+    includes = ["include"],
+)
+
+CMAKE_PACKAGE = "fmt"
+
+cmake_config(
+    package = CMAKE_PACKAGE,
+    script = "@drake//tools/workspace/fmt:package-create-cps.py",
+    version_file = "include/fmt/core.h",
+)
+
+# Creates rule :install_cmake_config.
+install_cmake_config(package = CMAKE_PACKAGE)
+
+install(
+    name = "install",
+    targets = [":fmt"],
+    hdr_dest = "include/" + CMAKE_PACKAGE,
+    hdr_strip_prefix = ["include"],
+    guess_hdrs = "PACKAGE",
+    docs = ["LICENSE.rst"],
+    deps = [":install_cmake_config"],
+)

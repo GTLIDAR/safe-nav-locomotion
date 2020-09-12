@@ -1,0 +1,80 @@
+# -*- python -*-
+
+load(
+    "@drake//tools/skylark:drake_cc.bzl",
+    "drake_cc_googletest",
+    "drake_cc_library",
+    "drake_cc_package_library",
+)
+load("//tools/lint:lint.bzl", "add_lint_tests")
+
+package(default_visibility = ["//visibility:public"])
+
+drake_cc_package_library(
+    name = "query_results",
+    deps = [
+        ":contact_surface",
+        ":penetration_as_point_pair",
+        ":signed_distance_pair",
+        ":signed_distance_to_point",
+        ":signed_distance_to_point_with_gradient",
+    ],
+)
+
+drake_cc_library(
+    name = "penetration_as_point_pair",
+    srcs = [],
+    hdrs = ["penetration_as_point_pair.h"],
+    deps = [
+        "//common:essential",
+        "//geometry:geometry_ids",
+    ],
+)
+
+drake_cc_library(
+    name = "signed_distance_pair",
+    srcs = [],
+    hdrs = ["signed_distance_pair.h"],
+    deps = [
+        "//common",
+        "//geometry:geometry_ids",
+    ],
+)
+
+drake_cc_library(
+    name = "signed_distance_to_point",
+    srcs = [],
+    hdrs = ["signed_distance_to_point.h"],
+    deps = [
+        "//common",
+        "//geometry:geometry_ids",
+    ],
+)
+
+drake_cc_library(
+    name = "signed_distance_to_point_with_gradient",
+    srcs = [],
+    hdrs = ["signed_distance_to_point_with_gradient.h"],
+    deps = [
+        "//common",
+        "//geometry:geometry_ids",
+    ],
+)
+
+drake_cc_library(
+    name = "contact_surface",
+    srcs = [
+        "contact_surface.cc",
+    ],
+    hdrs = [
+        "contact_surface.h",
+    ],
+    deps = [
+        "//common",
+        "//geometry:geometry_ids",
+        "//geometry/proximity:mesh_field",
+        "//math:geometric_transform",
+    ],
+)
+
+add_lint_tests()

@@ -1,0 +1,189 @@
+# -*- python -*-
+
+load(
+    "@drake//tools/skylark:drake_cc.bzl",
+    "drake_cc_binary",
+    "drake_cc_googletest",
+    "drake_cc_library",
+)
+load("//tools/install:install_data.bzl", "install_data")
+load("//tools/lint:lint.bzl", "add_lint_tests")
+load(
+    "@drake//tools/vector_gen:vector_gen.bzl",
+    "drake_cc_vector_gen_library",
+)
+
+package(default_visibility = ["//visibility:private"])
+
+drake_cc_vector_gen_library(
+    name = "pendulum_vector_types",
+    srcs = [
+        "pendulum_input.named_vector",
+        "pendulum_params.named_vector",
+        "pendulum_state.named_vector",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+drake_cc_library(
+    name = "pendulum_plant",
+    srcs = ["pendulum_plant.cc"],
+    hdrs = ["pendulum_plant.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":pendulum_vector_types",
+        "//systems/framework:leaf_system",
+    ],
+)
+
+drake_cc_library(
+    name = "pendulum_geometry",
+    srcs = ["pendulum_geometry.cc"],
+    hdrs = ["pendulum_geometry.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":pendulum_plant",
+        ":pendulum_vector_types",
+        "//geometry:geometry_roles",
+        "//geometry:scene_graph",
+        "//math:geometric_transform",
+        "//systems/framework:diagram_builder",
+        "//systems/framework:leaf_system",
+    ],
+)
+
+drake_cc_binary(
+    name = "passive_simulation",
+    srcs = ["passive_simulation.cc"],
+    add_test_rule = 1,
+    data = [":models"],
+    test_rule_args = ["--target_realtime_rate=0.0"],
+    deps = [
+        ":pendulum_geometry",
+        ":pendulum_plant",
+        "//geometry:geometry_visualization",
+        "//systems/analysis:simulator",
+        "//systems/framework:diagram",
+        "//systems/primitives:constant_vector_source",
+        "@gflags",
+    ],
+)
+
+drake_cc_binary(
+    name = "energy_shaping_simulation",
+    srcs = ["energy_shaping_simulation.cc"],
+    add_test_rule = 1,
+    data = [":models"],
+    test_rule_args = ["--target_realtime_rate=0.0"],
+    deps = [
+        ":pendulum_geometry",
+        ":pendulum_plant",
+        "//geometry:geometry_visualization",
+        "//systems/analysis:simulator",
+        "//systems/framework:diagram",
+        "//systems/framework:leaf_system",
+        "@gflags",
+    ],
+)
+
+drake_cc_binary(
+    name = "lqr_simulation",
+    srcs = ["lqr_simulation.cc"],
+    add_test_rule = 1,
+    data = [":models"],
+    test_rule_args = ["--target_realtime_rate=0.0"],
+    deps = [
+        ":pendulum_geometry",
+        ":pendulum_plant",
+        "//common:is_approx_equal_abstol",
+        "//geometry:geometry_visualization",
+        "//systems/analysis:simulator",
+        "//systems/controllers:linear_quadratic_regulator",
+        "//systems/framework:diagram",
+        "//systems/framework:leaf_system",
+        "@gflags",
+    ],
+)
+
+drake_cc_binary(
+    name = "trajectory_optimization_simulation",
+    srcs = ["trajectory_optimization_simulation.cc"],
+    add_test_rule = 1,
+    data = [":models"],
+    test_rule_args = ["--target_realtime_rate=0.0"],
+    # Non-deterministic IPOPT-related failures on macOS, see #10276.
+    test_rule_flaky = 1,
+    deps = [
+        ":pendulum_geometry",
+        ":pendulum_plant",
+        "//common:is_approx_equal_abstol",
+        "//geometry:geometry_visualization",
+        "//solvers:solve",
+        "//systems/analysis:simulator",
+        "//systems/controllers:pid_controlled_system",
+        "//systems/framework:diagram",
+        "//systems/primitives:trajectory_source",
+        "//systems/trajectory_optimization:direct_collocation",
+        "@gflags",
+    ],
+)
+
+drake_cc_binary(
+    name = "print_symbolic_dynamics",
+    srcs = ["print_symbolic_dynamics.cc"],
+    add_test_rule = 1,
+    data = [":models"],
+    deps = [
+        ":pendulum_plant",
+        "//common:symbolic",
+        "//multibody/parsing",
+        "//multibody/plant",
+    ],
+)
+
+drake_cc_binary(
+    name = "pendulum_parameters_derivatives",
+    srcs = ["pendulum_parameters_derivatives.cc"],
+    add_test_rule = 1,
+    deps = [
+        ":pendulum_plant",
+        ":pendulum_vector_types",
+    ],
+)
+
+# === test/ ===
+
+drake_cc_googletest(
+    name = "urdf_dynamics_test",
+    data = ["Pendulum.urdf"],
+    deps = [
+        ":pendulum_plant",
+        "//attic/multibody:rigid_body_tree",
+        "//attic/multibody/parsers",
+        "//attic/multibody/rigid_body_plant",
+        "//common:find_resource",
+        "//common/test_utilities:eigen_matrix_compare",
+    ],
+)
+
+drake_cc_googletest(
+    name = "pendulum_geometry_test",
+    deps = [
+        ":pendulum_geometry",
+        ":pendulum_plant",
+        "//common/test_utilities:eigen_matrix_compare",
+        "//math:geometric_transform",
+    ],
+)
+
+drake_cc_googletest(
+    name = "pendulum_plant_test",
+    deps = [
+        ":pendulum_plant",
+        "//common:autodiff",
+    ],
+)
+
+install_data()
+
+add_lint_tests()

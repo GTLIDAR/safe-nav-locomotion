@@ -1,0 +1,68 @@
+[INPUT]
+pre_gripper
+gripper
+free
+correct
+move
+
+[OUTPUT]
+go_to_free
+grasp
+go_to_correct
+release
+wait
+
+[ENV_INIT]
+! pre_gripper
+! gripper
+free
+! correct
+! move
+
+
+[ENV_TRANS]
+! & pre_gripper' gripper'
+^ correct' free'
+
+[SYS_INIT]
+wait
+! go_to_free
+! grasp
+! go_to_correct
+! release
+
+
+[SYS_TRANS]
+# Do not move if the human takes an action
+| ! move wait'
+
+# No human action
+
+# Item free and not pre-gripper state, go to the item
+| ! & & & free ! move ! pre_gripper ! gripper go_to_free'
+
+# Item free and pre gripper state, grasp item
+| ! & & free ! move pre_gripper grasp'
+
+# Item free and in gripper, go to correct
+| ! & & free ! move gripper go_to_correct'
+
+# Item correct and in gripper, release
+| ! & & correct ! move gripper release'
+
+# Item correct and not in gripper, wait
+| ! & & correct ! move ! gripper wait'
+
+# Mutual Exclusion
+! & go_to_free grasp
+! & go_to_free go_to_correct
+! & go_to_free release
+! & go_to_free wait
+! & grasp go_to_correct
+! & grasp release
+! & grasp wait
+! & go_to_correct release
+! & go_to_correct wait
+! & release wait
+
+^ ^ ^ ^ go_to_free grasp go_to_correct release wait

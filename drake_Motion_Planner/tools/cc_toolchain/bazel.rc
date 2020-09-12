@@ -1,0 +1,29 @@
+# Disable ccache due to incompatibility with Bazel.
+build --action_env=CCACHE_DISABLE=1
+
+# Add C++14 compiler flags.
+build --cxxopt=-std=c++14
+build --host_cxxopt=-std=c++14
+
+# When compiling with Drake as the main WORKSPACE (i.e., if and only if this
+# rcfile is loaded), we enable -Werror by default for Drake's *own* targets,
+# but not for our externals.
+#
+# Developers may still disable errors locally by passing --copt=-w on the
+# command line, or promote *any* warnings even from externals to errors via
+# --copt=-Werror.
+#
+# When compiilng Drake as an external package, this rcfile is not loaded and we
+# won't promote warnings to errors by default.
+build --define=DRAKE_WERROR=ON
+
+### Debug symbols on OS X. ###
+# See https://github.com/bazelbuild/bazel/issues/2537
+build:apple_debug --spawn_strategy=standalone
+build:apple_debug --genrule_strategy=standalone
+build:apple_debug --compilation_mode=dbg
+
+# We don't actually use APPLE_DEBUG in code. It's just here to invalidate any
+# sandboxed .o files that might be in cache if a developer tried to build
+# with --compilation_mode=dbg instead of --config=apple_debug.
+build:apple_debug --copt="-DAPPLE_DEBUG"

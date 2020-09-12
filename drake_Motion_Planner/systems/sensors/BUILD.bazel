@@ -1,0 +1,342 @@
+# -*- python -*-
+
+load(
+    "@drake//tools/skylark:drake_cc.bzl",
+    "drake_cc_binary",
+    "drake_cc_googletest",
+    "drake_cc_library",
+    "drake_cc_package_library",
+)
+load(
+    "@drake//tools/vector_gen:vector_gen.bzl",
+    "drake_cc_vector_gen_library",
+)
+load(
+    "@drake//tools/skylark:alias.bzl",
+    "drake_cc_library_aliases",
+)
+load("//tools/lint:lint.bzl", "add_lint_tests")
+load("//tools/skylark:test_tags.bzl", "vtk_test_tags")
+
+package(default_visibility = ["//visibility:public"])
+
+drake_cc_package_library(
+    name = "sensors",
+    deps = [
+        ":beam_model",
+        ":beam_model_params",
+        ":camera_info",
+        ":color_palette",
+        ":image",
+        ":image_to_lcm_image_array_t",
+        ":image_writer",
+        ":lcm_image_array_to_images",
+        ":lcm_image_traits",
+        ":optitrack_sender",
+        ":rgbd_sensor",
+        ":rotary_encoders",
+        ":vtk_util",
+    ],
+)
+
+drake_cc_vector_gen_library(
+    name = "beam_model_params",
+    srcs = ["beam_model_params.named_vector"],
+)
+
+drake_cc_library(
+    name = "beam_model",
+    srcs = ["beam_model.cc"],
+    hdrs = ["beam_model.h"],
+    deps = [
+        ":beam_model_params",
+        "//common:unused",
+        "//systems/framework",
+    ],
+)
+
+drake_cc_library(
+    name = "camera_info",
+    srcs = [
+        "camera_info.cc",
+    ],
+    hdrs = [
+        "camera_info.h",
+    ],
+    deps = [
+        "//systems/framework",
+    ],
+)
+
+drake_cc_library(
+    name = "image",
+    srcs = [
+        "image.cc",
+        "pixel_types.cc",
+    ],
+    hdrs = [
+        "image.h",
+        "pixel_types.h",
+    ],
+    deps = [
+        "//common:essential",
+        "//common:reset_after_move",
+        "//common:symbolic",
+    ],
+)
+
+drake_cc_library(
+    name = "lcm_image_traits",
+    srcs = [
+        "lcm_image_traits.cc",
+    ],
+    hdrs = [
+        "lcm_image_traits.h",
+    ],
+    deps = [
+        ":image",
+        "@lcmtypes_robotlocomotion",
+    ],
+)
+
+drake_cc_library(
+    name = "image_to_lcm_image_array_t",
+    srcs = [
+        "image_to_lcm_image_array_t.cc",
+    ],
+    hdrs = [
+        "image_to_lcm_image_array_t.h",
+    ],
+    deps = [
+        ":lcm_image_traits",
+        "//common:essential",
+        "//systems/framework",
+        "@zlib",
+    ],
+)
+
+drake_cc_library(
+    name = "lcm_image_array_to_images",
+    srcs = [
+        "lcm_image_array_to_images.cc",
+    ],
+    hdrs = [
+        "lcm_image_array_to_images.h",
+    ],
+    deps = [
+        ":lcm_image_traits",
+        "//common:essential",
+        "//systems/framework",
+        "@lcmtypes_robotlocomotion",
+        "@libpng",
+        "@vtk//:vtkIOImage",
+        "@zlib",
+    ],
+)
+
+drake_cc_binary(
+    name = "lcm_image_array_receive_example",
+    srcs = [
+        "lcm_image_array_receive_example.cc",
+    ],
+    deps = [
+        ":image_to_lcm_image_array_t",
+        ":lcm_image_array_to_images",
+        "//common:text_logging_gflags",
+        "//systems/analysis:simulator",
+        "//systems/lcm:lcm_pubsub_system",
+        "@gflags",
+    ],
+)
+
+drake_cc_library(
+    name = "vtk_util",
+    srcs = ["vtk_util.cc"],
+    hdrs = ["vtk_util.h"],
+    # We must not expose `#include <vtk/...>` in any of our installed headers;
+    # vtk_util.h is only included internally within this package.
+    install_hdrs_exclude = ["vtk_util.h"],
+    # TODO(SeanCurtis-TRI): Remove this from sensors when the VTK rendering
+    # completely lives in geometry/render.
+    # Temporarily public so this can be shared by the old RgbdCamera in sensors
+    # and the *new* rendering infrastructure in geometry/render. Once the old
+    # is deprecated, this can be moved into geometry/render and made private.
+    visibility = ["//visibility:public"],
+    deps = [
+        "//common:essential",
+        "//math:geometric_transform",
+        "@eigen",
+        "@vtk//:vtkCommonCore",
+        "@vtk//:vtkCommonTransforms",
+        "@vtk//:vtkFiltersSources",
+    ],
+)
+
+drake_cc_library(
+    name = "color_palette",
+    hdrs = ["color_palette.h"],
+    deps = ["//common"],
+)
+
+drake_cc_library(
+    name = "rgbd_sensor",
+    srcs = ["rgbd_sensor.cc"],
+    hdrs = ["rgbd_sensor.h"],
+    deps = [
+        ":camera_info",
+        ":image",
+        "//geometry:geometry_ids",
+        "//geometry:scene_graph",
+        "//geometry/render:render_engine",
+        "//systems/framework:leaf_system",
+        "//systems/primitives:zero_order_hold",
+        "//systems/rendering:pose_vector",
+    ],
+)
+
+drake_cc_library(
+    name = "rotary_encoders",
+    srcs = ["rotary_encoders.cc"],
+    hdrs = ["rotary_encoders.h"],
+    deps = [
+        "//common:unused",
+        "//systems/framework",
+    ],
+)
+
+drake_cc_library(
+    name = "optitrack_sender",
+    srcs = ["optitrack_sender.cc"],
+    hdrs = ["optitrack_sender.h"],
+    deps = [
+        "//geometry:frame_kinematics",
+        "//systems/framework:leaf_system",
+        "@optitrack_driver//lcmtypes:optitrack_lcmtypes",
+    ],
+)
+
+drake_cc_library(
+    name = "image_writer",
+    srcs = ["image_writer.cc"],
+    hdrs = ["image_writer.h"],
+    deps = [
+        ":image",
+        "//common:essential",
+        "//systems/framework",
+        "@spruce",
+        "@vtk//:vtkCommonDataModel",
+        "@vtk//:vtkIOImage",
+    ],
+)
+
+# === test/ ===
+
+drake_cc_googletest(
+    name = "beam_model_test",
+    deps = [
+        ":beam_model",
+        "//common/proto:call_matlab",
+        "//systems/analysis:simulator",
+        "//systems/primitives:constant_vector_source",
+        "//systems/primitives:random_source",
+        "//systems/primitives:signal_logger",
+    ],
+)
+
+drake_cc_googletest(
+    name = "camera_info_test",
+    deps = [
+        ":camera_info",
+        "//common/test_utilities:eigen_matrix_compare",
+    ],
+)
+
+drake_cc_googletest(
+    name = "image_test",
+    deps = [
+        ":image",
+    ],
+)
+
+filegroup(
+    name = "test_models",
+    testonly = 1,
+    srcs = [
+        "test/models/background.jpg",
+        "test/models/box.sdf",
+        "test/models/box_with_mesh.sdf",
+        "test/models/meshes/box.json",
+        "test/models/meshes/box.obj",
+        "test/models/meshes/box.obj.mtl",
+        "test/models/meshes/box.png",
+        "test/models/meshes/box2.obj",
+        "test/models/nothing.sdf",
+        "test/models/sphere.sdf",
+    ],
+)
+
+drake_cc_googletest(
+    name = "image_writer_test",
+    tags = vtk_test_tags(),
+    deps = [
+        ":image_writer",
+        "//common:temp_directory",
+        "//common/test_utilities",
+        "@spruce",
+        "@vtk//:vtkIOImage",
+    ],
+)
+
+drake_cc_googletest(
+    name = "rgbd_sensor_test",
+    tags = vtk_test_tags(),
+    deps = [
+        ":rgbd_sensor",
+        "//common/test_utilities:eigen_matrix_compare",
+        "//geometry/test_utilities:dummy_render_engine",
+    ],
+)
+
+drake_cc_googletest(
+    name = "rotary_encoders_test",
+    deps = [
+        ":rotary_encoders",
+        "//common/test_utilities:eigen_matrix_compare",
+        "//common/test_utilities:symbolic_test_util",
+        "//systems/framework/test_utilities",
+    ],
+)
+
+drake_cc_googletest(
+    name = "vtk_util_test",
+    deps = [":vtk_util"],
+)
+
+drake_cc_googletest(
+    name = "image_to_lcm_image_array_t_test",
+    deps = [":image_to_lcm_image_array_t"],
+)
+
+drake_cc_googletest(
+    name = "lcm_image_array_to_images_test",
+    data = glob([
+        "test/*.jpg",
+        "test/*.png",
+    ]),
+    deps = [
+        ":lcm_image_array_to_images",
+        "//common:find_resource",
+    ],
+)
+
+drake_cc_googletest(
+    name = "optitrack_sender_test",
+    srcs = ["test/optitrack_sender_test.cc"],
+    deps = [
+        ":optitrack_sender",
+        "//systems/framework",
+        "@optitrack_driver//lcmtypes:optitrack_lcmtypes",
+    ],
+)
+
+add_lint_tests()
