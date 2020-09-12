@@ -12,7 +12,7 @@ Setup Drake following the step by step tutorial [here](https://drake.mit.edu/ins
 
 ### Local adjustments 
 
-in CDC/src/simulate_psp.cc and CDC/src/run_cassie_follow.cc adjust the path in `file_name = "path/drake/CDC/vis/..."` to match where drake directory is cloned on your local machine. 
+in CDC/src/simulate_psp.cc and CDC/src/run_cassie_follow.cc adjust the path in `file_name = "path/drake/CDC/vis/..."` to match the path to the drake directory on your local machine. 
 
 ## Running the code
 ### Setting up action.json file from Task_Planner
