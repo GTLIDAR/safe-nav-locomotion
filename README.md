@@ -3,8 +3,10 @@
 This repo contains the code used for implementation in our published work:-
 ```
 @article{warnketowards,
-  title={Towards Safe Locomotion Navigation in Partially Observable Environments with Uneven Terrain},
-  author={Warnke, Jonas and Shamsah, Abdulaziz and Li, Yingke and Zhao, Ye}
+  title={Towards Safe Locomotion Navigation in 
+  Partially Observable Environments with Uneven Terrain},
+  author={Warnke, Jonas and Shamsah, Abdulaziz 
+  and Li, Yingke and Zhao, Ye}
   journal   = {IEEE Conference on Decision and Control},
   year      = {2020},
 }
