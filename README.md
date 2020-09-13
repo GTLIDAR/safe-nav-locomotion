@@ -20,7 +20,7 @@ in [Motion_Planner/drake/CDC/src/simulate_psp.cc](Motion_Planner/drake/CDC/src/s
 
 ## Running the code
 ### Setting up action.json file from Task_Planner
-1- Once an action.json file is generated from Task_Planner, copy and past the file into [Motion_Planner/drake/CDC/vis/](Motion_Planner/drake/CDC/vis/) .
+1- Once an action.json file is generated from Task_Planner, copy and past the file into [Motion_Planner/drake/CDC/vis/](Motion_Planner/drake/CDC/vis/).
 
 2- In [Motion_Planner/drake/CDC/src/simulate_psp.cc](Motion_Planner/drake/CDC/src/simulate_psp.cc) adjust the path in 
 `BeliefIOParser parser("path/drake/CDC/vis/actions_CDC_Sub.json");` and choose the desired action file.
