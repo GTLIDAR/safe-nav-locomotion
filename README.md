@@ -1,6 +1,12 @@
 # safe-nav-locomotion
 
 This repo contains the code used for implementation in our published work:-
+`
+@article{warnketowards,
+  title={Towards Safe Locomotion Navigation in Partially Observable Environments with Uneven Terrain},
+  author={Warnke, Jonas and Shamsah, Abdulaziz and Li, Yingke and Zhao, Ye}
+}
+`
 
 "Jonas Warnke*, Abdulaziz Shamsah*, Yingke Li*, and Ye Zhao. Towards Safe Locomotion Navigation in Partially Observable Environments with Uneven Terrain, (*equally contributed), IEEE Conference on Decision and Control (CDC), 2020."
 
