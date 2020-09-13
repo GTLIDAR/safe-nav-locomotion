@@ -73,23 +73,23 @@ void DoMain() {
 
   std::string file_name;
   
-  file_name = "/home/sa-zhao/code/drake/CDC/vis/log_COM.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_COM.txt";
   std::vector<Eigen::Matrix<double, 9, 1>> COM_list;
   read_data<9>(COM_list, file_name);
 
-  file_name = "/home/sa-zhao/code/drake/CDC/vis/log_l_foot.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_l_foot.txt";
   std::vector<Eigen::Matrix<double, 9, 1>> l_foot_list;
   read_data<9>(l_foot_list, file_name);
 
-  file_name = "/home/sa-zhao/code/drake/CDC/vis/log_r_foot.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_r_foot.txt";
   std::vector<Eigen::Matrix<double, 9, 1>> r_foot_list;
   read_data<9>(r_foot_list, file_name);
 
-  file_name = "/home/sa-zhao/code/drake/CDC/vis/log_heading.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_heading.txt";
   std::vector<Eigen::Matrix<double, 1, 1>> heading_list;
   read_data<1>(heading_list, file_name);
 
-  file_name = "/home/sa-zhao/code/drake/CDC/vis/log_obstacle.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_obstacle.txt";
   std::vector<Eigen::Matrix<double, 3, 1>> location_list;
   read_data<3>(location_list, file_name);
 
