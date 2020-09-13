@@ -20,9 +20,9 @@ in [Motion_Planner/drake/CDC/src/simulate_psp.cc](Motion_Planner/drake/CDC/src/s
 
 ## Running the code
 ### Setting up action.json file from Task_Planner
-1- Once an action.json file is generated from Task_Planner, copy and past the file into drake/CDC/vis/ .
+1- Once an action.json file is generated from Task_Planner, copy and past the file into [Motion_Planner/drake/CDC/vis/](Motion_Planner/drake/CDC/vis/) .
 
-2- In CDC/src/simualte_psp.cc adjust the path in 
+2- In [Motion_Planner/drake/CDC/src/simulate_psp.cc](Motion_Planner/drake/CDC/src/simulate_psp.cc) adjust the path in 
 `BeliefIOParser parser("path/drake/CDC/vis/actions_CDC_Sub.json");` and choose the desired action file.
 
 ### Phase-Space Planning and trajectory generation 
@@ -33,6 +33,7 @@ This will generate the trajectory .txt files.
 
 ### Drake Visualization 
 Make sure that the trajectories are generated beforehand as shown in the previous section.
+
 1- Open termminal and run
 ```
 cd path/drake/
