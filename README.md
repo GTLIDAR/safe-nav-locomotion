@@ -61,7 +61,9 @@ CC=clang-6.0 CXX=clang++-6.0 bazel run CDC:run_cassie_follow
 
 ### Py.plot Visualization 
 <img src="https://i.imgur.com/jJ5KXOj.png" />
+
 1- Open terminal and run
+
 ```
 cd path/drake/CDC/vis/
 python vis_psp.py 
