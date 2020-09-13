@@ -41,6 +41,8 @@ Note:[actions_CDC_Subs.json](Motion_Planner/drake/CDC/vis/actions_CDC_Sub.json) 
 This will generate the trajectory .txt files.
 
 ### Drake Visualization 
+<img src="https://i.imgur.com/taoI3AF.gif" />
+
 Make sure that the trajectories are generated beforehand as shown in the previous section.
 
 1- Open termminal and run
