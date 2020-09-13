@@ -1,4 +1,7 @@
 # Motion Planner
+
+The Motion_Planner directory contains the code nacessary to generate the center of mass, foot trajectories as well as foot placement location using phase-space planning. It also containts a Drake visualization code of the Cassie bipedal robot following the generated trajectories in the proposed environment.
+
 ## Drake Phase-Space Planning and Visualization 
 
 The code is based on Drake (Please see the [Drake Documentation](https://drake.mit.edu) for more
@@ -6,7 +9,7 @@ information). Here we include the source code of Drake and our own addition for 
 
 The code is run on Ubuntu 16.04.
 
-## Initialzing 
+## Initializing 
 
 ### Building Drake
 Setup Drake following the step by step tutorial [here](https://drake.mit.edu/installation.html).
@@ -29,7 +32,7 @@ in [Motion_Planner/drake/CDC/src/simulate_psp.cc](Motion_Planner/drake/CDC/src/s
 This will generate the trajectory .txt files.
 
 ### Drake Visualization 
-Make sure that the trajectories are generated before hand as shown before.
+Make sure that the trajectories are generated beforehand as shown in the previous section.
 1- Open termminal and run
 ```
 cd path/drake/
@@ -73,5 +76,3 @@ This repo contains the code used for implementation in our published work:-
 }
 ```
 
-
-The Motion_Planner directory contains the code nacessary to generate the center of mass, foot trajectories as well as foot placement location using phase-space planning. It also containts a Drake visualization code of the Cassie bipedal robot following the generated trajectories in the proposed environment.
