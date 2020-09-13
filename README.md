@@ -12,7 +12,8 @@ The code is run on Ubuntu 16.04.
 ## Initializing 
 
 In a terminal go to the directory where you want to clone safe-nav-locomotion repo.
-run `git clone https://github.com/GTLIDAR/safe-nav-locomotion.git`
+run 
+`git clone https://github.com/GTLIDAR/safe-nav-locomotion.git`
 
 ### Building Drake
 Make sure you have the required dependencies for Drake. 
