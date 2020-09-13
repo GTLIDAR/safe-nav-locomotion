@@ -8,7 +8,7 @@ The Motion_Planner directory contains the code nacessary to generate the center 
 ## Drake Phase-Space Planning and Visualization 
 
 The code is based on Drake (Please see the [Drake Documentation](https://drake.mit.edu) for more
-information). Here we include the source code of Drake and our own addition for phase-space planning in the CDC folder.
+information). Here we include the source code of Drake and our own addition for phase-space planning in the [CDC](Motion_Planner/drake/CDC/) folder.
 
 The code is run on Ubuntu 16.04.
 
