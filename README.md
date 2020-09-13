@@ -1,3 +1,6 @@
+
+# Task Planner
+
 # Motion Planner
 
 The Motion_Planner directory contains the code nacessary to generate the center of mass, foot trajectories as well as foot placement location using phase-space planning. It also containts a Drake visualization code of the Cassie bipedal robot following the generated trajectories in the proposed environment.
@@ -62,11 +65,6 @@ CC=clang-6.0 CXX=clang++-6.0 bazel run CDC:run_cassie_follow
 cd path/drake/CDC/vis/
 python vis_psp.py 
 ```
-
-
-
-# Task Planner
-
 
 
 # Publiciations 
