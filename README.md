@@ -11,8 +11,12 @@ The code is run on Ubuntu 16.04.
 
 ## Initializing 
 
+In a terminal go to the directory where you want to clone safe-nav-locomotion repo.
+run `git clone https://github.com/GTLIDAR/safe-nav-locomotion.git`
+
 ### Building Drake
-Setup Drake following the step by step tutorial [here](https://drake.mit.edu/installation.html).
+Make sure you have the required dependencies for Drake. 
+Drake installation steps can be found here [here](https://drake.mit.edu/installation.html).
 
 ### Local adjustments 
 
@@ -21,6 +25,7 @@ in [Motion_Planner/drake/CDC/src/simulate_psp.cc](Motion_Planner/drake/CDC/src/s
 ## Running the code
 ### Setting up action.json file from Task_Planner
 1- Once an action.json file is generated from Task_Planner, copy and past the file into [Motion_Planner/drake/CDC/vis/](Motion_Planner/drake/CDC/vis/).
+Note:[actions_CDC_Subs.json](Motion_Planner/drake/CDC/vis/actions_CDC_Subs.json) is the action file used in our publiciation
 
 2- In [Motion_Planner/drake/CDC/src/simulate_psp.cc](Motion_Planner/drake/CDC/src/simulate_psp.cc) adjust the path in 
 `BeliefIOParser parser("path/drake/CDC/vis/actions_CDC_Sub.json");` and choose the desired action file.
