@@ -8,7 +8,7 @@ The Motion_Planner directory contains the code nacessary to generate the center 
 ## Drake Phase-Space Planning and Visualization 
 
 The code is based on Drake (Please see the [Drake Documentation](https://drake.mit.edu) for more
-information). Here we include the source code of Drake and our own addition for phase-space planning in the [CDC](Motion_Planner/drake/CDC/) folder.
+information). Here we include the source code of Drake and our own addition for phase-space planning in the [safe-nav-loco](motion_planner/drake/safe-nav-loco/) folder.
 
 The code is run on Ubuntu 16.04.
 
@@ -24,14 +24,14 @@ Drake installation steps can be found here [here](https://drake.mit.edu/installa
 
 ### Local adjustments 
 
-in [Motion_Planner/drake/CDC/src/simulate_psp.cc](Motion_Planner/drake/CDC/src/simulate_psp.cc) and [Motion_Planner/drake/CDC/src/run_cassie_follow.cc](Motion_Planner/drake/CDC/src/run_cassie_follow.cc) adjust the path in `file_name = "path/drake/CDC/vis/..."` to match the path to the drake directory on your local machine. 
+in [motion_planner/drake/safe-nav-loco/src/simulate_psp.cc](motion_planner/drake/safe-nav-loco/src/simulate_psp.cc) and [motion_planner/drake/safe-nav-loco/src/run_cassie_follow.cc](motion_planner/drake/safe-nav-loco/src/run_cassie_follow.cc) adjust the path in `file_name = "path/drake/CDC/vis/..."` to match the path to the drake directory on your local machine. 
 
 ## Running the code
 ### Setting up action.json file from Task_Planner
-1- Once an action.json file is generated from Task_Planner, copy and past the file into [Motion_Planner/drake/CDC/vis/](Motion_Planner/drake/CDC/vis/).
-Note:[actions_CDC_Subs.json](Motion_Planner/drake/CDC/vis/actions_CDC_Sub.json) is the action file used in our publiciation
+1- Once an action.json file is generated from Task_Planner, copy and past the file into [motion_planner/drake/safe-nav-loco/vis/](motion_planner/drake/safe-nav-loco/vis/).
+Note:[actions_CDC_Subs.json](motion_planner/drake/safe-nav-loco/vis/actions_CDC_Sub.json) is the action file used in our publiciation
 
-2- In [Motion_Planner/drake/CDC/src/simulate_psp.cc](Motion_Planner/drake/CDC/src/simulate_psp.cc) adjust the path in 
+2- In [motion_planner/drake/safe-nav-loco/src/simulate_psp.cc](motion_planner/drake/safe-nav-loco/src/simulate_psp.cc) adjust the path in 
 `BeliefIOParser parser("path/drake/CDC/vis/actions_CDC_Sub.json");` and choose the desired action file.
 
 ### Phase-Space Planning and trajectory generation 
