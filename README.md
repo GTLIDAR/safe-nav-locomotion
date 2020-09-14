@@ -50,10 +50,19 @@ Make sure that the trajectories are generated beforehand as shown in the previou
 cd path/drake/
 bazel-bin/tools/drake_visualizer
 ```
-* Open another terminal and run the commend to open the drake lcm spy
+In case the Drake visualizer is not built already run the following command
 ```
+bazel-bin/tools/drake_visualizer
+```
+* Open another terminal and run the commend to open the drake-lcm-spy
+```
+
 cd path/drake/
 bazel-bin/lcmtypes/drake-lcm-spy
+```
+In case the drake-lcm-spy is not built already run the following command
+```
+bazel build //lcmtypes:drake-lcm-spy
 ```
 * Open a third terminal and run the command to simulate the Cassie robot in drake visualzier within the environment
 ```
