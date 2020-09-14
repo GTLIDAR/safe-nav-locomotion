@@ -1,4 +1,4 @@
-#include "drake/CDC/include/cassie.h"
+#include "drake/safe-nav-loco/include/cassie.h"
 
 #define PI 3.1416
 

@@ -1,7 +1,7 @@
 #include <gflags/gflags.h>
 
-#include "drake/CDC/include/beliefIOParser.h"
-#include "drake/CDC/include/phase_space_planner.h"
+#include "drake/safe-nav-loco/include/beliefIOParser.h"
+#include "drake/safe-nav-loco/include/phase_space_planner.h"
 
 namespace phase_space_planner
 {
@@ -85,7 +85,7 @@ int DoMain()
   psp.InitObstacle(obs0);
 
 
-  BeliefIOParser parser("/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/actions_CDC_Sub.json");
+  BeliefIOParser parser("/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/actions_CDC_Sub.json");
   parser.advanceStep();
   double v;
   double pre_v = 0.1;
@@ -256,31 +256,31 @@ int DoMain()
   // Log 
   std::string file_name;
   
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_apex.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_apex.txt";
   write_data<5>(psp.apex_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_d.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_d.txt";
   write_data<5>(psp.d_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_switch.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_switch.txt";
   write_data<6>(psp.switch_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_p_foot.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_p_foot.txt";
   write_data<3>(psp.p_foot_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_COM.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_COM.txt";
   write_data<9>(psp.COM_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_l_foot.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_l_foot.txt";
   write_data<9>(psp.l_foot_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_r_foot.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_r_foot.txt";
   write_data<9>(psp.r_foot_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_heading.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_heading.txt";
   write_data<1>(psp.heading_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_obstacle.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_obstacle.txt";
   write_data<3>(psp.obstacle_list, file_name);
   
   return 0;

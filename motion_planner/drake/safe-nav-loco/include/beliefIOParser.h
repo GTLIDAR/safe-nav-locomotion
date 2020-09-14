@@ -5,7 +5,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "drake/CDC/include/json.hpp"
+#include "drake/safe-nav-loco/include/json.hpp"
 using json = nlohmann::json;
 
 class BeliefIOParser

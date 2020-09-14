@@ -15,10 +15,10 @@
 #include "drake/multibody/rigid_body_plant/drake_visualizer.h"
 #include "drake/multibody/parsers/urdf_parser.h"
 //#include "drake/systems/framework/diagram_builder.h"
-#include "drake/CDC/include/slugs_interface.h"
-#include "drake/CDC/include/phase_space_planner.h"
+#include "drake/safe-nav-loco/include/slugs_interface.h"
+#include "drake/safe-nav-loco/include/phase_space_planner.h"
 #include "drake/systems/rendering/multibody_position_to_geometry_pose.h"
-#include "drake/CDC/include/cassie.h"
+#include "drake/safe-nav-loco/include/cassie.h"
 DEFINE_double(simulation_time, 22.205, "Desired duration of the simulation in seconds");
 DEFINE_double(max_time_step, 1.0e-4, "Simulation time step used for integrator.");
 
@@ -73,23 +73,23 @@ void DoMain() {
 
   std::string file_name;
   
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_COM.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_COM.txt";
   std::vector<Eigen::Matrix<double, 9, 1>> COM_list;
   read_data<9>(COM_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_l_foot.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_l_foot.txt";
   std::vector<Eigen::Matrix<double, 9, 1>> l_foot_list;
   read_data<9>(l_foot_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_r_foot.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_r_foot.txt";
   std::vector<Eigen::Matrix<double, 9, 1>> r_foot_list;
   read_data<9>(r_foot_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_heading.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_heading.txt";
   std::vector<Eigen::Matrix<double, 1, 1>> heading_list;
   read_data<1>(heading_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/Motion_Planner/drake/CDC/vis/log_obstacle.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_obstacle.txt";
   std::vector<Eigen::Matrix<double, 3, 1>> location_list;
   read_data<3>(location_list, file_name);
 
@@ -110,18 +110,18 @@ void DoMain() {
   // Load Cassie   
   
   std::string full_name;
-  full_name = FindResourceOrThrow("drake/CDC/model/cassie.urdf");
+  full_name = FindResourceOrThrow("drake/safe-nav-loco/model/cassie.urdf");
 
 
   Parser parser(&plant, &scene_graph);
   parser.AddModelFromFile(full_name);
   
   std::string full_name1;
-  full_name1 = FindResourceOrThrow("drake/CDC/model/cart.urdf");
+  full_name1 = FindResourceOrThrow("drake/safe-nav-loco/model/cart.urdf");
   parser.AddModelFromFile(full_name1);
 
   multibody::ModelInstanceIndex navigation_instance = parser.AddModelFromFile(
-          FindResourceOrThrow("drake/CDC/model/CDC_environment.sdf"));
+          FindResourceOrThrow("drake/safe-nav-loco/model/CDC_environment.sdf"));
   // Welding home_environment to make sure it doesn't move
   RigidTransform<double> X_WT(Vector3d(0, 0, 0));
   plant.WeldFrames(plant.world_frame(), plant.GetFrameByName("floor", navigation_instance), X_WT);
@@ -153,7 +153,7 @@ void DoMain() {
   
   // Set up simulator.
   auto simulator = std::make_unique<Simulator<double>>(*diagram, std::move(context));
-  simulator->set_target_realtime_rate(2);
+  simulator->set_target_realtime_rate(1); //runtime rate 
   simulator->Initialize();
   simulator->AdvanceTo(200);
 

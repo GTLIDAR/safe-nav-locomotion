@@ -1,4 +1,4 @@
-#include "drake/CDC/include/phase_space_planner.h"
+#include "drake/safe-nav-loco/include/phase_space_planner.h"
 
 
 namespace phase_space_planner

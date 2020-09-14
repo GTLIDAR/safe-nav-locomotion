@@ -1,4 +1,4 @@
-#include "drake/CDC/include/slugs_interface.h"
+#include "drake/safe-nav-loco/include/slugs_interface.h"
 
 slugsInterface::slugsInterface(char* slugsLocation, char* inputFile)
 {

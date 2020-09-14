@@ -112,7 +112,7 @@ drake_cc_binary(
         "model/cart.urdf",
         "model/CDC_environment.sdf",
         "model/meshes",
-         "model/environment_floor_1.sdf",
+        "model/environment_floor_1.sdf",
         "model/environment_floor_2.sdf",
         "model/stairs.sdf",      
     ],

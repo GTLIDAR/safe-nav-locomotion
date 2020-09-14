@@ -1,6 +1,6 @@
 #pragma once
 
-#include "drake/CDC/include/utils.h"
+#include "drake/safe-nav-loco/include/utils.h"
 
 
 namespace phase_space_planner 

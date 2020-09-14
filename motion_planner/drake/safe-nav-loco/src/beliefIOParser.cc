@@ -1,4 +1,4 @@
-#include "drake/CDC/include/beliefIOParser.h"
+#include "drake/safe-nav-loco/include/beliefIOParser.h"
 
 BeliefIOParser::BeliefIOParser(std::string fileName)
 {
