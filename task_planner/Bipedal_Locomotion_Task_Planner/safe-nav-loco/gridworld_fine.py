@@ -253,7 +253,7 @@ class Gridworld():
         if state in self.obstacles:
             successorsR = [(state, 1)]
             for (next_state, p) in successorsR:
-                self.probR[action][state, next_state] = p\
+                self.probR[action][state, next_state] = p
                 return
         row,col = self.coords(state)
         northState = self.isAllowedState((row-1,col),state)

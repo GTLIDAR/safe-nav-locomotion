@@ -28,7 +28,7 @@ h_c, w_c = image_c.shape[:2]
 
 folder_locn = 'Examples/'
 
-example_name_c = 'Belief_Evasion_coarse_cdc_map_one_stair'
+example_name_c = 'Belief_Evasion_coarse_cdc_map'
 initial_c = [62]
 moveobstacles_c = [28]
 
@@ -40,7 +40,7 @@ infile_c = copy.deepcopy(trial_name_c)
 gwfile_c = folder_locn + '/figs/gridworldfig_' + example_name_c + '.png'
 
 
-example_name_f = 'Belief_Evasion_fine_abstraction_size_26_longer_stepL'
+example_name_f = 'Belief_Evasion_fine_abstraction'
 jsonfile_name_f = folder_locn + "Integration/" + example_name_f + ".json"
 trial_name_f = folder_locn + example_name_f
 

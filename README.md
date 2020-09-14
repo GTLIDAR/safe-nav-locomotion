@@ -1,9 +1,31 @@
 
 # Task Planner
 
+The task_planner directory contains the code necessary to synthesize navigation and action planners for bipedal locomotion an a partially observable environment. The planners can be simulated in a discrete 2D game against a user controlled dynamic obstacle. The discrete obstacle trajectory and action sets at each robot keyframe are stored in an output file that are used by the motion planner to plan robot trajectories and simulate the resulting locomotion behavior in drake.
+
+## Synthesis
+
+We have included the slugs reactive synthesis tool which needs to be installed for navigation and action planning synthesis. Documentation can be found [here](https://github.com/VerifiableRobotics/slugs). If you already have slugs installed, then you must simply change the path in [Run_File_coarse_abstratction_CDC.py](task_planner/Bipedal_Locomotion_Task_Planner/safe-nav-loco/Run_File_coarse_abstratction_CDC.py) and [Run_File_fine_abstratction.py](task_planner/Bipedal_Locomotion_Task_Planner/safe-nav-loco/Run_File_fine_abstratction.py).
+
+## Running the code
+
+### Environment input file
+
+The code requires an image of the environment as an input. White areas in the image are interpreted as obstacle free, while black areas are interpreted as static obstacles. If the discrete representation of the environment is already known, an image can be generated pixel by pixel using [PNG_Gen.py](/task_planner/PNG_Gen/PNG_Gen.py).
+
+### Synthesis
+
+Synthesis of the navigation planner is executed by running [Run_File_coarse_abstratction_CDC.py](task_planner/Bipedal_Locomotion_Task_Planner/safe-nav-loco/Run_File_coarse_abstratction_CDC.py) (the desired discrete abstraction, belief partition, and initial robot and obstacle locations can also be edited in this file).
+
+Synthesis of the action planner is executed by running [Run_File_fine_abstratction.py](task_planner/Bipedal_Locomotion_Task_Planner/safe-nav-loco/Run_File_fine_abstratction.py).
+
+### 2D simulation
+
+After synthesis is complete both planners can be simulated in a 2D collision avoidance game against a user controlled dynamic obstacle. Running [Sim_2LA.py](task_planner/Bipedal_Locomotion_Task_Planner/safe-nav-loco/Sim_2LA.py). The user can control the evasion game on the coarse grid using the arrow keys. Between coarse game states the code visualizes the robot progressing through the environment on a fine discretization within one discrete coarse cell. Actions at each keyframe as well as the dynamic obstacle pass are saved into an output file in the [integration](task_planner/Bipedal_Locomotion_Task_Planner/safe-nav-loco/Examples/Integration) directory. 
+
 # Motion Planner
 
-The Motion_Planner directory contains the code nacessary to generate the center of mass, foot trajectories as well as foot placement location using phase-space planning. It also containts a Drake visualization code of the Cassie bipedal robot following the generated trajectories in the proposed environment.
+The motion_planner directory contains the code nacessary to generate the center of mass, foot trajectories as well as foot placement location using phase-space planning. It also containts a Drake visualization code of the Cassie bipedal robot following the generated trajectories in the proposed environment.
 
 ## Drake Phase-Space Planning and Visualization 
 

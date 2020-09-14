@@ -29,7 +29,7 @@ if __name__ == '__main__':
     h_f, w_f = image_f.shape[:2]
     
     folder_locn = 'Examples/'
-    example_name = 'Belief_Evasion_fine_abstraction_size_26_longer_stepL_test'
+    example_name = 'Belief_Evasion_fine_abstraction'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
