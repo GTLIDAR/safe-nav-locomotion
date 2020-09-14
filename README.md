@@ -52,7 +52,7 @@ bazel-bin/tools/drake_visualizer
 ```
 In case the Drake visualizer is not built already run the following command
 ```
-bazel-bin/tools/drake_visualizer
+bazel build //tools:drake_visualizer
 ```
 * Open another terminal and run the commend to open the drake-lcm-spy
 ```
