@@ -64,7 +64,7 @@ CC=clang-6.0 CXX=clang++-6.0 bazel run CDC:run_cassie_follow
 ### Py.plot Visualization 
 <img src="https://i.imgur.com/jJ5KXOj.png" />
 
-1- Open terminal and run
+1- Open terminal and run the command to visualize the center of mass and foot trajectories as well as high-level waypoints, apex states and foot stance locations.
 
 ```
 cd path/drake/safe-nav-loco/vis/
@@ -72,7 +72,10 @@ python vis_psp.py
 ```
 
 
-# Publications 
+# Project and Related Publications 
+
+This work is a part of our ongoing work on robust and reactive fecision-making and AI planning of collaborative and agile robots in complex environments. More information and related publications can be found [here](http://lab-idar.gatech.edu/robust-and-reactive-decision-making-and-ai-planning-of-collaborative-and-agile-robots-in-complex-environments/)
+
 
 This repo contains the code used for implementation in our [published work](https://arxiv.org/abs/2009.05168):-
 ```
@@ -86,6 +89,5 @@ This repo contains the code used for implementation in our [published work](http
 }
 ```
 
-This work is a part of our ongoing work on robust and reactive fecision-making and AI planning of collaborative and agile robots in complex environments. More information and related publications can be found [here](http://lab-idar.gatech.edu/robust-and-reactive-decision-making-and-ai-planning-of-collaborative-and-agile-robots-in-complex-environments/)
 
 # About
