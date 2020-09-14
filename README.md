@@ -64,7 +64,7 @@ CC=clang-6.0 CXX=clang++-6.0 bazel run CDC:run_cassie_follow
 ### Py.plot Visualization 
 <img src="https://i.imgur.com/jJ5KXOj.png" />
 
-1- Open terminal and run the command to visualize the center of mass and foot trajectories as well as high-level waypoints, apex states and foot stance locations.
+1- Open terminal and run the command to visualize the center of mass and foot trajectories as well as high-level waypoints, and foot stance locations.
 
 ```
 cd path/drake/safe-nav-loco/vis/
