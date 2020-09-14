@@ -20,19 +20,19 @@ run
 
 ### Building Drake
 Make sure you have the required dependencies for Drake. 
-Drake installation steps can be found here [here](https://drake.mit.edu/installation.html).
+Drake installation steps can be found [here](https://drake.mit.edu/installation.html).
 
 ### Local adjustments 
 
-in [motion_planner/drake/safe-nav-loco/src/simulate_psp.cc](motion_planner/drake/safe-nav-loco/src/simulate_psp.cc) and [motion_planner/drake/safe-nav-loco/src/run_cassie_follow.cc](motion_planner/drake/safe-nav-loco/src/run_cassie_follow.cc) adjust the path in `file_name = "path/drake/CDC/vis/..."` to match the path to the drake directory on your local machine. 
+in [motion_planner/drake/safe-nav-loco/src/simulate_psp.cc](motion_planner/drake/safe-nav-loco/src/simulate_psp.cc) and [motion_planner/drake/safe-nav-loco/src/run_cassie_follow.cc](motion_planner/drake/safe-nav-loco/src/run_cassie_follow.cc) adjust the path in `file_name = "path/drake/safe-nav-loco/vis/..."` to match the path to the drake directory on your local machine. 
 
 ## Running the code
-### Setting up action.json file from Task_Planner
-1- Once an action.json file is generated from Task_Planner, copy and past the file into [motion_planner/drake/safe-nav-loco/vis/](motion_planner/drake/safe-nav-loco/vis/).
-Note:[actions_CDC_Subs.json](motion_planner/drake/safe-nav-loco/vis/actions_CDC_Sub.json) is the action file used in our publiciation
+### Setting up action.json file from task_planner
+1- Once an action.json file is generated from task_planner, copy and past the file into [motion_planner/drake/safe-nav-loco/vis/](motion_planner/drake/safe-nav-loco/vis/).
+Note:[actions_CDC_Subs.json](motion_planner/drake/safe-nav-loco/vis/actions_CDC_Sub.json) is the action file used in our publication
 
 2- In [motion_planner/drake/safe-nav-loco/src/simulate_psp.cc](motion_planner/drake/safe-nav-loco/src/simulate_psp.cc) adjust the path in 
-`BeliefIOParser parser("path/drake/CDC/vis/actions_CDC_Sub.json");` and choose the desired action file.
+`BeliefIOParser parser("path/drake/safe-nav-loco/vis/actions_CDC_Sub.json");` and choose the desired action file.
 
 ### Phase-Space Planning and trajectory generation 
 1- Open terminal and go to the drake folder `cd path/drake/`
@@ -45,17 +45,17 @@ This will generate the trajectory .txt files.
 
 Make sure that the trajectories are generated beforehand as shown in the previous section.
 
-1- Open termminal and run
+1- Open termminal and run the command to open Drake visualizer
 ```
 cd path/drake/
 bazel-bin/tools/drake_visualizer
 ```
-2- Open another terminal and run
+2- Open another terminal and run the commend to open the drake lcm spy
 ```
 cd path/drake/
 bazel-bin/lcmtypes/drake-lcm-spy
 ```
-3- Open a third terminal and run 
+3- Open a third terminal and run the command to simulate the Cassie robot in drake visualzier within the environment
 ```
 cd path/drake/
 CC=clang-6.0 CXX=clang++-6.0 bazel run CDC:run_cassie_follow
@@ -67,14 +67,14 @@ CC=clang-6.0 CXX=clang++-6.0 bazel run CDC:run_cassie_follow
 1- Open terminal and run
 
 ```
-cd path/drake/CDC/vis/
+cd path/drake/safe-nav-loco/vis/
 python vis_psp.py 
 ```
 
 
-# Publiciations 
+# Publications 
 
-This repo contains the code used for implementation in our published work:-
+This repo contains the code used for implementation in our [published work](https://arxiv.org/abs/2009.05168):-
 ```
 @article{warnketowards,
   title={Towards Safe Locomotion Navigation in 
@@ -86,3 +86,6 @@ This repo contains the code used for implementation in our published work:-
 }
 ```
 
+This work is a part of our ongoing work on robust and reactive fecision-making and AI planning of collaborative and agile robots in complex environments. More information and related publications can be found [here](http://lab-idar.gatech.edu/robust-and-reactive-decision-making-and-ai-planning-of-collaborative-and-agile-robots-in-complex-environments/)
+
+# About
