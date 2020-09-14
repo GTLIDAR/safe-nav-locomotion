@@ -74,7 +74,7 @@ python vis_psp.py
 
 # Project and Related Publications 
 
-This work is a part of our ongoing work on robust and reactive fecision-making and AI planning of collaborative and agile robots in complex environments. More information and related publications can be found [here](http://lab-idar.gatech.edu/robust-and-reactive-decision-making-and-ai-planning-of-collaborative-and-agile-robots-in-complex-environments/)
+This work is a part of our ongoing work on robust and reactive decision-making and AI planning of collaborative and agile robots in complex environments. More information and related publications can be found [here](http://lab-idar.gatech.edu/robust-and-reactive-decision-making-and-ai-planning-of-collaborative-and-agile-robots-in-complex-environments/)
 
 
 This repo contains the code used for implementation in our [published work](https://arxiv.org/abs/2009.05168):-
