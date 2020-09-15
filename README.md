@@ -9,6 +9,8 @@ We have included the slugs reactive synthesis tool which needs to be installed f
 
 ## Running the code
 
+Synthesis and 2D simulation code requires python 2.7
+
 ### Environment input file
 
 The code requires an image of the environment as an input. White areas in the image are interpreted as obstacle free, while black areas are interpreted as static obstacles. If the discrete representation of the environment is already known, an image can be generated pixel by pixel using [PNG_Gen.py](/task_planner/PNG_Gen/PNG_Gen.py).
