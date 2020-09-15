@@ -17,11 +17,20 @@ The code requires an image of the environment as an input. White areas in the im
 
 Synthesis of the navigation planner is executed by running [Run_File_coarse_abstratction_CDC.py](task_planner/Bipedal_Locomotion_Task_Planner/safe-nav-loco/Run_File_coarse_abstratction_CDC.py) (the desired discrete abstraction, belief partition, and initial robot and obstacle locations can also be edited in this file).
 
+`cd task_planner/Bipedal_Locomotion_Task_Planner/safe-nav-loco/; python Run_File_coarse_abstratction_CDC.py`
+
 Synthesis of the action planner is executed by running [Run_File_fine_abstratction.py](task_planner/Bipedal_Locomotion_Task_Planner/safe-nav-loco/Run_File_fine_abstratction.py).
+
+`python Run_File_fine_abstratction.py`
+
 
 ### 2D simulation
 
-After synthesis is complete both planners can be simulated in a 2D collision avoidance game against a user controlled dynamic obstacle. Running [Sim_2LA.py](task_planner/Bipedal_Locomotion_Task_Planner/safe-nav-loco/Sim_2LA.py). The user can control the evasion game on the coarse grid using the arrow keys. Between coarse game states the code visualizes the robot progressing through the environment on a fine discretization within one discrete coarse cell. Actions at each keyframe as well as the dynamic obstacle pass are saved into an output file in the [integration](task_planner/Bipedal_Locomotion_Task_Planner/safe-nav-loco/Examples/Integration) directory. 
+After synthesis is complete both planners can be simulated in a 2D collision avoidance game against a user controlled dynamic obstacle. Run [Sim_2LA.py](task_planner/Bipedal_Locomotion_Task_Planner/safe-nav-loco/Sim_2LA.py) to initiate the simulation. 
+
+`python Sim_2LA.py`
+
+The user can control the dynamic obstacle on the coarse grid using the arrow keys. Between coarse game states the code visualizes the robot progressing through the environment on a fine discretization within one discrete coarse cell. Actions at each keyframe as well as the dynamic obstacle pass are saved into an output file in the [integration](task_planner/Bipedal_Locomotion_Task_Planner/safe-nav-loco/Examples/Integration) directory. 
 
 # Motion Planner
 
