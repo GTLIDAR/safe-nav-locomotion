@@ -78,7 +78,6 @@ bazel build //tools:drake_visualizer
 ```
 * Open another terminal and run the commend to open the drake-lcm-spy
 ```
-
 cd path/drake/
 bazel-bin/lcmtypes/drake-lcm-spy
 ```
