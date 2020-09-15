@@ -59,7 +59,7 @@ Note:[actions_CDC_Subs.json](motion_planner/drake/safe-nav-loco/vis/actions_CDC_
 ### Phase-Space Planning and trajectory generation 
 * Open terminal and go to the drake folder `cd path/drake/`
 
-* run `CC=clang-6.0 CXX=clang++-6.0 bazel run CDC:simulate_psp`
+* run `CC=clang-6.0 CXX=clang++-6.0 bazel run safe-nav-loco:simulate_psp`
 This will generate the trajectory .txt files.
 
 ### Drake Visualization 
@@ -88,7 +88,7 @@ bazel build //lcmtypes:drake-lcm-spy
 * Open a third terminal and run the command to simulate the Cassie robot in drake visualzier within the environment
 ```
 cd path/drake/
-CC=clang-6.0 CXX=clang++-6.0 bazel run CDC:run_cassie_follow
+CC=clang-6.0 CXX=clang++-6.0 bazel run safe-nav-loco:run_cassie_follow
 ```
 
 ### Py.plot Visualization 
