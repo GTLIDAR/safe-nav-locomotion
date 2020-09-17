@@ -130,5 +130,9 @@ This repo contains the code used for implementation in our [published work](http
 }
 ```
 
+## Refrence Citation
+
+[Jonas Warnke*, Abdulaziz Shamsah*, Yingke Li*, and Ye Zhao. Towards Safe Locomotion Navigation in Partially Observable Environments with Uneven Terrain, (*equally contributed), IEEE Conference on Decision and Control, 2020.](https://arxiv.org/abs/2009.05168)
+
 
 # About
