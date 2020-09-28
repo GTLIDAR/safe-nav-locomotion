@@ -39,6 +39,10 @@ After synthesis is complete both planners can be simulated in a 2D collision avo
 
 The user can control the dynamic obstacle on the coarse grid using the arrow keys. Between coarse game states the code visualizes the robot progressing through the environment on a fine discretization within one discrete coarse cell. Actions at each keyframe as well as the dynamic obstacle pass are saved into an output file in the [integration](task_planner/Bipedal_Locomotion_Task_Planner/safe-nav-loco/Examples/Integration) directory. 
 
+<img src="https://i.imgur.com/1bcUtZ2.gif" />
+
+
+
 ## Acknowledgment
 
 We would like to acknowledge Suda Bharadwaj and Ufuk Topcu for their discussions on belief space planning [implementation](https://github.com/u-t-autonomous/Surveillance-Synthesis) which this code builds upon.
