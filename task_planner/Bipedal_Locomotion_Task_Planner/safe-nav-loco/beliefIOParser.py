@@ -18,8 +18,13 @@ class BeliefIOParser():
             self.file_handle = open(filename, 'w')
             self.file_handle.write('{\"saved_states\": {')
 
-    def saveState(self, gwg, automaton, automaton_state, gridstate):
-        env_state = automaton[automaton_state]['State']['st']
+    def saveState(self, gwg, automaton, automaton_state, gridstate,moveobstacles):
+        env_state = [0 for i in range(len(moveobstacles))]
+        try:
+            for n in range(0,len(moveobstacles)):
+                env_state[n] = automaton[automaton_state]['State']['st{}'.format(n)]
+        except:
+            env_state = automaton[automaton_state]['State']['st']
         try:
             agent_state = automaton[automaton_state]['State']['s_c']
         except:
@@ -27,7 +32,12 @@ class BeliefIOParser():
 
         agent_location = gwg.coords(agent_state) 
         # env_location = gwg.coords(env_state)
-        obs_location = gwg.coords(gridstate)
+        try:
+            obs_location = [0 for i in range(len(moveobstacles))]
+            for n in range(0,len(moveobstacles)):
+                obs_location[n] = gwg.coords(gridstate[n])
+        except:
+            obs_location = gwg.coords(gridstate)
         output = json.dumps({'agent_state': agent_state, 'agent_location': agent_location, \
             'env_state': env_state, 'obstacle_location': obs_location, \
             'automaton_state': automaton_state, 'action_info': automaton[automaton_state]})

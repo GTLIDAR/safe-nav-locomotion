@@ -1,5 +1,5 @@
 *.pyc
-*.json
+*agent0.json
 Bipedal_Locomotion_Task_Planner/Navigation/Joans_Vis_Studio.code-workspace
 *.code-workspace
 **/2_level_abs/

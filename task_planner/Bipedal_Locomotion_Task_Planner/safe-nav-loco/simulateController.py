@@ -90,7 +90,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
     gridstate = copy.deepcopy(moveobstacles[0])
     output = BeliefIOParser(jsonfile)
     while True:
-        output.saveState(gwg, automaton, automaton_state,gridstate)
+        output.saveState(gwg, automaton, automaton_state,gridstate,moveobstacles)
         envstate = automaton[automaton_state]['State']['st']
         # try:
         #     print 'Agent state is J ', agentstate
