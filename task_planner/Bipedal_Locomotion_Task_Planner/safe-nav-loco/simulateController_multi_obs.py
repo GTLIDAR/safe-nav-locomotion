@@ -123,7 +123,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         # gwg.draw_state_labels()
         
         nextstates = automaton[automaton_state]['Successors']
-        nextstatedirn = {'W':{'W':None,'E':None,'S':None,'N':None,'R':None, 'Belief':set()},'E':{'W':None,'E':None,'S':None,'N':None,'R':None, 'Belief':set()},'S':{'W':None,'E':None,'S':None,'N':None,'R':None, 'Belief':set()},'N':{'W':None,'E':None,'S':None,'N':None,'R':None, 'Belief':set()},'R':{'W':None,'E':None,'S':None,'N':None,'R':None, 'Belief':set()}, 'Belief':{'W':None,'E':None,'S':None,'N':None,'R':None, 'Belief':set()}}
+        nextstatedirn = {'W':{'W':None,'E':None,'S':None,'N':None,'R':None, 'Belief':set()},'E':{'W':None,'E':None,'S':None,'N':None,'R':None, 'Belief':set()},'S':{'W':None,'E':None,'S':None,'N':None,'R':None, 'Belief':set()},'N':{'W':None,'E':None,'S':None,'N':None,'R':None, 'Belief':set()},'R':{'W':None,'E':None,'S':None,'N':None,'R':None, 'Belief':set()}, 'Belief':{'W':set(),'E':set(),'S':set(),'N':set(),'R':set(), 'Belief':set()}}
         # Need to Change this to add multiple next automaton states for one moving obstacle action (based on delivery request only I think, in this case only consider delivery request to be true). Need to add correct obstacle transition to specifications
         
         for n in nextstates:
@@ -141,7 +141,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                     nextstatedirn['W']['R'] = n
                 if nenvstate[1] not in xstates:
                     nextstatedirn['W']['Belief'].add(n)
-            if nenvstate == gwg.moveobstacles[0] + 1:
+            if nenvstate[0] == gwg.moveobstacles[0] + 1:
                 if nenvstate[1] == gwg.moveobstacles[1] - 1:
                     nextstatedirn['E']['W'] = n
                 if nenvstate[1] == gwg.moveobstacles[1] + 1:
@@ -154,7 +154,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                     nextstatedirn['E']['R'] = n
                 if nenvstate[1] not in xstates:
                     nextstatedirn['E']['Belief'].add(n)
-            if nenvstate == gwg.moveobstacles[0] + gwg.ncols:
+            if nenvstate[0] == gwg.moveobstacles[0] + gwg.ncols:
                 if nenvstate[1] == gwg.moveobstacles[1] - 1:
                     nextstatedirn['S']['W'] = n
                 if nenvstate[1] == gwg.moveobstacles[1] + 1:
@@ -167,7 +167,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                     nextstatedirn['S']['R'] = n
                 if nenvstate[1] not in xstates:
                     nextstatedirn['S']['Belief'].add(n)
-            if nenvstate == gwg.moveobstacles[0] - gwg.ncols:
+            if nenvstate[0] == gwg.moveobstacles[0] - gwg.ncols:
                 if nenvstate[1] == gwg.moveobstacles[1] - 1:
                     nextstatedirn['N']['W'] = n
                 if nenvstate[1] == gwg.moveobstacles[1] + 1:
@@ -180,7 +180,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                     nextstatedirn['N']['R'] = n
                 if nenvstate[1] not in xstates:
                     nextstatedirn['N']['Belief'].add(n)
-            if nenvstate == gwg.moveobstacles[0]:
+            if nenvstate[0] == gwg.moveobstacles[0]:
                 if nenvstate[1] == gwg.moveobstacles[1] - 1:
                     nextstatedirn['R']['W'] = n
                 if nenvstate[1] == gwg.moveobstacles[1] + 1:
@@ -193,19 +193,32 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                     nextstatedirn['R']['R'] = n
                 if nenvstate[1] not in xstates:
                     nextstatedirn['R']['Belief'].add(n)
-            if nenvstate not in xstates:
+            if nenvstate[0] not in xstates:
                 if nenvstate[1] == gwg.moveobstacles[1] - 1:
-                    nextstatedirn['Belief']['W'] = n
+                    nextstatedirn['Belief']['W'].add(n)
                 if nenvstate[1] == gwg.moveobstacles[1] + 1:
-                    nextstatedirn['Belief']['E'] = n
+                    nextstatedirn['Belief']['E'].add(n)
                 if nenvstate[1] == gwg.moveobstacles[1] + gwg.ncols:
-                    nextstatedirn['Belief']['S'] = n
+                    nextstatedirn['Belief']['S'].add(n)
                 if nenvstate[1] == gwg.moveobstacles[1] - gwg.ncols:
-                    nextstatedirn['Belief']['N'] = n
+                    nextstatedirn['Belief']['N'].add(n)
                 if nenvstate[1] == gwg.moveobstacles[1]:
-                    nextstatedirn['Belief']['R'] = n
+                    nextstatedirn['Belief']['R'].add(n)
                 if nenvstate[1] not in xstates:
                     nextstatedirn['Belief']['Belief'].add(n)
+            # if nenvstate[0] not in xstates:
+            #     if nenvstate[1] == gwg.moveobstacles[1] - 1:
+            #         nextstatedirn['Belief']['W'] = n
+            #     if nenvstate[1] == gwg.moveobstacles[1] + 1:
+            #         nextstatedirn['Belief']['E'] = n
+            #     if nenvstate[1] == gwg.moveobstacles[1] + gwg.ncols:
+            #         nextstatedirn['Belief']['S'] = n
+            #     if nenvstate[1] == gwg.moveobstacles[1] - gwg.ncols:
+            #         nextstatedirn['Belief']['N'] = n
+            #     if nenvstate[1] == gwg.moveobstacles[1]:
+            #         nextstatedirn['Belief']['R'] = n
+            #     if nenvstate[1] not in xstates:
+            #         nextstatedirn['Belief']['Belief'].add(n)
                 
         while True:
             nextstate = None
@@ -218,8 +231,29 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                     arrow2 = gwg.getkeyinput()
                     if arrow2 != None:
                         break
-                nextstate = nextstatedirn[arrow1][arrow2]
+                        
                 
+                # nextstate = nextstatedirn[arrow1][arrow2]
+                case = 0
+                if nextstatedirn[arrow1][arrow2] != None:
+                    nextstate = nextstatedirn[arrow1][arrow2]
+                    case = 1
+                elif len(nextstatedirn[arrow1]['Belief']) != 0:
+                    print "next states if only obstacle 1 is visible" + str(nextstatedirn[arrow1]['Belief'])
+                    # nextstate = nextstatedirn[arrow1]['Belief']
+                    case = 2
+                elif len(nextstatedirn['Belief'][arrow2]) != 0:
+                    print "next states if only obstacle 2 is visible" + str(nextstatedirn['Belief'][arrow2])
+                    case = 3
+                elif len(nextstatedirn['Belief']['Belief']) != 0:
+                    print "next states if no obstacles are visible" + str(nextstatedirn['Belief']['Belief'])
+                    case = 4
+                else:
+                    print "HOUSTON WE HAVE A PROBLEM"
+                    case = 5
+
+                print "case =" + str(case)
+
                 if nextstate == None:
                     if arrow1 == 'W':
                         gridstate[0] = gwg.moveobstacles[0] - 1
@@ -243,34 +277,120 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                     elif arrow2 == 'R':
                         gridstate[1] = gwg.moveobstacles[1]
                     
-                    for n in nextstatedirn['Belief']['Belief']:
-                        nenvstate[0] = automaton[n]['State']['st0']
-                        try:
-                            nextbeliefs = beliefcombs[len(beliefcombs) - (len(allstates) - allstates.index(nenvstate[0]))]
-                        except:
-                            nextstate = 124
-                            continue
-                        if any(gridstate[0] in partitionGrid[x] for x in nextbeliefs):
-                            nextstate = copy.deepcopy(n)
-                            # print 'Environment state in automaton is', allstates.index(nenvstate[0])
-                            # print 'Belief state is', beliefcombs[allstates.index(nenvstate[0]) - len(xstates)]
-                            nextagentstate = automaton[n]['State']['s_c']
-                            invisstates = invisibilityset[0][nextagentstate]
                     
-                            visstates = set(xstates) - set(invisstates)
-                            if nenvstate[0] not in xstates:
-                                beliefcombstate = beliefcombs[allstates.index(nenvstate[0]) - len(xstates)]
-                                beliefstates = set()
-                                for b in beliefcombstate:
-                                    beliefstates = beliefstates.union(partitionGrid[b])
-                                truebeliefstates = beliefstates - beliefstates.intersection(visstates)
-                                gwg.colorstates[1] = copy.deepcopy(truebeliefstates)
-                                gwg.render()
-                                print 'True belief set is ', truebeliefstates
-                                print 'Size of true belief set is ', len(truebeliefstates)
+                    
+                    if case == 2:
+                        for n in nextstatedirn[arrow1]['Belief']:
+                            nenvstate = [automaton[n]['State']['st0'],automaton[n]['State']['st1']]
+                            nextbeliefs = beliefcombs[len(beliefcombs) - (len(allstates) - allstates.index(nenvstate[1]))]
+                            # try:
+                            #     nextbeliefs = beliefcombs[len(beliefcombs) - (len(allstates) - allstates.index(nenvstate[0]))]
+                            # except:
+                            #     nextstate = 124
+                            #     continue
+                            if any(gridstate[1] in partitionGrid[x] for x in nextbeliefs):
+                                nextstate = copy.deepcopy(n)
+                                # print 'Environment state in automaton is', allstates.index(nenvstate[0])
+                                # print 'Belief state is', beliefcombs[allstates.index(nenvstate[0]) - len(xstates)]
+                                nextagentstate = automaton[n]['State']['s_c']
+                                invisstates = invisibilityset[0][nextagentstate]
+                        
+                                visstates = set(xstates) - set(invisstates)
+                                if nenvstate[1] not in xstates:
+                                    beliefcombstate = beliefcombs[allstates.index(nenvstate[1]) - len(xstates)]
+                                    beliefstates = set()
+                                    for b in beliefcombstate:
+                                        beliefstates = beliefstates.union(partitionGrid[b])
+                                    truebeliefstates = beliefstates - beliefstates.intersection(visstates)
+                                    gwg.colorstates[1] = copy.deepcopy(truebeliefstates)
+                                    gwg.render()
+                                    print 'True belief set is ', truebeliefstates
+                                    print 'Size of true belief set is ', len(truebeliefstates)
+                    elif case == 3:
+                        for n in nextstatedirn['Belief'][arrow2]:
+                            nenvstate = [automaton[n]['State']['st0'],automaton[n]['State']['st1']]
+                            nextbeliefs = beliefcombs[len(beliefcombs) - (len(allstates) - allstates.index(nenvstate[0]))]
+                            # try:
+                            #     nextbeliefs = beliefcombs[len(beliefcombs) - (len(allstates) - allstates.index(nenvstate[0]))]
+                            # except:
+                            #     nextstate = 124
+                            #     continue
+                            if any(gridstate[0] in partitionGrid[x] for x in nextbeliefs):
+                                nextstate = copy.deepcopy(n)
+                                # print 'Environment state in automaton is', allstates.index(nenvstate[0])
+                                # print 'Belief state is', beliefcombs[allstates.index(nenvstate[0]) - len(xstates)]
+                                nextagentstate = automaton[n]['State']['s_c']
+                                invisstates = invisibilityset[0][nextagentstate]
+                        
+                                visstates = set(xstates) - set(invisstates)
+                                if nenvstate[0] not in xstates:
+                                    beliefcombstate = beliefcombs[allstates.index(nenvstate[0]) - len(xstates)]
+                                    beliefstates = set()
+                                    for b in beliefcombstate:
+                                        beliefstates = beliefstates.union(partitionGrid[b])
+                                    truebeliefstates = beliefstates - beliefstates.intersection(visstates)
+                                    gwg.colorstates[1] = copy.deepcopy(truebeliefstates)
+                                    gwg.render()
+                                    print 'True belief set is ', truebeliefstates
+                                    print 'Size of true belief set is ', len(truebeliefstates)
+                    elif case == 4:
+                        for n in nextstatedirn['Belief']['Belief']:
+                            nenvstate = [automaton[n]['State']['st0'],automaton[n]['State']['st1']]
+                            nextbeliefs = [beliefcombs[len(beliefcombs) - (len(allstates) - allstates.index(nenvstate[0]))],beliefcombs[len(beliefcombs) - (len(allstates) - allstates.index(nenvstate[1]))]]
+                            # try:
+                            #     nextbeliefs = beliefcombs[len(beliefcombs) - (len(allstates) - allstates.index(nenvstate[0]))]
+                            # except:
+                            #     nextstate = 124
+                            #     continue
+                            if any(gridstate[0] in partitionGrid[x] for x in nextbeliefs[0]):
+                                nextstate = copy.deepcopy(n)
+                                # print 'Environment state in automaton is', allstates.index(nenvstate[0])
+                                # print 'Belief state is', beliefcombs[allstates.index(nenvstate[0]) - len(xstates)]
+                                nextagentstate = automaton[n]['State']['s_c']
+                                invisstates = invisibilityset[0][nextagentstate]
+                        
+                                visstates = set(xstates) - set(invisstates)
+                                if nenvstate[0] not in xstates:
+                                    beliefcombstate = beliefcombs[allstates.index(nenvstate[0]) - len(xstates)]
+                                    beliefstates = set()
+                                    for b in beliefcombstate:
+                                        beliefstates = beliefstates.union(partitionGrid[b])
+                                    truebeliefstates = beliefstates - beliefstates.intersection(visstates)
+                                    gwg.colorstates[1] = copy.deepcopy(truebeliefstates)
+                                    gwg.render()
+                                    print 'True belief set is ', truebeliefstates
+                                    print 'Size of true belief set is ', len(truebeliefstates)
+
+
+                    # for n in nextstatedirn['Belief']['Belief']:
+                    #         nenvstate = [automaton[n]['State']['st0'],automaton[n]['State']['st0']]
+                    #         nextbeliefs = [beliefcombs[len(beliefcombs) - (len(allstates) - allstates.index(nenvstate[0]))],beliefcombs[len(beliefcombs) - (len(allstates) - allstates.index(nenvstate[1]))]]
+                    #         # try:
+                    #         #     nextbeliefs = beliefcombs[len(beliefcombs) - (len(allstates) - allstates.index(nenvstate[0]))]
+                    #         # except:
+                    #         #     nextstate = 124
+                    #         #     continue
+                    #         if any(gridstate[0] in partitionGrid[x] for x in nextbeliefs[0]):
+                    #             nextstate = copy.deepcopy(n)
+                    #             # print 'Environment state in automaton is', allstates.index(nenvstate[0])
+                    #             # print 'Belief state is', beliefcombs[allstates.index(nenvstate[0]) - len(xstates)]
+                    #             nextagentstate = automaton[n]['State']['s_c']
+                    #             invisstates = invisibilityset[0][nextagentstate]
+                        
+                    #             visstates = set(xstates) - set(invisstates)
+                    #             if nenvstate[0] not in xstates:
+                    #                 beliefcombstate = beliefcombs[allstates.index(nenvstate[0]) - len(xstates)]
+                    #                 beliefstates = set()
+                    #                 for b in beliefcombstate:
+                    #                     beliefstates = beliefstates.union(partitionGrid[b])
+                    #                 truebeliefstates = beliefstates - beliefstates.intersection(visstates)
+                    #                 gwg.colorstates[1] = copy.deepcopy(truebeliefstates)
+                    #                 gwg.render()
+                    #                 print 'True belief set is ', truebeliefstates
+                    #                 print 'Size of true belief set is ', len(truebeliefstates)
                 else:
                     nenvstate = [automaton[nextstate]['State']['st0'],automaton[nextstate]['State']['st1']]
-                    print 'Environment state in automaton is', allstates.index(nenvstate)
+                    print 'Environment state in automaton is', allstates.index(nenvstate[0])
                     print 'Environment state in grid is', nenvstate
                     gridstate = copy.deepcopy(nenvstate)
                     gwg.colorstates[1] = set()

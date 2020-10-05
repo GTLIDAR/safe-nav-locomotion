@@ -14,7 +14,8 @@ image = cv2.resize(image,dsize=(colnum,rownum),interpolation=cv2.INTER_AREA)
 h, w = image.shape[:2]
 
 folder_locn = 'Examples/'
-example_name = 'Belief_Evasion_coarse_multi_obs_no_colis_spec'
+# example_name = 'Belief_Evasion_coarse_multi_obs_no_colis_spec'
+example_name = 'Belief_Evasion_coarse_multi_obs_test'
 trial_name = folder_locn + example_name
 
 outfile = trial_name + '.json'
@@ -62,7 +63,7 @@ pg[0] = {0:allowed_states[0]}
 #              3: set.union(*[set([80,95,110,125,140,155,170])])  - set(gwg.obstacles), 
 #              4: set.union(*[set([81,96,111,126,141,156,171])])  - set(gwg.obstacles) }
 
-visdist = [12,20,3500,3500]
+visdist = [4,20,3500,3500]
 target_vis_dist = 2
 vel = [1,2,2,2]
 invisibilityset = []
