@@ -343,40 +343,23 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                             #     nextstate = 124
                             #     continue
                             if any(gridstate[0] in partitionGrid[x] for x in nextbeliefs[0]):
-                                if any(gridstate[0] in partitionGrid[x] for x in nextbeliefs[0]):
-                                    nextstate = copy.deepcopy(n)
-                                    # print 'Environment state in automaton is', allstates.index(nenvstate[0])
-                                    # print 'Belief state is', beliefcombs[allstates.index(nenvstate[0]) - len(xstates)]
-                                    nextagentstate = automaton[n]['State']['s_c']
-                                    invisstates = invisibilityset[0][nextagentstate]
-                            
-                                    visstates = set(xstates) - set(invisstates)
-                                    if nenvstate[0] not in xstates:
-                                        beliefcombstate = beliefcombs[allstates.index(nenvstate[0]) - len(xstates)]
-                                        beliefstates = set()
-                                        for b in beliefcombstate:
-                                            beliefstates = beliefstates.union(partitionGrid[b])
-                                        truebeliefstates = beliefstates - beliefstates.intersection(visstates)
-                                        tmp = copy.deepcopy(truebeliefstates)
-                                        gwg.colorstates[1] = copy.deepcopy(truebeliefstates)
-                                        gwg.render()
-                                        print 'True belief set is ', truebeliefstates
-                                        print 'Size of true belief set is ', len(truebeliefstates)
-                                    if nenvstate[1] not in xstates:
-                                        beliefcombstate = beliefcombs[allstates.index(nenvstate[1]) - len(xstates)]
-                                        beliefstates = set()
-                                        for b in beliefcombstate:
-                                            beliefstates = beliefstates.union(partitionGrid[b])
-                                        truebeliefstates = beliefstates - beliefstates.intersection(visstates)
-                                        # gwg.colorstates[1] = copy.deepcopy(truebeliefstates)
-
-                                        tmp2 = copy.deepcopy(truebeliefstates)
-                                        tmp.update(tmp2)
-                    
-                                        gwg.colorstates[1] = copy.deepcopy(tmp)
-                                        gwg.render()
-                                        print 'True belief set is ', truebeliefstates
-                                        print 'Size of true belief set is ', len(truebeliefstates)
+                                nextstate = copy.deepcopy(n)
+                                # print 'Environment state in automaton is', allstates.index(nenvstate[0])
+                                # print 'Belief state is', beliefcombs[allstates.index(nenvstate[0]) - len(xstates)]
+                                nextagentstate = automaton[n]['State']['s_c']
+                                invisstates = invisibilityset[0][nextagentstate]
+                        
+                                visstates = set(xstates) - set(invisstates)
+                                if nenvstate[0] not in xstates:
+                                    beliefcombstate = beliefcombs[allstates.index(nenvstate[0]) - len(xstates)]
+                                    beliefstates = set()
+                                    for b in beliefcombstate:
+                                        beliefstates = beliefstates.union(partitionGrid[b])
+                                    truebeliefstates = beliefstates - beliefstates.intersection(visstates)
+                                    gwg.colorstates[1] = copy.deepcopy(truebeliefstates)
+                                    gwg.render()
+                                    print 'True belief set is ', truebeliefstates
+                                    print 'Size of true belief set is ', len(truebeliefstates)
 
 
                     # for n in nextstatedirn['Belief']['Belief']:

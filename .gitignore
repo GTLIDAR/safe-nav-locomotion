@@ -6,3 +6,7 @@ Bipedal_Locomotion_Task_Planner/Navigation/Joans_Vis_Studio.code-workspace
 **/2_level_finer_abs/
 **/Backup/
 **/Legacy/
+*.slugsin
+*.structuredslugs
+**/Integration/
+**/Examples/

@@ -36,7 +36,7 @@ if __name__ == '__main__':
     h_c, w_c = image_c.shape[:2]
     
     folder_locn = 'Examples/'
-    example_name = 'Belief_Evasion_coarse_multi_obs_no_colis_spec'
+    example_name = 'Belief_Evasion_coarse_multi_obs_no_colis_spec_cmplx_belief'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
@@ -62,11 +62,12 @@ if __name__ == '__main__':
     allowed_states[0] = list(set(gwg_c.states) - set(gwg_c.obstacles))
 
     #####     3) Pick belief state partitions     #####
-    pg[0] = {0:allowed_states[0]}
+    # pg[0] = {0:allowed_states[0]}
 
     # pg[0] = {0: set.union(*[set(range(0,24))])  - set(gwg_c.obstacles), 1: set.union(*[set(range(27,37))])  - set(gwg_c.obstacles), 2: set.union(*[set(range(40,50))])  - set(gwg_c.obstacles),
-    		#  3: set.union(*[set(range(53,63))])  - set(gwg_c.obstacles), 4: set.union(*[set(range(66,76))])  - set(gwg_c.obstacles)}
+    # 		 3: set.union(*[set(range(53,63))])  - set(gwg_c.obstacles), 4: set.union(*[set(range(66,76))])  - set(gwg_c.obstacles)}
     
+    pg[0] = {0:(set(allowed_states[0])-set([55,56,57,44,58,70,71])),1:set([55]),2:set([56,57,44,58,70,71])}
  
     visdist = [4,20,3500,3500]
     target_vis_dist = 2

@@ -1,5 +1,5 @@
-from gridworld_fine import *
-import write_structured_slugs_rss_fine_grid_CDC_longer_stepL
+from gridworld_fine_auto_spec import *
+import write_structured_slugs_rss_fine_auto_spec
 import compute_all_vis
 import cv2
 # import visibility
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     h_f, w_f = image_f.shape[:2]
     
     folder_locn = 'Examples/'
-    example_name = 'Belief_Evasion_fine_abstraction_test'
+    example_name = 'Belief_Evasion_fine_abstraction_auto_spec_test_2'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
@@ -86,15 +86,17 @@ if __name__ == '__main__':
         print 'output file: ', outfile
         print 'input file name:', infile
 
-        write_structured_slugs_rss_fine_grid_CDC_longer_stepL.write_to_slugs_part_dist(infile, gwg_f, initial_f[n], moveobstacles_f[0], iset, PUDO_targets = PUDO_t,
+        write_structured_slugs_rss_fine_auto_spec.write_to_slugs_part_dist(infile, gwg_f, initial_f[n], moveobstacles_f[0], iset, PUDO_targets = PUDO_t,
                                                                    visdist =  visdist[n], allowed_states = allowed_states[n],
                                                                    partitionGrid = pg[n])
         
-        noww = time.time()
-        print('Writing specifications took ', noww - then, ' seconds')
+        bf_conv = time.time()
+        print('Writing specifications took ', bf_conv - then, ' seconds')
 
         print ('Converting input file...')
         os.system('python compiler.py ' + infile + '.structuredslugs > ' + infile + '.slugsin')
+        bf_syn = time.time()
+        print('Converting to .slugsin took ', bf_syn - bf_conv, ' seconds')
         print('Computing controller...')
         sp = subprocess.Popen(slugs + ' --explicitStrategy --jsonOutput ' + infile + '.slugsin > ' + outfile,
                                   shell=True, stdout=subprocess.PIPE)
@@ -102,6 +104,6 @@ if __name__ == '__main__':
 
     now = time.time()
     print('Total synthesis took ', now - then, ' seconds')
-    print('Actual synthesis took ', now - noww, ' seconds')
+    print('Actual synthesis took ', now - bf_syn, ' seconds')
 
     Simulator.userControlled_partition(filename_f[0], gwg_f, pg[0], moveobstacles_f, invisibilityset, jsonfile_name)

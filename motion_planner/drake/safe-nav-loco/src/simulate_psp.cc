@@ -14,7 +14,7 @@ int read_data(std::vector<Eigen::Matrix<double, Derived, 1>>& data, std::string&
   std::ifstream inFile;
   inFile.open(file_name, std::ios::in);
   std::string line;
-	while (getline(inFile, line))
+  while (getline(inFile, line))
   {
     std::istringstream linestream(line);
     std::vector<std::string> vv;
