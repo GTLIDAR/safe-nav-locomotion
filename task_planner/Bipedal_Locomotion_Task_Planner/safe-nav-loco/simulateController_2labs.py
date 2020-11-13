@@ -141,7 +141,7 @@ def userControlled_partition(filename_c,gwg_c,partitionGrid_c,moveobstacles_c,in
         time.sleep(0.3)
         
         while True:
-            output.saveState(gwg_f, automaton_f, automaton_state_f,gridstate_f)
+            output.saveState(gwg_f, automaton_f, automaton_state_f,gridstate_f,moveobstacles_f)
             agentstate_f = automaton_f[automaton_state_f]['State']['s']
           
 
@@ -203,7 +203,11 @@ def userControlled_partition(filename_c,gwg_c,partitionGrid_c,moveobstacles_c,in
             # print 'stanceFoot: ' + str(automaton[nextstate]['State']['stanceFoot'])
             # print 'pastTurnStanceMatchFoot: ' + str(automaton[nextstate]['State']['pastTurnStanceMatchFoot'])
             # print str(automaton[nextstate]['State'])
-            
+
+            # if automaton_f[nextstate_f]['State']['requestPending1'] == 5:
+            #     # if automaton_f[automaton_state_f]['State']['requestPending1'] != 5:
+            #     break
+
             automaton_state_f = copy.deepcopy(nextstate_f)
             agentstate_f = automaton_f[automaton_state_f]['State']['s']
             gwg_f.render()
@@ -216,7 +220,7 @@ def userControlled_partition(filename_c,gwg_c,partitionGrid_c,moveobstacles_c,in
                 break
         
         time.sleep(0.5)
-        output_c.saveState(gwg_c, automaton, automaton_state,gridstate)
+        output_c.saveState(gwg_c, automaton, automaton_state,gridstate,moveobstacles_c)
         
         gwg_c.moveobstacles[0] = copy.deepcopy(gridstate)
         gwg_c.render()

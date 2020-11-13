@@ -1,23 +1,20 @@
-from gridworld_multi_obs import *
-import simulateController_multi_obs as Simulator
+from gridworld_fine_auto_spec import *
+import simulateController_fine_abs as Simulator
 import copy
 import compute_all_vis
 import cv2
 
-mapname = 'BeliefEvasion_CDC'
+mapname = 'fine_abstraction'
 
-rownum = 7
-colnum = 13
+rownum = 23
+colnum = 23
 filename = 'figures/'+mapname+'.png'
 image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
 image = cv2.resize(image,dsize=(colnum,rownum),interpolation=cv2.INTER_AREA)
 h, w = image.shape[:2]
 
 folder_locn = 'Examples/'
-# example_name = 'Belief_Evasion_coarse_multi_obs_no_colis_spec'
-# example_name = 'Belief_Evasion_coarse_multi_obs_test'
-# example_name = 'Belief_Evasion_coarse_multi_obs_no_colis_spec_cmplx_belief'
-example_name = 'Belief_Evasion_coarse_multi_obs_colis_spec_cmplx_belief_test_2'
+example_name = 'Belief_Evasion_fine_abstraction_auto_spec_cross_turns_new_var_size_23'
 trial_name = folder_locn + example_name
 
 outfile = trial_name + '.json'
@@ -27,12 +24,12 @@ gwfile = folder_locn + '/figs/gridworldfig_' + example_name + '.png'
 nagents = 1
 # targets = [[],[],[],[],[]]
 targets = [[]]
-initial = [62]
-moveobstacles = [28,32]
+initial = [351]
+moveobstacles = [0]
 
 filename = [filename,(colnum,rownum),cv2.INTER_AREA]
 
-gwg = Gridworld(filename,nagents=nagents, targets=targets, initial=initial, moveobstacles=moveobstacles)
+gwg = Gridworld(filename,nagents=nagents, targets=targets, initial_f=initial, moveobstacles_f=moveobstacles)
 gwg.colorstates = [set(), set()]
 gwg.render()
 # gwg.draw_state_labels()
@@ -65,14 +62,19 @@ pg[0] = {0:allowed_states[0]}
 #              3: set.union(*[set([80,95,110,125,140,155,170])])  - set(gwg.obstacles), 
 #              4: set.union(*[set([81,96,111,126,141,156,171])])  - set(gwg.obstacles) }
 
-pg[0] = {0:(set(allowed_states[0])-set([55,56,57,44,58,70,71])),1:set([55]),2:set([56,57,44,58,70,71])}
-
-visdist = [4,20,3500,3500]
+visdist = [12,20,3500,3500]
 target_vis_dist = 2
 vel = [1,2,2,2]
 invisibilityset = []
-obj = compute_all_vis.img2obj(image)
-iset = compute_all_vis.compute_visibility_for_all(obj, h, w, radius=visdist[0])
+# obj = compute_all_vis.img2obj(image)
+# iset = compute_all_vis.compute_visibility_for_all(obj, h, w, radius=visdist[0])
+# invisibilityset.append(iset)
+if len(gwg.obstacles)>0:
+        iset = compute_all_vis.compute_visibility_for_all(obj, h, w, radius=visdist[n])
+else:
+    iset = {}
+    for state in gwg.states:
+        iset[state] = set()
 invisibilityset.append(iset)
 
 

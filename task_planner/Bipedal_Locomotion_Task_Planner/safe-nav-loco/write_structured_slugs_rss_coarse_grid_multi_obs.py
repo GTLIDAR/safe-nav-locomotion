@@ -425,12 +425,12 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
         file.write('s_c != {}\n'.format(obs))
 
 
-    # for n in range(0,len(initmovetarget)):
-    #     for s in set(allowed_states):
-    #         stri = 'st{}\' = {} -> !s_c\' = {}\n'.format(n,s,s)
-    #         file.write(stri)
-    #         stri = 'st{}\' = {} -> !s_c = {}\n'.format(n,s,s)
-    #         file.write(stri)
+    for n in range(0,len(initmovetarget)):
+        for s in set(allowed_states):
+            stri = 'st{}\' = {} -> !s_c\' = {}\n'.format(n,s,s)
+            file.write(stri)
+            stri = 'st{}\' = {} -> !s_c = {}\n'.format(n,s,s)
+            file.write(stri)
 
 
 
@@ -449,11 +449,20 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     file.write('\n[ENV_LIVENESS]\n')
    
-    # stri = ""
-    # for visstate in set(nonbeliefstates):
-    #     stri += "st != {} /\\ ".format(visstate)
-    # stri = stri[:-4]
-    # file.write(stri)
+    # for n in range(0,len(initmovetarget)):
+    #     stri = ""
+    #     for visstate in set(nonbeliefstates):
+    #         stri += "st{} != {} /\\ ".format(n,visstate)
+    #     stri = stri[:-4]
+    #     stri += "\n"
+    #     file.write(stri)
+    stri = ""
+    for n in range(0,len(initmovetarget)):
+        for visstate in set(nonbeliefstates):
+            stri += "st{} != {} /\\ ".format(n,visstate)
+    stri = stri[:-4]
+    stri += "\n"
+    file.write(stri)
 
     # stri = ""
     # for Bstate in (set(allstates) - set(nonbeliefstates)):
@@ -461,11 +470,12 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # stri = stri[:-4]
     # file.write(stri)
 
-    stri = ""
-    for n in range(0,len(initmovetarget)):
-        stri += "st{}' = {} & ".format(n,allstates[-2])
-    stri = stri[:-3]
-    file.write(stri)
+
+    # stri = ""
+    # for n in range(0,len(initmovetarget)):
+    #     stri += "st{}' = {} & ".format(n,allstates[-2])
+    # stri = stri[:-3]
+    # file.write(stri)
     
     # file.write("st' = {} \\/ st' = {} \\/ st' = {}".format(68,80,allstates[-2]))
     # file.write("st' = {}".format(80))

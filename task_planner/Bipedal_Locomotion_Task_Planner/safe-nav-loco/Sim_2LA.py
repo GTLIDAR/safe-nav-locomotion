@@ -40,7 +40,8 @@ infile_c = copy.deepcopy(trial_name_c)
 gwfile_c = folder_locn + '/figs/gridworldfig_' + example_name_c + '.png'
 
 
-example_name_f = 'Belief_Evasion_fine_abstraction'
+# example_name_f = 'Belief_Evasion_fine_abstraction'
+example_name_f = 'Belief_Evasion_fine_abstraction_auto_spec_cross_turns_new_var'
 jsonfile_name_f = folder_locn + "Integration/" + example_name_f + ".json"
 trial_name_f = folder_locn + example_name_f
 

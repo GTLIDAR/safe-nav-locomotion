@@ -90,8 +90,9 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles_f,invisibi
     gridstate = copy.deepcopy(moveobstacles_f[0])
     output = BeliefIOParser(jsonfile)
     while True:
+        # output.saveState(gwg, automaton, automaton_state,gridstate,moveobstacles_f)
         try:
-            output.saveState(gwg, automaton, automaton_state,gridstate)
+            output.saveState(gwg, automaton, automaton_state,gridstate,moveobstacles_f)
         except:
             print "broken Output"
         envstate = automaton[automaton_state]['State']['st']
@@ -128,18 +129,19 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles_f,invisibi
         # Need to Change this to add multiple next automaton states for one moving obstacle action (based on delivery request only I think, in this case only consider delivery request to be true). Need to add correct obstacle transition to specifications
         for n in nextstates:
             nenvstate = automaton[n]['State']['directionrequest']
-            if nenvstate == 4:
-                nextstatedirn['W'] = n
-            if nenvstate == 2:
-                nextstatedirn['E'] = n
-            if nenvstate == 3:
-                nextstatedirn['S'] = n
-            if nenvstate == 1:
-                nextstatedirn['N'] = n
-            if nenvstate == 0:
-                nextstatedirn['R'] = n
-            if nenvstate not in xstates:
-                nextstatedirn['Belief'].add(n)
+            if automaton[n]['State']['stair'] == 0:
+                if nenvstate == 4:
+                    nextstatedirn['W'] = n
+                if nenvstate == 2:
+                    nextstatedirn['E'] = n
+                if nenvstate == 3:
+                    nextstatedirn['S'] = n
+                if nenvstate == 1:
+                    nextstatedirn['N'] = n
+                if nenvstate == 0:
+                    nextstatedirn['R'] = n
+                if nenvstate not in xstates:
+                    nextstatedirn['Belief'].add(n)
 
 
         # for n in nextstates:
@@ -214,7 +216,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles_f,invisibi
         print 'Automaton state is ', nextstate
         # print 'actions: \norientation: ' + str(automaton[nextstate]['State']['orientation']) + '\nstop: ' + str(automaton[nextstate]['State']['stop']) + '\nturn Left: ' + str(automaton[nextstate]['State']['turnLeft']) + '\nturn Right: ' + str(automaton[nextstate]['State']['turnRight']) + '\nforward: ' + str(automaton[nextstate]['State']['forward'])  + '\nstepL: ' + str(automaton[nextstate]['State']['stepL'])  + '\nstanceFoot: ' + str(automaton[nextstate]['State']['stanceFoot'])
         # print 'sOld: ' + str(automaton[nextstate]['State']['sOld'])
-        # print 'stanceFoot: ' + str(automaton[nextstate]['State']['stanceFoot'])
+        print 'stepL: ' + str(automaton[nextstate]['State']['stepL'])
         # print 'pastTurnStanceMatchFoot: ' + str(automaton[nextstate]['State']['pastTurnStanceMatchFoot'])
         # print str(automaton[nextstate]['State'])
         automaton_state = copy.deepcopy(nextstate)

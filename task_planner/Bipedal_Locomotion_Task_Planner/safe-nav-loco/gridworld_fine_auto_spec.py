@@ -80,6 +80,11 @@ class Gridworld():
         self.top_edge4 = []
         self.bottom_edge4 = []
 
+        self.left_edge5 = []
+        self.right_edge5 = []
+        self.top_edge5 = []
+        self.bottom_edge5 = []
+
         self.regions = regions
         self.moveobstacles_f = moveobstacles_f
         self.states = range(nrows*ncols)
@@ -91,21 +96,25 @@ class Gridworld():
                 self.left_edge2.append(x+1)
                 self.left_edge3.append(x+2)
                 self.left_edge4.append(x+3)
+                self.left_edge5.append(x+4)
             if 0 <= x < self.ncols:
                 self.top_edge.append(x)
                 self.top_edge2.append(x+self.ncols)
                 self.top_edge3.append(x+2*self.ncols)
                 self.top_edge4.append(x+3*self.ncols)
+                self.top_edge5.append(x+4*self.ncols)
             if x % self.ncols == self.ncols - 1:
                 self.right_edge.append(x)
                 self.right_edge2.append(x-1)
                 self.right_edge3.append(x-2)
                 self.right_edge4.append(x-3)
+                self.right_edge5.append(x-4)
             if (self.nrows - 1) * self.ncols <= x <= self.nstates:
                 self.bottom_edge.append(x)
                 self.bottom_edge2.append(x-self.ncols)
                 self.bottom_edge3.append(x-2*self.ncols)
                 self.bottom_edge4.append(x-3*self.ncols)
+                self.bottom_edge5.append(x-4*self.ncols)
         self.edges = self.left_edge + self.top_edge + self.right_edge + self.bottom_edge
         self.walls = self.edges + obstacles
 
@@ -118,6 +127,9 @@ class Gridworld():
         edges4_temp = self.left_edge4 + self.top_edge4 + self.right_edge4 + self.bottom_edge4
         edges4_temp = [x for x in edges4_temp if x not in self.edges and x not in self.edges2 and x not in self.edges3]
         self.edges4 = list( OrderedDict.fromkeys(edges4_temp) )
+        edges5_temp = self.left_edge5 + self.top_edge5 + self.right_edge5 + self.bottom_edge5
+        edges5_temp = [x for x in edges5_temp if x not in self.edges and x not in self.edges2 and x not in self.edges3 and x not in self.edges4]
+        self.edges4 = list( OrderedDict.fromkeys(edges5_temp) )
 
         self.obsborder = set()
         for obs in obstacles:
@@ -176,7 +188,8 @@ class Gridworld():
         self.probMO = {a: np.zeros((self.nstates, self.nstates)) for a in self.actlistMO}
         self.probR = {a: np.zeros((self.nstates, self.nstates)) for a in self.actlistR}
         
-        self.trans = ['N4',"N3E2","N2E2","N2E3","E4","S2E3","S2E2","S3E2","S4","S3W2","S2W2","S2E3","W4","N2W3","N2W2","N3W2",'N3','E3','S3','W3']
+        self.trans = ['N4',"N3E2","N2E2","N2E3","E4","S2E3","S2E2","S3E2","S4","S3W2","S2W2","S2E3","W4","N2W3","N2W2","N3W2",'N3','E3','S3','W3', 
+                       "N5","E5","S5","W5","N1E2","N3E3","N2E1","S1E2","S3E3","S2E1","N1W2","N3W3","N2W1","S1W2","S3W3","S2W1"]
         # self.transR = {o: {sl: {t: -1 for t in self.turns} for sl in self.RobotStepL} for o in self.orientation}
         self.transR = {s:{t:-1 for t in self.trans} for s in self.states}
 
@@ -222,11 +235,56 @@ class Gridworld():
             return self.rcoords((row,col))
         return returnState
 
+    # def MapState(self,(row,col),returnState):
+    #     cross = [0,0]
+    #     if row not in range(self.nrows):
+    #         if row<0:
+    #             row_t = row+self.nrows
+    #             cross[0] = 1
+    #         elif row >=  self.nrows:
+    #             row_t = row-self.nrows
+    #             cross[0] = 2
+    #         else:
+    #             print "FAILED ROW IN MAPSTATE!!!!!!!!!!!!!"
+    #     else:
+    #         row_t = row
+        
+    #     if col not in range(self.ncols):
+    #         if col<0:
+    #             col_t = col+self.ncols
+    #             cross[1] = 2
+    #         elif col >=  self.ncols:
+    #             col_t = col-self.ncols
+    #             cross[1] = 1
+    #         else:
+    #             print "FAILED COL IN MAPSTATE!!!!!!!!!!!!!"
+    #     else:
+    #         col_t = col
+
+
+    #     if self.isAllowed((row,col)):
+    #         return [self.rcoords((row,col)),cross]
+    #     else:
+    #         return [self.rcoords((row_t,col_t)),cross]
+
     def MapState(self,(row,col),returnState):
+        cross = 0
         if row not in range(self.nrows):
             if row<0:
+                if col<0:
+                    cross = 8
+                elif col >=  self.ncols:
+                    cross = 5
+                else:
+                    cross = 1
                 row_t = row+self.nrows
             elif row >=  self.nrows:
+                if col<0:
+                    cross = 7
+                elif col >=  self.ncols:
+                    cross = 6
+                else:
+                    cross = 3
                 row_t = row-self.nrows
             else:
                 print "FAILED ROW IN MAPSTATE!!!!!!!!!!!!!"
@@ -235,8 +293,12 @@ class Gridworld():
         
         if col not in range(self.ncols):
             if col<0:
+                if row in range(self.nrows):
+                    cross = 4
                 col_t = col+self.ncols
             elif col >=  self.ncols:
+                if row in range(self.nrows):
+                    cross = 2
                 col_t = col-self.ncols
             else:
                 print "FAILED COL IN MAPSTATE!!!!!!!!!!!!!"
@@ -245,9 +307,9 @@ class Gridworld():
 
 
         if self.isAllowed((row,col)):
-            return self.rcoords((row,col))
+            return [self.rcoords((row,col)),cross]
         else:
-            return self.rcoords((row_t,col_t))
+            return [self.rcoords((row_t,col_t)),cross]
 
 
 
@@ -348,7 +410,7 @@ class Gridworld():
         self.transR[state]['S3'] = self.MapState((row+3,col),state)
         self.transR[state]['W3'] = self.MapState((row,col-3),state)
 
-        self.transR[state]['N3E2'] = self.MapState((row-3,col+1),state)
+        self.transR[state]['N3E2'] = self.MapState((row-3,col+2),state)
         self.transR[state]['N2E2'] = self.MapState((row-2,col+2),state)
         self.transR[state]['N2E3'] = self.MapState((row-2,col+3),state)
         
@@ -364,23 +426,27 @@ class Gridworld():
         self.transR[state]['N2W2'] = self.MapState((row-2,col-2),state)
         self.transR[state]['N3W2'] = self.MapState((row-3,col-2),state)
 
-        
 
+        self.transR[state]['N5'] = self.MapState((row-5,col),state)
+        self.transR[state]['E5'] = self.MapState((row,col+5),state)
+        self.transR[state]['S5'] = self.MapState((row+5,col),state)
+        self.transR[state]['W5'] = self.MapState((row,col-5),state)
 
-        # N2E2 = self.MapState((row-2,col+2),state)
-        # N2E3 = self.MapState((row-2,col+3),state)
-        
-        # S2E3 = self.MapState((row+2,col+3),state)
-        # S2E2 = self.MapState((row+2,col+2),state)
-        # S3E2 = self.MapState((row+3,col+2),state)
+        self.transR[state]['N1E2'] = self.MapState((row-1,col+2),state)
+        self.transR[state]['N3E3'] = self.MapState((row-3,col+3),state)
+        self.transR[state]['N2E1'] = self.MapState((row-2,col+1),state)
 
-        # S3W2 = self.MapState((row+3,col-2),state)
-        # S2W2 = self.MapState((row+2,col-2),state)
-        # S2E3 = self.MapState((row+2,col-3),state)
+        self.transR[state]['S1E2'] = self.MapState((row+1,col+2),state)
+        self.transR[state]['S3E3'] = self.MapState((row+3,col+3),state)
+        self.transR[state]['S2E1'] = self.MapState((row+2,col+1),state)
 
-        # N2W3 = self.MapState((row-2,col-3),state)
-        # N2W2 = self.MapState((row-2,col-2),state)
-        # N3W2 = self.MapState((row-3,col-2),state)
+        self.transR[state]['N1W2'] = self.MapState((row-1,col-2),state)
+        self.transR[state]['N3W3'] = self.MapState((row-3,col-3),state)
+        self.transR[state]['N2W1'] = self.MapState((row-2,col-1),state)
+
+        self.transR[state]['S1W2'] = self.MapState((row+1,col-2),state)
+        self.transR[state]['S3W3'] = self.MapState((row+3,col-3),state)
+        self.transR[state]['S2W1'] = self.MapState((row+2,col-1),state)
 
     def getStateRegion(self, state):
         if state in self.regions['deterministic']:

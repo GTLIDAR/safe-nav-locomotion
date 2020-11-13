@@ -15,7 +15,9 @@ h, w = image.shape[:2]
 
 folder_locn = 'Examples/'
 # example_name = 'Belief_Evasion_coarse_multi_obs_no_colis_spec'
-example_name = 'Belief_Evasion_coarse_multi_obs_test'
+# example_name = 'Belief_Evasion_coarse_multi_obs_test'
+example_name = 'Belief_Evasion_coarse_multi_obs_colis_spec_cmplx_belief_test_3'
+
 trial_name = folder_locn + example_name
 
 outfile = trial_name + '.json'
@@ -41,6 +43,9 @@ pg = [[None]]*nagents
 allowed_states[0] = list(set(gwg.states) - set(gwg.obstacles))
 
 pg[0] = {0:allowed_states[0]}
+
+pg[0] = {0:(set(allowed_states[0])-set([55,56,57,44,58,70,71])),1:set([55]),2:set([56,57,44,58,70,71])}
+
 # pg[0] = {0: set.union(*[set(range(0,10))])  - set(gwg.obstacles), 1: set.union(*[set(range(10,20))])  - set(gwg.obstacles), 2: set.union(*[set(range(20,30))])  - set(gwg.obstacles),
 #     		 3: set.union(*[set(range(30,40))])  - set(gwg.obstacles), 4: set.union(*[set(range(40,50))])  - set(gwg.obstacles), 5: set.union(*[set(range(50,60))])  - set(gwg.obstacles),
 #     		 6: set.union(*[set(range(60,70))])  - set(gwg.obstacles), 7: set.union(*[set(range(70,80))])  - set(gwg.obstacles), 8: set.union(*[set(range(80,90))])  - set(gwg.obstacles),

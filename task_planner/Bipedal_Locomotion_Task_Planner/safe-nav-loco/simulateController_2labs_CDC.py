@@ -256,7 +256,7 @@ def userControlled_partition(filename_c,gwg_c,partitionGrid_c,moveobstacles_c,in
                 break
 
         while True:
-            output.saveState(gwg_f, automaton_f, automaton_state_f,gridstate_f)
+            output.saveState(gwg_f, automaton_f, automaton_state_f,gridstate_f,moveobstacles_f)
             agentstate_f = automaton_f[automaton_state_f]['State']['s']
             if which_render ==1:
                 gwg_f.render()
@@ -348,7 +348,7 @@ def userControlled_partition(filename_c,gwg_c,partitionGrid_c,moveobstacles_c,in
             #     # print time.time()-start_t> turn
             # break
 
-        output_c.saveState(gwg_c, automaton, automaton_state,gridstate)
+        output_c.saveState(gwg_c, automaton, automaton_state,gridstate,moveobstacles_c)
         
         # gwg_c.moveobstacles[0] = copy.deepcopy(gridstate)
         # # if which_render ==0:

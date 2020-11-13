@@ -1,5 +1,6 @@
 from gridworld_fine_auto_spec import *
-import write_structured_slugs_rss_fine_auto_spec
+# import write_structured_slugs_rss_fine_auto_spec_more_turns_no_cross
+import write_structured_slugs_rss_fine_auto_spec_more_turns_spec_cross
 import compute_all_vis
 import cv2
 # import visibility
@@ -29,7 +30,7 @@ if __name__ == '__main__':
     h_f, w_f = image_f.shape[:2]
     
     folder_locn = 'Examples/'
-    example_name = 'Belief_Evasion_fine_abstraction_auto_spec_test_2'
+    example_name = 'Belief_Evasion_fine_abstraction_auto_spec_cross_turns_new_var_size_26'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
@@ -43,6 +44,8 @@ if __name__ == '__main__':
     targets = [[]]
 
     initial_f = [351]
+    # initial_f = [264]
+    # initial_f = [210]
     moveobstacles_f = [0]
     PUDO_t = [3,27,45,21,24]
 
@@ -86,7 +89,7 @@ if __name__ == '__main__':
         print 'output file: ', outfile
         print 'input file name:', infile
 
-        write_structured_slugs_rss_fine_auto_spec.write_to_slugs_part_dist(infile, gwg_f, initial_f[n], moveobstacles_f[0], iset, PUDO_targets = PUDO_t,
+        write_structured_slugs_rss_fine_auto_spec_more_turns_spec_cross.write_to_slugs_part_dist(infile, gwg_f, initial_f[n], moveobstacles_f[0], iset, PUDO_targets = PUDO_t,
                                                                    visdist =  visdist[n], allowed_states = allowed_states[n],
                                                                    partitionGrid = pg[n])
         

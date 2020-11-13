@@ -37,7 +37,7 @@ if __name__ == '__main__':
     h_c, w_c = image_c.shape[:2]
     
     folder_locn = 'Examples/'
-    example_name = 'Belief_Evasion_coarse_cdc_map_belief'
+    example_name = 'Belief_Evasion_Coarse_cdc_vid_easier_belief_spec_simpleRecovery'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
@@ -90,7 +90,7 @@ if __name__ == '__main__':
             iset = {}
             for state in gwg_c.states:
                 iset[state] = set()
-        J = 1
+        J = 0
         # f = open( 'Iset_test.txt', 'w' )
         # f.write(repr(iset) )
         # # pickle.dump(iset,f)
@@ -119,8 +119,24 @@ if __name__ == '__main__':
         print ('Converting input file...')
         os.system('python compiler.py ' + infile + '.structuredslugs > ' + infile + '.slugsin')
         print('Computing controller...')
-        sp = subprocess.Popen(slugs + ' --explicitStrategy --jsonOutput ' + infile + '.slugsin > ' + outfile,
+        # sp = subprocess.Popen(slugs + ' --explicitStrategy --jsonOutput ' + infile + '.slugsin > ' + outfile,
+        #                           shell=True, stdout=subprocess.PIPE)
+        # sp = subprocess.Popen(slugs + ' --explicitStrategy --fixedPointRecycling --jsonOutput ' + infile + '.slugsin > ' + outfile,
+        #                           shell=True, stdout=subprocess.PIPE)
+        sp = subprocess.Popen(slugs + ' --explicitStrategy --jsonOutput --simpleRecovery ' + infile + '.slugsin > ' + outfile,
                                   shell=True, stdout=subprocess.PIPE)
+        # sp = subprocess.Popen(slugs + ' --biasForAction --explicitStrategy --jsonOutput ' + infile + '.slugsin > ' + outfile,
+        #                           shell=True, stdout=subprocess.PIPE)
+                                # --biasForAction  
+                                # --simpleRecovery
+                                # --fixedPointRecycling
+                                # --analyzeAssumptions
+                                # --analyzeSafetyLivenessInteraction
+                                # --computeInterestingRunOfTheSystem
+                                # --nonDeterministicMotion
+                                # --twoDimensionalCost
+                                # --cooperativeGR1Strategy
+
         sp.wait()
 
     now = time.time()
