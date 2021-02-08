@@ -86,11 +86,11 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
     beliefcombs = powerset(partitionGrid.keys())
     for i in range(gwg.nstates,gwg.nstates+ len(beliefcombs)):
         allstates.append(i)
-    gwg.colorstates = [set(), set()]
+    gwg.colorstates = [set(), set(), set(), set(), set(), set(), set()]
     gridstate = copy.deepcopy(moveobstacles[0])
     output = BeliefIOParser(jsonfile)
     while True:
-        output.saveState(gwg, automaton, automaton_state,gridstate,moveobstacles)
+        output.saveState(gwg, automaton, automaton_state,gridstate,moveobstacles,gwg)
         envstate = automaton[automaton_state]['State']['st']
         # try:
         #     print 'Agent state is J ', agentstate
@@ -172,9 +172,10 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                                 beliefcombstate = beliefcombs[allstates.index(nenvstate) - len(xstates)]
                                 beliefstates = set()
                                 for b in beliefcombstate:
-                                    beliefstates = beliefstates.union(partitionGrid[b])
+                                    beliefstates = beliefstates.union(partitionGrid[b]) 
+                                    gwg.colorstates[b+1] = copy.deepcopy(partitionGrid[b]) - partitionGrid[b].intersection(visstates)
                                 truebeliefstates = beliefstates - beliefstates.intersection(visstates)
-                                gwg.colorstates[1] = copy.deepcopy(truebeliefstates)
+                                # gwg.colorstates[1] = copy.deepcopy(truebeliefstates)
                                 gwg.render()
                                 print 'True belief set is ', truebeliefstates
                                 print 'Size of true belief set is ', len(truebeliefstates)
@@ -184,6 +185,11 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                     print 'Environment state in grid is', nenvstate
                     gridstate = copy.deepcopy(nenvstate)
                     gwg.colorstates[1] = set()
+                    gwg.colorstates[2] = set()
+                    gwg.colorstates[3] = set()
+                    gwg.colorstates[4] = set()
+                    gwg.colorstates[5] = set()
+                    gwg.colorstates[6] = set()
                     gwg.render()
 
             try:

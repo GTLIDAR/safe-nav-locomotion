@@ -1,6 +1,8 @@
 from gridworld_fine_auto_spec import *
 # import write_structured_slugs_rss_fine_auto_spec_more_turns_no_cross
-import write_structured_slugs_rss_fine_auto_spec_more_turns_spec_cross
+# import write_structured_slugs_JRNL_boundary
+import write_structured_slugs_JRNL_boundary_stair_mod
+# import write_structured_slugs_JRNL_cross_causal
 import compute_all_vis
 import cv2
 # import visibility
@@ -30,7 +32,7 @@ if __name__ == '__main__':
     h_f, w_f = image_f.shape[:2]
     
     folder_locn = 'Examples/'
-    example_name = 'Belief_Evasion_fine_abstraction_auto_spec_cross_turns_new_var_size_26'
+    example_name = 'Belief_Evasion_fine_abstraction_JRNL_Boundary6_b2b_stair'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
@@ -89,9 +91,12 @@ if __name__ == '__main__':
         print 'output file: ', outfile
         print 'input file name:', infile
 
-        write_structured_slugs_rss_fine_auto_spec_more_turns_spec_cross.write_to_slugs_part_dist(infile, gwg_f, initial_f[n], moveobstacles_f[0], iset, PUDO_targets = PUDO_t,
+        write_structured_slugs_JRNL_boundary_stair_mod.write_to_slugs_part_dist(infile, gwg_f, initial_f[n], moveobstacles_f[0], iset, PUDO_targets = PUDO_t,
                                                                    visdist =  visdist[n], allowed_states = allowed_states[n],
                                                                    partitionGrid = pg[n])
+        # write_structured_slugs_JRNL_cross_causal.write_to_slugs_part_dist(infile, gwg_f, initial_f[n], moveobstacles_f[0], iset, PUDO_targets = PUDO_t,
+        #                                                            visdist =  visdist[n], allowed_states = allowed_states[n],
+        #                                                            partitionGrid = pg[n])
         
         bf_conv = time.time()
         print('Writing specifications took ', bf_conv - then, ' seconds')

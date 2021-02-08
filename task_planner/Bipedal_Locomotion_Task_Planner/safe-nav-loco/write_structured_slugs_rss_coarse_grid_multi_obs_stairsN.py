@@ -190,6 +190,9 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('s_c:0...{}\n'.format(len(gw.states)-1))
     file.write('deliveryrequest\n')
     file.write('sOld:0...{}\n'.format(len(gw.states)-1))
+    file.write('test\n')
+    file.write('cond1\n')
+    file.write('cond2\n')
 
     file.write('\n[OUTPUT]\n')
     file.write('directionrequest:0...4\n')
@@ -197,7 +200,8 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('requestPending1\n')
     file.write('requestPending2\n')
     file.write('stairs\n')
-    file.write('stairs_n\n')
+    file.write('stairsN\n')
+    # file.write('stairs_n\n')
 
     file.write('\n[ENV_INIT]\n')
     file.write('s_c = {}\n'.format(init))
@@ -356,7 +360,42 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     for n in range(0,len(initmovetarget)):
         file.write('directionrequest = 0 -> st{}\' != s_c\n'.format(n))
 
-    
+
+
+
+    stri = "((s_c =28 | s_c =29 | s_c =30) & "
+    for n in range(0,len(initmovetarget)):
+        stri += "st{} = {} & ".format(n,str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
+    stri = stri[:-3]
+    stri += ") -> cond1'\n"
+    file.write(stri)
+
+    stri = "((s_c !=28 & s_c !=29 & s_c !=30) | "
+    for n in range(0,len(initmovetarget)):
+        stri += "st{}! = {} | ".format(n,str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
+    stri = stri[:-3]
+    stri += ") -> !cond1'\n".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
+    file.write(stri)
+
+
+    stri = "((s_c !=28 & s_c !=29 & s_c !=30) & "
+    for n in range(0,len(initmovetarget)):
+        for visstate in set(nonbeliefstates):
+            stri += "st{} != {} /\\ ".format(n,visstate)
+    stri = stri[:-4]
+    stri += ") -> cond2'\n"
+    file.write(stri)
+
+    stri = "((s_c =28 | s_c =29 | s_c =30) | "
+    for n in range(0,len(initmovetarget)):
+        for visstate in set(nonbeliefstates):
+            stri += "st{} = {} | ".format(n,visstate)
+    stri = stri[:-2]
+    stri += ") -> !cond2'\n"
+    file.write(stri)
+
+    file.write("cond1 | cond2 -> test'\n")
+    file.write("!cond1 & !cond2 -> !test'\n")
 
 
     # Writing env_safety
@@ -365,6 +404,10 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
         for obs in tqdm(gw.obstacles):
             if obs in allowed_states:
                 file.write('!st = {}\n'.format(obs))
+
+
+
+
 
 
     # writing sys_trans
@@ -415,10 +458,12 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write(stri)
 
     file.write("stairs' -> directionrequest' = 2 \/ directionrequest' = 4\n")
-    file.write("stairs_n -> stairs'\n")
-    file.write("!stairs_n -> !stairs'\n")
+    # file.write("stairs_n -> stairs'\n")
+    # file.write("!stairs_n -> !stairs'\n")
+    file.write("stairs' -> directionrequest' = directionrequest\n")
     
-
+    file.write("stairsN -> stairs'\n")
+    file.write("!stairsN -> !stairs'\n")
 
 
     for obs in gw.obstacles:
@@ -456,13 +501,16 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     #     stri = stri[:-4]
     #     stri += "\n"
     #     file.write(stri)
-    stri = ""
-    for n in range(0,len(initmovetarget)):
-        for visstate in set(nonbeliefstates):
-            stri += "st{} != {} /\\ ".format(n,visstate)
-    stri = stri[:-4]
-    stri += "\n"
-    file.write(stri)
+
+    # stri = ""
+    # for n in range(0,len(initmovetarget)):
+    #     for visstate in set(nonbeliefstates):
+    #         stri += "st{} != {} /\\ ".format(n,visstate)
+    # stri = stri[:-4]
+    # stri += "\n"
+    # file.write(stri)
+
+    file.write("test'\n")
 
     # stri = ""
     # for Bstate in (set(allstates) - set(nonbeliefstates)):

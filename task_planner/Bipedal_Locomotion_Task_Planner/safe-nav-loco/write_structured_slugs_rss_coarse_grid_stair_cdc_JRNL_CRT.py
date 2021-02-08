@@ -5,7 +5,7 @@ import itertools
 from tqdm import *
 import simplejson as json
 import math
-from gridworld import *
+from gridworld_JRNL import *
 import time
 
 
@@ -184,6 +184,9 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('s_c:0...{}\n'.format(len(gw.states)-1))
     file.write('deliveryrequest\n')
     file.write('sOld:0...{}\n'.format(len(gw.states)-1))
+    file.write('test\n')
+    file.write('cond1\n')
+    file.write('cond2\n')
 
     file.write('\n[OUTPUT]\n')
     file.write('directionrequest:0...4\n')
@@ -191,7 +194,8 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('requestPending1\n')
     file.write('requestPending2\n')
     file.write('stairs\n')
-    file.write('stairs_n\n')
+    file.write('stairsN\n')
+    # file.write('stairs_n\n')
 
     file.write('\n[ENV_INIT]\n')
     file.write('s_c = {}\n'.format(init))
@@ -262,8 +266,8 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
                 
                 (row,col)=gw.coords(s)
                 closestates = []
-                coordcombs = [[-3,0],[-2,0],[-1,0],[0,0],[1,0],[2,0],[3,0],[0,-3],[0,-2],[0,-1],[0,1],[0,2],[0,3],[1,1],[1,-1],[-1,-1],[-1,1]]
-                # coordcombs = [[-1,0],[0,0],[1,0],[0,-1],[0,1]]
+                # coordcombs = [[-3,0],[-2,0],[-1,0],[0,0],[1,0],[2,0],[3,0],[0,-3],[0,-2],[0,-1],[0,1],[0,2],[0,3],[1,1],[1,-1],[-1,-1],[-1,1]]
+                coordcombs = [[-1,0],[0,0],[1,0],[0,-1],[0,1]]
 
                 for coordspecific in coordcombs:
                     if (row + coordspecific[0]<gw.nrows) and (row + coordspecific[0]>0):
@@ -285,7 +289,9 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
                     invisstatesOld = invisibilityset[sOld]
                     visstatesOld = set(nonbeliefstates) - invisstatesOld
                     Newvisstates = visstates - visstatesOld
-                    beliefstates_invis_and_new = beliefstates - (beliefstates_vis - Newvisstates)
+                    NewInvisStates = visstatesOld - visstates
+                    # beliefstates_invis_and_new = beliefstates - (beliefstates_vis - Newvisstates)
+                    beliefstates_invis_and_new = beliefstates - (beliefstates_vis - Newvisstates) - NewInvisStates
                     
                     if len(beliefstates_invis_and_new) > 0:
                         stri = "(s_c = {} /\\ st = {} /\\ sOld = {}) -> ".format(s,st,sOld)
@@ -322,6 +328,12 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     for obs in gw.no_obs:
         file.write("st' != {}\n".format(obs))
 
+    ######added for journal env, need to remove######
+    # file.write("st' != 49\n")
+    # file.write("st' != 48\n")
+    # file.write("st' != 23\n")
+    # file.write("st' != 24\n")
+
     print 'Writing Action Based Environment Transitions'
     stri = ''
     stri += '\n'
@@ -356,6 +368,65 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     for obs in tqdm(gw.obstacles):
         if obs in allowed_states:
             file.write('!st = {}\n'.format(obs))
+
+
+
+    # stri = "((s_c =26 | s_c =27 | s_c =28) & st = {}) -> cond1'\n".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
+    # file.write(stri)
+    # stri = "((s_c !=26 & s_c !=27 & s_c !=28) | st != {}) -> !cond1'\n".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
+    # file.write(stri)
+
+    # stri = "((s_c !=26 & s_c !=27 & s_c !=28) & "
+    # for visstate in set(nonbeliefstates):
+    #     stri += "st != {} /\\ ".format(visstate)
+    # stri = stri[:-4]
+    # stri += ") -> cond2'\n"
+    # file.write(stri)
+
+    # stri = "((s_c =26 | s_c =27 | s_c =28) | "
+    # for visstate in set(nonbeliefstates):
+    #     stri += "st = {} | ".format(visstate)
+    # stri = stri[:-2]
+    # stri += ") -> !cond2'\n"
+    # file.write(stri)
+
+    stri = "((s_c =28 | s_c =29 | s_c =30) & st = {}) -> cond1'\n".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
+    file.write(stri)
+    stri = "((s_c !=28 & s_c !=29 & s_c !=30) | st != {}) -> !cond1'\n".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
+    file.write(stri)
+
+    stri = "((s_c !=28 & s_c !=29 & s_c !=30) & "
+    for visstate in set(nonbeliefstates):
+        stri += "st != {} /\\ ".format(visstate)
+    stri = stri[:-4]
+    stri += ") -> cond2'\n"
+    file.write(stri)
+
+    stri = "((s_c =28 | s_c =29 | s_c =30) | "
+    for visstate in set(nonbeliefstates):
+        stri += "st = {} | ".format(visstate)
+    stri = stri[:-2]
+    stri += ") -> !cond2'\n"
+    file.write(stri)
+
+    file.write("cond1 | cond2 -> test'\n")
+    file.write("!cond1 & !cond2 -> !test'\n")
+
+    # stri = "((s_c =15 | s_c =16 | s_c =17) & st' = {}) | ((s_c !=15 & s_c !=16 & s_c =17) & ".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
+    # for visstate in set(nonbeliefstates):
+    #     stri += "st' != {} /\\ ".format(visstate)
+    # stri = stri[:-4]
+    # stri += ") -> test'\n"
+    # file.write(stri)
+
+    # stri = "((s_c !=15 & s_c !=16 & s_c !=17) | st' != {}) & ((s_c !=15 & s_c !=16 & s_c =17) & ".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
+    # for visstate in set(nonbeliefstates):
+    #     stri += "st' != {} /\\ ".format(visstate)
+    # stri = stri[:-4]
+    # stri += ") -> test'\n"
+    # file.write(stri)
+
+
 
 
     # writing sys_trans
@@ -406,21 +477,24 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write(stri)
 
     file.write("stairs' -> directionrequest' = 2 \/ directionrequest' = 4\n")
-    file.write("stairs_n -> stairs'\n")
-    file.write("!stairs_n -> !stairs'\n")
-    
+    # file.write("stairs_n -> stairs'\n")
+    # file.write("!stairs_n -> !stairs'\n")
+    file.write("stairs' -> directionrequest' = directionrequest\n")
+
+    file.write("stairsN -> stairs'\n")
+    file.write("!stairsN -> !stairs'\n")
 
 
 
     for obs in gw.obstacles:
-        file.write('s_c != {}\n'.format(obs))
+        file.write('s_c\' != {}\n'.format(obs))
 
 
-    for s in set(allowed_states):
-        stri = 'st\' = {} -> !s_c\' = {}\n'.format(s,s)
-        file.write(stri)
-        stri = 'st\' = {} -> !s_c = {}\n'.format(s,s)
-        file.write(stri)
+    # for s in set(allowed_states):
+    #     stri = 'st\' = {} -> !s_c\' = {}\n'.format(s,s)
+    #     file.write(stri)
+    #     stri = 'st\' = {} -> !s_c = {}\n'.format(s,s)
+    #     file.write(stri)
 
 
 
@@ -438,20 +512,31 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
 
     file.write('\n[ENV_LIVENESS]\n')
-   
+
+    # file.write("st' = {}\n".format(allstates[-2]))
+    # file.write("st = {}".format(allstates[-2]))
+
     # stri = ""
     # for visstate in set(nonbeliefstates):
-    #     stri += "st != {} /\\ ".format(visstate)
+    #     stri += "st' != {} /\\ ".format(visstate)
     # stri = stri[:-4]
     # file.write(stri)
 
-    # stri = ""
-    # for Bstate in (set(allstates) - set(nonbeliefstates)):
-    #     stri += "st = {} \/ ".format(Bstate)
+    # stri = "((s_c =15 | s_c =16 | s_c =17) & st' = {}) | ((s_c !=15 & s_c !=16 & s_c =17) & ".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
+    # for visstate in set(nonbeliefstates):
+    #     stri += "st' != {} /\\ ".format(visstate)
     # stri = stri[:-4]
+    # stri += ")"
     # file.write(stri)
 
-    file.write("st' = {}".format(allstates[-2]))
+    file.write("test'\n")
 
-    # file.write("st' = {} \\/ st' = {} \\/ st' = {}".format(68,80,allstates[-2]))
-    # file.write("st' = {}".format(80))
+    # stri = "("
+    # for visstate in set(nonbeliefstates):
+    #     stri += "st = {} \\/ ".format(visstate)
+    # stri = stri[:-4]
+    # stri += ") /\\ "
+    # for visstate in set(nonbeliefstates):
+    #     stri += "st' != {} /\\ ".format(visstate)
+    # stri = stri[:-4]
+    # file.write(stri)

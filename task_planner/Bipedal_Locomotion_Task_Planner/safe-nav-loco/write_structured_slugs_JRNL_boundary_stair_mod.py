@@ -187,6 +187,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('s:0...{}\n'.format(len(gw.states)-1))
     file.write('directionrequest:0...4\n')
     file.write('stair\n')
+    file.write('stairN\n')
     file.write('crossV:0...2\n')
     file.write('crossH:0...2\n')
 
@@ -200,6 +201,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('turn:0...4\n')
     file.write('stanceFoot:0...1\n')
     file.write('fail:0...1\n')
+    file.write('TaskAchieved\n')
 
 
 
@@ -553,21 +555,30 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
             file.write('!st = {}\n'.format(obs))
 
     ##### Navigation goal tracking
-    file.write("directionrequest = 0 & orientation = 0 & requestPending1 = 5 -> directionrequest' =1 \/ directionrequest' =0\n")
-    file.write("directionrequest = 0 & orientation = 4 & requestPending1 = 5 -> directionrequest' =2 \/ directionrequest' =0\n")
-    file.write("directionrequest = 0 & orientation = 8 & requestPending1 = 5 -> directionrequest' =3 \/ directionrequest' =0\n")
-    file.write("directionrequest = 0 & orientation = 12 & requestPending1 = 5 -> directionrequest' =4 \/ directionrequest' =0\n")
+    # file.write("directionrequest = 0 & orientation = 0 & requestPending1 = 5 -> directionrequest' =1 \/ directionrequest' =0\n")
+    # file.write("directionrequest = 0 & orientation = 4 & requestPending1 = 5 -> directionrequest' =2 \/ directionrequest' =0\n")
+    # file.write("directionrequest = 0 & orientation = 8 & requestPending1 = 5 -> directionrequest' =3 \/ directionrequest' =0\n")
+    # file.write("directionrequest = 0 & orientation = 12 & requestPending1 = 5 -> directionrequest' =4 \/ directionrequest' =0\n")
+
+    file.write("directionrequest = 0 & orientation = 0 & TaskAchieved -> directionrequest' =1 \/ directionrequest' =0\n")
+    file.write("directionrequest = 0 & orientation = 4 & TaskAchieved -> directionrequest' =2 \/ directionrequest' =0\n")
+    file.write("directionrequest = 0 & orientation = 8 & TaskAchieved -> directionrequest' =3 \/ directionrequest' =0\n")
+    file.write("directionrequest = 0 & orientation = 12 & TaskAchieved -> directionrequest' =4 \/ directionrequest' =0\n")
+
 
     file.write("directionrequest = 1 -> directionrequest' !=3\n")
     file.write("directionrequest = 2 -> directionrequest' !=4\n")
     file.write("directionrequest = 3 -> directionrequest' !=1\n")
     file.write("directionrequest = 4 -> directionrequest' !=2\n")
 
-    file.write("requestPending1 != 5 -> directionrequest' = directionrequest\n")
+    # file.write("requestPending1 != 5 -> directionrequest' = directionrequest\n")
     # file.write("crossH' = 0 & crossV'=0 -> directionrequest' = directionrequest\n")
+    file.write("!TaskAchieved -> directionrequest' = directionrequest\n")
 
-    file.write("requestPending1 != 5 & stair-> stair' \n")
-    file.write("requestPending1 != 5 & !stair-> !stair' \n")
+    # file.write("requestPending1 != 5 & stair-> stair' \n")
+    # file.write("requestPending1 != 5 & !stair-> !stair' \n")
+    file.write("stair-> (crossH' = 0 & stair') | (crossH' != 0 & (stair' | !stair'))\n")
+    file.write("!stair-> (crossH' = 0 & !stair') | (crossH' != 0 & (stair' | !stair'))\n")
     
 
 
@@ -669,17 +680,77 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     file.write("stop & (requestPending1' = 0 | requestPending1' = 5) -> stop'\n")
 
-    file.write("requestPending1 = 5 -> requestPending1' = directionrequest'\n")
+    file.write("requestPending1 = 5 -> requestPending1' = directionrequest'\n\n")
+
+    file.write("TaskAchieved -> requestPending1' = 5\n")
+    file.write("!TaskAchieved -> requestPending1' != 5\n\n")
 
     
    
-    file.write("\nstair'  & directionrequest' = 2 -> (stepL' = 0 & stepH' = 4) \/ ((stepL' = 1 & stepH' = 4)) \/ ((stepL' = 2 & stepH' = 6))\n")
-    file.write("stair' & directionrequest' = 4 -> (stepL' = 0 & stepH' = 2) \/ ((stepL' = 1 & stepH' = 1)) \/ ((stepL' = 2 & stepH' = 0))\n\n")
+    file.write("\nstair'  & directionrequest' = 2 & !TaskAchieved' -> (stepL' = 0 & stepH' = 4) \/ ((stepL' = 1 & stepH' = 4)) \/ ((stepL' = 2 & stepH' = 6))\n")
+    file.write("stair' & directionrequest' = 4 & !TaskAchieved' -> (stepL' = 0 & stepH' = 2) \/ ((stepL' = 1 & stepH' = 1)) \/ ((stepL' = 2 & stepH' = 0))\n\n")
     
+    file.write("stair' & TaskAchieved' & stairN' & directionrequest' = 2 -> (stepL' = 0 & stepH' = 4) \/ ((stepL' = 1 & stepH' = 4)) \/ ((stepL' = 2 & stepH' = 6))\n")
+    file.write("stair' & TaskAchieved' & stairN' & directionrequest' = 4 -> (stepL' = 0 & stepH' = 2) \/ ((stepL' = 1 & stepH' = 1)) \/ ((stepL' = 2 & stepH' = 0))\n")
+
+    file.write("stair' & TaskAchieved' & !stairN' -> stepH' = 3\n\n")
+
+
     file.write("!stair' -> stepH' = 3\n\n")
 
 
 
+
+    #avoid getting close to boarder
+    # top2_edge = gw.top_edge+gw.top_edge2
+    # right2_edge = gw.right_edge+gw.right_edge2
+    # bottom2_edge = gw.bottom_edge+gw.bottom_edge2
+    # left2_edge = gw.left_edge+gw.left_edge2
+    # sides = left2_edge+right2_edge
+    # tops = top2_edge+bottom2_edge
+
+    # top2_edge = gw.top_edge+gw.top_edge2+gw.top_edge3+gw.top_edge4
+    # right2_edge = gw.right_edge+gw.right_edge2+gw.right_edge3+gw.right_edge4
+    # bottom2_edge = gw.bottom_edge+gw.bottom_edge2+gw.bottom_edge3+gw.bottom_edge4
+    # left2_edge = gw.left_edge+gw.left_edge2+gw.left_edge3+gw.left_edge4
+    # sides = left2_edge+right2_edge
+    # tops = top2_edge+bottom2_edge
+
+    top2_edge = gw.top_edge+gw.top_edge2+gw.top_edge3+gw.top_edge4+gw.top_edge5+gw.top_edge6
+    right2_edge = gw.right_edge+gw.right_edge2+gw.right_edge3+gw.right_edge4+gw.right_edge5+gw.right_edge6
+    bottom2_edge = gw.bottom_edge+gw.bottom_edge2+gw.bottom_edge3+gw.bottom_edge4+gw.bottom_edge5+gw.bottom_edge6
+    left2_edge = gw.left_edge+gw.left_edge2+gw.left_edge3+gw.left_edge4+gw.left_edge5+gw.left_edge6
+    sides = left2_edge+right2_edge
+    tops = top2_edge+bottom2_edge
+
+
+    stri= "directionrequest'=1 & orientation' = 0 -> ("
+    for s in sides:
+        stri+= "s' != {} & ".format(s)
+    stri = stri[:-3]
+    stri += ")\n"
+    file.write(stri)
+
+    stri= "directionrequest'=2 & orientation' = 4 -> ("
+    for s in tops:
+        stri+= "s' != {} & ".format(s)
+    stri = stri[:-3]
+    stri += ")\n"
+    file.write(stri)
+    
+    stri= "directionrequest'=3 & orientation' = 8 -> ("
+    for s in sides:
+        stri+= "s' != {} & ".format(s)
+    stri = stri[:-3]
+    stri += ")\n"
+    file.write(stri)
+    
+    stri= "directionrequest'=4 & orientation' = 12 -> ("
+    for s in tops:
+        stri+= "s' != {} & ".format(s)
+    stri = stri[:-3]
+    stri += ")\n"
+    file.write(stri)
 
 ##################################################################################
 

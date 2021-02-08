@@ -94,7 +94,8 @@ def userControlled_partition(filename_c,gwg_c,partitionGrid_c,moveobstacles_c,in
         allstates.append(i)
     for i in range(gwg_f.nstates,gwg_f.nstates+ len(beliefcombs_f)):
         allstates_f.append(i)
-    gwg_c.colorstates = [set(), set()]
+    # gwg_c.colorstates = [set(), set()]
+    gwg_c.colorstates = [set(), set(), set(), set(), set(), set(), set()]
     gwg_f.colorstates = [set(), set()]
     gridstate = copy.deepcopy(moveobstacles_c[0])
     gridstate_f = copy.deepcopy(moveobstacles_f[0])
@@ -141,48 +142,77 @@ def userControlled_partition(filename_c,gwg_c,partitionGrid_c,moveobstacles_c,in
         time.sleep(0.3)
         
         while True:
-            output.saveState(gwg_f, automaton_f, automaton_state_f,gridstate_f,moveobstacles_f)
+            output.saveState(gwg_f, automaton_f, automaton_state_f,gridstate_f,moveobstacles_f,gwg_c)
             agentstate_f = automaton_f[automaton_state_f]['State']['s']
           
 
             nextstates_f = automaton_f[automaton_state_f]['Successors']
-            nextstatedirn_f = {"1":{'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}, "0":{'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}}
+            nextstatedirn_f = {"1":{"1":{'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}, "0":{'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}},"0":{"1":{'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}, "0":{'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}}}
             ### nextstatedirn_f first number is stair boolean, second number is direcion request
             for n in nextstates_f:
                 nenv_dir_req = automaton_f[n]['State']['directionrequest']
                 nenv_stair_req = automaton_f[n]['State']['stair']
+                nenv_stairN_req = automaton_f[n]['State']['stairN']
                 if nenv_stair_req ==1:
-                    if nenv_dir_req == 4:
-                        nextstatedirn_f["1"]['4'] = n
-                    if nenv_dir_req == 2:
-                        nextstatedirn_f["1"]['2'] = n
-                    if nenv_dir_req == 3:
-                        nextstatedirn_f["1"]['3'] = n
-                    if nenv_dir_req == 1:
-                        nextstatedirn_f["1"]['1'] = n
-                    if nenv_dir_req == 0:
-                        nextstatedirn_f["1"]['0'] = n
-                    if nenv_dir_req not in xstates:
-                        nextstatedirn_f["1"]['Belief'].add(n)
+                    if nenv_stairN_req ==1:
+                        if nenv_dir_req == 4:
+                            nextstatedirn_f["1"]["1"]['4'] = n
+                        if nenv_dir_req == 2:
+                            nextstatedirn_f["1"]["1"]['2'] = n
+                        if nenv_dir_req == 3:
+                            nextstatedirn_f["1"]["1"]['3'] = n
+                        if nenv_dir_req == 1:
+                            nextstatedirn_f["1"]["1"]['1'] = n
+                        if nenv_dir_req == 0:
+                            nextstatedirn_f["1"]["1"]['0'] = n
+                        if nenv_dir_req not in xstates:
+                            nextstatedirn_f["1"]['Belief'].add(n)
+                    else:
+                        if nenv_dir_req == 4:
+                            nextstatedirn_f["1"]["0"]['4'] = n
+                        if nenv_dir_req == 2:
+                            nextstatedirn_f["1"]["0"]['2'] = n
+                        if nenv_dir_req == 3:
+                            nextstatedirn_f["1"]["0"]['3'] = n
+                        if nenv_dir_req == 1:
+                            nextstatedirn_f["1"]["0"]['1'] = n
+                        if nenv_dir_req == 0:
+                            nextstatedirn_f["1"]["0"]['0'] = n
+                        if nenv_dir_req not in xstates:
+                            nextstatedirn_f["1"]["0"]['Belief'].add(n)
                 else:
-                    if nenv_dir_req == 4:
-                        nextstatedirn_f["0"]['4'] = n
-                    if nenv_dir_req == 2:
-                        nextstatedirn_f["0"]['2'] = n
-                    if nenv_dir_req == 3:
-                        nextstatedirn_f["0"]['3'] = n
-                    if nenv_dir_req == 1:
-                        nextstatedirn_f["0"]['1'] = n
-                    if nenv_dir_req == 0:
-                        nextstatedirn_f["0"]['0'] = n
-                    if nenv_dir_req not in xstates:
-                        nextstatedirn_f["0"]['Belief'].add(n)
+                    if nenv_stairN_req ==1:
+                        if nenv_dir_req == 4:
+                            nextstatedirn_f["0"]["1"]['4'] = n
+                        if nenv_dir_req == 2:
+                            nextstatedirn_f["0"]["1"]['2'] = n
+                        if nenv_dir_req == 3:
+                            nextstatedirn_f["0"]["1"]['3'] = n
+                        if nenv_dir_req == 1:
+                            nextstatedirn_f["0"]["1"]['1'] = n
+                        if nenv_dir_req == 0:
+                            nextstatedirn_f["0"]["1"]['0'] = n
+                        if nenv_dir_req not in xstates:
+                            nextstatedirn_f["0"]['Belief'].add(n)
+                    else:
+                        if nenv_dir_req == 4:
+                            nextstatedirn_f["0"]["0"]['4'] = n
+                        if nenv_dir_req == 2:
+                            nextstatedirn_f["0"]["0"]['2'] = n
+                        if nenv_dir_req == 3:
+                            nextstatedirn_f["0"]["0"]['3'] = n
+                        if nenv_dir_req == 1:
+                            nextstatedirn_f["0"]["0"]['1'] = n
+                        if nenv_dir_req == 0:
+                            nextstatedirn_f["0"]["0"]['0'] = n
+                        if nenv_dir_req not in xstates:
+                            nextstatedirn_f["0"]["0"]['Belief'].add(n)
               
             while True:
                 nextstate_f = None
                 while nextstate_f == None:
                     time.sleep(0.2)
-                    nextstate_f = nextstatedirn_f[str(automaton[automaton_state]['State']['stairs'])][str(automaton[automaton_state]['State']['directionrequest'])]
+                    nextstate_f = nextstatedirn_f[str(automaton[automaton_state]['State']['stairs'])][str(automaton[automaton_state]['State']['stairsN'])][str(automaton[automaton_state]['State']['directionrequest'])]
                     nenv_dir_req = automaton_f[nextstate_f]['State']['st']
                     print 'Environment state in fine automaton is', allstates.index(nenv_dir_req)
                     print 'Environment state in fine grid is', nenv_dir_req
@@ -216,11 +246,13 @@ def userControlled_partition(filename_c,gwg_c,partitionGrid_c,moveobstacles_c,in
             gwg_f.colorstates[0].update(invisibilityset_f[0][agentstate_f])
             gwg_f.render()
 
-            if automaton_f[automaton_state_f]['State']['requestPending1'] == 5:
+            # if automaton_f[automaton_state_f]['State']['requestPending1'] == 5:
+            #     break
+            if automaton_f[automaton_state_f]['State']['TaskAchieved'] == 1:
                 break
         
         time.sleep(0.5)
-        output_c.saveState(gwg_c, automaton, automaton_state,gridstate,moveobstacles_c)
+        output_c.saveState(gwg_c, automaton, automaton_state,gridstate,moveobstacles_c,gwg_c)
         
         gwg_c.moveobstacles[0] = copy.deepcopy(gridstate)
         gwg_c.render()
@@ -292,8 +324,9 @@ def userControlled_partition(filename_c,gwg_c,partitionGrid_c,moveobstacles_c,in
                                 beliefstates = set()
                                 for b in beliefcombstate:
                                     beliefstates = beliefstates.union(partitionGrid_c[b])
+                                    gwg_c.colorstates[b+1] = copy.deepcopy(partitionGrid_c[b]) - partitionGrid_c[b].intersection(visstates)
                                 truebeliefstates = beliefstates - beliefstates.intersection(visstates)
-                                gwg_c.colorstates[1] = copy.deepcopy(truebeliefstates)
+                                # gwg_c.colorstates[1] = copy.deepcopy(truebeliefstates)
                                 gwg_c.render()
                                 print 'True belief set is ', truebeliefstates
                                 print 'Size of true belief set is ', len(truebeliefstates)
@@ -303,6 +336,11 @@ def userControlled_partition(filename_c,gwg_c,partitionGrid_c,moveobstacles_c,in
                     print 'Environment state in grid is', nenvstate
                     gridstate = copy.deepcopy(nenvstate)
                     gwg_c.colorstates[1] = set()
+                    gwg_c.colorstates[2] = set()
+                    gwg_c.colorstates[3] = set()
+                    gwg_c.colorstates[4] = set()
+                    gwg_c.colorstates[5] = set()
+                    gwg_c.colorstates[6] = set()
                     gwg_c.render()
 
 

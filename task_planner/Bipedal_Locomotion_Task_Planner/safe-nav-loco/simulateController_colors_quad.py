@@ -75,31 +75,37 @@ def getGridstate(gwg,currstate,dirn):
         return currstate - gwg.ncols
 
 
-def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibilityset,jsonfile):
+def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibilityset,jsonfile,jsonfile_obs):
     automaton = parseJson(filename)
+    automaton_obs = parseJson(jsonfile_obs)
     # for s in automaton:
     #     print automaton[s]['State']['s']
 
     automaton_state = 0
+    automaton_state_obs = 0
     xstates = list(set(gwg.states))
     allstates = copy.deepcopy(xstates)
     beliefcombs = powerset(partitionGrid.keys())
     for i in range(gwg.nstates,gwg.nstates+ len(beliefcombs)):
         allstates.append(i)
-    gwg.colorstates = [set(), set()]
+    gwg.colorstates = [set(), set(), set(), set(), set(), set(), set()]
     gridstate = copy.deepcopy(moveobstacles[0])
     output = BeliefIOParser(jsonfile)
+    j = 0
     while True:
-        output.saveState(gwg, automaton, automaton_state,gridstate,moveobstacles)
-        envstate = automaton[automaton_state]['State']['st']
-        # try:
-        #     print 'Agent state is J ', agentstate
-        # except:
-        #     print 'nothingyet'
+        j +=1
+        output.saveState(gwg, automaton, automaton_state,gridstate,moveobstacles,gwg)
+        envstate = automaton_obs[automaton_state_obs]['State']['st']
+      
 
         
         gwg.moveobstacles[0] = copy.deepcopy(gridstate)
         gwg.render()
+        if j == 1:
+            while True:
+                    arrow = gwg.getkeyinput()
+                    if arrow != None:
+                        break
         # ----------------- Robot Waits For Key Stroke To Take Action-----------------
         # while True:
         #             arrow = gwg.getkeyinput()
@@ -140,10 +146,71 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         while True:
             nextstate = None
             while nextstate == None:
-                while True:
-                    arrow = gwg.getkeyinput()
-                    if arrow != None:
-                        break
+
+
+                # while True:
+                #     arrow = gwg.getkeyinput()
+                #     if arrow != None:
+                #         break
+                # nextstate = nextstatedirn[arrow]
+                nextstates_obs = automaton_obs[automaton_state_obs]['Successors']
+                nextstatedirn_obs = {'W':None,'E':None,'S':None,'N':None,'R':None}
+                for n in nextstates_obs:
+                    if automaton_obs[n]['State']['deliveryrequest'] == 1:
+                        if automaton_obs[n]['State']['stop'] == automaton[automaton_state]['State']['stop']:
+                            if automaton_obs[n]['State']['orientation'] == automaton[automaton_state]['State']['orientation']:
+                                nenvstate_obs = automaton_obs[n]['State']['s_c']
+                                # if nenvstate_obs == gwg.current[0] - 1:
+                                #     nextstatedirn_obs['W'] = n
+                                # if nenvstate_obs == gwg.current[0] + 1:
+                                #     nextstatedirn_obs['E'] = n
+                                # if nenvstate_obs == gwg.current[0] + gwg.ncols:
+                                #     nextstatedirn_obs['S'] = n
+                                # if nenvstate_obs == gwg.current[0] - gwg.ncols:
+                                #     nextstatedirn_obs['N'] = n
+                                # if nenvstate_obs == gwg.current[0]:
+                                #     nextstatedirn_obs['R'] = n
+                                if nenvstate_obs == automaton_obs[automaton_state_obs]['State']['s_c'] - 1:
+                                    nextstatedirn_obs['W'] = n
+                                if nenvstate_obs == automaton_obs[automaton_state_obs]['State']['s_c'] + 1:
+                                    nextstatedirn_obs['E'] = n
+                                if nenvstate_obs == automaton_obs[automaton_state_obs]['State']['s_c'] + gwg.ncols:
+                                    nextstatedirn_obs['S'] = n
+                                if nenvstate_obs == automaton_obs[automaton_state_obs]['State']['s_c'] - gwg.ncols:
+                                    nextstatedirn_obs['N'] = n
+                                if nenvstate_obs == automaton_obs[automaton_state_obs]['State']['s_c']:
+                                    nextstatedirn_obs['R'] = n
+                
+                arrow_biped = None
+                if gwg.current[0] == automaton_obs[automaton_state_obs]['State']['s_c']:
+                    arrow_biped = 'R'
+                if gwg.current[0] == automaton_obs[automaton_state_obs]['State']['s_c']-1:
+                    arrow_biped = 'W'
+                if gwg.current[0] == automaton_obs[automaton_state_obs]['State']['s_c']+1:
+                    arrow_biped = 'E'
+                if gwg.current[0] == automaton_obs[automaton_state_obs]['State']['s_c'] + gwg.ncols:
+                    arrow_biped = 'S'
+                if gwg.current[0] == automaton_obs[automaton_state_obs]['State']['s_c'] - gwg.ncols:
+                    arrow_biped = 'N'
+                    
+                if arrow_biped == None:
+                    print 'Error: Invalid robot move according to quadcopter automaton'
+                nextstate_obs = nextstatedirn_obs[arrow_biped]
+                gridstate = automaton_obs[nextstate_obs]['State']['st']
+                print 'Arrow_biped: ' + str(arrow_biped)
+                
+                arrow = None
+                if gridstate == gwg.moveobstacles[0] - 1:
+                    arrow = 'W'
+                if gridstate == gwg.moveobstacles[0] + 1:
+                    arrow = 'E'
+                if gridstate == gwg.moveobstacles[0] + gwg.ncols:
+                    arrow = 'S'
+                if gridstate == gwg.moveobstacles[0] - gwg.ncols:
+                    arrow = 'N'
+                if gridstate == gwg.moveobstacles[0]:
+                    arrow = 'R'
+
                 nextstate = nextstatedirn[arrow]
                 if nextstate == None:
                     if arrow == 'W':
@@ -172,9 +239,10 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                                 beliefcombstate = beliefcombs[allstates.index(nenvstate) - len(xstates)]
                                 beliefstates = set()
                                 for b in beliefcombstate:
-                                    beliefstates = beliefstates.union(partitionGrid[b])
+                                    beliefstates = beliefstates.union(partitionGrid[b]) 
+                                    gwg.colorstates[b+1] = copy.deepcopy(partitionGrid[b]) - partitionGrid[b].intersection(visstates)
                                 truebeliefstates = beliefstates - beliefstates.intersection(visstates)
-                                gwg.colorstates[1] = copy.deepcopy(truebeliefstates)
+                                # gwg.colorstates[1] = copy.deepcopy(truebeliefstates)
                                 gwg.render()
                                 print 'True belief set is ', truebeliefstates
                                 print 'Size of true belief set is ', len(truebeliefstates)
@@ -182,10 +250,15 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                     nenvstate = automaton[nextstate]['State']['st']
                     print 'Environment state in automaton is', allstates.index(nenvstate)
                     print 'Environment state in grid is', nenvstate
-                    gridstate = copy.deepcopy(nenvstate)
+                    # gridstate = copy.deepcopy(nenvstate)
                     gwg.colorstates[1] = set()
+                    gwg.colorstates[2] = set()
+                    gwg.colorstates[3] = set()
+                    gwg.colorstates[4] = set()
+                    gwg.colorstates[5] = set()
+                    gwg.colorstates[6] = set()
                     gwg.render()
-
+            
             try:
                 print 'orientation is', automaton[automaton_state]['State']['orientation']
                 print 'directionrequest is ', automaton[automaton_state]['State']['directionrequest']
@@ -195,7 +268,8 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 
             if len(automaton[nextstate]['Successors']) > 0:
                 break
-
+        # if nenvstate != gridstate:
+        #     print 'Error: agent\'s automaton states are out of sync'
         print 'Automaton state is ', nextstate
         # print 'actions: \norientation: ' + str(automaton[nextstate]['State']['orientation']) + '\nstop: ' + str(automaton[nextstate]['State']['stop']) + '\nturn Left: ' + str(automaton[nextstate]['State']['turnLeft']) + '\nturn Right: ' + str(automaton[nextstate]['State']['turnRight']) + '\nforward: ' + str(automaton[nextstate]['State']['forward'])  + '\nstepL: ' + str(automaton[nextstate]['State']['stepL'])  + '\nstanceFoot: ' + str(automaton[nextstate]['State']['stanceFoot'])
         # print 'sOld: ' + str(automaton[nextstate]['State']['sOld'])
@@ -203,6 +277,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         # print 'pastTurnStanceMatchFoot: ' + str(automaton[nextstate]['State']['pastTurnStanceMatchFoot'])
         # print str(automaton[nextstate]['State'])
         automaton_state = copy.deepcopy(nextstate)
+        automaton_state_obs = copy.deepcopy(nextstate_obs)
 
 
 # def userControlled_imperfect_sensor(filename,gwg,partitionGrid,moveobstacles,allowed_states,invisibilityset,belief_gridstates,sensor_uncertainty,saveImage=None):

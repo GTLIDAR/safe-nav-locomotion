@@ -1,5 +1,5 @@
-from gridworld import *
-import write_structured_slugs_rss_coarse_grid_stair_cdc
+from gridworld_JRNL_color import *
+import write_structured_slugs_rss_coarse_quad
 import compute_all_vis
 import cv2
 # import visibility
@@ -9,7 +9,7 @@ import time
 import copy
 import cPickle as pickle
 from tqdm import *
-import simulateController as Simulator
+import simulateController_colors as Simulator
 import itertools
 import Control_Parser
 import json
@@ -19,16 +19,18 @@ if __name__ == '__main__':
     then = time.time()
     print 'time: ' + str(datetime.datetime.now().time())
     ######     1) Choose Environment input figure name:     #####
-    mapname_coarse = 'BeliefEvasion_CDC'
+    mapname_coarse = 'BeliefEvasion_jrnl_CRT3'
     rownum_c = 7
-    colnum_c = 13
-
+    colnum_c = 12
 
     #####     2) pick initial location for robot and dynamic obstacle, pick goal locations     #####
-    initial_c = [62]
-    moveobstacles_c = [28]
-    PUDO_t_c = [37,53]
+    # initial_c = [52]
+    # moveobstacles_c = [38]
+    # PUDO_t_c = [53,45]
 
+    initial_c = [56]
+    moveobstacles_c = [61]
+    PUDO_t_c = [54,49]
 
     filename_c = 'figures/'+mapname_coarse+'.png'
     image_c = cv2.imread(filename_c, cv2.IMREAD_GRAYSCALE)
@@ -36,7 +38,7 @@ if __name__ == '__main__':
     h_c, w_c = image_c.shape[:2]
     
     folder_locn = 'Examples/'
-    example_name = 'Belief_Evasion_coarse_cdc_vid'
+    example_name = 'Belief_Evasion_coarse_quad'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
@@ -67,7 +69,18 @@ if __name__ == '__main__':
     # pg[0] = {0: set.union(*[set(range(0,24))])  - set(gwg_c.obstacles), 1: set.union(*[set(range(27,37))])  - set(gwg_c.obstacles), 2: set.union(*[set(range(40,50))])  - set(gwg_c.obstacles),
     		#  3: set.union(*[set(range(53,63))])  - set(gwg_c.obstacles), 4: set.union(*[set(range(66,76))])  - set(gwg_c.obstacles)}
     
- 
+    # pg[0] = {0:(set(allowed_states[0])-set([12,23,24,25,34,35,37,38,39,45,46,47,48,49,50,56,57,61])),1:set([12,23,24,34,35]),2:set([45,46,56,57]),3:set([25]),4:set([47]),5:set([37,38,39,48,49,50,61])}
+    # pg[0] = {0:(set(allowed_states[0])-set([12,23,24,25,34,35,37,38,39,45,46,47,48,49,50,56,57,61])),1:set([12,23,24,34,35]),2:set([45,46,56,57]),3:set([25]),4:set([47]),5:set([38,39,48,49,50,61])}
+
+    # pg[0] = {0:(set(allowed_states[0])-set([12,23,24,25,34,35,37,38,39,45,46,47,48,49,50,56,57,61])),1:set([12,23,24,34,35]),2:set([45,46,56,57]),3:set([25]),4:set([47,48]),5:set([38,39,49,50,61])}
+    
+    # pg[0] = {0:(set(allowed_states[0])-set([34,35,36,45,56,48,49,56,57,58,59,60])),1:set([34,35,45,46]),2:set([56,57]),3:set([36]),4:set([58]),5:set([48,49,59,60])}
+    #for crt hyb env 2
+    # pg[0] = {0:(set(allowed_states[0])-set([34,35,36,45,46,56,48,49,56,57,58,59,60])),1:set([34,35,45,46]),2:set([56,57]),3:set([36]),4:set([58,59]),5:set([49,60,60,61])}
+    #for crt hyb env 3:
+    pg[0] = {0:(set(allowed_states[0])-set([37,38,39,49,50,53,54,61,62,63,64,65,66])),1:set([37,38,49,50]),2:set([61,62]),3:set([39]),4:set([63,64]),5:set([53,54,65,66])}
+
+
     visdist = [4,20,3500,3500]
     target_vis_dist = 2
     vel = [1,2,2,2]
@@ -91,7 +104,7 @@ if __name__ == '__main__':
         print 'output file: ', outfile
         print 'input file name:', infile
 
-        write_structured_slugs_rss_coarse_grid_stair_cdc.write_to_slugs_part_dist(infile, gwg_c, initial_c[n], moveobstacles_c[0], iset, PUDO_targets = PUDO_t_c,
+        write_structured_slugs_rss_coarse_quad.write_to_slugs_part_dist(infile, gwg_c, initial_c[n], moveobstacles_c[0], iset, PUDO_targets = PUDO_t_c,
                                                                    visdist =  visdist[n], allowed_states = allowed_states[n],
                                                                    partitionGrid = pg[n])
         
@@ -101,8 +114,19 @@ if __name__ == '__main__':
         print ('Converting input file...')
         os.system('python compiler.py ' + infile + '.structuredslugs > ' + infile + '.slugsin')
         print('Computing controller...')
-        sp = subprocess.Popen(slugs + ' --explicitStrategy --jsonOutput ' + infile + '.slugsin > ' + outfile,
+        # sp = subprocess.Popen(slugs + ' --explicitStrategy --jsonOutput ' + infile + '.slugsin > ' + outfile,
+        #                           shell=True, stdout=subprocess.PIPE)
+        # sp = subprocess.Popen(slugs + ' --explicitStrategy --fixedPointRecycling --jsonOutput ' + infile + '.slugsin > ' + outfile,
+        #                           shell=True, stdout=subprocess.PIPE)
+        sp = subprocess.Popen(slugs + ' --biasForAction --explicitStrategy --jsonOutput ' + infile + '.slugsin > ' + outfile,
                                   shell=True, stdout=subprocess.PIPE)
+                                  
+        # sp = subprocess.Popen(slugs + ' --counterStrategy ',
+        #                           shell=True, stdout=subprocess.PIPE)
+
+        # --computeInterestingRunOfTheSystem
+
+                                  
         sp.wait()
 
     now = time.time()

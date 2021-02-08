@@ -13,12 +13,12 @@ from collections import OrderedDict
 
 class Gridworld():
     # a gridworld with uneven terrain
-    def __init__(self, filename_f=None, initial_f=0, nrows=8, ncols=8, nagents=1, targets=[], obstacles=[], moveobstacles_f = [], regions=dict(), filename_c=None, initial_c=0, moveobstacles_c = []):
+    def __init__(self, filename=None, initial=0, nrows=8, ncols=8, nagents=1, targets=[], obstacles=[], moveobstacles = [], regions=dict()):
         # walls are the obstacles. The edges of the gridworld will be included into the walls.
         # region is a string and can be one of: ['pavement','gravel', 'grass', 'sand']
-        if filename_f[0] != None:
-            data = io.imread(filename_f[0])
-            data = cv2.resize(data, filename_f[1], interpolation=filename_f[2])
+        if filename[0] != None:
+            data = io.imread(filename[0])
+            data = cv2.resize(data, filename[1], interpolation=filename[2])
             regionkeys = {'deterministic'}
             (nrows,ncols) = data.shape[:2]
             data = data.flatten()
@@ -33,25 +33,26 @@ class Gridworld():
                 a.append(list({s[j] for j in range(x) if (i &(1<<j))}))
             return a
 
-        self.current = initial_f
+        self.current = initial
         self.nrows = nrows
         self.ncols = ncols
         self.obstacles = obstacles
         self.regions = regions
         self.nagents = nagents
         self.nstates = nrows * ncols
-
         self.actlistMO = ['R','N', 'S', 'W', 'E']
         self.actlistR = ['forward','turnLeft','turnRight','stepL0','stepL1','stepL2','stepL3','stop']
-
+        self.robotState = ['forward','turnLeft','turnRight','stepL0','stepL1','stepL2','stepL3','stop', 'O0', 'O1', 'O2', 'O3', 'O4', 'O5', 'O6', 'O7', 'O8', 'O9', 'O10', 'O11']
+        # ['requestPending1','requestPending2']
+        self.RobotTurn = ['none','turnLeft','turnRight']
+        self.RobotTurnLast = ['none','turnLeft','turnRight']
+        # self.RobotStepL = ['short', 'medium', 'long', 'special']
         self.RobotStepL = [0,1,2,3]
         self.RobotForward = ['forward', 'notForward']
         self.robotStop = ['stop', 'notStop']
         self.orientation = [0,1,2,3,4,5,6,7,8,9,10,11]
         self.norientations = len((self.orientation))
         # self.actioncomb = powerset(self.actlistR)
-
-
 
 
     
@@ -73,13 +74,8 @@ class Gridworld():
         self.top_edge3 = []
         self.bottom_edge3 = []
 
-        self.left_edge4 = []
-        self.right_edge4 = []
-        self.top_edge4 = []
-        self.bottom_edge4 = []
-
         self.regions = regions
-        self.moveobstacles_f = moveobstacles_f
+        self.moveobstacles = moveobstacles
         self.states = range(nrows*ncols)
         self.colorstates = set()
         for x in range(self.nstates):
@@ -88,22 +84,18 @@ class Gridworld():
                 self.left_edge.append(x)
                 self.left_edge2.append(x+1)
                 self.left_edge3.append(x+2)
-                self.left_edge4.append(x+3)
             if 0 <= x < self.ncols:
                 self.top_edge.append(x)
                 self.top_edge2.append(x+self.ncols)
                 self.top_edge3.append(x+2*self.ncols)
-                self.top_edge4.append(x+3*self.ncols)
             if x % self.ncols == self.ncols - 1:
                 self.right_edge.append(x)
                 self.right_edge2.append(x-1)
                 self.right_edge3.append(x-2)
-                self.right_edge4.append(x-3)
             if (self.nrows - 1) * self.ncols <= x <= self.nstates:
                 self.bottom_edge.append(x)
                 self.bottom_edge2.append(x-self.ncols)
                 self.bottom_edge3.append(x-2*self.ncols)
-                self.bottom_edge4.append(x-3*self.ncols)
         self.edges = self.left_edge + self.top_edge + self.right_edge + self.bottom_edge
         self.walls = self.edges + obstacles
 
@@ -113,9 +105,6 @@ class Gridworld():
         edges3_temp = self.left_edge3 + self.top_edge3 + self.right_edge3 + self.bottom_edge3
         edges3_temp = [x for x in edges3_temp if x not in self.edges and x not in self.edges2]
         self.edges3 = list( OrderedDict.fromkeys(edges3_temp) )
-        edges4_temp = self.left_edge4 + self.top_edge4 + self.right_edge4 + self.bottom_edge4
-        edges4_temp = [x for x in edges4_temp if x not in self.edges and x not in self.edges2 and x not in self.edges3]
-        self.edges4 = list( OrderedDict.fromkeys(edges4_temp) )
 
         self.obsborder = set()
         for obs in obstacles:
@@ -167,24 +156,31 @@ class Gridworld():
         self.level1states = [291,292,293,294,295,296,329,334,367,372,405,410,443,448,481,482,483,484,485,486]
         self.level2states = [330,331,332,333,368,369,370,371,406,407,408,409,444,445,446,447]
         self.level0states = set(self.states) - set(self.level1states) - set(self.level2states)
-        # self.level1states.append
+
+
+        # self.stair_states = [47]
+        # self.no_robot = []
+        # self.no_obs = [22,23,24,35,36,37,48,49,50,61,62,63,74,75,76,46]
+        self.stair_states = [18]
+        self.no_robot = []
+        self.no_obs = [19,20,30,31,41,42,52,53,62,63,64,17]
+
             
 
-  
+
         self.probMO = {a: np.zeros((self.nstates, self.nstates)) for a in self.actlistMO}
         self.probR = {a: np.zeros((self.nstates, self.nstates)) for a in self.actlistR}
 
-
-        # self.probOfSuccess = dict([])
-        # self.getProbRegions()
-        # self.getProbRegionsMO()
-        # self.getProbRegionsR()
+  
 
         for s in self.states:
             for a in self.actlistMO:
                 self.getProbsMO(s, a)
 
+        # need to add actlistR version
+        # see below
         for s in self.states:
+            # for a in self.actioncomb:
             for a in self.actlistR:
                 for o in self.orientation:
                     self.getProbsR(s, a, o)
@@ -207,10 +203,11 @@ class Gridworld():
         return returnState
 
 
-
     def rcoords(self, coords):
         s = coords[0] * self.ncols + coords[1]
         return s
+
+
 
     def getProbsMO(self, state, action):
         successors = []
@@ -282,7 +279,7 @@ class Gridworld():
             successorsR.append((state,1))
 
         for (next_state, p) in successorsR:
-            self.probR[action][state, next_state] += p 
+            self.probR[action][state, next_state] += p  
 
     def getStateRegion(self, state):
         if state in self.regions['deterministic']:
@@ -290,14 +287,14 @@ class Gridworld():
 
     ## Everything from here onwards is for creating the image
 
-    def render(self, size=30):
+    def render(self, size=60):
         self.height = self.nrows * size + self.nrows + 1
         self.width = self.ncols * size + self.ncols + 1
         self.size = size
 
         #       # initialize pygame ( SDL extensions )
         pygame.init()
-        screenA = pygame.display.set_mode((self.width, self.height))
+        pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption('Gridworld')
         self.screen = pygame.display.get_surface()
         # gets info on what is currently displayed
@@ -415,10 +412,10 @@ class Gridworld():
         for n in range(self.nagents):
             x, y = self.indx2coord(state[n], center=True)
             pygame.draw.circle(self.surface, (0+(50*n), 0+(20*n), 255.0/(n+1)), (y, x), self.size / 2)
-        # if len(self.moveobstacles_f) > 0:
-        #     for s in self.moveobstacles_f:
-        #         x, y = self.indx2coord(s, center=True)
-        #         pygame.draw.circle(self.surface, (205, 92, 0), (y, x), self.size / 2)
+        if len(self.moveobstacles) > 0:
+            for s in self.moveobstacles:
+                x, y = self.indx2coord(s, center=True)
+                pygame.draw.circle(self.surface, (205, 92, 0), (y, x), self.size / 2)
         if blit:
             self.screen.blit(self.surface, (0, 0))
             pygame.display.flip()
@@ -439,8 +436,8 @@ class Gridworld():
         pygame.display.flip()
 
     #
-    def save(self, filename_f):
-        pygame.image.save(self.surface, filename_f)
+    def save(self, filename):
+        pygame.image.save(self.surface, filename)
 
     def redraw(self):
         self.screen.blit(self.surface, (0, 0))
@@ -503,7 +500,7 @@ class Gridworld():
                     coords = pygame.Rect(y - self.size / 2, x - self.size / 2, self.size, self.size)
                     coords = pygame.Rect(y, x, self.size, self.size)
                     pygame.draw.rect(self.bg, color[self.getStateRegion(s)], coords)  # the obstacles are in color grey
-            statecols = [(0,0,0),(150,150,150)]
+            statecols = [(0,0,0),(191,150,150)]
             for i in range(len(self.colorstates)):
                 for s in self.colorstates[i]:
                     if not any(s in x for x in self.targets) and s not in self.obstacles:

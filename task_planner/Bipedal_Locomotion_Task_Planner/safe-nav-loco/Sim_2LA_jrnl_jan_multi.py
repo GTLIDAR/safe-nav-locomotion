@@ -1,6 +1,8 @@
-from gridworld import *
+from gridworld_JRNL_color import *
 from gridworld_fine_2l import *
-import simulateController_2labs as Simulator
+# import simulateController_2labs as Simulator
+# import simulateController_2labs_stairN as Simulator
+import simulateController_2labs_stairN_color_multiObs as Simulator
 import copy
 import compute_all_vis
 import cv2
@@ -11,9 +13,9 @@ scale_f = (int(40*2.8),40)
 rownum_f = 26
 colnum_f = 26
 
-mapname_coarse = 'BeliefEvasion_CDC'
+mapname_coarse = 'BeliefEvasion_jrnl_CRT3'
 rownum_c = 7
-colnum_c = 13
+colnum_c = 12
 
 
 filename_f = 'figures/'+mapname_fine+'.png'
@@ -28,9 +30,14 @@ h_c, w_c = image_c.shape[:2]
 
 folder_locn = 'Examples/'
 
-example_name_c = 'Belief_Evasion_coarse_cdc_map'
-initial_c = [62]
-moveobstacles_c = [28]
+# example_name_c = 'Belief_Evasion_coarse_cdc_map'
+# example_name_c = 'Belief_Evasion_coarse_JRNL_crt3'
+example_name_c = 'Belief_Evasion_coarse_JRNL_crt3_2stair_test2'
+example_name_c = 'Belief_Evasion_coarse_JRNL_crt3_2stair'
+example_name_c = 'Belief_Evasion_coarse_multi_obs_jrnl_stairsN'
+
+initial_c = [56]
+moveobstacles_c = [61,62]
 
 jsonfile_name_c = folder_locn + "Integration/" + example_name_c + ".json"
 trial_name_c = folder_locn + example_name_c
@@ -41,7 +48,8 @@ gwfile_c = folder_locn + '/figs/gridworldfig_' + example_name_c + '.png'
 
 
 # example_name_f = 'Belief_Evasion_fine_abstraction'
-example_name_f = 'Belief_Evasion_fine_abstraction_auto_spec_cross_turns_new_var'
+example_name_f = 'Belief_Evasion_fine_abstraction_JRNL_Boundary6_26x26_stair_mod_test'
+example_name_f = 'Belief_Evasion_fine_abstraction_JRNL_Boundary6_b2b_stair'
 jsonfile_name_f = folder_locn + "Integration/" + example_name_f + ".json"
 trial_name_f = folder_locn + example_name_f
 
@@ -66,7 +74,10 @@ pg_c = [[None]]*nagents
 allowed_states_c[0] = list(set(gwg_c.states) - set(gwg_c.obstacles))
 
 
-pg_c[0] = {0:allowed_states_c[0]}
+# pg_c[0] = {0:allowed_states_c[0]}
+# pg_c[0] = {0:(set(allowed_states_c[0])-set([55,56,57,44,58,70,71])),1:set([55]),2:set([56,57,44,58,70,71])}
+pg_c[0] = {0:(set(allowed_states_c[0])-set([37,38,39,49,50,53,54,61,62,63,64,65,66])),1:set([37,38,49,50]),2:set([61,62]),3:set([39]),4:set([63,64]),5:set([53,54,65,66])}
+
 
 filename_f = [filename_f,(colnum_f,rownum_f),cv2.INTER_AREA]
 gwg_f = Gridworld_fine(filename_f,nagents=nagents, targets=targets, initial_f=initial_f, moveobstacles_f=moveobstacles_f)
@@ -87,6 +98,7 @@ vel = [1,2,2,2]
 invisibilityset_c = []
 obj_c = compute_all_vis.img2obj(image_c)
 iset_c = compute_all_vis.compute_visibility_for_all(obj_c, h_c, w_c, radius=visdist[0])
+
 invisibilityset_c.append(iset_c)
 
 

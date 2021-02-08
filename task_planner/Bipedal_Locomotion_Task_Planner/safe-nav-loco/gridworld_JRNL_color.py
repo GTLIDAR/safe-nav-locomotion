@@ -164,6 +164,7 @@ class Gridworld():
         # self.stair_states = [18]
         # self.no_robot = []
         # self.no_obs = [19,20,30,31,41,42,52,53,62,63,64,17]
+
         self.stair_states = [30,31]
         self.no_robot = []
         self.no_obs = [20,21,22,32,33,34,44,45,46,56,57,58,29]
@@ -414,11 +415,11 @@ class Gridworld():
 
         for n in range(self.nagents):
             x, y = self.indx2coord(state[n], center=True)
-            pygame.draw.circle(self.surface, (0+(50*n), 0+(20*n), 255.0/(n+1)), (y, x), self.size / 2)
+            pygame.draw.circle(self.surface, (0+(50*n), 0+(20*n), 255.0/(n+1)), (y, x), (self.size / 2)-2)
         if len(self.moveobstacles) > 0:
             for s in self.moveobstacles:
                 x, y = self.indx2coord(s, center=True)
-                pygame.draw.circle(self.surface, (205, 92, 0), (y, x), self.size / 2)
+                pygame.draw.circle(self.surface, (205, 92, 0), (y, x), (self.size / 2)-2)
         if blit:
             self.screen.blit(self.surface, (0, 0))
             pygame.display.flip()
@@ -481,7 +482,7 @@ class Gridworld():
 
             for s in range(self.nstates):
                 x, y = self.indx2coord(s, False)
-                coords = pygame.Rect(y, x, self.size, self.size)
+                coords = pygame.Rect(y, x, self.size-1, self.size-1)
                 pygame.draw.rect(self.bg, ((250, 250, 250)), coords)
             for n in range(self.nagents):
 
@@ -492,7 +493,7 @@ class Gridworld():
 
             for s in self.obstacles:
                 (x, y) = self.indx2coord(s)
-                coords = pygame.Rect(y, x, self.size, self.size)
+                coords = pygame.Rect(y, x, self.size-1, self.size-1)
                 pygame.draw.rect(self.bg, (255, 0, 0), coords)  # the obstacles are in color red
 
             color = {'sand': (223, 225, 179), 'gravel': (255, 255, 255), 'grass': (211, 255, 192),
@@ -501,14 +502,14 @@ class Gridworld():
                 if s not in self.edges and not any(s in x for x in self.targets) and s not in self.obstacles and not any(s in x for x in self.colorstates):
                     (x, y) = self.indx2coord(s)
                     coords = pygame.Rect(y - self.size / 2, x - self.size / 2, self.size, self.size)
-                    coords = pygame.Rect(y, x, self.size, self.size)
+                    coords = pygame.Rect(y, x, self.size-1, self.size-1)
                     pygame.draw.rect(self.bg, color[self.getStateRegion(s)], coords)  # the obstacles are in color grey
-            statecols = [(0,0,0),(150,150,150)]
+            statecols = [(0,0,0),(190,150,150),(30,177,237),(51,118,179),(114,192,77),(253,191,145),(121,63,158)]
             for i in range(len(self.colorstates)):
                 for s in self.colorstates[i]:
                     if not any(s in x for x in self.targets) and s not in self.obstacles:
                         (x, y) = self.indx2coord(s)
-                        coords = pygame.Rect(y, x, self.size, self.size)
+                        coords = pygame.Rect(y, x, self.size-1, self.size-1)
                         pygame.draw.rect(self.bg, statecols[i], coords)  # the obstacles are in color grey
 
         self.bg_rendered = True  # don't render again unless flag is set

@@ -85,6 +85,11 @@ class Gridworld():
         self.top_edge5 = []
         self.bottom_edge5 = []
 
+        self.left_edge6 = []
+        self.right_edge6 = []
+        self.top_edge6 = []
+        self.bottom_edge6 = []
+
         self.regions = regions
         self.moveobstacles_f = moveobstacles_f
         self.states = range(nrows*ncols)
@@ -97,24 +102,28 @@ class Gridworld():
                 self.left_edge3.append(x+2)
                 self.left_edge4.append(x+3)
                 self.left_edge5.append(x+4)
+                self.left_edge6.append(x+5)
             if 0 <= x < self.ncols:
                 self.top_edge.append(x)
                 self.top_edge2.append(x+self.ncols)
                 self.top_edge3.append(x+2*self.ncols)
                 self.top_edge4.append(x+3*self.ncols)
                 self.top_edge5.append(x+4*self.ncols)
+                self.top_edge6.append(x+5*self.ncols)
             if x % self.ncols == self.ncols - 1:
                 self.right_edge.append(x)
                 self.right_edge2.append(x-1)
                 self.right_edge3.append(x-2)
                 self.right_edge4.append(x-3)
                 self.right_edge5.append(x-4)
+                self.right_edge6.append(x-5)
             if (self.nrows - 1) * self.ncols <= x <= self.nstates:
                 self.bottom_edge.append(x)
                 self.bottom_edge2.append(x-self.ncols)
                 self.bottom_edge3.append(x-2*self.ncols)
                 self.bottom_edge4.append(x-3*self.ncols)
                 self.bottom_edge5.append(x-4*self.ncols)
+                self.bottom_edge6.append(x-5*self.ncols)
         self.edges = self.left_edge + self.top_edge + self.right_edge + self.bottom_edge
         self.walls = self.edges + obstacles
 
@@ -129,7 +138,11 @@ class Gridworld():
         self.edges4 = list( OrderedDict.fromkeys(edges4_temp) )
         edges5_temp = self.left_edge5 + self.top_edge5 + self.right_edge5 + self.bottom_edge5
         edges5_temp = [x for x in edges5_temp if x not in self.edges and x not in self.edges2 and x not in self.edges3 and x not in self.edges4]
-        self.edges4 = list( OrderedDict.fromkeys(edges5_temp) )
+        self.edges5 = list( OrderedDict.fromkeys(edges5_temp) )
+
+        edges6_temp = self.left_edge6 + self.top_edge6 + self.right_edge6 + self.bottom_edge6
+        edges6_temp = [x for x in edges6_temp if x not in self.edges and x not in self.edges2 and x not in self.edges3 and x not in self.edges4 and x not in self.edges5]
+        self.edges6 = list( OrderedDict.fromkeys(edges6_temp) )
 
         self.obsborder = set()
         for obs in obstacles:
