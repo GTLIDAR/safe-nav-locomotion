@@ -75,7 +75,8 @@ def getGridstate(gwg,currstate,dirn):
         return currstate - gwg.ncols
 
 
-def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibilityset,jsonfile):
+def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibilityset,jsonfile,blockageStates=[]):
+    print(filename)
     automaton = parseJson(filename)
     # for s in automaton:
     #     print automaton[s]['State']['s']
@@ -89,8 +90,9 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
     gwg.colorstates = [set(), set()]
     gridstate = copy.deepcopy(moveobstacles[0])
     output = BeliefIOParser(jsonfile)
-    while True:
-        output.saveState(gwg, automaton, automaton_state,gridstate,moveobstacles)
+    
+    while gwg.moveobstacles[0] not in blockageStates: #formerly while True
+        output.saveState(gwg, automaton, automaton_state,gridstate,moveobstacles, gwg)
         envstate = automaton[automaton_state]['State']['st']
         # try:
         #     print 'Agent state is J ', agentstate
@@ -138,6 +140,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
             if nenvstate not in xstates:
                 nextstatedirn['Belief'].add(n)
         while True:
+
             nextstate = None
             while nextstate == None:
                 while True:
@@ -195,14 +198,36 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 
             if len(automaton[nextstate]['Successors']) > 0:
                 break
+            
 
         print 'Automaton state is ', nextstate
+        print("Obstacle state", gwg.moveobstacles[0])
+        print("Blockages", blockageStates)
+        
+        #NEW: clearing a blockage
+        if agentstate in gwg.resolvable:
+            print("blockage resolved")
+            gwg.resolveBlockage(agentstate)
+
+        
+        
         # print 'actions: \norientation: ' + str(automaton[nextstate]['State']['orientation']) + '\nstop: ' + str(automaton[nextstate]['State']['stop']) + '\nturn Left: ' + str(automaton[nextstate]['State']['turnLeft']) + '\nturn Right: ' + str(automaton[nextstate]['State']['turnRight']) + '\nforward: ' + str(automaton[nextstate]['State']['forward'])  + '\nstepL: ' + str(automaton[nextstate]['State']['stepL'])  + '\nstanceFoot: ' + str(automaton[nextstate]['State']['stanceFoot'])
         # print 'sOld: ' + str(automaton[nextstate]['State']['sOld'])
         # print 'stanceFoot: ' + str(automaton[nextstate]['State']['stanceFoot'])
         # print 'pastTurnStanceMatchFoot: ' + str(automaton[nextstate]['State']['pastTurnStanceMatchFoot'])
         # print str(automaton[nextstate]['State'])
         automaton_state = copy.deepcopy(nextstate)
+
+        # new: check if physically valid
+        if not gwg.physicallyValid():
+            break;
+
+    #NEW: return whatever blockage state it is experiencing, then the obstacle location, then nthe agen location
+    if gwg.moveobstacles[0] in blockageStates:
+        return gwg.moveobstacles[0], gwg.moveobstacles[0], agentstate
+    else:
+        return -1, gwg.moveobstacles[0], agentstate
+
 
 
 # def userControlled_imperfect_sensor(filename,gwg,partitionGrid,moveobstacles,allowed_states,invisibilityset,belief_gridstates,sensor_uncertainty,saveImage=None):
