@@ -41,8 +41,8 @@ targets = [[]]
 # initial = [62]
 # moveobstacles = [28]
 
-initial = [19]
-moveobstacles = [16]
+initial = [71]
+moveobstacles = [14]
 
 filename = [filename,(colnum,rownum),cv2.INTER_AREA]
 
@@ -56,7 +56,7 @@ allowed_states = [[None]] * nagents
 pg = [[None]]*nagents
 allowed_states[0] = list(set(gwg.states) - set(gwg.obstacles))
 
-# pg[0] = {0:allowed_states[0]}
+pg[0] = {0:set(allowed_states[0])}
 # pg[0] = {0: set.union(*[set(range(0,10))])  - set(gwg.obstacles), 1: set.union(*[set(range(10,20))])  - set(gwg.obstacles), 2: set.union(*[set(range(20,30))])  - set(gwg.obstacles),
 #     		 3: set.union(*[set(range(30,40))])  - set(gwg.obstacles), 4: set.union(*[set(range(40,50))])  - set(gwg.obstacles), 5: set.union(*[set(range(50,60))])  - set(gwg.obstacles),
 #     		 6: set.union(*[set(range(60,70))])  - set(gwg.obstacles), 7: set.union(*[set(range(70,80))])  - set(gwg.obstacles), 8: set.union(*[set(range(80,90))])  - set(gwg.obstacles),
@@ -81,7 +81,7 @@ allowed_states[0] = list(set(gwg.states) - set(gwg.obstacles))
 
 # pg[0] = {0:(set(allowed_states[0])-set([12,23,24,25,34,35,37,38,39,45,46,47,48,49,50,56,57,61])),1:set([12,23,24,34,35]),2:set([45,46,56,57]),3:set([25]),4:set([47]),5:set([38,39,48,49,50,61])}
 # pg[0] = {0:(set(allowed_states[0])-set([12,23,24,25,34,35,37,38,39,45,46,47,48,49,50,56,57,61])),1:set([12,23,24,34,35]),2:set([45,46,56,57]),3:set([25]),4:set([47,48]),5:set([38,39,49,50,61])}
-pg[0] = {0:(set(allowed_states[0])-set([37,38,39,49,50,53,54,61,62,63,64,65,66])),1:set([37,38,49,50]),2:set([61,62]),3:set([39]),4:set([63,64]),5:set([53,54,65,66])}
+# pg[0] = {0:(set(allowed_states[0])-set([37,38,39,49,50,53,54,61,62,63,64,65,66])),1:set([37,38,49,50]),2:set([61,62]),3:set([39]),4:set([63,64]),5:set([53,54,65,66])}
 
 visdist = [4,20,3500,3500]
 target_vis_dist = 2

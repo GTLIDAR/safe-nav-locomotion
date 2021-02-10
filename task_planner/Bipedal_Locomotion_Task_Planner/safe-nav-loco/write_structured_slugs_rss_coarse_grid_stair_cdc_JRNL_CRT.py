@@ -184,9 +184,9 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('s_c:0...{}\n'.format(len(gw.states)-1))
     file.write('deliveryrequest\n')
     file.write('sOld:0...{}\n'.format(len(gw.states)-1))
-    file.write('test\n')
-    file.write('cond1\n')
-    file.write('cond2\n')
+    # file.write('test\n')
+    # file.write('cond1\n')
+    # file.write('cond2\n')
 
     file.write('\n[OUTPUT]\n')
     file.write('directionrequest:0...4\n')
@@ -390,27 +390,27 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # stri += ") -> !cond2'\n"
     # file.write(stri)
 
-    stri = "((s_c =28 | s_c =29 | s_c =30) & st = {}) -> cond1'\n".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
-    file.write(stri)
-    stri = "((s_c !=28 & s_c !=29 & s_c !=30) | st != {}) -> !cond1'\n".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
-    file.write(stri)
+    # stri = "((s_c =28 | s_c =29 | s_c =30) & st = {}) -> cond1'\n".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
+    # file.write(stri)
+    # stri = "((s_c !=28 & s_c !=29 & s_c !=30) | st != {}) -> !cond1'\n".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
+    # file.write(stri)
 
-    stri = "((s_c !=28 & s_c !=29 & s_c !=30) & "
-    for visstate in set(nonbeliefstates):
-        stri += "st != {} /\\ ".format(visstate)
-    stri = stri[:-4]
-    stri += ") -> cond2'\n"
-    file.write(stri)
+    # stri = "((s_c !=28 & s_c !=29 & s_c !=30) & "
+    # for visstate in set(nonbeliefstates):
+    #     stri += "st != {} /\\ ".format(visstate)
+    # stri = stri[:-4]
+    # stri += ") -> cond2'\n"
+    # file.write(stri)
 
-    stri = "((s_c =28 | s_c =29 | s_c =30) | "
-    for visstate in set(nonbeliefstates):
-        stri += "st = {} | ".format(visstate)
-    stri = stri[:-2]
-    stri += ") -> !cond2'\n"
-    file.write(stri)
+    # stri = "((s_c =28 | s_c =29 | s_c =30) | "
+    # for visstate in set(nonbeliefstates):
+    #     stri += "st = {} | ".format(visstate)
+    # stri = stri[:-2]
+    # stri += ") -> !cond2'\n"
+    # file.write(stri)
 
-    file.write("cond1 | cond2 -> test'\n")
-    file.write("!cond1 & !cond2 -> !test'\n")
+    # file.write("cond1 | cond2 -> test'\n")
+    # file.write("!cond1 & !cond2 -> !test'\n")
 
     # stri = "((s_c =15 | s_c =16 | s_c =17) & st' = {}) | ((s_c !=15 & s_c !=16 & s_c =17) & ".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
     # for visstate in set(nonbeliefstates):
@@ -513,7 +513,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     file.write('\n[ENV_LIVENESS]\n')
 
-    # file.write("st' = {}\n".format(allstates[-2]))
+    file.write("st' = {}\n".format(allstates[-2]))
     # file.write("st = {}".format(allstates[-2]))
 
     # stri = ""
@@ -529,7 +529,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # stri += ")"
     # file.write(stri)
 
-    file.write("test'\n")
+    # file.write("test'\n")
 
     # stri = "("
     # for visstate in set(nonbeliefstates):

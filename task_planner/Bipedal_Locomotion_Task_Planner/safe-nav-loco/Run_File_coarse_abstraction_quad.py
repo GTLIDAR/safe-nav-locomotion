@@ -36,8 +36,8 @@ if __name__ == '__main__':
     # moveobstacles_c = [61]
     # PUDO_t_c = [54,49]
 
-    initial_c = [20]
-    moveobstacles_c = [66]
+    initial_c = [71]
+    moveobstacles_c = [14]
     PUDO_t_c = [41, 49]
 
     filename_c = 'figures/'+mapname_coarse+'.png'
