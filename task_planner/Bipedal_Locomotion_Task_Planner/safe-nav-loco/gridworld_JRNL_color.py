@@ -22,7 +22,10 @@ class Gridworld():
             regionkeys = {'deterministic'}
             (nrows,ncols) = data.shape[:2]
             data = data.flatten()
-            obstacles = list(np.where(data<254)[0])
+            obstacles = list(np.where(data<127)[0])
+            # NEW: separate list classifying certain things as "resolvable" by the robot but these are still considered 'obstacles' by the MO
+            resolvable = list(np.where((data<254) & (data>127))[0])
+            #### END NEW ####
             regions = dict.fromkeys(regionkeys, {-1})
             regions['deterministic'] = range(nrows * ncols)
 
@@ -37,6 +40,7 @@ class Gridworld():
         self.nrows = nrows
         self.ncols = ncols
         self.obstacles = obstacles
+        self.resolvable = resolvable #NEW: resolvable obstacles
         self.regions = regions
         self.nagents = nagents
         self.nstates = nrows * ncols
@@ -165,11 +169,13 @@ class Gridworld():
         # self.no_robot = []
         # self.no_obs = [19,20,30,31,41,42,52,53,62,63,64,17]
 
-        self.stair_states = [30,31]
-        self.no_robot = []
-        self.no_obs = [20,21,22,32,33,34,44,45,46,56,57,58,29]
+        # self.stair_states = [30,31]
+        # self.no_robot = []
+        # self.no_obs = [20,21,22,32,33,34,44,45,46,56,57,58,29]
 
-            
+        self.stair_states = [0]
+        self.no_robot = []
+        self.no_obs = []
 
 
         self.probMO = {a: np.zeros((self.nstates, self.nstates)) for a in self.actlistMO}
@@ -206,6 +212,18 @@ class Gridworld():
             return self.rcoords((row,col))
         return returnState
 
+    def physicallyValid(self):
+        # check that all MOs are in valid spaces
+        for o in self.moveobstacles:
+            if (o in self.obstacles) or (o in self.resolvable):
+                return False
+        # check that agent is in valid space
+        if self.current in self.obstacles:
+            return False
+
+        # if both valid, return True
+        return True
+
 
     def rcoords(self, coords):
         s = coords[0] * self.ncols + coords[1]
@@ -216,7 +234,7 @@ class Gridworld():
     def getProbsMO(self, state, action):
         successors = []
 
-        if state in self.obstacles:
+        if state in self.obstacles or state in self.resolvable: ### NEW: MO (quadcopter) cannot go through obstacles, but robot can resolve them:
             successors = [(state, 1)]
             for (next_state, p) in successors:
                 self.probMO[action][state, next_state] = p
@@ -288,6 +306,12 @@ class Gridworld():
     def getStateRegion(self, state):
         if state in self.regions['deterministic']:
             return 'deterministic'
+
+    ## NEW: resolving a blockage
+    def resolveBlockage(self, state):
+        if state in self.resolvable:
+            self.resolvable.remove(state)
+            self.bg_rendered = False
 
     ## Everything from here onwards is for creating the image
 
@@ -496,10 +520,15 @@ class Gridworld():
                 coords = pygame.Rect(y, x, self.size-1, self.size-1)
                 pygame.draw.rect(self.bg, (255, 0, 0), coords)  # the obstacles are in color red
 
+            for r in self.resolvable:
+                (x, y) = self.indx2coord(r)
+                coords = pygame.Rect(y, x, self.size, self.size)
+                pygame.draw.rect(self.bg, (0, 165, 0), coords)  # the resolvable obstacles are in color green
+
             color = {'sand': (223, 225, 179), 'gravel': (255, 255, 255), 'grass': (211, 255, 192),
                      'pavement': (192, 255, 253),'deterministic': (255,255,255)}
             for s in range(self.nstates):
-                if s not in self.edges and not any(s in x for x in self.targets) and s not in self.obstacles and not any(s in x for x in self.colorstates):
+                if s not in self.edges and not any(s in x for x in self.targets) and s not in self.obstacles and s not in self.resolvable and not any(s in x for x in self.colorstates):
                     (x, y) = self.indx2coord(s)
                     coords = pygame.Rect(y - self.size / 2, x - self.size / 2, self.size, self.size)
                     coords = pygame.Rect(y, x, self.size-1, self.size-1)
@@ -507,7 +536,7 @@ class Gridworld():
             statecols = [(0,0,0),(190,150,150),(30,177,237),(51,118,179),(114,192,77),(253,191,145),(121,63,158)]
             for i in range(len(self.colorstates)):
                 for s in self.colorstates[i]:
-                    if not any(s in x for x in self.targets) and s not in self.obstacles:
+                    if not any(s in x for x in self.targets) and s not in self.obstacles and s not in self.resolvable:
                         (x, y) = self.indx2coord(s)
                         coords = pygame.Rect(y, x, self.size-1, self.size-1)
                         pygame.draw.rect(self.bg, statecols[i], coords)  # the obstacles are in color grey
