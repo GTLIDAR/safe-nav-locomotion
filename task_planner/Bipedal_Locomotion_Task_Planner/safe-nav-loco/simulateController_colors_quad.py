@@ -101,6 +101,10 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         
         gwg.moveobstacles[0] = copy.deepcopy(gridstate)
         gwg.render()
+        if not gwg.physicallyValid():
+            print("ERROR: SYSTEM ENTERED PHYSICALLY INVALID STATE")
+            break;
+
         if j == 1:
             while True:
                     arrow = gwg.getkeyinput()
@@ -125,6 +129,9 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         gwg.colorstates[0].update(invisibilityset[0][agentstate])
         gwg.render()
         # gwg.draw_state_labels()
+        if not gwg.physicallyValid():
+            print("ERROR: SYSTEM ENTERED PHYSICALLY INVALID STATE")
+            break;
         
         nextstates = automaton[automaton_state]['Successors']
         nextstatedirn = {'W':None,'E':None,'S':None,'N':None,'R':None, 'Belief':set()}
@@ -197,7 +204,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                     print 'Error: Invalid robot move according to quadcopter automaton'
                 nextstate_obs = nextstatedirn_obs[arrow_biped]
                 gridstate = automaton_obs[nextstate_obs]['State']['st']
-                print 'Arrow_biped: ' + str(arrow_biped)
+                #print 'Arrow_biped: ' + str(arrow_biped)
                 
                 arrow = None
                 if gridstate == gwg.moveobstacles[0] - 1:
