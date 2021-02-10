@@ -5,9 +5,13 @@ import compute_all_vis
 import cv2
 
 mapname = 'BeliefEvasion_jrnlt'
-mapname = 'BeliefEvasion_jrnl_CRT3'
+mapname = 'BeliefEvasion_jrnl_CRT3_door'
 rownum = 7
 colnum = 12
+
+mapname = 'Cooperation_actual'
+rownum = 7
+colnum = 13
 
 filename = 'figures/'+mapname+'.png'
 image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
@@ -17,7 +21,8 @@ h, w = image.shape[:2]
 folder_locn = 'Examples/'
 example_name = 'Belief_Evasion_coarse_JRNLtest'
 example_name = 'Belief_Evasion_coarse_JRNL_crt3_2stair'
-# example_name = 'Belief_Evasion_coarse_JRNL_crt3_2stair_no_colis_spec'
+example_name = 'Belief_Evasion_coarse_JRNL_crt3_2stair_no_colis_spec'
+example_name = 'Cooperation_cassie'
 
 # example_name = 'Belief_Evasion_coarse_quad'
 
@@ -27,7 +32,7 @@ outfile = trial_name + '.json'
 infile = copy.deepcopy(trial_name)
 gwfile = folder_locn + '/figs/gridworldfig_' + example_name + '.png'
 
-example_name_obs = 'Belief_Evasion_coarse_quad'
+example_name_obs = 'Cooperation_quad'
 trial_name_obs = folder_locn + example_name_obs
 
 nagents = 1
@@ -36,8 +41,8 @@ targets = [[]]
 # initial = [62]
 # moveobstacles = [28]
 
-initial = [56]
-moveobstacles = [61]
+initial = [19]
+moveobstacles = [16]
 
 filename = [filename,(colnum,rownum),cv2.INTER_AREA]
 

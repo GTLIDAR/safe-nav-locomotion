@@ -28,18 +28,26 @@ if __name__ == '__main__':
     rownum_c = 7
     colnum_c = 11
 
-    mapname_coarse = 'BeliefEvasion_jrnl_CRT3'
+    mapname_coarse = 'BeliefEvasion_jrnl_CRT3_door'
     rownum_c = 7
     colnum_c = 12
+
+    mapname_coarse = 'Cooperation'
+    rownum_c = 7
+    colnum_c = 13
 
     #####     2) pick initial location for robot and dynamic obstacle, pick goal locations     #####
     # initial_c = [52]
     # moveobstacles_c = [38]
     # PUDO_t_c = [53,45]
 
-    initial_c = [56]
-    moveobstacles_c = [61]
-    PUDO_t_c = [57,49]
+    # initial_c = [56]
+    # moveobstacles_c = [61]
+    # PUDO_t_c = [57,49]
+
+    initial_c = [20]
+    moveobstacles_c = [66]
+    PUDO_t_c = [28, 58]
 
     filename_c = 'figures/'+mapname_coarse+'.png'
     image_c = cv2.imread(filename_c, cv2.IMREAD_GRAYSCALE)
@@ -47,7 +55,7 @@ if __name__ == '__main__':
     h_c, w_c = image_c.shape[:2]
     
     folder_locn = 'Examples/'
-    example_name = 'Belief_Evasion_coarse_JRNL_crt3_2stair_no_colis_spec'
+    example_name = 'Cooperation_cassie'#'Belief_Evasion_coarse_JRNL_crt3_2stair_no_colis_spec'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
@@ -87,7 +95,10 @@ if __name__ == '__main__':
     #for crt hyb env 2
     # pg[0] = {0:(set(allowed_states[0])-set([34,35,36,45,46,56,48,49,56,57,58,59,60])),1:set([34,35,45,46]),2:set([56,57]),3:set([36]),4:set([58,59]),5:set([49,60,60,61])}
     #for crt hyb env 3:
-    pg[0] = {0:(set(allowed_states[0])-set([37,38,39,49,50,53,54,61,62,63,64,65,66])),1:set([37,38,49,50]),2:set([61,62]),3:set([39]),4:set([63,64]),5:set([53,54,65,66])}
+    #pg[0] = {0:(set(allowed_states[0])-set([37,38,39,49,50,53,54,61,62,63,64,65,66])),1:set([37,38,49,50]),2:set([61,62]),3:set([39]),4:set([63,64]),5:set([53,54,65,66])}
+    #for coop
+    #pg[0] = {0:(set(allowed_states[0])-set([53, 54, 66, 67, 27, 28, 29, 40, 41, 42, 55, 56, 68, 69, 14, 15, 16, 57, 58, 70, 71])),1:set([53, 54, 66, 67]),2:set([27, 28, 29, 40, 41, 42]),3:set([55, 56, 68, 69]),4:set([14, 15, 16]),5:set([57, 58, 70, 71])}
+
 
 
     visdist = [4,20,3500,3500]
@@ -142,4 +153,4 @@ if __name__ == '__main__':
     print('Total synthesis took ', now - then, ' seconds')
     print('Actual synthesis took ', now - noww, ' seconds')
 
-    Simulator.userControlled_partition(filename_c[0], gwg_c, pg[0], moveobstacles_c, invisibilityset, jsonfile_name)
+    #Simulator.userControlled_partition(filename_c[0], gwg_c, pg[0], moveobstacles_c, invisibilityset, jsonfile_name)
