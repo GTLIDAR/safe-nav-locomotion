@@ -25,6 +25,20 @@ class Gridworld():
             obstacles = list(np.where(data<127)[0])
             # NEW: separate list classifying certain things as "resolvable" by the robot but these are still considered 'obstacles' by the MO
             resolvable = list(np.where((data<254) & (data>127))[0])
+            # every resolvable obstacle has an action to resolve and a state to resolve the action in
+            resolution = dict()
+            for r in resolvable:
+                if data[r] > 191: # if the pixel > 191, it's a door that needs force to push open
+                    action = 'push'
+                    state = r
+                else: # if the pixel <= 191, it's a door which requires a ceiling switch to open (for now, switch is placed one state NW of the door)
+                    action = 'fly'
+                    state = r - (ncols + 1) #CHANGE TO SOMETHING MORE ROBUST LATER
+                resolution[r] = {
+                    'action': action,
+                    'state': state
+                }
+            print(resolution)
             #### END NEW ####
             regions = dict.fromkeys(regionkeys, {-1})
             regions['deterministic'] = range(nrows * ncols)
@@ -40,7 +54,11 @@ class Gridworld():
         self.nrows = nrows
         self.ncols = ncols
         self.obstacles = obstacles
-        self.resolvable = resolvable #NEW: resolvable obstacles
+        #NEW: resolvable obstacles
+        self.resolvable = resolvable 
+        self.resolution = resolution
+        
+
         self.regions = regions
         self.nagents = nagents
         self.nstates = nrows * ncols
@@ -212,17 +230,39 @@ class Gridworld():
             return self.rcoords((row,col))
         return returnState
 
+    # returns boolean
     def physicallyValid(self):
         # check that all MOs are in valid spaces
         for o in self.moveobstacles:
-            if (o in self.obstacles) or (o in self.resolvable):
+            if (o in self.obstacles):
+                return False
+            elif (o in self.resolvable) and (self.resolution[o]['action'] != 'fly'):
                 return False
         # check that agent is in valid space
-        if self.current in self.obstacles:
+        if self.current[0] in self.obstacles:
+            return False
+        elif (self.current[0] in self.resolvable) and (self.resolution[self.current[0]]['action'] != 'push'):
             return False
 
         # if both valid, return True
         return True
+
+    # returns -1 if no violation, otherwise returns the state that is being violated
+    def physicalViolation(self):
+        # check that all MOs are in valid spaces
+        for o in self.moveobstacles:
+            if (o in self.obstacles):
+                return o
+            elif (o in self.resolvable) and (self.resolution[o]['action'] != 'fly'):
+                return o
+        # check that agent is in valid space
+        if self.current[0] in self.obstacles:
+            return self.current[0]
+        elif (self.current[0] in self.resolvable) and (self.resolution[self.current[0]]['action'] != 'push'):
+            return self.current[0]
+
+        # if both valid, return -1
+        return -1
 
 
     def rcoords(self, coords):
@@ -308,7 +348,7 @@ class Gridworld():
             return 'deterministic'
 
     ## NEW: resolving a blockage
-    def resolveBlockage(self, state):
+    def resolveObstacle(self, state):
         if state in self.resolvable:
             self.resolvable.remove(state)
             self.bg_rendered = False
