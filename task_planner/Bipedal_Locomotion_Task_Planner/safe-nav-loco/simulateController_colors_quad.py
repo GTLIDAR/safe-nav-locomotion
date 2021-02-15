@@ -101,8 +101,12 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         
         gwg.moveobstacles[0] = copy.deepcopy(gridstate)
         gwg.render()
-        if not gwg.physicallyValid():
-            print("ERROR: SYSTEM ENTERED PHYSICALLY INVALID STATE")
+        if gwg.physicalViolation() != -1:
+            print("SYSTEM ENTERED PHYSICALLY INVALID STATE")
+            break;
+        elif gwg.current[0] in gwg.resolvable and gwg.resolution[gwg.current[0]]['action'] == 'push':
+            print("CASSIE RESOLVED AN OBSTACLE")
+            gwg.resolveObstacle(gwg.current[0])
             break;
 
         if j == 1:
@@ -129,8 +133,12 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         gwg.colorstates[0].update(invisibilityset[0][agentstate])
         gwg.render()
         # gwg.draw_state_labels()
-        if not gwg.physicallyValid():
-            print("ERROR: SYSTEM ENTERED PHYSICALLY INVALID STATE")
+        if gwg.physicalViolation() != -1:
+            print("SYSTEM ENTERED PHYSICALLY INVALID STATE")
+            break;
+        elif gwg.current[0] in gwg.resolvable and gwg.resolution[gwg.current[0]]['action'] == 'push':
+            print("CASSIE RESOLVED AN OBSTACLE")
+            gwg.resolveObstacle(gwg.current[0])
             break;
         
         nextstates = automaton[automaton_state]['Successors']
