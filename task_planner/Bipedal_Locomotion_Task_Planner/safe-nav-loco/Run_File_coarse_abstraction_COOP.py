@@ -24,7 +24,11 @@ if __name__ == '__main__':
     rownum_c = 7
     colnum_c = 12
 
-    mapname_coarse = 'Cooperation_flipped' # also 'Cooperation_flipped' and 'Cooperation_even'
+    # mapname_coarse = 'Cooperation_flipped' # also 'Cooperation_flipped' and 'Cooperation_even'
+    # rownum_c = 7
+    # colnum_c = 13
+
+    mapname_coarse = 'Cooperation' # also 'Cooperation_flipped' and 'Cooperation_even'
     rownum_c = 7
     colnum_c = 13
 
@@ -39,10 +43,10 @@ if __name__ == '__main__':
 
 
     #coop original
-    # initial_c_orig = [71]
-    # moveobstacles_c_orig = [14]
-    # PUDO_t_c_quad_orig = [66, 49]
-    # PUDO_t_c_cassie_orig = [58, 28]
+    initial_c_orig = [71]
+    moveobstacles_c_orig = [14]
+    PUDO_t_c_quad_orig = [66, 49]
+    PUDO_t_c_cassie_orig = [58, 28]
 
     # #coop troubleshooting
     # initial_c = [15]
@@ -51,10 +55,10 @@ if __name__ == '__main__':
     # PUDO_t_c_cassie = [28, 47]
 
     # # flipped
-    initial_c_orig = [71]
-    moveobstacles_c_orig = [66]
-    PUDO_t_c_quad_orig = [40, 49]
-    PUDO_t_c_cassie_orig = [32, 62]
+    # initial_c_orig = [71]
+    # moveobstacles_c_orig = [66]
+    # PUDO_t_c_quad_orig = [40, 49]
+    # PUDO_t_c_cassie_orig = [32, 62]
 
     # # flipped troubleshooting
     # initial_c = [32]

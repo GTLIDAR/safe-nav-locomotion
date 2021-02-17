@@ -23,6 +23,8 @@ example_name = 'Belief_Evasion_coarse_JRNLtest'
 example_name = 'Belief_Evasion_coarse_JRNL_crt3_2stair'
 example_name = 'Belief_Evasion_coarse_JRNL_crt3_2stair_no_colis_spec'
 example_name = 'Cooperation_cassie'
+example_name = 'Cooperation_cassie_2'
+
 
 # example_name = 'Belief_Evasion_coarse_quad'
 

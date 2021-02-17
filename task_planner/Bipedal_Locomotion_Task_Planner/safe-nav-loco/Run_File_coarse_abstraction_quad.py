@@ -46,7 +46,7 @@ if __name__ == '__main__':
     h_c, w_c = image_c.shape[:2]
     
     folder_locn = 'Examples/'
-    example_name = 'Cooperation_quad'#'Belief_Evasion_coarse_quad'
+    example_name = 'Cooperation_quad_colis'#'Belief_Evasion_coarse_quad'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
