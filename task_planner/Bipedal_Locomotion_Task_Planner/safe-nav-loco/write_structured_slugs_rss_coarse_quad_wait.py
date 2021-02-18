@@ -188,6 +188,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # file.write('cond1\n')
     # file.write('cond2\n')
     file.write('stop\n')
+    file.write('wait\n')
 
     file.write('\n[OUTPUT]\n')
     file.write('directionrequest:0...4\n')
@@ -427,6 +428,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     stri += "!((st = {})) -> (requestPending2' <-> ((st = {} & requestPending1) | requestPending2))\n\n".format(PUDO_targets[1],PUDO_targets[0])
     file.write(stri)
 
+    file.write("wait' -> directionrequest' = 0\n")
 
     # stri = ""
     # for row in range(gw.nrows-1):
@@ -490,6 +492,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
 
     file.write('\n[ENV_LIVENESS]\n')
+    file.write("!wait\n")
 
     # file.write("st' = {}\n".format(allstates[-2]))
     # file.write("st = {}".format(allstates[-2]))

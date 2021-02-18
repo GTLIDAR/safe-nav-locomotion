@@ -183,28 +183,26 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('orientation:0...3\n')
     file.write('s_c:0...{}\n'.format(len(gw.states)-1))
     file.write('deliveryrequest\n')
-    file.write('sOld:0...{}\n'.format(len(gw.states)-1))
-    file.write('cooprequest\n')
-    file.write('coop_location:0...{}\n'.format(len(gw.states)-1))
-
+    # file.write('sOld:0...{}\n'.format(len(gw.states)-1))
     # file.write('test\n')
     # file.write('cond1\n')
     # file.write('cond2\n')
+    file.write('stop\n')
+    file.write('cooprequest\n')
+    file.write('coop_location:0...{}\n'.format(len(gw.states)-1))
 
     file.write('\n[OUTPUT]\n')
     file.write('directionrequest:0...4\n')
-    file.write('stop\n')
+    # file.write('stop\n')
     file.write('requestPending1\n')
     file.write('requestPending2\n')
-    file.write('stairs\n')
-    file.write('stairsN\n')
     file.write('requestPending3\n')
-    # file.write('stairs_n\n')
 
     file.write('\n[ENV_INIT]\n')
     file.write('s_c = {}\n'.format(init))
     file.write('orientation = 1\n')
     file.write('deliveryrequest\n')
+    file.write('stop\n')
     file.write('!cooprequest\n')
     file.write('coop_location = 0\n')
 
@@ -213,11 +211,11 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     else:
         file.write('st = {}\n'.format(allstates[-1]))
 
-    file.write('sOld = {}\n'.format(init))
+    # file.write('sOld = {}\n'.format(init))
     
 
     file.write('\n[SYS_INIT]\n')
-    file.write('stop\n')
+    # file.write('stop\n')
     file.write('directionrequest = 2\n')
 
     # writing env_trans
@@ -226,113 +224,120 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     file.write('\n[ENV_TRANS]\n') #write specifications on how the environment state can transition at each step with "'" indicating the next state
     print 'Writing ENV_TRANS'
-    for st in tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states)) - set(gw.stair_states)): #iterate through allowed states and belief states (tqdm displays a progress bar)
-        if st in allowed_states: #write transitions if the dynamic obstacle (st) is visible
-            for s in allowed_states:
-                repeat = set()
-                stri = "(s_c = {} /\\ st = {}) -> ".format(s,st)
-                beliefset = set()
-                for a in range(gw.nactionsMO):  
-                    for t in np.nonzero(gw.probMO[gw.actlistMO[a]][st])[0]:
-                        if t in allowed_states and t not in repeat:
-                            if t not in invisibilityset[s]:
-                                stri += 'st\' = {} \\/'.format(t)
-                                repeat.add(t)
-                            else:
-                                if not t == s and t not in targets: # not allowed to move on agent's position
-                                    try: # here we evaluate which grid partitions the robot enters with action a
-                                        partgridkeyind = [inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]
-                                        t2 = partitionGrid.keys()[partgridkeyind]
-                                        beliefset.add(t2) 
-                                    except:
-                                        print t
-                                        print 'tests'
-                        elif t not in allowed_states and t not in gw.obstacles and allstates[-1] not in repeat: # Error state????
-                            stri += 'st\' = {} \\/'.format(allstates[-1])
-                            # t should always be in allowed state or in obstacle state
-                            repeat.add(allstates[-1])
-                if len(beliefset) > 0: #here we write the possible next belief state if the obstacle was at the edge of the visible range at the current step
-                    b2 = allstates[len(nonbeliefstates) + beliefcombs.index(beliefset)]
-                    if b2 not in repeat:
-                        stri += ' st\' = {} \\/'.format(b2)
-                        repeat.add(b2)
-                stri = stri[:-3]
-                stri += '\n'
-                file.write(stri)
+    # for st in tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states)) - set(gw.stair_states)): #iterate through allowed states and belief states (tqdm displays a progress bar)
+    #     if st in allowed_states: #write transitions if the dynamic obstacle (st) is visible
+    #         for s in allowed_states:
+    #             repeat = set()
+    #             stri = "(s_c = {} /\\ st = {}) -> ".format(s,st)
+    #             beliefset = set()
+    #             for a in range(gw.nactionsMO):  
+    #                 for t in np.nonzero(gw.probMO[gw.actlistMO[a]][st])[0]:
+    #                     if t in allowed_states and t not in repeat:
+    #                         if t not in invisibilityset[s]:
+    #                             stri += 'st\' = {} \\/'.format(t)
+    #                             repeat.add(t)
+    #                         else:
+    #                             if not t == s and t not in targets: # not allowed to move on agent's position
+    #                                 try: # here we evaluate which grid partitions the robot enters with action a
+    #                                     partgridkeyind = [inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]
+    #                                     t2 = partitionGrid.keys()[partgridkeyind]
+    #                                     beliefset.add(t2) 
+    #                                 except:
+    #                                     print t
+    #                                     print 'tests'
+    #                     elif t not in allowed_states and t not in gw.obstacles and allstates[-1] not in repeat: # Error state????
+    #                         stri += 'st\' = {} \\/'.format(allstates[-1])
+    #                         # t should always be in allowed state or in obstacle state
+    #                         repeat.add(allstates[-1])
+    #             if len(beliefset) > 0: #here we write the possible next belief state if the obstacle was at the edge of the visible range at the current step
+    #                 b2 = allstates[len(nonbeliefstates) + beliefcombs.index(beliefset)]
+    #                 if b2 not in repeat:
+    #                     stri += ' st\' = {} \\/'.format(b2)
+    #                     repeat.add(b2)
+    #             stri = stri[:-3]
+    #             stri += '\n'
+    #             file.write(stri)
 
-        elif st == allstates[-1]: # Error state
-            stri = "st = {} -> ".format(st)
-            for t in fullvis_states:
-                stri += "st' = {} \\/ ".format(t)
-            stri += "st' = {}".format(st)
-            stri += '\n'
-            file.write(stri)
-        else: #write transitions if the dynamic obstacle (st) is not visible ransitions between belief states and from belief state to visible state
-            for s in tqdm(allowed_states):
+    #     elif st == allstates[-1]: # Error state
+    #         stri = "st = {} -> ".format(st)
+    #         for t in fullvis_states:
+    #             stri += "st' = {} \\/ ".format(t)
+    #         stri += "st' = {}".format(st)
+    #         stri += '\n'
+    #         file.write(stri)
+    #     else: #write transitions if the dynamic obstacle (st) is not visible ransitions between belief states and from belief state to visible state
+    #         for s in tqdm(allowed_states):
                 
-                (row,col)=gw.coords(s)
-                closestates = []
-                # coordcombs = [[-3,0],[-2,0],[-1,0],[0,0],[1,0],[2,0],[3,0],[0,-3],[0,-2],[0,-1],[0,1],[0,2],[0,3],[1,1],[1,-1],[-1,-1],[-1,1]]
-                coordcombs = [[-1,0],[0,0],[1,0],[0,-1],[0,1]]
+    #             (row,col)=gw.coords(s)
+    #             closestates = []
+    #             # coordcombs = [[-3,0],[-2,0],[-1,0],[0,0],[1,0],[2,0],[3,0],[0,-3],[0,-2],[0,-1],[0,1],[0,2],[0,3],[1,1],[1,-1],[-1,-1],[-1,1]]
+    #             coordcombs = [[-1,0],[0,0],[1,0],[0,-1],[0,1]]
 
-                for coordspecific in coordcombs:
-                    if (row + coordspecific[0]<gw.nrows) and (row + coordspecific[0]>0):
-                        if (col+coordspecific[1]<gw.ncols) and (col+coordspecific[1]>0):
-                            state = gw.coords2state_works(row+coordspecific[0],col+coordspecific[1])
-                            closestates.append(state)
+    #             for coordspecific in coordcombs:
+    #                 if (row + coordspecific[0]<gw.nrows) and (row + coordspecific[0]>0):
+    #                     if (col+coordspecific[1]<gw.ncols) and (col+coordspecific[1]>0):
+    #                         state = gw.coords2state_works(row+coordspecific[0],col+coordspecific[1])
+    #                         closestates.append(state)
 
-                invisstates = invisibilityset[s]
-                visstates = set(nonbeliefstates) - invisstates
-                beliefcombstate = beliefcombs[st - len(nonbeliefstates)]
-                beliefstates = set()
-                for currbeliefstate in beliefcombstate:
-                    beliefstates = beliefstates.union(partitionGrid[currbeliefstate])
-                    # beliefstates is the combination of actual states that the target can be in based on your current state st
-                beliefstates = beliefstates - set(targets) # remove target positions (no transitions from target positions)
-                beliefstates_vis = beliefstates.intersection(visstates)
+    #             invisstates = invisibilityset[s]
+    #             visstates = set(nonbeliefstates) - invisstates
+    #             beliefcombstate = beliefcombs[st - len(nonbeliefstates)]
+    #             beliefstates = set()
+    #             for currbeliefstate in beliefcombstate:
+    #                 beliefstates = beliefstates.union(partitionGrid[currbeliefstate])
+    #                 # beliefstates is the combination of actual states that the target can be in based on your current state st
+    #             beliefstates = beliefstates - set(targets) # remove target positions (no transitions from target positions)
+    #             beliefstates_vis = beliefstates.intersection(visstates)
 
-                for sOld in closestates:
-                    invisstatesOld = invisibilityset[sOld]
-                    visstatesOld = set(nonbeliefstates) - invisstatesOld
-                    Newvisstates = visstates - visstatesOld
-                    NewInvisStates = visstatesOld - visstates
-                    # beliefstates_invis_and_new = beliefstates - (beliefstates_vis - Newvisstates)
-                    beliefstates_invis_and_new = beliefstates - (beliefstates_vis - Newvisstates) - NewInvisStates
+    #             for sOld in closestates:
+    #                 invisstatesOld = invisibilityset[sOld]
+    #                 visstatesOld = set(nonbeliefstates) - invisstatesOld
+    #                 Newvisstates = visstates - visstatesOld
+    #                 NewInvisStates = visstatesOld - visstates
+    #                 # beliefstates_invis_and_new = beliefstates - (beliefstates_vis - Newvisstates)
+    #                 beliefstates_invis_and_new = beliefstates - (beliefstates_vis - Newvisstates) - NewInvisStates
                     
-                    if len(beliefstates_invis_and_new) > 0:
-                        stri = "(s_c = {} /\\ st = {} /\\ sOld = {}) -> ".format(s,st,sOld)
-                        repeat = set()
-                        beliefset = set()
-                        for b in beliefstates_invis_and_new:
-                        # for b in beliefstates:
-                            for a in range(gw.nactionsMO):
-                                for t in np.nonzero(gw.probMO[gw.actlistMO[a]][b])[0]:
-                                    if t not in invisibilityset[s]:
-                                        if t in allowed_states and t not in repeat:
-                                            stri += ' st\' = {} \\/'.format(t)
-                                            repeat.add(t)
-                                    else:
-                                        if t in gw.targets[0]:
-                                            continue
-                                        if t in allowed_states:
-                                            t2 = partitionGrid.keys()[[inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]]
-                                            beliefset.add(t2)
-                        if len(beliefset) > 0:
-                            b2 = allstates[len(nonbeliefstates) + beliefcombs.index(beliefset)]
-                            if b2 not in repeat:
-                                stri += ' st\' = {} \\/'.format(b2)
-                                repeat.add(b2)
+    #                 if len(beliefstates_invis_and_new) > 0:
+    #                     stri = "(s_c = {} /\\ st = {} /\\ sOld = {}) -> ".format(s,st,sOld)
+    #                     repeat = set()
+    #                     beliefset = set()
+    #                     for b in beliefstates_invis_and_new:
+    #                     # for b in beliefstates:
+    #                         for a in range(gw.nactionsMO):
+    #                             for t in np.nonzero(gw.probMO[gw.actlistMO[a]][b])[0]:
+    #                                 if t not in invisibilityset[s]:
+    #                                     if t in allowed_states and t not in repeat:
+    #                                         stri += ' st\' = {} \\/'.format(t)
+    #                                         repeat.add(t)
+    #                                 else:
+    #                                     if t in gw.targets[0]:
+    #                                         continue
+    #                                     if t in allowed_states:
+    #                                         t2 = partitionGrid.keys()[[inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]]
+    #                                         beliefset.add(t2)
+    #                     if len(beliefset) > 0:
+    #                         b2 = allstates[len(nonbeliefstates) + beliefcombs.index(beliefset)]
+    #                         if b2 not in repeat:
+    #                             stri += ' st\' = {} \\/'.format(b2)
+    #                             repeat.add(b2)
 
-                        stri = stri[:-3]
-                        stri += '\n'
-                        file.write(stri)
+    #                     stri = stri[:-3]
+    #                     stri += '\n'
+    #                     file.write(stri)
 
+    stri = "directionrequest = 0 -> st' = st\n"
+    stri += "directionrequest = 1 -> st'+{} = st\n".format(gw.ncols)
+    stri += "directionrequest = 2 -> st' = st+1\n"
+    stri += "directionrequest = 3 -> st' = st+{}\n".format(gw.ncols)
+    stri += "directionrequest = 4 -> st'+1 = st\n\n"
+    file.write(stri)
     
-    for stair in gw.stair_states:
-        file.write("st' != {}\n".format(stair))
+    # for stair in gw.stair_states:
+    #     file.write("st' != {}\n".format(stair))
     
-    for obs in gw.no_obs:
-        file.write("st' != {}\n".format(obs))
+    # for obs in gw.no_obs:
+    #     file.write("st' != {}\n".format(obs))
+        
 
     ######added for journal env, need to remove######
     # file.write("st' != 49\n")
@@ -349,59 +354,49 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     stri =""
     for edgeS in gw.edges:
-        stri += "st' != {}\n".format(edgeS)
+        stri += "s_c' != {}\n".format(edgeS)
     stri += "\n"
     file.write(stri)
 
 
-    file.write("sOld' = s_c\n\n")
+    # file.write("sOld' = s_c\n\n")
 
 
-    stri = "directionrequest = 0 -> orientation' = orientation & s_c' = s_c\n"
-    stri += "directionrequest = 1 -> orientation' = 0 & s_c'+{} = s_c\n".format(gw.ncols)
-    stri += "directionrequest = 2 -> orientation' = 1 & s_c' = s_c+1\n"
-    stri += "directionrequest = 3 -> orientation' = 2 & s_c' = s_c+{}\n".format(gw.ncols)
-    stri += "directionrequest = 4 -> orientation' = 3 & s_c'+1= s_c\n\n"
+    # stri = "directionrequest = 0 -> orientation' = orientation & s_c' = s_c\n"
+    # stri += "directionrequest = 1 -> orientation' = 0 & s_c'+{} = s_c\n".format(gw.ncols)
+    # stri += "directionrequest = 2 -> orientation' = 1 & s_c' = s_c+1\n"
+    # stri += "directionrequest = 3 -> orientation' = 2 & s_c' = s_c+{}\n".format(gw.ncols)
+    # stri += "directionrequest = 4 -> orientation' = 3 & s_c'+1= s_c\n\n"
+    # file.write(stri)
+
+    stri = "orientation = 0 -> (s_c' = s_c) | (s_c'+{} = s_c) | (s_c' = s_c+1) | (s_c'+1 = s_c)\n".format(gw.ncols)
+    stri += "orientation = 1 -> (s_c' = s_c) | (s_c'+{} = s_c) | (s_c' = s_c+1) | (s_c' = s_c+{})\n".format(gw.ncols, gw.ncols)
+    stri += "orientation = 2 -> (s_c' = s_c) | (s_c' = s_c+{}) | (s_c' = s_c+1) | (s_c'+1 = s_c)\n".format(gw.ncols)
+    stri += "orientation = 3 -> (s_c' = s_c) | (s_c'+{} = s_c) | (s_c'+1 = s_c) | (s_c' = s_c+{})\n".format(gw.ncols, gw.ncols)
     file.write(stri)
     
+    file.write("orientation = 0 -> orientation' != 2\n")
+    file.write("orientation = 1 -> orientation' != 3\n")
+    file.write("orientation = 2 -> orientation' != 0\n")
+    file.write("orientation = 3 -> orientation' != 1\n")
+
+
     # file.write('directionrequest = 0 -> st\' != s_c\n')
 
-    # file.write("cooprequest = 0 -> coop_location' = 0")
-    # file.write("coop_location != 0 & cooprequest != 0 -> coop_location' = coop_location")
+    
     file.write("cooprequest -> coop_location' != 0\n")
     file.write("coop_location != 0 -> coop_location' = coop_location\n")
-    # file.write("coop_location != 0 -> !cooprequest'\n")
 
     for obs in tqdm(gw.obstacles):
         if obs != 0:
             file.write('coop_location != {}\n'.format(obs))
 
-
     # Writing env_safety
     print 'Writing ENV_SAFETY'
-    for obs in tqdm(gw.obstacles):
-        # if obs in allowed_states:
-        file.write('!st = {}\n'.format(obs))
+    for obs in gw.obstacles:
+        file.write('s_c\' != {}\n'.format(obs))
 
 
-
-    # stri = "((s_c =26 | s_c =27 | s_c =28) & st = {}) -> cond1'\n".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
-    # file.write(stri)
-    # stri = "((s_c !=26 & s_c !=27 & s_c !=28) | st != {}) -> !cond1'\n".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
-    # file.write(stri)
-
-    # stri = "((s_c !=26 & s_c !=27 & s_c !=28) & "
-    # for visstate in set(nonbeliefstates):
-    #     stri += "st != {} /\\ ".format(visstate)
-    # stri = stri[:-4]
-    # stri += ") -> cond2'\n"
-    # file.write(stri)
-
-    # stri = "((s_c =26 | s_c =27 | s_c =28) | "
-    # for visstate in set(nonbeliefstates):
-    #     stri += "st = {} | ".format(visstate)
-    # stri = stri[:-2]
-    # stri += ") -> !cond2'\n"
     # file.write(stri)
 
     # stri = "((s_c =28 | s_c =29 | s_c =30) & st = {}) -> cond1'\n".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
@@ -426,20 +421,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # file.write("cond1 | cond2 -> test'\n")
     # file.write("!cond1 & !cond2 -> !test'\n")
 
-    # stri = "((s_c =15 | s_c =16 | s_c =17) & st' = {}) | ((s_c !=15 & s_c !=16 & s_c =17) & ".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
-    # for visstate in set(nonbeliefstates):
-    #     stri += "st' != {} /\\ ".format(visstate)
-    # stri = stri[:-4]
-    # stri += ") -> test'\n"
-    # file.write(stri)
-
-    # stri = "((s_c !=15 & s_c !=16 & s_c !=17) | st' != {}) & ((s_c !=15 & s_c !=16 & s_c =17) & ".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
-    # for visstate in set(nonbeliefstates):
-    #     stri += "st' != {} /\\ ".format(visstate)
-    # stri = stri[:-4]
-    # stri += ") -> test'\n"
-    # file.write(stri)
-
+  
 
 
 
@@ -449,68 +431,55 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     print 'Writing SYS_TRANS'
    
 
-    stri = "(s_c = {}) -> ! requestPending1'\n".format(PUDO_targets[0])
-    stri += "!((s_c = {})) ->(requestPending1' <-> (requestPending1 | deliveryrequest))\n\n".format(PUDO_targets[0])
-    stri += "(s_c = {}) -> !requestPending2'\n".format(PUDO_targets[1])
-    stri += "!((s_c = {})) -> (requestPending2' <-> ((s_c = {} & requestPending1) | requestPending2))\n\n".format(PUDO_targets[1],PUDO_targets[0])
+    stri = "(st = {}) -> ! requestPending1'\n".format(PUDO_targets[0])
+    stri += "!((st = {})) ->(requestPending1' <-> (requestPending1 | deliveryrequest))\n\n".format(PUDO_targets[0])
+    stri += "(st = {}) -> !requestPending2'\n".format(PUDO_targets[1])
+    stri += "!((st = {})) -> (requestPending2' <-> ((st = {} & requestPending1) | requestPending2))\n\n".format(PUDO_targets[1],PUDO_targets[0])
+    file.write(stri)
+
+    stri = "(st = coop_location) -> !requestPending3'\n"
+    stri += "!((st = coop_location)) ->(requestPending3' <-> (requestPending3 | cooprequest))\n\n"
     file.write(stri)
 
 
-    stri = "(s_c = coop_location) -> !requestPending3'\n"
-    stri += "!((s_c = coop_location)) ->(requestPending3' <-> (requestPending3 | cooprequest))\n\n"
-    file.write(stri)
+    # stri = ""
+    # for row in range(gw.nrows-1):
+    #     stri += "s_c = {} \\/ s_c = {} \\/ s_c = {} -> s_c' != {} & s_c' != {} & s_c' != {}\n".format(((row+1)*gw.ncols -3),((row+1)*gw.ncols -2),((row+1)*gw.ncols -1),((row+1)*gw.ncols),((row+1)*gw.ncols +1),((row+1)*gw.ncols +2))
+    # file.write(stri)
 
+    # file.write("orientation' = 0 -> directionrequest' !=3\n")
+    # file.write("orientation' = 1 -> directionrequest' !=4\n")
+    # file.write("orientation' = 2 -> directionrequest' !=1\n")
+    # file.write("orientation' = 3 -> directionrequest' !=2\n")
 
-
-
-
-
-    stri = ""
-    for row in range(gw.nrows-1):
-        stri += "s_c = {} \\/ s_c = {} \\/ s_c = {} -> s_c' != {} & s_c' != {} & s_c' != {}\n".format(((row+1)*gw.ncols -3),((row+1)*gw.ncols -2),((row+1)*gw.ncols -1),((row+1)*gw.ncols),((row+1)*gw.ncols +1),((row+1)*gw.ncols +2))
-
-
-    file.write(stri)
-
-    file.write("orientation' = 0 -> directionrequest' !=3\n")
-    file.write("orientation' = 1 -> directionrequest' !=4\n")
-    file.write("orientation' = 2 -> directionrequest' !=1\n")
-    file.write("orientation' = 3 -> directionrequest' !=2\n")
-
-    file.write("orientation = 0 & directionrequest = 0 -> directionrequest' = 0 \/ directionrequest' = 1\n")
-    file.write("orientation = 1 & directionrequest = 0 -> directionrequest' = 0 \/ directionrequest' = 2\n")
-    file.write("orientation = 2 & directionrequest = 0 -> directionrequest' = 0 \/ directionrequest' = 3\n")
-    file.write("orientation = 3 & directionrequest = 0 -> directionrequest' = 0 \/ directionrequest' = 4\n")
+    # file.write("orientation = 0 & directionrequest = 0 -> directionrequest' = 0 \/ directionrequest' = 1\n")
+    # file.write("orientation = 1 & directionrequest = 0 -> directionrequest' = 0 \/ directionrequest' = 2\n")
+    # file.write("orientation = 2 & directionrequest = 0 -> directionrequest' = 0 \/ directionrequest' = 3\n")
+    # file.write("orientation = 3 & directionrequest = 0 -> directionrequest' = 0 \/ directionrequest' = 4\n")
 
 
     stri =""
     for edgeS in gw.edges:
-        stri += "s_c' != {}\n".format(edgeS)
+        stri += "st' != {}\n".format(edgeS)
     stri += "\n"
     file.write(stri)
 
+
+
+
+    # for obs in gw.obstacles:
+    #     file.write('s_c\' != {}\n'.format(obs))
+
+    for obs in tqdm(gw.obstacles):
+        # if obs in allowed_states:
+        file.write('!st\' = {}\n'.format(obs))
+
+
     for stair in gw.stair_states:
-        file.write("s_c' = {} -> stairs'\n".format(stair))
-
-    stri = ""
-    for stair in gw.stair_states:
-        stri +="s_c' != {} & ".format(stair)
-    stri = stri[:-3]
-    stri +="-> !stairs'\n"
-    file.write(stri)
-
-    file.write("stairs' -> directionrequest' = 2 \/ directionrequest' = 4\n")
-    # file.write("stairs_n -> stairs'\n")
-    # file.write("!stairs_n -> !stairs'\n")
-    file.write("stairs' -> directionrequest' = directionrequest\n")
-
-    file.write("stairsN -> stairs'\n")
-    file.write("!stairsN -> !stairs'\n")
-
-
-
-    for obs in gw.obstacles:
-        file.write('s_c\' != {}\n'.format(obs))
+        file.write("st' != {}\n".format(stair))
+    
+    for obs in gw.no_obs:
+        file.write("st' != {}\n".format(obs))
 
 
     # for s in set(allowed_states):
@@ -530,6 +499,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write("!requestPending1\n")
     file.write("!requestPending2\n")
     file.write("!requestPending3\n")
+
     
 
 
@@ -537,7 +507,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('\n[ENV_LIVENESS]\n')
 
     # file.write("st' = {}\n".format(allstates[-2]))
-    file.write("st = {}".format(allstates[-2]))
+    # file.write("st = {}".format(allstates[-2]))
 
     # stri = ""
     # for visstate in set(nonbeliefstates):
