@@ -25,6 +25,7 @@ class Gridworld():
             obstacles = list(np.where(data<127)[0])
             # NEW: separate list classifying certain things as "resolvable" by the robot but these are still considered 'obstacles' by the MO
             resolvable = list(np.where((data<254) & (data>127))[0])
+            switches = []
             # every resolvable obstacle has an action to resolve and a state to resolve the action in
             resolution = dict()
             for r in resolvable:
@@ -34,6 +35,7 @@ class Gridworld():
                 else: # if the pixel <= 191, it's a door which requires a ceiling switch to open (for now, switch is placed one state NW of the door)
                     action = 'fly'
                     state = r - (ncols + 1) #CHANGE TO SOMETHING MORE ROBUST LATER
+                    switches.append(state)
                 resolution[r] = {
                     'action': action,
                     'state': state
@@ -57,6 +59,7 @@ class Gridworld():
         #NEW: resolvable obstacles
         self.resolvable = resolvable 
         self.resolution = resolution
+        self.switches = switches
         
 
         self.regions = regions
@@ -352,6 +355,8 @@ class Gridworld():
         if state in self.resolvable:
             self.resolvable.remove(state)
             self.bg_rendered = False
+            if self.resolution[state]['state'] in self.switches:
+                self.switches.remove(self.resolution[state]['state'])
 
     ## Everything from here onwards is for creating the image
 
@@ -565,10 +570,15 @@ class Gridworld():
                 coords = pygame.Rect(y, x, self.size, self.size)
                 pygame.draw.rect(self.bg, (0, 165, 0), coords)  # the resolvable obstacles are in color green
 
+            for sw in self.switches:
+                (x, y) = self.indx2coord(sw)
+                coords = pygame.Rect(y, x, self.size, self.size)
+                pygame.draw.rect(self.bg, (165, 165, 0), coords)
+
             color = {'sand': (223, 225, 179), 'gravel': (255, 255, 255), 'grass': (211, 255, 192),
                      'pavement': (192, 255, 253),'deterministic': (255,255,255)}
             for s in range(self.nstates):
-                if s not in self.edges and not any(s in x for x in self.targets) and s not in self.obstacles and s not in self.resolvable and not any(s in x for x in self.colorstates):
+                if s not in self.edges and not any(s in x for x in self.targets) and s not in self.obstacles and s not in self.resolvable and s not in self.switches and not any(s in x for x in self.colorstates):
                     (x, y) = self.indx2coord(s)
                     coords = pygame.Rect(y - self.size / 2, x - self.size / 2, self.size, self.size)
                     coords = pygame.Rect(y, x, self.size-1, self.size-1)
@@ -576,7 +586,7 @@ class Gridworld():
             statecols = [(0,0,0),(190,150,150),(30,177,237),(51,118,179),(114,192,77),(253,191,145),(121,63,158)]
             for i in range(len(self.colorstates)):
                 for s in self.colorstates[i]:
-                    if not any(s in x for x in self.targets) and s not in self.obstacles and s not in self.resolvable:
+                    if not any(s in x for x in self.targets) and s not in self.obstacles and s not in self.resolvable and s not in self.switches:
                         (x, y) = self.indx2coord(s)
                         coords = pygame.Rect(y, x, self.size-1, self.size-1)
                         pygame.draw.rect(self.bg, statecols[i], coords)  # the obstacles are in color grey

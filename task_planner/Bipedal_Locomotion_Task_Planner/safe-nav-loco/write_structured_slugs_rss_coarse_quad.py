@@ -166,7 +166,7 @@ def vis_parser(file_target_vis):
 ##################################################################################
 def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_targets,visset_target = [],targets = [],vel=1,visdist = 5,allowed_states = [],
     fullvis_states = [],partitionGrid =dict(), belief_safety = 0, belief_liveness = 0, target_reachability = False,
-    target_has_vision = False, target_vision_dist = 1.1, filename_target_vis = None, compute_vis_flag = False):
+    target_has_vision = False, target_vision_dist = 1.1, filename_target_vis = None, compute_vis_flag = False, orientation = 1, direction_request = 2):
     nonbeliefstates = gw.states
     beliefcombs = powerset(partitionGrid.keys())
     #beliefcombs is all possible combination of belief states defined in main file
@@ -197,7 +197,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     file.write('\n[ENV_INIT]\n')
     file.write('s_c = {}\n'.format(init))
-    file.write('orientation = 1\n')
+    file.write('orientation = {}\n'.format(orientation))
     file.write('deliveryrequest\n')
     file.write('stop\n')
 
@@ -211,7 +211,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     file.write('\n[SYS_INIT]\n')
     # file.write('stop\n')
-    file.write('directionrequest = 2\n')
+    file.write('directionrequest = {}\n'.format(direction_request))
 
     # writing env_trans
     file.write('\n[ENV_TRANS]\n')
@@ -386,6 +386,11 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     for obs in gw.obstacles:
         file.write('s_c\' != {}\n'.format(obs))
 
+    # potentially needed for future use
+    # for obs in gw.resolvable:
+    #     if gw.resolution[obs]['action'] != 'fly':
+    #         file.write('s_c\' != {}\n'.format(obs))
+
 
     # file.write(stri)
 
@@ -459,6 +464,10 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     for obs in tqdm(gw.obstacles):
         # if obs in allowed_states:
         file.write('!st\' = {}\n'.format(obs))
+
+    # for obs in gw.resolvable:
+    #     if gw.resolution[obs]['action'] != 'push':
+    #         file.write('!st\' = {}\n'.format(obs))
 
 
     for stair in gw.stair_states:

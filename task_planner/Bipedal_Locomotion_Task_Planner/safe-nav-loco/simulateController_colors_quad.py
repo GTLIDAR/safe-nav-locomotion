@@ -91,29 +91,38 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
     gwg.colorstates = [set(), set(), set(), set(), set(), set(), set()]
     gridstate = copy.deepcopy(moveobstacles[0])
     output = BeliefIOParser(jsonfile)
+    states_of_interest = {}
+    for o in gwg.resolvable:
+        states_of_interest[gwg.resolution[o]['state']] = {
+            'action': gwg.resolution[o]['action'],
+            'resolves': o
+        }
     j = 0
     while True:
         j +=1
         output.saveState(gwg, automaton, automaton_state,gridstate,moveobstacles,gwg)
         envstate = automaton_obs[automaton_state_obs]['State']['st']
       
-
         
         gwg.moveobstacles[0] = copy.deepcopy(gridstate)
         gwg.render()
         if gwg.physicalViolation() != -1:
             print("SYSTEM ENTERED PHYSICALLY INVALID STATE")
             break;
-        elif gwg.current[0] in gwg.resolvable and gwg.resolution[gwg.current[0]]['action'] == 'push':
+        elif gwg.current[0] in states_of_interest and states_of_interest[gwg.current[0]]['action'] == 'push':
             print("CASSIE RESOLVED AN OBSTACLE")
             gwg.resolveObstacle(gwg.current[0])
+            break;
+        elif gwg.moveobstacles[0] in states_of_interest and states_of_interest[gwg.moveobstacles[0]]['action'] == 'fly':
+            print("QUADCOPTER RESOLVED AN OBSTACLE")
+            gwg.resolveObstacle(states_of_interest[gwg.moveobstacles[0]]['resolves'])
             break;
 
         if j == 1:
             while True:
-                    arrow = gwg.getkeyinput()
-                    if arrow != None:
-                        break
+                arrow = gwg.getkeyinput()
+                if arrow != None:
+                    break
         # ----------------- Robot Waits For Key Stroke To Take Action-----------------
         # while True:
         #             arrow = gwg.getkeyinput()
@@ -136,9 +145,13 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         if gwg.physicalViolation() != -1:
             print("SYSTEM ENTERED PHYSICALLY INVALID STATE")
             break;
-        elif gwg.current[0] in gwg.resolvable and gwg.resolution[gwg.current[0]]['action'] == 'push':
+        elif gwg.current[0] in states_of_interest and states_of_interest[gwg.current[0]]['action'] == 'push':
             print("CASSIE RESOLVED AN OBSTACLE")
             gwg.resolveObstacle(gwg.current[0])
+            break;
+        elif gwg.moveobstacles[0] in states_of_interest and states_of_interest[gwg.moveobstacles[0]]['action'] == 'fly':
+            print("QUADCOPTER RESOLVED AN OBSTACLE")
+            gwg.resolveObstacle(states_of_interest[gwg.moveobstacles[0]]['resolves'])
             break;
         
         nextstates = automaton[automaton_state]['Successors']
@@ -293,3 +306,9 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         # print str(automaton[nextstate]['State'])
         automaton_state = copy.deepcopy(nextstate)
         automaton_state_obs = copy.deepcopy(nextstate_obs)
+
+    # return cassie orientation and direction request upon completion
+    return (automaton[automaton_state]['State']['orientation'], automaton[automaton_state]['State']['directionrequest'], 
+        automaton_obs[automaton_state_obs]['State']['orientation'], automaton_obs[automaton_state_obs]['State']['directionrequest'])
+
+

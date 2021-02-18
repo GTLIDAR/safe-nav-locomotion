@@ -28,7 +28,7 @@ if __name__ == '__main__':
     # rownum_c = 7
     # colnum_c = 13
 
-    mapname_coarse = 'Cooperation' # also 'Cooperation_flipped' and 'Cooperation_even'
+    mapname_coarse = 'Cooperation_q' # also 'Cooperation_flipped' and 'Cooperation_even'
     rownum_c = 7
     colnum_c = 13
 
@@ -45,14 +45,20 @@ if __name__ == '__main__':
     #coop original
     initial_c_orig = [71]
     moveobstacles_c_orig = [14]
-    PUDO_t_c_quad_orig = [66, 49]
+    PUDO_t_c_quad_orig = [54, 49]
     PUDO_t_c_cassie_orig = [58, 28]
 
+    # coop, quad resolves
+    initial_c_orig = [71]
+    moveobstacles_c_orig = [14]
+    PUDO_t_c_quad_orig = [58, 28]
+    PUDO_t_c_cassie_orig = [54, 49]
+
     # #coop troubleshooting
-    # initial_c = [15]
-    # moveobstacles_c = [46]
-    # PUDO_t_c_quad = [41, 41]
-    # PUDO_t_c_cassie = [28, 47]
+    # initial_c_orig = [47]
+    # moveobstacles_c_orig = [54]
+    # PUDO_t_c_quad_orig = [54, 49]
+    # PUDO_t_c_cassie_orig = [58, 28]
 
     # # flipped
     # initial_c_orig = [71]
@@ -78,7 +84,7 @@ if __name__ == '__main__':
     # PUDO_t_c_quad = [28, 29]
     # PUDO_t_c_cassie = [60, 45]
 
-    need_synthesis = [0, 1, 2]
+    need_synthesis = []#[0, 1, 2]
     run_mode = 0 # 0 = original, 1 = obstacle resolution, -1 = other error
     capabilities = {
         'quad':['fly'],
@@ -89,6 +95,12 @@ if __name__ == '__main__':
     moveobstacles_c = copy.deepcopy(moveobstacles_c_orig)
     PUDO_t_c_quad = copy.deepcopy(PUDO_t_c_quad_orig)
     PUDO_t_c_cassie = copy.deepcopy(PUDO_t_c_cassie_orig)
+
+    # initial cassie orientation/direction for automaton
+    cassie_orientation = 1
+    cassie_request = 2
+    quad_orientation = 1
+    quad_request = 2
 
     # gridworld that synthesis sees
     filename_c = 'figures/'+mapname_coarse+'.png'
@@ -196,11 +208,11 @@ if __name__ == '__main__':
 
                 write_structured_slugs_rss_coarse_quad.write_to_slugs_part_dist(infile_quad, gwg_c, initial_c[n], moveobstacles_c[0], iset, PUDO_targets = PUDO_t_c_quad,
                                                                            visdist =  visdist[n], allowed_states = allowed_states[n],
-                                                                           partitionGrid = pg[n])
+                                                                           partitionGrid = pg[n], orientation = quad_orientation, direction_request = quad_request)
 
                 write_structured_slugs_rss_coarse_grid_stair_cdc_JRNL_CRT.write_to_slugs_part_dist(infile_cassie, gwg_c, initial_c[n], moveobstacles_c[0], iset, PUDO_targets = PUDO_t_c_cassie,
                                                                            visdist =  visdist[n], allowed_states = allowed_states[n],
-                                                                           partitionGrid = pg[n])
+                                                                           partitionGrid = pg[n], orientation = cassie_orientation, direction_request = cassie_request)
                 
                 noww = time.time()
                 print('Writing specifications took ', noww - then, ' seconds')
@@ -238,7 +250,7 @@ if __name__ == '__main__':
 
         f = f + 1
 
-        Simulator.userControlled_partition(outfile_cassie, gwg_a, pg[0], moveobstacles_c, invisibilityset, example_name_cassie + '.json', outfile_quad)
+        cassie_orientation, cassie_request, quad_orientation, quad_request = Simulator.userControlled_partition(outfile_cassie, gwg_a, pg[0], moveobstacles_c, invisibilityset, example_name_cassie + '.json', outfile_quad)
 
         bad_state = gwg_a.physicalViolation()
         print("Bad state: ", bad_state)
@@ -251,13 +263,23 @@ if __name__ == '__main__':
             if gwg_a.resolution[bad_state]['action'] in capabilities['quad']:
                 print("Obstacle Resolvable by Quadcopter")
                 PUDO_t_c_quad[1] = gwg_a.resolution[bad_state]['state']
-                PUDO_t_c_cassie[1] = PUDO_t_c_cassie[0]#gwg_a.current[0] - 1
+                PUDO_t_c_cassie[1] = PUDO_t_c_cassie[0]+1
                 gwg_a.current[0] = gwg_a.current[0] - 1
+                print("old cassie positions", cassie_orientation, cassie_request)
+                cassie_orientation = (cassie_orientation + 1) % 4
+                if cassie_request != 0:
+                    cassie_request = ((cassie_request) % 4) + 1
+                print("new cassie positions", cassie_orientation, cassie_request)
             elif gwg_a.resolution[bad_state]['action'] in capabilities['cassie']:
                 print("Obstacle Resolvable by Cassie")
-                PUDO_t_c_quad[1] = PUDO_t_c_quad[0]#gwg_a.moveobstacles[0] - (2)
+                PUDO_t_c_quad[1] = PUDO_t_c_quad[0]+1#gwg_a.moveobstacles[0] - (2)
                 PUDO_t_c_cassie[1] = gwg_a.resolution[bad_state]['state']
-                gwg_a.moveobstacles[0] = gwg_a.moveobstacles[0] - 2
+                gwg_a.moveobstacles[0] = gwg_a.moveobstacles[0] - 1
+                print("old quad positions", quad_orientation, quad_request)
+                quad_orientation = (quad_orientation + 1) % 4
+                if quad_request != 0:
+                    quad_request = ((quad_request) % 4) +1
+                print("new quad positions", quad_orientation, quad_request)
             else:
                 run_mode = -1
                 print("ERROR: NO AGENT HAS CAPABILITY OF RESOLVING OBSTACLE")
