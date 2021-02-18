@@ -358,7 +358,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     stri += "directionrequest = 4 -> orientation' = 3 & s_c'+1= s_c\n\n"
     file.write(stri)
     
-    file.write('directionrequest = 0 -> st\' != s_c\n')
+    # file.write('directionrequest = 0 -> st\' != s_c\n')
 
     
 

@@ -84,7 +84,7 @@ if __name__ == '__main__':
     # PUDO_t_c_quad = [28, 29]
     # PUDO_t_c_cassie = [60, 45]
 
-    need_synthesis = []#[0, 1, 2]
+    need_synthesis = [0, 1, 2]
     run_mode = 0 # 0 = original, 1 = obstacle resolution, -1 = other error
     capabilities = {
         'quad':['fly'],
