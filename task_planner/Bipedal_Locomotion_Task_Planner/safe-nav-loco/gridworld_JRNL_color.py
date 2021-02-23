@@ -9,6 +9,7 @@ import cv2
 import pygame.locals as pgl
 import copy
 from collections import OrderedDict
+from numpy import random
 
 
 class Gridworld():
@@ -22,7 +23,7 @@ class Gridworld():
             regionkeys = {'deterministic'}
             (nrows,ncols) = data.shape[:2]
             data = data.flatten()
-            obstacles = list(np.where(data<127)[0])
+            obstacles.extend(list(np.where(data<127)[0]))
             # NEW: separate list classifying certain things as "resolvable" by the robot but these are still considered 'obstacles' by the MO
             resolvable = list(np.where((data<254) & (data>127))[0])
             switches = []
@@ -34,8 +35,10 @@ class Gridworld():
                     state = [r]
                 else: # if the pixel <= 191, it's a space that Cassie requires the quadcopter to sense before traversal, which is accomplished by the quadcopter visiting the space directly to the west
                     action = 'sense'
-                    state = [r - 1, r + 1, r - ncols, r + ncols] #
-                    [state.remove(s) for s in state if s in obstacles]
+                    state = []
+                    for s in [r - 1, r + 1, r - ncols, r + ncols]: #
+                        if s not in obstacles:
+                            state.append(s)
                     print(state)
 
                     [switches.append(s) for s in state]
@@ -201,7 +204,10 @@ class Gridworld():
         self.no_robot = []
         self.no_obs = []
 
+        self.defineProbs()
 
+
+    def defineProbs(self):
         self.probMO = {a: np.zeros((self.nstates, self.nstates)) for a in self.actlistMO}
         self.probR = {a: np.zeros((self.nstates, self.nstates)) for a in self.actlistR}
 
@@ -356,10 +362,20 @@ class Gridworld():
     ## NEW: resolving a blockage
     def resolveObstacle(self, state):
         if state in self.resolvable:
+            # remove from resolution dict
             self.resolvable.remove(state)
             self.bg_rendered = False
             if any([s in self.switches for s in self.resolution[state]['state']]):
                 [self.switches.remove(s) for s in self.resolution[state]['state']]
+            # here, can add specific effects for each type of resolvable obstacle
+            # for 'sense', there is a 50% chance that the sensed space is a full obstacle
+            if self.resolution[state]['action'] == 'sense':
+                if random.rand() > 0.5:
+                    self.obstacles.append(state)
+                    self.defineProbs()
+
+
+
 
     ## Everything from here onwards is for creating the image
 

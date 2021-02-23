@@ -15,24 +15,32 @@ import itertools
 import Control_Parser
 import json
 import datetime
+from numpy import random
 
 if __name__ == '__main__':
+
+
     
     print 'time: ' + str(datetime.datetime.now().time())
     ######     1) Choose Environment input figure name:     #####
-    mapname_coarse = 'BeliefEvasion_jrnl_CRT3'
-    rownum_c = 7
-    colnum_c = 12
+    # mapname_coarse = 'BeliefEvasion_jrnl_CRT3'
+    # rownum_c = 7
+    # colnum_c = 12
 
     # mapname_coarse = 'Cooperation_flipped' # also 'Cooperation_flipped' and 'Cooperation_even'
     # rownum_c = 7
     # colnum_c = 13
+    
 
-    mapname_coarse = 'Cooperation_chain' # also 'Cooperation_flipped' and 'Cooperation_even'
+    mapname_coarse = 'Cooperation_chain' # ['Cooperation', 'Cooperation_sense','Cooperation_chain'] 
     rownum_c = 7
     colnum_c = 13
 
     #####     2) pick initial location for robot and dynamic obstacle, pick goal locations     #####
+    # NOTE: for now we do assume that the first target is always reachable, if any are blocked it is the second target
+    # this is because when resynthesizing, we keep the first target and change the second
+    # TODO is to make this more robust (perhaps setting both to prev?)
+
     # initial_c = [52]
     # moveobstacles_c = [38]
     # PUDO_t_c = [53,45]
@@ -47,6 +55,21 @@ if __name__ == '__main__':
     # moveobstacles_c_orig = [14]
     # PUDO_t_c_quad_orig = [54, 49]
     # PUDO_t_c_cassie_orig = [58, 28]
+
+    # sense
+    # initial_c_orig = [71]
+    # moveobstacles_c_orig = [14]
+    # PUDO_t_c_quad_orig = [28, 58]
+    # PUDO_t_c_cassie_orig = [41, 49]
+    # random.seed(427052) # this seeds to specifically get the behavior for the 'sense' case study shown in the paper, uncomment for true rng in obstacle sensing
+
+    # chain
+    initial_c_orig = [58]
+    moveobstacles_c_orig = [49]
+    PUDO_t_c_quad_orig = [22, 76]
+    PUDO_t_c_cassie_orig = [41, 45]
+    random.seed(420) # this seeds to specifically get the behavior for the 'chain' case study shown in the paper, uncomment for true rng in obstacle sensing
+
 
     # coop, quad resolves
     # initial_c_orig = [71]
@@ -84,13 +107,9 @@ if __name__ == '__main__':
     # PUDO_t_c_quad = [28, 29]
     # PUDO_t_c_cassie = [60, 45]
 
-    # chain
-    initial_c_orig = [58]
-    moveobstacles_c_orig = [49]
-    PUDO_t_c_quad_orig = [36, 62]
-    PUDO_t_c_cassie_orig = [45, 41]
 
-    need_synthesis = [0, 1, 2, 3, 4, 5]
+
+    need_synthesis = []#[0, 1, 2, 3, 4, 5, 6, 7]
     run_mode = 0 # 0 = original, 1 = obstacle resolution, -1 = other error
     capabilities = {
         'quad':['fly', 'sense'],
@@ -123,8 +142,8 @@ if __name__ == '__main__':
     h_a, w_a = image_a.shape[:2]
     
     folder_locn = 'Examples/'
-    example_name_quad = 'Cooperation_quad'#'Belief_Evasion_coarse_quad'
-    example_name_cassie = 'Cooperation_cassie'#'Belief_Evasion_coarse_quad'
+    example_name_quad = mapname_coarse + '_quad'#'Belief_Evasion_coarse_quad'
+    example_name_cassie = mapname_coarse + '_cassie'#'Belief_Evasion_coarse_quad'
     jsonfile_name_quad = folder_locn + "Integration/" + example_name_quad + ".json"
     jsonfile_name_cassie = folder_locn + "Integration/" + example_name_cassie + ".json"
     trial_name_quad = folder_locn + example_name_quad
@@ -143,6 +162,7 @@ if __name__ == '__main__':
     targets = [[]]
 
     filename_c = [filename_c,(colnum_c,rownum_c),cv2.INTER_AREA]
+    known_additional_obs = []
      
     # actual gridworld environment
     filename_a = [filename_a,(colnum_c,rownum_c),cv2.INTER_AREA]
@@ -152,7 +172,7 @@ if __name__ == '__main__':
 
     while run_mode != -1:
         # gridworld that synthesis sees
-        gwg_c = Gridworld(filename_c,nagents=nagents, targets=targets, initial=initial_c, moveobstacles=moveobstacles_c)
+        gwg_c = Gridworld(filename_c,nagents=nagents, targets=targets, initial=initial_c, moveobstacles=moveobstacles_c, obstacles=known_additional_obs)
         
         gwg_c.colorstates = [set(), set()]
         gwg_c.render()
@@ -258,7 +278,8 @@ if __name__ == '__main__':
 
         f = f + 1
 
-        cassie_orientation, cassie_request, quad_orientation, quad_request, prev_cassie, prev_quad = Simulator.userControlled_partition(outfile_cassie, gwg_a, pg[0], moveobstacles_c, invisibilityset, example_name_cassie + '.json', outfile_quad)
+        cassie_orientation, cassie_request, quad_orientation, quad_request, prev_cassie, prev_quad, new_obs = Simulator.userControlled_partition(outfile_cassie, gwg_a, pg[0], moveobstacles_c, invisibilityset, example_name_cassie + '.json', outfile_quad)
+        known_additional_obs.extend(new_obs)
 
         bad_state = gwg_a.physicalViolation()
         print("Bad state: ", bad_state)
@@ -274,7 +295,8 @@ if __name__ == '__main__':
             if gwg_a.resolution[bad_state]['action'] in capabilities['quad']:
                 print("Obstacle Resolvable by Quadcopter")
                 PUDO_t_c_quad[1] = gwg_a.resolution[bad_state]['state'][0]
-                PUDO_t_c_cassie[1] = PUDO_t_c_cassie[0]+1
+                #PUDO_t_c_cassie[1] = PUDO_t_c_cassie[0]+1
+                PUDO_t_c_cassie = [prev_cassie, prev_cassie]
                 gwg_a.current[0] = prev_cassie
                 print("old cassie positions", cassie_orientation, cassie_request)
                 cassie_orientation = (cassie_orientation + 1) % 4
@@ -284,7 +306,8 @@ if __name__ == '__main__':
 
             elif gwg_a.resolution[bad_state]['action'] in capabilities['cassie']:
                 print("Obstacle Resolvable by Cassie")
-                PUDO_t_c_quad[1] = PUDO_t_c_quad[0]+1#gwg_a.moveobstacles[0] - (2)
+                #PUDO_t_c_quad[1] = PUDO_t_c_quad[0]+1#gwg_a.moveobstacles[0] - (2)
+                PUDO_t_c_quad = [prev_quad, prev_quad]
                 PUDO_t_c_cassie[1] = gwg_a.resolution[bad_state]['state'][0]
                 gwg_a.moveobstacles[0] = prev_quad
                 print("old quad positions", quad_orientation, quad_request)

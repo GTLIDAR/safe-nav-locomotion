@@ -99,6 +99,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 
     prev_cassie = gwg.current[0]
     prev_quad = gwg.moveobstacles[0]
+    new_obs = []
     while True:
         j +=1
         output.saveState(gwg, automaton, automaton_state,gridstate,moveobstacles,gwg)
@@ -117,6 +118,9 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         elif gwg.moveobstacles[0] in states_of_interest and states_of_interest[gwg.moveobstacles[0]]['action'] == 'sense':
             print("QUADCOPTER RESOLVED AN OBSTACLE")
             gwg.resolveObstacle(states_of_interest[gwg.moveobstacles[0]]['resolves'])
+            # if the quadcopter senses an obstacle, add it to known obstacles
+            if states_of_interest[gwg.moveobstacles[0]]['resolves'] in gwg.obstacles:
+                new_obs.append(states_of_interest[gwg.moveobstacles[0]]['resolves'])
             break;
 
         if j == 1:
@@ -153,6 +157,10 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         elif gwg.moveobstacles[0] in states_of_interest and states_of_interest[gwg.moveobstacles[0]]['action'] == 'sense':
             print("QUADCOPTER RESOLVED AN OBSTACLE")
             gwg.resolveObstacle(states_of_interest[gwg.moveobstacles[0]]['resolves'])
+            # if the quadcopter senses an obstacle, add it to known obstacles
+            if states_of_interest[gwg.moveobstacles[0]]['resolves'] in gwg.obstacles:
+                new_obs.append(states_of_interest[gwg.moveobstacles[0]]['resolves'])
+            break;
             break;
 
         prev_cassie = gwg.current[0]
@@ -314,6 +322,6 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
     # return cassie orientation and direction request upon completion
     return (automaton[automaton_state]['State']['orientation'], automaton[automaton_state]['State']['directionrequest'], 
         automaton_obs[automaton_state_obs]['State']['orientation'], automaton_obs[automaton_state_obs]['State']['directionrequest'],
-        prev_cassie, prev_quad)
+        prev_cassie, prev_quad, new_obs)
 
 
