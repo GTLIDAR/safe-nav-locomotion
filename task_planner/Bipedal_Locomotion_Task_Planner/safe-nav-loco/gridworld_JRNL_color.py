@@ -31,11 +31,14 @@ class Gridworld():
             for r in resolvable:
                 if data[r] > 191: # if the pixel > 191, it's a door that needs force to push open
                     action = 'push'
-                    state = r
-                else: # if the pixel <= 191, it's a door which requires a ceiling switch to open (for now, switch is placed one state NW of the door)
-                    action = 'fly'
-                    state = r - (ncols + 1) #CHANGE TO SOMETHING MORE ROBUST LATER
-                    switches.append(state)
+                    state = [r]
+                else: # if the pixel <= 191, it's a space that Cassie requires the quadcopter to sense before traversal, which is accomplished by the quadcopter visiting the space directly to the west
+                    action = 'sense'
+                    state = [r - 1, r + 1, r - ncols, r + ncols] #
+                    [state.remove(s) for s in state if s in obstacles]
+                    print(state)
+
+                    [switches.append(s) for s in state]
                 resolution[r] = {
                     'action': action,
                     'state': state
@@ -239,7 +242,7 @@ class Gridworld():
         for o in self.moveobstacles:
             if (o in self.obstacles):
                 return False
-            elif (o in self.resolvable) and (self.resolution[o]['action'] != 'fly'):
+            elif (o in self.resolvable) and (self.resolution[o]['action'] != 'sense'): # TODO: pass in capabilities instead of hardcoding these values
                 return False
         # check that agent is in valid space
         if self.current[0] in self.obstacles:
@@ -256,7 +259,7 @@ class Gridworld():
         for o in self.moveobstacles:
             if (o in self.obstacles):
                 return o
-            elif (o in self.resolvable) and (self.resolution[o]['action'] != 'fly'):
+            elif (o in self.resolvable) and (self.resolution[o]['action'] != 'sense'):
                 return o
         # check that agent is in valid space
         if self.current[0] in self.obstacles:
@@ -355,8 +358,8 @@ class Gridworld():
         if state in self.resolvable:
             self.resolvable.remove(state)
             self.bg_rendered = False
-            if self.resolution[state]['state'] in self.switches:
-                self.switches.remove(self.resolution[state]['state'])
+            if any([s in self.switches for s in self.resolution[state]['state']]):
+                [self.switches.remove(s) for s in self.resolution[state]['state']]
 
     ## Everything from here onwards is for creating the image
 

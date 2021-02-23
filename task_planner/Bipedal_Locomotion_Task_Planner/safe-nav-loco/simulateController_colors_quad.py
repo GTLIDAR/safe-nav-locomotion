@@ -93,11 +93,12 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
     output = BeliefIOParser(jsonfile)
     states_of_interest = {}
     for o in gwg.resolvable:
-        states_of_interest[gwg.resolution[o]['state']] = {
-            'action': gwg.resolution[o]['action'],
-            'resolves': o
-        }
+        for s in gwg.resolution[o]['state']:
+            states_of_interest[s] = {'action': gwg.resolution[o]['action'],'resolves': o}
     j = 0
+
+    prev_cassie = gwg.current[0]
+    prev_quad = gwg.moveobstacles[0]
     while True:
         j +=1
         output.saveState(gwg, automaton, automaton_state,gridstate,moveobstacles,gwg)
@@ -113,7 +114,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
             print("CASSIE RESOLVED AN OBSTACLE")
             gwg.resolveObstacle(gwg.current[0])
             break;
-        elif gwg.moveobstacles[0] in states_of_interest and states_of_interest[gwg.moveobstacles[0]]['action'] == 'fly':
+        elif gwg.moveobstacles[0] in states_of_interest and states_of_interest[gwg.moveobstacles[0]]['action'] == 'sense':
             print("QUADCOPTER RESOLVED AN OBSTACLE")
             gwg.resolveObstacle(states_of_interest[gwg.moveobstacles[0]]['resolves'])
             break;
@@ -149,10 +150,13 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
             print("CASSIE RESOLVED AN OBSTACLE")
             gwg.resolveObstacle(gwg.current[0])
             break;
-        elif gwg.moveobstacles[0] in states_of_interest and states_of_interest[gwg.moveobstacles[0]]['action'] == 'fly':
+        elif gwg.moveobstacles[0] in states_of_interest and states_of_interest[gwg.moveobstacles[0]]['action'] == 'sense':
             print("QUADCOPTER RESOLVED AN OBSTACLE")
             gwg.resolveObstacle(states_of_interest[gwg.moveobstacles[0]]['resolves'])
             break;
+
+        prev_cassie = gwg.current[0]
+        prev_quad = gwg.moveobstacles[0]
         
         nextstates = automaton[automaton_state]['Successors']
         nextstatedirn = {'W':None,'E':None,'S':None,'N':None,'R':None, 'Belief':set()}
@@ -309,6 +313,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 
     # return cassie orientation and direction request upon completion
     return (automaton[automaton_state]['State']['orientation'], automaton[automaton_state]['State']['directionrequest'], 
-        automaton_obs[automaton_state_obs]['State']['orientation'], automaton_obs[automaton_state_obs]['State']['directionrequest'])
+        automaton_obs[automaton_state_obs]['State']['orientation'], automaton_obs[automaton_state_obs]['State']['directionrequest'],
+        prev_cassie, prev_quad)
 
 

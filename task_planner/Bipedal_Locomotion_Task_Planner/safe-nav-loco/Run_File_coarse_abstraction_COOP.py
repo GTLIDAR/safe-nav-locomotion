@@ -28,7 +28,7 @@ if __name__ == '__main__':
     # rownum_c = 7
     # colnum_c = 13
 
-    mapname_coarse = 'Cooperation_q' # also 'Cooperation_flipped' and 'Cooperation_even'
+    mapname_coarse = 'Cooperation_chain' # also 'Cooperation_flipped' and 'Cooperation_even'
     rownum_c = 7
     colnum_c = 13
 
@@ -43,16 +43,16 @@ if __name__ == '__main__':
 
 
     #coop original
-    initial_c_orig = [71]
-    moveobstacles_c_orig = [14]
-    PUDO_t_c_quad_orig = [54, 49]
-    PUDO_t_c_cassie_orig = [58, 28]
+    # initial_c_orig = [71]
+    # moveobstacles_c_orig = [14]
+    # PUDO_t_c_quad_orig = [54, 49]
+    # PUDO_t_c_cassie_orig = [58, 28]
 
     # coop, quad resolves
-    initial_c_orig = [71]
-    moveobstacles_c_orig = [14]
-    PUDO_t_c_quad_orig = [58, 28]
-    PUDO_t_c_cassie_orig = [54, 49]
+    # initial_c_orig = [71]
+    # moveobstacles_c_orig = [14]
+    # PUDO_t_c_quad_orig = [58, 28]
+    # PUDO_t_c_cassie_orig = [54, 49]
 
     # #coop troubleshooting
     # initial_c_orig = [47]
@@ -84,12 +84,20 @@ if __name__ == '__main__':
     # PUDO_t_c_quad = [28, 29]
     # PUDO_t_c_cassie = [60, 45]
 
-    need_synthesis = [0, 1, 2]
+    # chain
+    initial_c_orig = [58]
+    moveobstacles_c_orig = [49]
+    PUDO_t_c_quad_orig = [36, 62]
+    PUDO_t_c_cassie_orig = [45, 41]
+
+    need_synthesis = [0, 1, 2, 3, 4, 5]
     run_mode = 0 # 0 = original, 1 = obstacle resolution, -1 = other error
     capabilities = {
-        'quad':['fly'],
+        'quad':['fly', 'sense'],
         'cassie':['push', 'grab']
     }
+    pending_cassie_PUDO = []
+    pending_quad_PUDO = []
 
     initial_c = copy.deepcopy(initial_c_orig)
     moveobstacles_c = copy.deepcopy(moveobstacles_c_orig)
@@ -250,31 +258,35 @@ if __name__ == '__main__':
 
         f = f + 1
 
-        cassie_orientation, cassie_request, quad_orientation, quad_request = Simulator.userControlled_partition(outfile_cassie, gwg_a, pg[0], moveobstacles_c, invisibilityset, example_name_cassie + '.json', outfile_quad)
+        cassie_orientation, cassie_request, quad_orientation, quad_request, prev_cassie, prev_quad = Simulator.userControlled_partition(outfile_cassie, gwg_a, pg[0], moveobstacles_c, invisibilityset, example_name_cassie + '.json', outfile_quad)
 
         bad_state = gwg_a.physicalViolation()
         print("Bad state: ", bad_state)
         if bad_state != -1:
             # if it's a physical Violation, resolve
-            run_mode = 1
+            # first, save what the previous objective was, will pop later once current violation is resolved
+            pending_cassie_PUDO.append(copy.deepcopy(PUDO_t_c_cassie))
+            pending_quad_PUDO.append(copy.deepcopy(PUDO_t_c_quad))
+            #run_mode = 1 this no longer necessary with push/pop method
             print(gwg_a.current)
             # change PUDO targets to resolve obstacles
-            # for now, move quad/cassie two states left if it's the one causing the violation
+            # for now, move quad/cassie one space if it's the one causing the violation (hand tuned atm)
             if gwg_a.resolution[bad_state]['action'] in capabilities['quad']:
                 print("Obstacle Resolvable by Quadcopter")
-                PUDO_t_c_quad[1] = gwg_a.resolution[bad_state]['state']
+                PUDO_t_c_quad[1] = gwg_a.resolution[bad_state]['state'][0]
                 PUDO_t_c_cassie[1] = PUDO_t_c_cassie[0]+1
-                gwg_a.current[0] = gwg_a.current[0] - 1
+                gwg_a.current[0] = prev_cassie
                 print("old cassie positions", cassie_orientation, cassie_request)
                 cassie_orientation = (cassie_orientation + 1) % 4
                 if cassie_request != 0:
                     cassie_request = ((cassie_request) % 4) + 1
                 print("new cassie positions", cassie_orientation, cassie_request)
+
             elif gwg_a.resolution[bad_state]['action'] in capabilities['cassie']:
                 print("Obstacle Resolvable by Cassie")
                 PUDO_t_c_quad[1] = PUDO_t_c_quad[0]+1#gwg_a.moveobstacles[0] - (2)
-                PUDO_t_c_cassie[1] = gwg_a.resolution[bad_state]['state']
-                gwg_a.moveobstacles[0] = gwg_a.moveobstacles[0] - 1
+                PUDO_t_c_cassie[1] = gwg_a.resolution[bad_state]['state'][0]
+                gwg_a.moveobstacles[0] = prev_quad
                 print("old quad positions", quad_orientation, quad_request)
                 quad_orientation = (quad_orientation + 1) % 4
                 if quad_request != 0:
@@ -286,11 +298,11 @@ if __name__ == '__main__':
 
 
         else:
-            # if not, either a separate error occurred (in which case the code has failed elsewhere) or an obstacle has been resolved, return to original goal
-            run_mode = 0
+            # if not, either a separate error occurred (in which case the code has failed elsewhere) or an obstacle has been resolved, return to previous goal
+            # run_mode = 0 this no longer necessary with push/pop method
 
-            PUDO_t_c_quad = copy.deepcopy(PUDO_t_c_quad_orig)
-            PUDO_t_c_cassie = copy.deepcopy(PUDO_t_c_cassie_orig)
+            PUDO_t_c_quad = pending_quad_PUDO.pop()
+            PUDO_t_c_cassie = pending_cassie_PUDO.pop()
 
         # update initial states to current states
         initial_c = gwg_a.current
