@@ -23,8 +23,8 @@ if __name__ == '__main__':
     print 'time: ' + str(datetime.datetime.now().time())
     mapname_fine = 'fine_abstraction'
     scale = (int(40*2.8),40)
-    rownum_f = 26
-    rownum_f = 26
+    rownum_f = 23
+    rownum_f = 23
 
     filename_f = 'figures/'+mapname_fine+'.png'
     image_f = cv2.imread(filename_f, cv2.IMREAD_GRAYSCALE)
@@ -32,7 +32,7 @@ if __name__ == '__main__':
     h_f, w_f = image_f.shape[:2]
     
     folder_locn = 'Examples/'
-    example_name = 'Belief_Evasion_fine_abstraction_JRNL_Boundary6_b2b_stair'
+    example_name = 'Belief_Evasion_fine_abstraction_JRNL_Boundary6_b2b_stair_test_23'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'

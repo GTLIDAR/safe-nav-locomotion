@@ -46,7 +46,7 @@ class BeliefIOParser():
                 obs_location.append(a)
                 obs_location.append(b)
             except:
-                obs_location = gwg.coords(gridstate)
+                obs_location = gwg_c.coords(gridstate)
 
         output = json.dumps({'agent_state': agent_state, 'agent_location': agent_location, \
             'env_state': env_state, 'obstacle_location': obs_location, \

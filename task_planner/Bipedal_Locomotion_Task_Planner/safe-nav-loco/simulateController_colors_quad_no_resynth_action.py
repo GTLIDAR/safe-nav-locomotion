@@ -75,22 +75,32 @@ def getGridstate(gwg,currstate,dirn):
         return currstate - gwg.ncols
 
 
-def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibilityset,jsonfile,jsonfile_obs,capabilities):
+def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibilityset,jsonfile,jsonfile_obs,capabilities,filename_f,gwg_f,partitionGrid_f,moveobstacles_f,invisibilityset_f,jsonfile_f):
     automaton = parseJson(filename)
     automaton_obs = parseJson(jsonfile_obs)
+    automaton_f = parseJson(filename_f)
     # for s in automaton:
     #     print automaton[s]['State']['s']
 
     automaton_state = 0
     automaton_state_obs = 0
+    automaton_state_f = 0
     xstates = list(set(gwg.states))
+    xstates_f = list(set(gwg_f.states))
     allstates = copy.deepcopy(xstates)
+    allstates_f = copy.deepcopy(xstates_f)
     beliefcombs = powerset(partitionGrid.keys())
+    beliefcombs_f = powerset(partitionGrid_f.keys())
     for i in range(gwg.nstates,gwg.nstates+ len(beliefcombs)):
         allstates.append(i)
+    for i in range(gwg_f.nstates,gwg_f.nstates+ len(beliefcombs_f)):
+        allstates_f.append(i)
     gwg.colorstates = [set(), set(), set(), set(), set(), set(), set()]
+    gwg_f.colorstates = [set(), set()]
     gridstate = copy.deepcopy(moveobstacles[0])
+    gridstate_f = copy.deepcopy(moveobstacles_f[0])
     output = BeliefIOParser(jsonfile)
+    output_f = BeliefIOParser(jsonfile_f)
     j = 0
     wait=0
     coop_location_c = 0
@@ -103,11 +113,16 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         j +=1
         output.saveState(gwg, automaton, automaton_state,gridstate,moveobstacles,gwg)
         envstate = automaton_obs[automaton_state_obs]['State']['st']
+        envstate_f = automaton_f[automaton_state_f]['State']['st']
       
 
         
         gwg.moveobstacles[0] = copy.deepcopy(gridstate)
         gwg.render()
+
+        gwg_f.moveobstacles_f[0] = copy.deepcopy(gridstate_f)
+
+
         if gwg.physicalViolation() != -1 and wait_over == 0:
             print("SYSTEM ENTERED PHYSICALLY INVALID STATE")
             # break;
@@ -152,6 +167,130 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         # ---------------------------------------------------------------------------------
         time.sleep(0.2)
         agentstate = automaton[automaton_state]['State']['s_c']
+        nav_req = automaton[automaton_state]['State']['directionrequest']
+
+        agentstate_f = automaton_f[automaton_state_f]['State']['s']
+
+
+
+        while True:
+            output_f.saveState(gwg_f, automaton_f, automaton_state_f,gridstate,moveobstacles_f,gwg)
+            agentstate_f = automaton_f[automaton_state_f]['State']['s']
+          
+
+            nextstates_f = automaton_f[automaton_state_f]['Successors']
+            nextstatedirn_f = {"1":{"1":{'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}, "0":{'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}},"0":{"1":{'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}, "0":{'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}}}
+            ### nextstatedirn_f first number is stair boolean, second number is direcion request
+            for n in nextstates_f:
+                nenv_dir_req = automaton_f[n]['State']['directionrequest']
+                nenv_stair_req = automaton_f[n]['State']['stair']
+                nenv_stairN_req = automaton_f[n]['State']['stairN']
+                if nenv_stair_req ==1:
+                    if nenv_stairN_req ==1:
+                        if nenv_dir_req == 4:
+                            nextstatedirn_f["1"]["1"]['4'] = n
+                        if nenv_dir_req == 2:
+                            nextstatedirn_f["1"]["1"]['2'] = n
+                        if nenv_dir_req == 3:
+                            nextstatedirn_f["1"]["1"]['3'] = n
+                        if nenv_dir_req == 1:
+                            nextstatedirn_f["1"]["1"]['1'] = n
+                        if nenv_dir_req == 0:
+                            nextstatedirn_f["1"]["1"]['0'] = n
+                        if nenv_dir_req not in xstates:
+                            nextstatedirn_f["1"]['Belief'].add(n)
+                    else:
+                        if nenv_dir_req == 4:
+                            nextstatedirn_f["1"]["0"]['4'] = n
+                        if nenv_dir_req == 2:
+                            nextstatedirn_f["1"]["0"]['2'] = n
+                        if nenv_dir_req == 3:
+                            nextstatedirn_f["1"]["0"]['3'] = n
+                        if nenv_dir_req == 1:
+                            nextstatedirn_f["1"]["0"]['1'] = n
+                        if nenv_dir_req == 0:
+                            nextstatedirn_f["1"]["0"]['0'] = n
+                        if nenv_dir_req not in xstates:
+                            nextstatedirn_f["1"]["0"]['Belief'].add(n)
+                else:
+                    if nenv_stairN_req ==1:
+                        if nenv_dir_req == 4:
+                            nextstatedirn_f["0"]["1"]['4'] = n
+                        if nenv_dir_req == 2:
+                            nextstatedirn_f["0"]["1"]['2'] = n
+                        if nenv_dir_req == 3:
+                            nextstatedirn_f["0"]["1"]['3'] = n
+                        if nenv_dir_req == 1:
+                            nextstatedirn_f["0"]["1"]['1'] = n
+                        if nenv_dir_req == 0:
+                            nextstatedirn_f["0"]["1"]['0'] = n
+                        if nenv_dir_req not in xstates:
+                            nextstatedirn_f["0"]['Belief'].add(n)
+                    else:
+                        if nenv_dir_req == 4:
+                            nextstatedirn_f["0"]["0"]['4'] = n
+                        if nenv_dir_req == 2:
+                            nextstatedirn_f["0"]["0"]['2'] = n
+                        if nenv_dir_req == 3:
+                            nextstatedirn_f["0"]["0"]['3'] = n
+                        if nenv_dir_req == 1:
+                            nextstatedirn_f["0"]["0"]['1'] = n
+                        if nenv_dir_req == 0:
+                            nextstatedirn_f["0"]["0"]['0'] = n
+                        if nenv_dir_req not in xstates:
+                            nextstatedirn_f["0"]["0"]['Belief'].add(n)
+              
+            while True:
+                nextstate_f = None
+                while nextstate_f == None:
+                    time.sleep(0.2)
+                    nextstate_f = nextstatedirn_f[str(automaton[automaton_state]['State']['stairs'])][str(automaton[automaton_state]['State']['stairsN'])][str(automaton[automaton_state]['State']['directionrequest'])]
+                    nenv_dir_req = automaton_f[nextstate_f]['State']['st']
+                    print 'Environment state in fine automaton is', allstates.index(nenv_dir_req)
+                    print 'Environment state in fine grid is', nenv_dir_req
+                    print 'Stair Boolean is ', automaton_f[nextstate_f]['State']['stair']
+                    print 'Step Length is ', automaton_f[nextstate_f]['State']['stepL']
+                    print 'turn is ', automaton_f[nextstate_f]['State']['turn']
+                    gridstate_f = copy.deepcopy(nenv_dir_req)
+                    gwg_f.colorstates[1] = set()
+                    # gwg_f.render()
+
+
+                if len(automaton_f[nextstate_f]['Successors']) > 0:
+                    break
+
+            print 'Automaton fine state is ', nextstate_f
+            # print 'actions: \norientation: ' + str(automaton[nextstate]['State']['orientation']) + '\nstop: ' + str(automaton[nextstate]['State']['stop']) + '\nturn Left: ' + str(automaton[nextstate]['State']['turnLeft']) + '\nturn Right: ' + str(automaton[nextstate]['State']['turnRight']) + '\nforward: ' + str(automaton[nextstate]['State']['forward'])  + '\nstepL: ' + str(automaton[nextstate]['State']['stepL'])  + '\nstanceFoot: ' + str(automaton[nextstate]['State']['stanceFoot'])
+            # print 'sOld: ' + str(automaton[nextstate]['State']['sOld'])
+            # print 'stanceFoot: ' + str(automaton[nextstate]['State']['stanceFoot'])
+            # print 'pastTurnStanceMatchFoot: ' + str(automaton[nextstate]['State']['pastTurnStanceMatchFoot'])
+            # print str(automaton[nextstate]['State'])
+
+            # if automaton_f[nextstate_f]['State']['requestPending1'] == 5:
+            #     # if automaton_f[automaton_state_f]['State']['requestPending1'] != 5:
+            #     break
+
+            automaton_state_f = copy.deepcopy(nextstate_f)
+            agentstate_f = automaton_f[automaton_state_f]['State']['s']
+            gwg_f.render()
+            gwg_f.current = [copy.deepcopy(agentstate_f)]
+            gwg_f.colorstates[0] = set()
+            gwg_f.colorstates[0].update(invisibilityset_f[0][agentstate_f])
+            gwg_f.render()
+
+            # if automaton_f[automaton_state_f]['State']['requestPending1'] == 5:
+            #     break
+            if automaton_f[automaton_state_f]['State']['TaskAchieved'] == 1:
+                break
+
+        time.sleep(0.5)
+
+        gwg.moveobstacles[0] = copy.deepcopy(gridstate)
+        gwg.render()
+
+        agentstate = automaton[automaton_state]['State']['s_c']
+        nav_req = automaton[automaton_state]['State']['directionrequest']
+
         print 'Agent state is ', agentstate
         gwg.render()
         # gwg.moveobstacles[0] = copy.deepcopy(gridstate)

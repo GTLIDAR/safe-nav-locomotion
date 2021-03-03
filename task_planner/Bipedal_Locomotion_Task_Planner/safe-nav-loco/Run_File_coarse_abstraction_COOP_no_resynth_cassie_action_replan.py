@@ -1,6 +1,7 @@
 from gridworld_JRNL_color import *
-import write_structured_slugs_rss_coarse_quad
-import write_structured_slugs_rss_coarse_grid_stair_cdc_JRNL_CRT
+from gridworld_fine_2l import *
+import write_structured_slugs_rss_coarse_quad_wait
+import write_structured_slugs_rss_coarse_grid_cassie
 import compute_all_vis
 import cv2
 # import visibility
@@ -10,37 +11,29 @@ import time
 import copy
 import cPickle as pickle
 from tqdm import *
-import simulateController_colors_quad as Simulator
+import simulateController_colors_quad_no_resynth_action_replan as Simulator
 import itertools
 import Control_Parser
 import json
 import datetime
-from numpy import random
 
 if __name__ == '__main__':
-
-
     
     print 'time: ' + str(datetime.datetime.now().time())
     ######     1) Choose Environment input figure name:     #####
-    # mapname_coarse = 'BeliefEvasion_jrnl_CRT3'
+    mapname_coarse = 'BeliefEvasion_jrnl_CRT3'
+    rownum_c = 7
+    colnum_c = 12
+
+    # mapname_coarse = 'Cooperation_flipped' # also 'Cooperation_flipped' and 'Cooperation_even'
     # rownum_c = 7
-    # colnum_c = 12
+    # colnum_c = 13
 
     mapname_coarse = 'Cooperation' # also 'Cooperation_flipped' and 'Cooperation_even'
     rownum_c = 7
     colnum_c = 13
-    
-
-    # mapname_coarse = 'Cooperation_chain' # ['Cooperation', 'Cooperation_sense','Cooperation_chain'] 
-    # rownum_c = 7
-    # colnum_c = 13
 
     #####     2) pick initial location for robot and dynamic obstacle, pick goal locations     #####
-    # NOTE: for now we do assume that the first target is always reachable, if any are blocked it is the second target
-    # this is because when resynthesizing, we keep the first target and change the second
-    # TODO is to make this more robust (perhaps setting both to prev?)
-
     # initial_c = [52]
     # moveobstacles_c = [38]
     # PUDO_t_c = [53,45]
@@ -53,35 +46,64 @@ if __name__ == '__main__':
     #coop original
     initial_c_orig = [71]
     moveobstacles_c_orig = [14]
-    PUDO_t_c_quad_orig = [54, 49]
+    PUDO_t_c_quad_orig = [66, 49]
     PUDO_t_c_cassie_orig = [58, 28]
 
-    # sense
-    # initial_c_orig = [71]
-    # moveobstacles_c_orig = [14]
-    # PUDO_t_c_quad_orig = [28, 58]
-    # PUDO_t_c_cassie_orig = [41, 49]
-    # random.seed(427052) # this seeds to specifically get the behavior for the 'sense' case study shown in the paper, uncomment for true rng in obstacle sensing
 
-    # chain
-    # initial_c_orig = [58]
-    # moveobstacles_c_orig = [49]
-    # PUDO_t_c_quad_orig = [22, 76]
-    # PUDO_t_c_cassie_orig = [41, 45]
-    # random.seed(420) # this seeds to specifically get the behavior for the 'chain' case study shown in the paper, uncomment for true rng in obstacle sensing
+    mapname_fine = 'fine_abstraction'
+    scale = (int(40*2.8),40)
+    rownum_f = 23
+    colnum_f = 23
+    initial_f = [351]
+    moveobstacles_f = [0]
 
+    folder_locn = 'Examples/'
+    filename_f = 'figures/'+mapname_fine+'.png'
+    image_f = cv2.imread(filename_f, cv2.IMREAD_GRAYSCALE)
+    image_f = cv2.resize(image_f,dsize=(colnum_f,rownum_f),interpolation=cv2.INTER_AREA)
+    h_f, w_f = image_f.shape[:2]
+    
+    example_name_f = 'Belief_Evasion_fine_abstraction_JRNL_Boundary6_b2b_stair_test_23'
+    
 
-    # coop, quad resolves
-    # initial_c_orig = [71]
-    # moveobstacles_c_orig = [14]
-    # PUDO_t_c_quad_orig = [58, 28]
-    # PUDO_t_c_cassie_orig = [54, 49]
+    jsonfile_name_f = folder_locn + "Integration/" + example_name_f + ".json"
+    trial_name_f = folder_locn + example_name_f
 
+    outfile_f = trial_name_f + '.json'
+    infile_f = copy.deepcopy(trial_name_f)
+    gwfile_f = folder_locn + '/figs/gridworldfig_' + example_name_f + '.png'
+    nagents = 1
+    targets = [[]]
+
+    filename_f = [filename_f,(colnum_f,rownum_f),cv2.INTER_AREA]
+    gwg_f = Gridworld_fine(filename_f,nagents=nagents, targets=targets, initial_f=initial_f, moveobstacles_f=moveobstacles_f)
+    gwg_f.colorstates = [set(), set()]
+    gwg_f.render()
+    gwg_f.save(gwfile_f)
+    partition = dict()
+    allowed_states_f = [[None]] * nagents
+    pg_f = [[None]]*nagents
+    # allowed_states_f[0] = list(set(gwg.states) - set(gwg.obstacles))
+    # pg_f[0] = {0:allowed_states_f[0]}
+
+    # invisibilityset_f = []
+    # obj_f = compute_all_vis.img2obj(image_f)
+    # if len(gwg_f.obstacles)>0:
+    #             iset_f = compute_all_vis.compute_visibility_for_all(obj_f, h_f, w_f, radius=visdist[n])
+    # else:
+    #     iset_f = {}
+    #     for state in gwg_f.states:
+    #         iset_f[state] = set()
+    # invisibilityset_f.append(iset_f)
+
+    filename_f = []
+    outfile_f = trial_name_f+'agent'+str(0) +'.json'
+    filename_f.append(outfile_f)
     # #coop troubleshooting
-    # initial_c_orig = [47]
-    # moveobstacles_c_orig = [54]
-    # PUDO_t_c_quad_orig = [54, 49]
-    # PUDO_t_c_cassie_orig = [58, 28]
+    # initial_c = [15]
+    # moveobstacles_c = [46]
+    # PUDO_t_c_quad = [41, 41]
+    # PUDO_t_c_cassie = [28, 47]
 
     # # flipped
     # initial_c_orig = [71]
@@ -107,27 +129,17 @@ if __name__ == '__main__':
     # PUDO_t_c_quad = [28, 29]
     # PUDO_t_c_cassie = [60, 45]
 
-
-
-    need_synthesis = []#[0, 1, 2, 3, 4, 5, 6, 7]
+    need_synthesis = [0, 1, 2]
     run_mode = 0 # 0 = original, 1 = obstacle resolution, -1 = other error
     capabilities = {
-        'quad':['fly', 'sense'],
+        'quad':['fly'],
         'cassie':['push', 'grab']
     }
-    pending_cassie_PUDO = []
-    pending_quad_PUDO = []
 
     initial_c = copy.deepcopy(initial_c_orig)
     moveobstacles_c = copy.deepcopy(moveobstacles_c_orig)
     PUDO_t_c_quad = copy.deepcopy(PUDO_t_c_quad_orig)
     PUDO_t_c_cassie = copy.deepcopy(PUDO_t_c_cassie_orig)
-
-    # initial cassie orientation/direction for automaton
-    cassie_orientation = 1
-    cassie_request = 2
-    quad_orientation = 1
-    quad_request = 2
 
     # gridworld that synthesis sees
     filename_c = 'figures/'+mapname_coarse+'.png'
@@ -142,12 +154,15 @@ if __name__ == '__main__':
     h_a, w_a = image_a.shape[:2]
     
     folder_locn = 'Examples/'
-    example_name_quad = mapname_coarse + '_quad'#'Belief_Evasion_coarse_quad'
-    example_name_cassie = mapname_coarse + '_cassie'#'Belief_Evasion_coarse_quad'
+    example_name_quad = 'Cooperation_quad_wait'#'Belief_Evasion_coarse_quad'
+    example_name_cassie = 'Cooperation_cassie_WO_Resynth_no_colis_2'#'Belief_Evasion_coarse_quad'
+    # example_name_f = 'Belief_Evasion_fine_abstraction_JRNL_Boundary6_b2b_stair_test_23'
     jsonfile_name_quad = folder_locn + "Integration/" + example_name_quad + ".json"
     jsonfile_name_cassie = folder_locn + "Integration/" + example_name_cassie + ".json"
+    # jsonfile_name_f = folder_locn + "Integration/" + example_name_f + ".json"
     trial_name_quad = folder_locn + example_name_quad
     trial_name_cassie = folder_locn + example_name_cassie
+    # trial_name_f = folder_locn + example_name_f
     version = '01'
     slugs = '../../slugs-master/src/slugs' # Path to slugs
     save_to_Gazebo = False
@@ -162,7 +177,6 @@ if __name__ == '__main__':
     targets = [[]]
 
     filename_c = [filename_c,(colnum_c,rownum_c),cv2.INTER_AREA]
-    known_additional_obs = []
      
     # actual gridworld environment
     filename_a = [filename_a,(colnum_c,rownum_c),cv2.INTER_AREA]
@@ -172,7 +186,7 @@ if __name__ == '__main__':
 
     while run_mode != -1:
         # gridworld that synthesis sees
-        gwg_c = Gridworld(filename_c,nagents=nagents, targets=targets, initial=initial_c, moveobstacles=moveobstacles_c, obstacles=known_additional_obs)
+        gwg_c = Gridworld(filename_c,nagents=nagents, targets=targets, initial=initial_c, moveobstacles=moveobstacles_c)
         
         gwg_c.colorstates = [set(), set()]
         gwg_c.render()
@@ -203,7 +217,18 @@ if __name__ == '__main__':
         #pg[0] = {0:(set(allowed_states[0])-set([53, 54, 66, 67, 27, 28, 29, 40, 41, 42, 55, 56, 68, 69, 14, 15, 16, 57, 58, 70, 71])),1:set([53, 54, 66, 67]),2:set([27, 28, 29, 40, 41, 42]),3:set([55, 56, 68, 69]),4:set([14, 15, 16]),5:set([57, 58, 70, 71])}
 
 
-        
+        allowed_states_f[0] = list(set(gwg_c.states) - set(gwg_c.obstacles))
+        pg_f[0] = {0:allowed_states_f[0]}
+
+        invisibilityset_f = []
+        obj_f = compute_all_vis.img2obj(image_f)
+        if len(gwg_f.obstacles)>0:
+                    iset_f = compute_all_vis.compute_visibility_for_all(obj_f, h_f, w_f, radius=visdist[n])
+        else:
+            iset_f = {}
+            for state in gwg_f.states:
+                iset_f[state] = set()
+        invisibilityset_f.append(iset_f)
 
         visdist = [4,20,3500,3500]
         target_vis_dist = 2
@@ -231,101 +256,85 @@ if __name__ == '__main__':
             print 'output files: ', outfile_quad, ', ', outfile_cassie
             print 'input file names:', infile_quad, ', ', infile_cassie
 
-            if f in need_synthesis:
-                then = time.time()
+            # if f in need_synthesis:
+            #     then = time.time()
 
-                write_structured_slugs_rss_coarse_quad.write_to_slugs_part_dist(infile_quad, gwg_c, initial_c[n], moveobstacles_c[0], iset, PUDO_targets = PUDO_t_c_quad,
-                                                                           visdist =  visdist[n], allowed_states = allowed_states[n],
-                                                                           partitionGrid = pg[n], orientation = quad_orientation, direction_request = quad_request)
-
-                write_structured_slugs_rss_coarse_grid_stair_cdc_JRNL_CRT.write_to_slugs_part_dist(infile_cassie, gwg_c, initial_c[n], moveobstacles_c[0], iset, PUDO_targets = PUDO_t_c_cassie,
-                                                                           visdist =  visdist[n], allowed_states = allowed_states[n],
-                                                                           partitionGrid = pg[n], orientation = cassie_orientation, direction_request = cassie_request)
+            #     write_structured_slugs_rss_coarse_quad_wait.write_to_slugs_part_dist(infile_quad, gwg_c, initial_c[n], moveobstacles_c[0], iset, PUDO_targets = PUDO_t_c_quad,
+            #                                                                visdist =  visdist[n], allowed_states = allowed_states[n],
+            #                                                                partitionGrid = pg[n])
                 
-                noww = time.time()
-                print('Writing specifications took ', noww - then, ' seconds')
+            #     write_structured_slugs_rss_coarse_grid_cassie.write_to_slugs_part_dist(infile_cassie, gwg_c, initial_c[n], moveobstacles_c[0], iset, PUDO_targets = PUDO_t_c_cassie,
+            #                                                             visdist =  visdist[n], allowed_states = allowed_states[n],
+            #                                                             partitionGrid = pg[n])
+                
+            #     noww = time.time()
+            #     print('Writing specifications took ', noww - then, ' seconds')
 
-                print ('Converting input files...')
-                os.system('python compiler.py ' + infile_quad + '.structuredslugs > ' + infile_quad + '.slugsin')
-                os.system('python compiler.py ' + infile_cassie + '.structuredslugs > ' + infile_cassie + '.slugsin')
-                print('Computing controllers...')
-                # sp = subprocess.Popen(slugs + ' --explicitStrategy --jsonOutput ' + infile + '.slugsin > ' + outfile,
-                #                           shell=True, stdout=subprocess.PIPE)
-                # sp = subprocess.Popen(slugs + ' --explicitStrategy --fixedPointRecycling --jsonOutput ' + infile + '.slugsin > ' + outfile,
-                #                           shell=True, stdout=subprocess.PIPE)
-                sp_quad = subprocess.Popen(slugs + ' --biasForAction --explicitStrategy --jsonOutput ' + infile_quad + '.slugsin > ' + outfile_quad,
-                                          shell=True, stdout=subprocess.PIPE)
+            #     print ('Converting input files...')
+            #     os.system('python compiler.py ' + infile_quad + '.structuredslugs > ' + infile_quad + '.slugsin')
+                
+            #     os.system('python compiler.py ' + infile_cassie + '.structuredslugs > ' + infile_cassie + '.slugsin')
+            #     print('Computing controllers...')
+            #     # sp = subprocess.Popen(slugs + ' --explicitStrategy --jsonOutput ' + infile + '.slugsin > ' + outfile,
+            #     #                           shell=True, stdout=subprocess.PIPE)
+            #     # sp = subprocess.Popen(slugs + ' --explicitStrategy --fixedPointRecycling --jsonOutput ' + infile + '.slugsin > ' + outfile,
+            #     #                           shell=True, stdout=subprocess.PIPE)
+            #     sp_quad = subprocess.Popen(slugs + ' --biasForAction --explicitStrategy --jsonOutput ' + infile_quad + '.slugsin > ' + outfile_quad,
+            #                               shell=True, stdout=subprocess.PIPE)
 
-                sp_cassie = subprocess.Popen(slugs + ' --biasForAction --explicitStrategy --jsonOutput ' + infile_cassie + '.slugsin > ' + outfile_cassie,
-                                          shell=True, stdout=subprocess.PIPE)
+            #     sp_cassie = subprocess.Popen(slugs + ' --biasForAction --explicitStrategy --jsonOutput ' + infile_cassie + '.slugsin > ' + outfile_cassie,
+            #                             shell=True, stdout=subprocess.PIPE)
                                           
-                # sp = subprocess.Popen(slugs + ' --counterStrategy ',
-                #                           shell=True, stdout=subprocess.PIPE)
+            #     # sp = subprocess.Popen(slugs + ' --counterStrategy ',
+            #     #                           shell=True, stdout=subprocess.PIPE)
 
-                # --computeInterestingRunOfTheSystem
+            #     # --computeInterestingRunOfTheSystem
 
                                           
-                sp_quad.wait()
-                sp_cassie.wait()
+            #     sp_quad.wait()
+            #     sp_cassie.wait()
                 
 
 
         
         now = time.time()
-        if f in need_synthesis:
-            print('Total synthesis took ', now - then, ' seconds')
-            print('Actual synthesis took ', now - noww, ' seconds')
+        # if f in need_synthesis:
+            # print('Total synthesis took ', now - then, ' seconds')
+            # print('Actual synthesis took ', now - noww, ' seconds')
 
         f = f + 1
 
-        cassie_orientation, cassie_request, quad_orientation, quad_request, prev_cassie, prev_quad, new_obs = Simulator.userControlled_partition(outfile_cassie, gwg_a, pg[0], moveobstacles_c, invisibilityset, example_name_cassie + '.json', outfile_quad)
-        known_additional_obs.extend(new_obs)
+        Simulator.userControlled_partition(outfile_cassie, gwg_a, pg[0], moveobstacles_c, invisibilityset, example_name_cassie + '.json', outfile_quad,capabilities,filename_f[0], gwg_f, pg_f[0], moveobstacles_f, invisibilityset_f, jsonfile_name_f)
 
         bad_state = gwg_a.physicalViolation()
         print("Bad state: ", bad_state)
         if bad_state != -1:
             # if it's a physical Violation, resolve
-            # first, save what the previous objective was, will pop later once current violation is resolved
-            pending_cassie_PUDO.append(copy.deepcopy(PUDO_t_c_cassie))
-            pending_quad_PUDO.append(copy.deepcopy(PUDO_t_c_quad))
-            #run_mode = 1 this no longer necessary with push/pop method
+            run_mode = 1
             print(gwg_a.current)
             # change PUDO targets to resolve obstacles
-            # for now, move quad/cassie one space if it's the one causing the violation (hand tuned atm)
+            # for now, move quad/cassie two states left if it's the one causing the violation
             if gwg_a.resolution[bad_state]['action'] in capabilities['quad']:
                 print("Obstacle Resolvable by Quadcopter")
-                PUDO_t_c_quad[1] = gwg_a.resolution[bad_state]['state'][0]
-                #PUDO_t_c_cassie[1] = PUDO_t_c_cassie[0]+1
-                PUDO_t_c_cassie = [prev_cassie, prev_cassie]
-                gwg_a.current[0] = prev_cassie
-                print("old cassie positions", cassie_orientation, cassie_request)
-                cassie_orientation = (cassie_orientation + 1) % 4
-                if cassie_request != 0:
-                    cassie_request = ((cassie_request) % 4) + 1
-                print("new cassie positions", cassie_orientation, cassie_request)
-
+                PUDO_t_c_quad[1] = gwg_a.resolution[bad_state]['state']
+                PUDO_t_c_cassie[1] = PUDO_t_c_cassie[0]#gwg_a.current[0] - 1
+                gwg_a.current[0] = gwg_a.current[0] - 1
             elif gwg_a.resolution[bad_state]['action'] in capabilities['cassie']:
                 print("Obstacle Resolvable by Cassie")
-                #PUDO_t_c_quad[1] = PUDO_t_c_quad[0]+1#gwg_a.moveobstacles[0] - (2)
-                PUDO_t_c_quad = [prev_quad, prev_quad]
-                PUDO_t_c_cassie[1] = gwg_a.resolution[bad_state]['state'][0]
-                gwg_a.moveobstacles[0] = prev_quad
-                print("old quad positions", quad_orientation, quad_request)
-                quad_orientation = (quad_orientation + 1) % 4
-                if quad_request != 0:
-                    quad_request = ((quad_request) % 4) +1
-                print("new quad positions", quad_orientation, quad_request)
+                PUDO_t_c_quad[1] = PUDO_t_c_quad[0]#gwg_a.moveobstacles[0] - (2)
+                PUDO_t_c_cassie[1] = gwg_a.resolution[bad_state]['state']
+                gwg_a.moveobstacles[0] = gwg_a.moveobstacles[0] - 2
             else:
                 run_mode = -1
                 print("ERROR: NO AGENT HAS CAPABILITY OF RESOLVING OBSTACLE")
 
 
         else:
-            # if not, either a separate error occurred (in which case the code has failed elsewhere) or an obstacle has been resolved, return to previous goal
-            # run_mode = 0 this no longer necessary with push/pop method
+            # if not, either a separate error occurred (in which case the code has failed elsewhere) or an obstacle has been resolved, return to original goal
+            run_mode = 0
 
-            PUDO_t_c_quad = pending_quad_PUDO.pop()
-            PUDO_t_c_cassie = pending_cassie_PUDO.pop()
+            PUDO_t_c_quad = copy.deepcopy(PUDO_t_c_quad_orig)
+            PUDO_t_c_cassie = copy.deepcopy(PUDO_t_c_cassie_orig)
 
         # update initial states to current states
         initial_c = gwg_a.current
