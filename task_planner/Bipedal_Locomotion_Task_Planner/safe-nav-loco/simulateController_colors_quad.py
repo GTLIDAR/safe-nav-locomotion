@@ -107,7 +107,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
       
         
         gwg.moveobstacles[0] = copy.deepcopy(gridstate)
-        gwg.render()
+        # gwg.render()
         if gwg.physicalViolation() != -1:
             print("SYSTEM ENTERED PHYSICALLY INVALID STATE")
             break;
@@ -126,6 +126,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         if j == 1:
             while True:
                 arrow = gwg.getkeyinput()
+                # gwg.render()
                 if arrow != None:
                     break
         # ----------------- Robot Waits For Key Stroke To Take Action-----------------
@@ -137,10 +138,10 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         time.sleep(0.2)
         agentstate = automaton[automaton_state]['State']['s_c']
         print 'Agent state is ', agentstate
-        gwg.render()
+        # gwg.render()
         # gwg.moveobstacles[0] = copy.deepcopy(gridstate)
 
-        gwg.render()
+        # gwg.render()
         gwg.current = [copy.deepcopy(agentstate)]
 
         gwg.colorstates[0] = set()
@@ -283,7 +284,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                                     gwg.colorstates[b+1] = copy.deepcopy(partitionGrid[b]) - partitionGrid[b].intersection(visstates)
                                 truebeliefstates = beliefstates - beliefstates.intersection(visstates)
                                 # gwg.colorstates[1] = copy.deepcopy(truebeliefstates)
-                                gwg.render()
+                                # gwg.render()
                                 print 'True belief set is ', truebeliefstates
                                 print 'Size of true belief set is ', len(truebeliefstates)
                 else:
@@ -297,7 +298,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                     gwg.colorstates[4] = set()
                     gwg.colorstates[5] = set()
                     gwg.colorstates[6] = set()
-                    gwg.render()
+                    # gwg.render()
             
             try:
                 print 'orientation is', automaton[automaton_state]['State']['orientation']

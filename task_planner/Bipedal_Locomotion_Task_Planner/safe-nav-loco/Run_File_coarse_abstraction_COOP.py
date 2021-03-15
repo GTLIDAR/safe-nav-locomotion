@@ -32,9 +32,9 @@ if __name__ == '__main__':
     colnum_c = 13
     
 
-    # mapname_coarse = 'Cooperation_chain' # ['Cooperation', 'Cooperation_sense','Cooperation_chain'] 
-    # rownum_c = 7
-    # colnum_c = 13
+    mapname_coarse = 'Cooperation_sense' # ['Cooperation', 'Cooperation_sense','Cooperation_chain'] 
+    rownum_c = 7
+    colnum_c = 13
 
     #####     2) pick initial location for robot and dynamic obstacle, pick goal locations     #####
     # NOTE: for now we do assume that the first target is always reachable, if any are blocked it is the second target
@@ -51,17 +51,17 @@ if __name__ == '__main__':
 
 
     #coop original
-    initial_c_orig = [71]
-    moveobstacles_c_orig = [14]
-    PUDO_t_c_quad_orig = [54, 49]
-    PUDO_t_c_cassie_orig = [58, 28]
-
-    # sense
     # initial_c_orig = [71]
     # moveobstacles_c_orig = [14]
-    # PUDO_t_c_quad_orig = [28, 58]
-    # PUDO_t_c_cassie_orig = [41, 49]
-    # random.seed(427052) # this seeds to specifically get the behavior for the 'sense' case study shown in the paper, uncomment for true rng in obstacle sensing
+    # PUDO_t_c_quad_orig = [54, 49]
+    # PUDO_t_c_cassie_orig = [58, 28]
+
+    # sense
+    initial_c_orig = [71]
+    moveobstacles_c_orig = [14]
+    PUDO_t_c_quad_orig = [28, 58]
+    PUDO_t_c_cassie_orig = [41, 49]
+    random.seed(427052) # this seeds to specifically get the behavior for the 'sense' case study shown in the paper, uncomment for true rng in obstacle sensing
 
     # chain
     # initial_c_orig = [58]

@@ -98,6 +98,12 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
     coop_location_q = 0
     cooprequest_q = 0
     wait_over = 0
+    resolving = 0
+    bad_state = 0
+    # gwg.moveobstacles[0] = copy.deepcopy(gridstate)
+    # agentstate = automaton[automaton_state]['State']['s_c']
+    # gwg.colorstates[0].update(invisibilityset[0][agentstate])
+    # gwg.render()
 
     while True:
         j +=1
@@ -108,7 +114,8 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         
         gwg.moveobstacles[0] = copy.deepcopy(gridstate)
         gwg.render()
-        if gwg.physicalViolation() != -1 and wait_over == 0:
+        # if gwg.physicalViolation() != -1 and wait_over == 0:
+        if wait == 1 and resolving ==0:
             print("SYSTEM ENTERED PHYSICALLY INVALID STATE")
             # break;
             wait=1
@@ -121,6 +128,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                 # gwg.current[0] = gwg.current[0] - 1
                 cooprequest_c = 1
                 cooprequest_q = 1
+                resolving = 1
             elif gwg.resolution[bad_state]['action'] in capabilities['cassie']:
                 print("Obstacle Resolvable by Cassie")
                 # coop_location_q = PUDO_t_c_quad[0]#gwg.moveobstacles[0] - (2)
@@ -128,6 +136,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                 # gwg.moveobstacles[0] = gwg.moveobstacles[0] - 2
                 cooprequest_c = 1
                 cooprequest_q = 1
+                resolving = 1
 
 
         if gwg.current[0] in gwg.resolvable and gwg.resolution[gwg.current[0]]['action'] == 'push':
@@ -137,6 +146,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
             wait=0
             wait_over = 1
             cooprequest_c = 0
+            resolving = 0
             # gwg.moveobstacles[0] = gwg.moveobstacles[0] + 2
 
         if j == 1:
@@ -234,13 +244,16 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                 if arrow_biped == None:
                     print 'Error: Invalid robot move according to quadcopter automaton'
                 nextstate_obs = nextstatedirn_obs[arrow_biped]
-                gridstate = automaton_obs[nextstate_obs]['State']['st']
+                # gridstate = automaton_obs[nextstate_obs]['State']['st']
+                gridstate = automaton_obs[automaton_obs[nextstate_obs]['Successors'][0]]['State']['st']
+                
 
                 temp_moveobs = copy.deepcopy(gwg.moveobstacles[0])
                 gwg.moveobstacles[0] = copy.deepcopy(gridstate)
                 if gwg.physicalViolation() != -1:
                     if wait == 0:
                         if wait_over == 0:
+                            bad_state = gwg.physicalViolation()
                             gwg.moveobstacles[0] = copy.deepcopy(temp_moveobs)
                             wait=1
                             continue

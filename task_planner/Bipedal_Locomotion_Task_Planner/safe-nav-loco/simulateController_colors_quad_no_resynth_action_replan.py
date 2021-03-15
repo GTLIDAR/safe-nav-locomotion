@@ -111,6 +111,12 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
     resolving = 0
     bad_state = 0
 
+    gwg.moveobstacles[0] = copy.deepcopy(gridstate)
+    # gwg.render()
+    agentstate = automaton[automaton_state]['State']['s_c']
+    gwg.colorstates[0].update(invisibilityset[0][agentstate])
+    gwg.render()
+
     while True:
         j +=1
         output.saveState(gwg, automaton, automaton_state,gridstate,moveobstacles,gwg)
@@ -120,7 +126,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 
         
         gwg.moveobstacles[0] = copy.deepcopy(gridstate)
-        gwg.render()
+        # gwg.render()
 
         gwg_f.moveobstacles_f[0] = copy.deepcopy(gridstate_f)
 
@@ -131,6 +137,10 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
             # break;
             # wait=1
             # bad_state = gwg.physicalViolation()
+            # while True:
+            #     arrow = gwg.getkeyinput()
+            #     if arrow != None:
+            #         break
             print("Bad state: ", bad_state)
             if gwg.resolution[bad_state]['action'] in capabilities['quad']:
                 print("Obstacle Resolvable by Quadcopter")
@@ -152,6 +162,10 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 
         if gwg.current[0] in gwg.resolvable and gwg.resolution[gwg.current[0]]['action'] == 'push':
             print("CASSIE RESOLVED AN OBSTACLE")
+            # while True:
+            #     arrow = gwg.getkeyinput()
+            #     if arrow != None:
+            #         break
             gwg.resolveObstacle(gwg.current[0])
             # break;
             wait=0
@@ -278,11 +292,11 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
 
             automaton_state_f = copy.deepcopy(nextstate_f)
             agentstate_f = automaton_f[automaton_state_f]['State']['s']
-            gwg_f.render()
+            # gwg_f.render()
             gwg_f.current = [copy.deepcopy(agentstate_f)]
             gwg_f.colorstates[0] = set()
             gwg_f.colorstates[0].update(invisibilityset_f[0][agentstate_f])
-            gwg_f.render()
+            # gwg_f.render()
 
             # if automaton_f[automaton_state_f]['State']['requestPending1'] == 5:
             #     break
@@ -292,16 +306,16 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
         time.sleep(0.5)
 
         gwg.moveobstacles[0] = copy.deepcopy(gridstate)
-        gwg.render()
+        # gwg.render()
 
         agentstate = automaton[automaton_state]['State']['s_c']
         nav_req = automaton[automaton_state]['State']['directionrequest']
 
         print 'Agent state is ', agentstate
-        gwg.render()
+        # gwg.render()
         # gwg.moveobstacles[0] = copy.deepcopy(gridstate)
 
-        gwg.render()
+        # gwg.render()
         gwg.current = [copy.deepcopy(agentstate)]
 
         gwg.colorstates[0] = set()
@@ -439,7 +453,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                                     gwg.colorstates[b+1] = copy.deepcopy(partitionGrid[b]) - partitionGrid[b].intersection(visstates)
                                 truebeliefstates = beliefstates - beliefstates.intersection(visstates)
                                 # gwg.colorstates[1] = copy.deepcopy(truebeliefstates)
-                                gwg.render()
+                                # gwg.render()
                                 print 'True belief set is ', truebeliefstates
                                 print 'Size of true belief set is ', len(truebeliefstates)
                 else:
@@ -453,7 +467,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles,invisibili
                     gwg.colorstates[4] = set()
                     gwg.colorstates[5] = set()
                     gwg.colorstates[6] = set()
-                    gwg.render()
+                    # gwg.render()
             
             try:
                 print 'orientation is', automaton[automaton_state]['State']['orientation']

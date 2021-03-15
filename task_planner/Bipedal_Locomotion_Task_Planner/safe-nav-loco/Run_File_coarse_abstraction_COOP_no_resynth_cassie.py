@@ -10,7 +10,7 @@ import time
 import copy
 import cPickle as pickle
 from tqdm import *
-import simulateController_colors_quad_no_resynth as Simulator
+import simulateController_colors_quad_no_resynth_replan as Simulator
 import itertools
 import Control_Parser
 import json
