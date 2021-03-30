@@ -48,6 +48,7 @@ gwfile_c = folder_locn + '/figs/gridworldfig_' + example_name_c + '.png'
 # example_name_f = 'Belief_Evasion_fine_abstraction'
 example_name_f = 'Belief_Evasion_fine_abstraction_JRNL_Boundary6_26x26_stair_mod_test'
 example_name_f = 'Belief_Evasion_fine_abstraction_JRNL_Boundary6_b2b_stair'
+example_name_f = 'Belief_Evasion_fine_abstraction_straight'
 jsonfile_name_f = folder_locn + "Integration/" + example_name_f + ".json"
 trial_name_f = folder_locn + example_name_f
 

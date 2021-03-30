@@ -275,6 +275,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
                     (row,col)=gw.coords(s)
                     closestates = []
                     coordcombs = [[-3,0],[-2,0],[-1,0],[0,0],[1,0],[2,0],[3,0],[0,-3],[0,-2],[0,-1],[0,1],[0,2],[0,3],[1,1],[1,-1],[-1,-1],[-1,1]]
+                    # coordcombs = [[-1,0],[0,0],[1,0],[0,-1],[0,1],[1,1],[1,-1],[-1,-1],[-1,1]]
 
                     for coordspecific in coordcombs:
                         if (row + coordspecific[0]<gw.nrows) and (row + coordspecific[0]>0):

@@ -10,7 +10,8 @@ import time
 import copy
 import cPickle as pickle
 from tqdm import *
-import simulateController_multi_obs as Simulator
+# import simulateController_multi_obs as Simulator
+import simulateController_2labs_stairN_color_multiObs as Simulator
 import itertools
 import Control_Parser
 import json
@@ -39,8 +40,8 @@ if __name__ == '__main__':
     # PUDO_t_c = [31,45]
 
     initial_c = [56]
-    moveobstacles_c = [61,62]
-    # moveobstacles_c = [61]
+    # moveobstacles_c = [61,62]
+    moveobstacles_c = [61]
     PUDO_t_c = [57,49]
 
 
@@ -51,7 +52,7 @@ if __name__ == '__main__':
     
     folder_locn = 'Examples/'
     # example_name = 'Belief_Evasion_coarse_multi_obs_timefixedPointRecycling_individual_beliefs'
-    example_name = 'Belief_Evasion_coarse_multi_obs_jrnl_stairsN'
+    example_name = 'Belief_Evasion_coarse_multi_obs_jrnl_stairsNT'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
