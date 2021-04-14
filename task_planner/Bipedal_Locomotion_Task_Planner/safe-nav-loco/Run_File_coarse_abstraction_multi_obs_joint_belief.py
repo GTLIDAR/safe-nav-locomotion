@@ -53,7 +53,7 @@ if __name__ == '__main__':
     
     folder_locn = 'Examples/'
     # example_name = 'Belief_Evasion_coarse_multi_obs_timefixedPointRecycling_individual_beliefs'
-    example_name = 'Belief_Evasion_coarse_multi_obs_joint_test2'
+    example_name = 'Belief_Evasion_coarse_multi_obs_joint_test_complete_colis'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
@@ -121,6 +121,8 @@ if __name__ == '__main__':
         print ('Converting input file...')
         os.system('python compiler.py ' + infile + '.structuredslugs > ' + infile + '.slugsin')
         print('Computing controller...')
+
+        nowww = time.time()
         # sp = subprocess.Popen(slugs + ' --explicitStrategy --jsonOutput ' + infile + '.slugsin > ' + outfile,
         #                           shell=True, stdout=subprocess.PIPE)
         sp = subprocess.Popen(slugs + ' --explicitStrategy --fixedPointRecycling --jsonOutput ' + infile + '.slugsin > ' + outfile,
@@ -129,6 +131,7 @@ if __name__ == '__main__':
 
     now = time.time()
     print('Total synthesis took ', now - then, ' seconds')
-    print('Actual synthesis took ', now - noww, ' seconds')
+    print('Actual synthesis + conversion took ', now - noww, ' seconds')
+    print('Actual synthesis took ', now - nowww, ' seconds')
 
     Simulator.userControlled_partition(filename_c[0], gwg_c, pg[0], moveobstacles_c, invisibilityset, jsonfile_name)

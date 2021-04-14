@@ -191,8 +191,15 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
         Astates.append(Nbeliefstates)
     state_comb = list(itertools.product(*Astates))
 
-
     filename = infile+'.structuredslugs'
+
+    for i in state_comb:
+        if i[0] in gw.obstacles or i[1] in gw.obstacles:
+            state_comb.remove(i)
+    
+
+
+
     file = open(filename,'w')
     file.write('[INPUT]\n')
     stri = ""
@@ -205,6 +212,8 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('s_c:0...{}\n'.format(len(gw.states)-1))
     file.write('deliveryrequest\n')
     file.write('sOld:0...{}\n'.format(len(gw.states)-1))
+    # for n in range(0,len(initmovetarget)):
+    #     stri += 'sOld{}:0...{}\n'.format(n,(len(gw.states)+1))
     file.write('test\n')
     file.write('cond1\n')
     file.write('cond2\n')
@@ -244,58 +253,178 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     file.write('\n[ENV_TRANS]\n') #write specifications on how the environment state can transition at each step with "'" indicating the next state
     print 'Writing ENV_TRANS'
     # for n in range(0,len(initmovetarget)):
-    for st in tqdm(set(Nbeliefstates)):          #tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states)) - set(gw.stair_states)): #iterate through allowed states and belief states (tqdm displays a progress bar)
-        for belief in Bstates:
-            if st in allowed_states: #write transitions if the dynamic obstacle (st) is visible
-                for s in allowed_states:
-                    repeat = set()
-                    stri = "(s_c = {} /\\ belief = {}".format(s,belief)
-                    for n in range(0,len(initmovetarget)):
-                        stri += " /\\ st{} = {}".format(n,st[n])
-                    stri += ") -> "
-                    # beliefset = set()
-                    beliefset = copy.deepcopy(beliefcombs[belief])
-                    for a in range(gw.nactionsMO):  
-                        for t in np.nonzero(gw.probMO[gw.actlistMO[a]][st])[0]:
-                            if t in allowed_states and t not in repeat:
-                                if t not in invisibilityset[s]:
-                                    stri += 'st{}\' = {} \\/'.format(n,st)
-                                    repeat.add(t)
-                                else:
-                                    if not t == s and t not in targets: # not allowed to move on agent's position
-                                        try: # here we evaluate which grid partitions the obstacle enters with action a
-                                            partgridkeyind = [inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]
-                                            t2 = partitionGrid.keys()[partgridkeyind]
-                                            beliefset.add(t2) 
-                                        except:
-                                            print t
-                                            print 'tests'
-                            elif t not in allowed_states and t not in gw.obstacles and allstates[-1] not in repeat: # Error state????
-                                stri += 'st{}\' = {} \\/'.format(n,len(gw.states)+1)
-                                # t should always be in allowed state or in obstacle state
-                                repeat.add(allstates[-1])
-                    if len(beliefset) > 0: #here we write the possible next belief state if the obstacle was at the edge of the visible range at the current step
-                        b2 = allstates[len(nonbeliefstates) + beliefcombs.index(beliefset)]
-                        if b2 not in repeat:
-                            # if belief = len(Bstates)-1
-                            # need to modify for when belief already exists:
-                            stri += '( st{}\' = {} & belief\' = {} ) \\/'.format(n,len(gw.states),beliefcombs.index(beliefset))
-                            repeat.add(b2)
-                    stri = stri[:-3]
-                    stri += '\n'
-                    file.write(stri)
+    # for st in tqdm(set(Nbeliefstates)):          #tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states)) - set(gw.stair_states)): #iterate through allowed states and belief states (tqdm displays a progress bar)
+    for st in tqdm(set(state_comb)):          #tqdm(set(allstates) - (set(nonbeliefstates) - set(allowed_states)) - set(gw.stair_states)): #iterate through allowed states and belief states (tqdm displays a progress bar)
+        # for belief in Bstates:
+        if st[0] in allowed_states and st[1] in allowed_states: #write transitions if the dynamic obstacle (st) is visible
+            # if st[1] in allowed_states: #write transitions if the dynamic obstacle (st) is visible
+            for s in allowed_states:
+                repeat = set()
+                repeat0 = set()
+                repeat1 = set()
+                # stri = "(s_c = {} /\\ belief = {}".format(s,belief)
+                stri = "(s_c = {}".format(s)
+                for n in range(0,len(initmovetarget)):
+                    stri += " /\\ st{} = {}".format(n,st[n])
+                stri += ") -> ("
+                beliefset0 = set()
+                beliefset1 = set()
 
-            elif st == len(gw.states)+1: # Error state
-                stri = "st{} = {} -> ".format(n,st)
-                for t in fullvis_states:
-                    stri += "st{}' = {} \\/ ".format(n,t)
-                stri += "st{}' = {}".format(n,st)
+                stri0 = ""
+                # beliefset = copy.deepcopy(beliefcombs[belief])
+                for a in range(gw.nactionsMO):  
+                    for t in np.nonzero(gw.probMO[gw.actlistMO[a]][st[0]])[0]:
+                        if t in allowed_states and t not in repeat0:
+                            if t not in invisibilityset[s]:
+                                stri0 += 'st0\' = {} \\/'.format(t)
+                                repeat0.add(t)
+                            else:
+                                if not t == s and t not in targets: # not allowed to move on agent's position
+                                    try: # here we evaluate which grid partitions the obstacle enters with action a
+                                        partgridkeyind = [inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]
+                                        t2 = partitionGrid.keys()[partgridkeyind]
+                                        beliefset0.add(t2) 
+                                    except:
+                                        print t
+                                        print 'tests'
+                        elif t not in allowed_states and t not in gw.obstacles and allstates[-1] not in repeat: # Error state????
+                            stri0 += 'st0\' = {} \\/'.format(len(gw.states)+1)
+                            # t should always be in allowed state or in obstacle state
+                            repeat0.add(allstates[-1])
+                stri0 = stri0[:-3]
+                # stri = stri + stri0
+                # stri += ') & ('
+
+                stri1 = ""
+
+                for a in range(gw.nactionsMO):  
+                    for t in np.nonzero(gw.probMO[gw.actlistMO[a]][st[1]])[0]:
+                        if t in allowed_states and t not in repeat1:
+                            if t not in invisibilityset[s]:
+                                stri1 += 'st1\' = {} \\/'.format(t)
+                                repeat1.add(t)
+                            else:
+                                if not t == s and t not in targets: # not allowed to move on agent's position
+                                    try: # here we evaluate which grid partitions the obstacle enters with action a
+                                        partgridkeyind = [inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]
+                                        t2 = partitionGrid.keys()[partgridkeyind]
+                                        beliefset1.add(t2) 
+                                    except:
+                                        print t
+                                        print 'tests'
+                        elif t not in allowed_states and t not in gw.obstacles and allstates[-1] not in repeat: # Error state????
+                            stri1 += 'st1\' = {} \\/'.format(len(gw.states)+1)
+                            # t should always be in allowed state or in obstacle state
+                            repeat1.add(allstates[-1])
+        
+                stri1 = stri1[:-3]
+
+                cnt=0
+                # stri += "("
+
+                if len(stri0)>0 and len(stri1)>0:
+                    stri += "("
+                    stri += "("
+                    if len(stri0)>0:
+                        stri = stri + stri0
+                        cnt=1
+                        if len(stri1)>0:
+                            stri += ') & ('
+                    if len(stri1)>0:
+                        stri = stri + stri1
+                        cnt=1
+                    stri += ')) | '
+
+                # stri = stri + stri1
+                # stri += ')) | ('
+                           
+                if len(beliefset0) > 0 and len(stri1)>0: #here we write the possible next belief state if the obstacle was at the edge of the visible range at the current step
+                    b2 = allstates[len(nonbeliefstates) + beliefcombs.index(beliefset0)]
+                    if b2 not in repeat0:
+                        # if belief = len(Bstates)-1
+                        # need to modify for when belief already exists
+                        stri += '('
+                        stri = stri + stri1
+                        stri += ' & ( st0\' = {} & belief\' = {} & st1\' != {})'.format(len(gw.states),beliefcombs.index(beliefset0),len(gw.states))
+                        repeat0.add(b2)
+                        stri += ') | '
+
+
+                if len(beliefset1) > 0 and len(stri0)>0: #here we write the possible next belief state if the obstacle was at the edge of the visible range at the current step
+                    b2 = allstates[len(nonbeliefstates) + beliefcombs.index(beliefset1)]
+                    if b2 not in repeat1:
+                        # if belief = len(Bstates)-1
+                        # need to modify for when belief already exists
+                        stri += '('
+                        stri = stri + stri0
+                        stri += ' & (st1\' = {} & belief\' = {} & st0\' != {})'.format(len(gw.states),beliefcombs.index(beliefset1),len(gw.states))
+                        repeat1.add(b2)
+                        stri += ') | '
+
+                if len(beliefset0) > 0 and len(beliefset1) > 0: #here we write the possible next belief state if the obstacle was at the edge of the visible range at the current step
+                    b2 = allstates[len(nonbeliefstates) + beliefcombs.index(beliefset0.union(beliefset1))]
+                    if b2 not in repeat:
+                        # if cnt==1:
+                        stri += '('
+                        # if belief = len(Bstates)-1
+                        # need to modify for when belief already exists
+                        # stri = stri + stri0
+                        stri += ' (st1\' = {} & belief\' = {} & st0\' = {})'.format(len(gw.states),beliefcombs.index(beliefset0.union(beliefset1)),len(gw.states))
+                        repeat.add(b2)
+                        stri += ') | '
+
+
+                # if len(beliefset0) > 0 and len(beliefset1) > 0: #here we write the possible next belief state if the obstacle was at the edge of the visible range at the current step
+                #     b2 = allstates[len(nonbeliefstates) + beliefcombs.index(beliefset0.union(beliefset1))]
+                #     if b2 not in repeat:
+                #         if cnt==1:
+                #             stri += '('
+                #         # if belief = len(Bstates)-1
+                #         # need to modify for when belief already exists
+                #         # stri = stri + stri0
+                #         stri += ' ( st1\' = {} & belief\' = {} & st0\' = {})'.format(len(gw.states),beliefcombs.index(beliefset0.union(beliefset1)),len(gw.states))
+                #         repeat.add(b2)
+                #         if cnt==1:
+                #             stri += ')'
+                #         stri += ') | '
+                
+                stri = stri[:-3]
+
+                stri += ')'
                 stri += '\n'
                 file.write(stri)
-            elif st == len(gw.states): #write transitions if the dynamic obstacle (st) is not visible ransitions between belief states and from belief state to visible state
-                for s in tqdm(allowed_states):
-                    # for belief in Bstates[0:len(Bstates)-1]:
-                    
+
+
+                # if len(beliefset) > 0: #here we write the possible next belief state if the obstacle was at the edge of the visible range at the current step
+                #     b2 = allstates[len(nonbeliefstates) + beliefcombs.index(beliefset)]
+                #     if b2 not in repeat:
+                #         # if belief = len(Bstates)-1
+                #         # need to modify for when belief already exists:
+                #         stri += '( st0\' = {} & belief\' = {} & st1\' != {}) \\/'.format(len(gw.states),beliefcombs.index(beliefset),len(gw.states))
+                #         repeat.add(b2)
+                # stri = stri[:-3]
+                # stri += '\n'
+                # file.write(stri)
+
+        # elif st[0] in allowed_states:
+        #     # test
+        
+        # elif st[1] in allowed_states:
+        #     # test
+
+        elif st[0] == len(gw.states)+1: # Error state
+            stri = "st0 = {} -> ".format(st[0])
+            for t in fullvis_states:
+                stri += "st0' = {} \\/ ".format(t)
+            stri += "st0' = {}".format(st[0])
+            stri += '\n'
+            file.write(stri)
+        elif st[0] == len(gw.states) or st[1] == len(gw.states): #write transitions if the dynamic obstacle (st) is not visible ransitions between belief states and from belief state to visible state
+            # if st[1] in allowed_states:
+            for s in tqdm(allowed_states):
+                for belief in Bstates:
+                # for belief in Bstates[0:len(Bstates)-1]:
+                
                     (row,col)=gw.coords(s)
                     closestates = []
                     coordcombs = [[-3,0],[-2,0],[-1,0],[0,0],[1,0],[2,0],[3,0],[0,-3],[0,-2],[0,-1],[0,1],[0,2],[0,3],[1,1],[1,-1],[-1,-1],[-1,1]]
@@ -323,35 +452,277 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
                         visstatesOld = set(nonbeliefstates) - invisstatesOld
                         Newvisstates = visstates - visstatesOld
                         beliefstates_invis_and_new = beliefstates - (beliefstates_vis - Newvisstates)
+
+                        if st[1] in allowed_states:
                         
-                        if len(beliefstates_invis_and_new) > 0:
-                            stri = "(s_c = {} /\\ st{} = {} /\\ sOld = {} /\\ belief = {}) -> ".format(s,n,st,sOld,belief)
-                            repeat = set()
-                            beliefset = set()
-                            for b in beliefstates_invis_and_new:
-                            # for b in beliefstates:
+                            if len(beliefstates_invis_and_new) > 0:
+                                stri = "(s_c = {} /\\ st0 = {} /\\ sOld = {} /\\ belief = {} & st1 = {}) -> (".format(s,st[0],sOld,belief,st[1])
+                                repeat0 = set()
+                                beliefset0 = set()
+                                stri0 = ""
+                                stri1 = ""
+                                for b in beliefstates_invis_and_new:
+                                # for b in beliefstates:
+                                    for a in range(gw.nactionsMO):
+                                        for t in np.nonzero(gw.probMO[gw.actlistMO[a]][b])[0]:
+                                            if t not in invisibilityset[s]:
+                                                if t in allowed_states and t not in repeat0:
+                                                    stri0 += ' st0\' = {} \\/'.format(t)
+                                                    repeat0.add(t)
+                                            else:
+                                                if t in gw.targets[0]:
+                                                    continue
+                                                if t in allowed_states:
+                                                    t2 = partitionGrid.keys()[[inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]]
+                                                    beliefset0.add(t2)
+                                # stri = stri + stri0
+
+                                beliefset1 = set()
+                                repeat1 = set()
+
                                 for a in range(gw.nactionsMO):
-                                    for t in np.nonzero(gw.probMO[gw.actlistMO[a]][b])[0]:
-                                        if t not in invisibilityset[s]:
-                                            if t in allowed_states and t not in repeat:
-                                                stri += ' st{}\' = {} \\/'.format(n,t)
-                                                repeat.add(t)
-                                        else:
-                                            if t in gw.targets[0]:
-                                                continue
-                                            if t in allowed_states:
-                                                t2 = partitionGrid.keys()[[inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]]
-                                                beliefset.add(t2)
-                            if len(beliefset) > 0:
-                                b2 = beliefcombs.index(beliefset)
-                                if b2 not in repeat:
-                                    stri += ' (st{}\' = {} & belief\' = {}) \\/'.format(n,len(gw.states),b2)
-                                    repeat.add(b2)
+                                        for t in np.nonzero(gw.probMO[gw.actlistMO[a]][st[1]])[0]:
+                                            if t not in invisibilityset[s]:
+                                                if t in allowed_states and t not in repeat1:
+                                                    stri1 += ' st1\' = {} \\/'.format(t)
+                                                    repeat1.add(t)
+                                            else:
+                                                if t in gw.targets[0]:
+                                                    continue
+                                                if t in allowed_states:
+                                                    t2 = partitionGrid.keys()[[inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]]
+                                                    beliefset1.add(t2)
 
-                            stri = stri[:-3]
-                            stri += '\n'
-                            file.write(stri)
 
+
+
+
+                                if len(beliefset1) > 0 and len(stri0)>0:
+                                    stri += "("
+                                    if len(stri1)>0:
+                                        stri = stri + "(" +stri1 
+                                    b2 = beliefcombs.index(beliefset1)
+                                    # if b2 not in repeat0:
+                                    stri += ' (st0\' = {} & belief\' = {} & st1 != {})'.format(len(gw.states),b2, len(gw.states))
+                                    repeat0.add(b2)
+                                    if len(stri1)>0:
+                                        stri += ")"
+
+                                    if len(stri0)>0:
+                                        # stri0 = stri0[:-3]
+                                        stri = stri + " & ("+ stri0[:-3] + ")"
+                                    stri += ') | '
+
+                                # if len(stri1)>0:
+                                #     stri1 = stri1[:-3]
+                                #     stri = stri + "& ("+ stri1 + ")"
+
+                                if len(beliefset1) > 0 and len(beliefset0) > 0:
+                                    stri += '(st1\' = {} & st0\' = {} & belief\' = {}) | '.format(len(gw.states),len(gw.states),beliefcombs.index(beliefset0.union(beliefset1)))
+
+                                if len(beliefset0) > 0 and len(stri1)>0:
+                                    stri += '(('
+                                    stri += stri1[:-3] +") & "
+                                    stri += '(st1\' != {} & st0\' = {} & belief\' = {})) | '.format(len(gw.states),len(gw.states),beliefcombs.index(beliefset0))
+
+                                if len(beliefset0) == 0 and len(beliefset1) == 0 and len(stri0)>0 and len(stri1)>0:
+                                    stri += '(('
+                                    stri += stri0[:-3] +") & (" + stri1[:-3] + ")) | "
+                                    
+                                # if len(stri0)>0:
+                                #     stri = stri + stri0
+
+                                stri = stri[:-3]
+                                stri += ')\n'
+                                file.write(stri)
+
+
+
+
+
+                                
+                                
+
+                                # if len(beliefset0) > 0 and len(stri1)>0 and len(stri0)>0:
+                                #     stri = stri + "(" +stri0
+                                #     b2 = beliefcombs.index(beliefset0)
+                                #     # if b2 not in repeat0:
+                                #     stri += ' (st0\' = {} & belief\' = {} & st1 != {}) \\/'.format(len(gw.states),b2, len(gw.states))
+                                #     repeat0.add(b2)
+                            
+                                #     stri = stri[:-3]
+
+                                #     stri1 = stri1[:-3]
+                                #     stri = stri + "& ("+ stri1 + ")"
+
+                                #     stri += ') | '
+
+                                # # if len(stri1)>0:
+                                # #     stri1 = stri1[:-3]
+                                # #     stri = stri + "& ("+ stri1 + ")"
+
+                                # if len(beliefset0) > 0 and len(beliefset1) > 0:
+                                #     stri += '(st0\' = {} & st1\' = {} & belief\' = {}) | '.format(len(gw.states),len(gw.states),beliefcombs.index(beliefset0.union(beliefset1)))
+
+                                # if len(beliefset1) > 0 and len(stri0)>0:
+                                #     stri += '(('
+                                #     stri += stri0[:-3] +") & "
+                                #     stri += '(st0\' != {} & st1\' = {} & belief\' = {})) | '.format(len(gw.states),len(gw.states),beliefcombs.index(beliefset1))
+
+                                # # if len(stri0)>0:
+                                # #     stri = stri + stri0
+
+                                # stri = stri[:-3]
+                                # stri += ')\n'
+                                # file.write(stri)
+
+                        
+                        
+                        if st[0] in allowed_states:
+                        
+                            if len(beliefstates_invis_and_new) > 0:
+                                stri = "(s_c = {} /\\ st1 = {} /\\ sOld = {} /\\ belief = {} & st0 = {}) -> (".format(s,st[1],sOld,belief,st[0])
+                                repeat0 = set()
+                                beliefset0 = set()
+                                stri0 = ""
+                                stri1 = ""
+                                for b in beliefstates_invis_and_new:
+                                # for b in beliefstates:
+                                    for a in range(gw.nactionsMO):
+                                        for t in np.nonzero(gw.probMO[gw.actlistMO[a]][b])[0]:
+                                            if t not in invisibilityset[s]:
+                                                if t in allowed_states and t not in repeat0:
+                                                    stri0 += ' st1\' = {} \\/'.format(t)
+                                                    repeat0.add(t)
+                                            else:
+                                                if t in gw.targets[0]:
+                                                    continue
+                                                if t in allowed_states:
+                                                    t2 = partitionGrid.keys()[[inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]]
+                                                    beliefset0.add(t2)
+                                # stri = stri + stri0
+
+                                beliefset1 = set()
+                                repeat1 = set()
+
+                                for a in range(gw.nactionsMO):
+                                        for t in np.nonzero(gw.probMO[gw.actlistMO[a]][st[0]])[0]:
+                                            if t not in invisibilityset[s]:
+                                                if t in allowed_states and t not in repeat1:
+                                                    stri1 += ' st0\' = {} \\/'.format(t)
+                                                    repeat1.add(t)
+                                            else:
+                                                if t in gw.targets[0]:
+                                                    continue
+                                                if t in allowed_states:
+                                                    t2 = partitionGrid.keys()[[inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]]
+                                                    beliefset1.add(t2)
+
+
+                                if len(beliefset0) > 0 and len(stri1)>0:
+                                    stri += "("
+                                    if len(stri0)>0:
+                                        stri = stri + "(" +stri0 
+                                    b2 = beliefcombs.index(beliefset0)
+                                    # if b2 not in repeat0:
+                                    stri += ' (st1\' = {} & belief\' = {} & st0 != {})'.format(len(gw.states),b2, len(gw.states))
+                                    repeat0.add(b2)
+                                    if len(stri0)>0:
+                                        stri += ")"
+
+                                    if len(stri1)>0:
+                                        # stri1 = stri1[:-3]
+                                        stri = stri + " & ("+ stri1[:-3] + ")"
+                                    stri += ') | '
+
+                                # if len(stri1)>0:
+                                #     stri1 = stri1[:-3]
+                                #     stri = stri + "& ("+ stri1 + ")"
+
+                                if len(beliefset0) > 0 and len(beliefset1) > 0:
+                                    stri += '(st1\' = {} & st0\' = {} & belief\' = {}) | '.format(len(gw.states),len(gw.states),beliefcombs.index(beliefset0.union(beliefset1)))
+
+                                if len(beliefset1) > 0 and len(stri0)>0:
+                                    stri += '(('
+                                    stri += stri0[:-3] +") & "
+                                    stri += '(st1\' != {} & st0\' = {} & belief\' = {})) | '.format(len(gw.states),len(gw.states),beliefcombs.index(beliefset1))
+
+                                if len(beliefset0) == 0 and len(beliefset1) == 0 and len(stri0)>0 and len(stri1)>0:
+                                    stri += '(('
+                                    stri += stri0[:-3] +") & (" + stri1[:-3] + ")) | "
+                                    
+                                # if len(stri0)>0:
+                                #     stri = stri + stri0
+
+                                stri = stri[:-3]
+                                stri += ')\n'
+                                file.write(stri)
+
+
+
+                        if st[0] == len(gw.states) and st[1] == len(gw.states):
+                        
+                            if len(beliefstates_invis_and_new) > 0:
+                                stri = "(s_c = {} /\\ st0 = {} /\\ sOld = {} /\\ belief = {} & st1 = {}) -> (".format(s,st[0],sOld,belief,st[1])
+                                repeat0 = set()
+                                beliefset0 = set()
+                                stri0 = ""
+                                stri1 = ""
+                                for b in beliefstates_invis_and_new:
+                                # for b in beliefstates:
+                                    for a in range(gw.nactionsMO):
+                                        for t in np.nonzero(gw.probMO[gw.actlistMO[a]][b])[0]:
+                                            if t not in invisibilityset[s]:
+                                                if t in allowed_states and t not in repeat0:
+                                                    stri0 += ' st0\' = {} \\/'.format(t)
+                                                    stri1 += ' st0\' = {} \\/'.format(t)
+                                                    repeat0.add(t)
+                                            else:
+                                                if t in gw.targets[0]:
+                                                    continue
+                                                if t in allowed_states:
+                                                    t2 = partitionGrid.keys()[[inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]]
+                                                    beliefset0.add(t2)
+                                # stri = stri + stri0
+
+                                stri0 = stri0[:-3]
+                                stri1 = stri1[:-3]
+
+
+                                if len(beliefset0) > 0:
+                                    b2 = beliefcombs.index(beliefset0)
+                                    # if b2 not in repeat0:
+                                    stri += '(st0\' = {} & st1 = {} & belief\' = {})'.format(len(gw.states),len(gw.states),b2)
+                                    repeat0.add(b2)
+
+                                    if len(stri0)>0:
+                                        stri = stri + " | "+ '((st1 = {} & belief\' = {})'.format(len(gw.states),b2) + "& (" + stri0 + "))"
+
+                                    if len(stri1)>0:
+                                        stri = stri + " | "+ '((st0 = {} & belief\' = {})'.format(len(gw.states),b2) + "& (" + stri1 + "))"
+                            
+                                    # stri = stri[:-3]
+                                    stri += ' | '
+
+                                if len(stri0)>0 and len(stri1)>0:
+                        
+                                    stri = stri + "(("+ stri0 + ") & (" + stri1 + ")) | "
+
+                                # if len(beliefset0) > 0 and len(beliefset1) > 0:
+                                #     stri += '(st0\' = {} & st1\' = {} & belief\' = {}) | '.format(len(gw.states),len(gw.states),beliefcombs.index(beliefset0.union(beliefset1)))
+
+                                # if len(beliefset1) > 0 and len(stri0)>0:
+                                #     stri += '(('
+                                #     stri += stri0[:-3] +") & "
+                                #     stri += '(st0\' != {} & st1\' = {} & belief\' = {}) | '.format(len(gw.states),len(gw.states),beliefcombs.index(beliefset1))
+
+                                # if len(stri0)>0:
+                                #     stri = stri + stri0
+
+                                stri = stri[:-3]
+                                stri += ')\n'
+                                file.write(stri)
+                                
     # if no obs are invisible then belief is locked
     stri = ""
     for n in range(0,len(initmovetarget)):
@@ -413,16 +784,55 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     # stri += ") -> !cond1'\n".format(str(len(nonbeliefstates) + beliefcombs.index(set([4]))))
     # file.write(stri)
 
-    stri = "((s_c =28 | s_c =29 | s_c =30) & "
+
+
+
+
+
+
+
+    # stri = "((s_c =28 | s_c =29 | s_c =30) & "
+    # for n in range(0,len(initmovetarget)):
+    #     stri += "belief = {} & ".format(str(beliefcombs.index(set([4]))))
+    # stri = stri[:-3]
+    # stri += ") -> cond1'\n"
+    # file.write(stri)
+
+    # stri = "((s_c !=28 & s_c !=29 & s_c !=30) | "
+    # for n in range(0,len(initmovetarget)):
+    #     stri += "belief! = {} | ".format(str(beliefcombs.index(set([4]))))
+    # stri = stri[:-3]
+    # stri += ") -> !cond1'\n".format(str(beliefcombs.index(set([4]))))
+    # file.write(stri)
+
+
+    # stri = "((s_c !=28 & s_c !=29 & s_c !=30) & "
+    # for n in range(0,len(initmovetarget)):
+    #     for visstate in set(nonbeliefstates):
+    #         stri += "st{} != {} /\\ ".format(n,visstate)
+    # stri = stri[:-4]
+    # stri += ") -> cond2'\n"
+    # file.write(stri)
+
+    # stri = "((s_c =28 | s_c =29 | s_c =30) | "
+    # for n in range(0,len(initmovetarget)):
+    #     for visstate in set(nonbeliefstates):
+    #         stri += "st{} = {} | ".format(n,visstate)
+    # stri = stri[:-2]
+    # stri += ") -> !cond2'\n"
+    # file.write(stri)
+
+
+    stri = "((s_c =28 | s_c =29 | s_c =30) & belief = {} & ".format(str(beliefcombs.index(set([4]))))
     for n in range(0,len(initmovetarget)):
-        stri += "belief = {} & ".format(str(beliefcombs.index(set([4]))))
+        stri += "st{} = {} & ".format(n,len(gw.states))
     stri = stri[:-3]
     stri += ") -> cond1'\n"
     file.write(stri)
 
-    stri = "((s_c !=28 & s_c !=29 & s_c !=30) | "
+    stri = "((s_c !=28 & s_c !=29 & s_c !=30) | belief! = {} | ".format(str(beliefcombs.index(set([4]))))
     for n in range(0,len(initmovetarget)):
-        stri += "belief! = {} | ".format(str(beliefcombs.index(set([4]))))
+        stri += "st{} = {} | ".format(n,len(gw.states))
     stri = stri[:-3]
     stri += ") -> !cond1'\n".format(str(beliefcombs.index(set([4]))))
     file.write(stri)
@@ -443,6 +853,9 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     stri = stri[:-2]
     stri += ") -> !cond2'\n"
     file.write(stri)
+
+
+
 
     file.write("cond1 | cond2 -> test'\n")
     file.write("!cond1 & !cond2 -> !test'\n")
@@ -520,12 +933,12 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
         file.write('s_c != {}\n'.format(obs))
 
 
-    for n in range(0,len(initmovetarget)):
-        for s in set(allowed_states):
-            stri = 'st{}\' = {} -> !s_c\' = {}\n'.format(n,s,s)
-            file.write(stri)
-            stri = 'st{}\' = {} -> !s_c = {}\n'.format(n,s,s)
-            file.write(stri)
+    # for n in range(0,len(initmovetarget)):
+    #     for s in set(allowed_states):
+    #         stri = 'st{}\' = {} -> !s_c\' = {}\n'.format(n,s,s)
+    #         file.write(stri)
+    #         stri = 'st{}\' = {} -> !s_c = {}\n'.format(n,s,s)
+    #         file.write(stri)
 
 
 
