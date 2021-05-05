@@ -34,7 +34,7 @@ folder_locn = 'Examples/'
 # example_name_c = 'Belief_Evasion_coarse_JRNL_crt3'
 example_name_c = 'Belief_Evasion_coarse_JRNL_crt3_2stair_test2'
 example_name_c = 'Belief_Evasion_coarse_JRNL_crt3_2stair'
-example_name_c = 'Belief_Evasion_coarse_multi_obs_jrnl_stairsN'
+example_name_c = 'Belief_Evasion_coarse_multi_obs_jrnl_stairsNTT'
 
 initial_c = [56]
 moveobstacles_c = [61,62]
