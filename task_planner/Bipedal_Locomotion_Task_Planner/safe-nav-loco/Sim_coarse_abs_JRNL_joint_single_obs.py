@@ -1,5 +1,5 @@
 from gridworld_JRNL_color import *
-import simulateController_colors_belief_slugs as Simulator
+import simulateController_colors_belief_slugs_single_obs as Simulator
 import copy
 import compute_all_vis
 import cv2
@@ -19,8 +19,6 @@ example_name = 'Belief_Evasion_coarse_JRNLtest'
 example_name = 'Belief_Evasion_coarse_multi_obs_joint_test2_single_obs'
 example_name = 'Belief_Evasion_coarse_seperate_belief_single_obs'
 example_name = 'Belief_Evasion_coarse_seperate_belief_single_obs_2t'
-example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_slugs'
-example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_slugs_colis'
 
 
 trial_name = folder_locn + example_name
@@ -38,8 +36,7 @@ targets = [[]]
 # moveobstacles = [28]
 
 initial = [56]
-# moveobstacles = [61]
-moveobstacles = [61,62]
+moveobstacles = [61]
 
 filename = [filename,(colnum,rownum),cv2.INTER_AREA]
 

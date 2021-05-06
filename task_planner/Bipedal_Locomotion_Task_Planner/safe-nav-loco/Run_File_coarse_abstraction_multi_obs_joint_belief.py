@@ -1,7 +1,7 @@
 from gridworld_multi_obs import *
 # import write_structured_slugs_rss_coarse_grid_multi_obs
-# import write_structured_slugs_rss_coarse_grid_multi_obs_joint_belief
-import write_structured_slugs_rss_coarse_grid_single_obs_joint_belief
+import write_structured_slugs_rss_coarse_grid_multi_obs_joint_belief
+# import write_structured_slugs_rss_coarse_grid_single_obs_joint_belief
 import compute_all_vis
 import cv2
 # import visibility
@@ -42,8 +42,8 @@ if __name__ == '__main__':
     # PUDO_t_c = [31,45]
 
     initial_c = [56]
-    # moveobstacles_c = [61,62]
-    moveobstacles_c = [61]
+    moveobstacles_c = [61,62]
+    # moveobstacles_c = [61]
     PUDO_t_c = [57,49]
 
 
@@ -55,7 +55,8 @@ if __name__ == '__main__':
     folder_locn = 'Examples/'
     # example_name = 'Belief_Evasion_coarse_multi_obs_timefixedPointRecycling_individual_beliefs'
     # example_name = 'Belief_Evasion_coarse_multi_obs_joint_test_complete_colisTTT'
-    example_name = 'Belief_Evasion_coarse_seperate_belief_single_obs_2t'
+    # example_name = 'Belief_Evasion_coarse_seperate_belief_single_obs_2t'
+    example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_slugs_colis'
     
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
@@ -114,7 +115,7 @@ if __name__ == '__main__':
         print 'output file: ', outfile
         print 'input file name:', infile
 
-        write_structured_slugs_rss_coarse_grid_single_obs_joint_belief.write_to_slugs_part_dist(infile, gwg_c, initial_c[n], moveobstacles_c, iset, PUDO_targets = PUDO_t_c,
+        write_structured_slugs_rss_coarse_grid_multi_obs_joint_belief.write_to_slugs_part_dist(infile, gwg_c, initial_c[n], moveobstacles_c, iset, PUDO_targets = PUDO_t_c,
                                                                    visdist =  visdist[n], allowed_states = allowed_states[n],
                                                                    partitionGrid = pg[n])
         
@@ -126,9 +127,12 @@ if __name__ == '__main__':
         print('Computing controller...')
 
         nowww = time.time()
+        print('Conversion took ', nowww - noww, ' seconds')
         # sp = subprocess.Popen(slugs + ' --explicitStrategy --jsonOutput ' + infile + '.slugsin > ' + outfile,
         #                           shell=True, stdout=subprocess.PIPE)
-        sp = subprocess.Popen(slugs + ' --explicitStrategy --fixedPointRecycling --jsonOutput ' + infile + '.slugsin > ' + outfile,
+        # sp = subprocess.Popen(slugs + ' --explicitStrategy --fixedPointRecycling --jsonOutput ' + infile + '.slugsin > ' + outfile,
+        #                           shell=True, stdout=subprocess.PIPE)
+        sp = subprocess.Popen(slugs + ' --biasForAction --explicitStrategy --jsonOutput ' + infile + '.slugsin > ' + outfile,
                                   shell=True, stdout=subprocess.PIPE)
         sp.wait()
 

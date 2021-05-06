@@ -9,7 +9,7 @@ import numpy as np
 from beliefIOParser import BeliefIOParser
 import subprocess
 import os
-
+from itertools import repeat, permutations
 
 
 def powerset(s):
@@ -133,7 +133,7 @@ def SlugsInput(inputVariables, state_next, inbits):
     inVars = inputVariables.keys()
     bits_l = [None]*inbits
     for var in inVars:
-        bits_v = list(bin(state_next['State'][var])[2:].zfil+l(inputVariables[var][1]-inputVariables[var][0]))
+        bits_v = list(bin(state_next['State'][var])[2:].zfill(inputVariables[var][1]-inputVariables[var][0]))
         # bits_v_r = bits_v[::-1]
         for i in range(len(bits_v)):
             bits_l[inputVariables[var][0]+i] = bits_v[-1-i]
@@ -190,7 +190,7 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
     for i in range(gwg.nstates,gwg.nstates+ len(beliefcombs)):
         allstates.append(i)
     gwg.colorstates = [set(), set(), set(), set(), set(), set(), set()]
-    gridstate = copy.deepcopy(moveobstacles[0])
+    gridstate = copy.deepcopy(moveobstacles)
     output = BeliefIOParser(jsonfile)
     nonbeliefstates = gwg.states
     Bstates = []
@@ -258,7 +258,7 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
 
 
         
-        gwg.moveobstacles[0] = copy.deepcopy(gridstate)
+        gwg.moveobstacles = copy.deepcopy(gridstate)
         gwg.render()
         # ----------------- Robot Waits For Key Stroke To Take Action-----------------
         # while True:
@@ -285,27 +285,64 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
 
         
         # nextstates = automaton[automaton_state]['Successors']
-        nextstatedirn = {'W':None,'E':None,'S':None,'N':None,'R':None}
-        nextbelief = {'W':None,'E':None,'S':None,'N':None,'R':None}
+        nextstatedirn0 = {'W':None,'E':None,'S':None,'N':None,'R':None}
+        nextstatedirn1 = {'W':None,'E':None,'S':None,'N':None,'R':None}
+
+        # nextbelief = {'W':None,'E':None,'S':None,'N':None,'R':None}
+        
+        # nextstatedirn = {'W':{'W':None,'E':None,'S':None,'N':None,'R':None},'E':{'W':None,'E':None,'S':None,'N':None,'R':None},'S':{'W':None,'E':None,'S':None,'N':None,'R':None},'N':{'W':None,'E':None,'S':None,'N':None,'R':None},'R':{'W':None,'E':None,'S':None,'N':None,'R':None}}
+        nextbelief = {'W':{'W':None,'E':None,'S':None,'N':None,'R':None},'E':{'W':None,'E':None,'S':None,'N':None,'R':None},'S':{'W':None,'E':None,'S':None,'N':None,'R':None},'N':{'W':None,'E':None,'S':None,'N':None,'R':None},'R':{'W':None,'E':None,'S':None,'N':None,'R':None}}
+        
+        
         # Need to Change this to add multiple next automaton states for one moving obstacle action (based on delivery request only I think, in this case only consider delivery request to be true). Need to add correct obstacle transition to specifications
-        beliefset = set()
-        repeat = set()
-        b_acts = []
+        beliefset0 = set()
+        beliefset1 = set()
+        repeat0 = set()
+        repeat1 = set()
+        b_acts0 = []
+        b_acts1 = []
+        actions0 = []
+        actions1 = []
         for a in range(gwg.nactionsMO):  
-            for t in np.nonzero(gwg.probMO[gwg.actlistMO[a]][gridstate])[0]:
-                if t in allowed_states[0] and t not in repeat:
+            for t in np.nonzero(gwg.probMO[gwg.actlistMO[a]][gridstate[0]])[0]:
+                if t in allowed_states[0] and t not in repeat0:
                     if t not in invisibilityset[0][agentstate]:
-                        nextstatedirn[gwg.actlistMO[a]]=t
+                        nextstatedirn0[gwg.actlistMO[a]]=t
+                        actions0.append(gwg.actlistMO[a])
                         # stri += 'st\' = {} \\/'.format(t)
-                        nextbelief[gwg.actlistMO[a]] = len(Bstates)-1
-                        repeat.add(t)
+                        # nextbelief[gwg.actlistMO[a]] = len(Bstates)-1
+                        repeat0.add(t)
                     else:
                         if not t == agentstate and t not in targets: # not allowed to move on agent's position
                             try: # here we evaluate which grid partitions the robot enters with action a
                                 partgridkeyind = [inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]
                                 t2 = partitionGrid.keys()[partgridkeyind]
-                                beliefset.add(t2)
-                                b_acts.append(gwg.actlistMO[a])
+                                beliefset0.add(t2)
+                                b_acts0.append(gwg.actlistMO[a])
+                                nextstatedirn0[gwg.actlistMO[a]]=len(gwg.states)
+                                actions0.append(gwg.actlistMO[a])
+                            except:
+                                print t
+                                print 'tests'
+
+        for a in range(gwg.nactionsMO):  
+            for t in np.nonzero(gwg.probMO[gwg.actlistMO[a]][gridstate[1]])[0]:
+                if t in allowed_states[0] and t not in repeat1:
+                    if t not in invisibilityset[0][agentstate]:
+                        nextstatedirn1[gwg.actlistMO[a]]=t
+                        actions1.append(gwg.actlistMO[a])
+                        # stri += 'st\' = {} \\/'.format(t)
+                        # nextbelief[gwg.actlistMO[a]] = len(Bstates)-1
+                        repeat1.add(t)
+                    else:
+                        if not t == agentstate and t not in targets: # not allowed to move on agent's position
+                            try: # here we evaluate which grid partitions the robot enters with action a
+                                partgridkeyind = [inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]
+                                t2 = partitionGrid.keys()[partgridkeyind]
+                                beliefset1.add(t2)
+                                b_acts1.append(gwg.actlistMO[a])
+                                nextstatedirn1[gwg.actlistMO[a]]=len(gwg.states)
+                                actions1.append(gwg.actlistMO[a])
                             except:
                                 print t
                                 print 'tests'
@@ -341,50 +378,100 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
                 Newvisstates = visstates - visstatesOld
                 beliefstates_invis_and_new = beliefstates - (beliefstates_vis - Newvisstates)
 
-            for b in beliefstates_invis_and_new:
-                for a in range(gwg.nactionsMO):
-                    for t in np.nonzero(gwg.probMO[gwg.actlistMO[a]][b])[0]:
-                        if t not in invisibilityset[0][s]:
-                            if t in allowed_states[0] and t not in repeat:
-                                # nothing here for now, captured by gridstate based code
-                                repeat.add(t)
-                        else:
-                            if t in gwg.targets[0]:
-                                continue
-                            if t in allowed_states[0]:
-                                t2 = partitionGrid.keys()[[inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]]
-                                beliefset.add(t2)
-                                # b_acts.append(gwg.actlistMO[a])
 
 
+            if envstate0 == len(gwg.states):
+                for b in beliefstates_invis_and_new:
+                    for a in range(gwg.nactionsMO):
+                        for t in np.nonzero(gwg.probMO[gwg.actlistMO[a]][b])[0]:
+                            if t not in invisibilityset[0][s]:
+                                if t in allowed_states[0] and t not in repeat0:
+                                    # nothing here for now, captured by gridstate based code
+                                    repeat0.add(t)
+                            else:
+                                if t in gwg.targets[0]:
+                                    continue
+                                if t in allowed_states[0]:
+                                    t2 = partitionGrid.keys()[[inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]]
+                                    beliefset0.add(t2)
+                                    # nextstatedirn0[gwg.actlistMO[a]]=len(gwg.states)
+                                    # b_acts.append(gwg.actlistMO[a])
 
-        for act in b_acts:
-            if len(beliefset) > 0: #here we write the possible next belief state if the obstacle was at the edge of the visible range at the current step
-                b2 = beliefcombs.index(beliefset)
-                nextstatedirn[act]=len(gwg.states)
-                nextbelief[act] = b2      
-            else:
-                print 'Issue: action without next state'
+            if envstate1 == len(gwg.states):
+                for b in beliefstates_invis_and_new:
+                    for a in range(gwg.nactionsMO):
+                        for t in np.nonzero(gwg.probMO[gwg.actlistMO[a]][b])[0]:
+                            if t not in invisibilityset[0][s]:
+                                if t in allowed_states[0] and t not in repeat1:
+                                    # nothing here for now, captured by gridstate based code
+                                    repeat1.add(t)
+                            else:
+                                if t in gwg.targets[0]:
+                                    continue
+                                if t in allowed_states[0]:
+                                    t2 = partitionGrid.keys()[[inv for inv in range(len(partitionGrid.values())) if t in partitionGrid.values()[inv]][0]]
+                                    beliefset1.add(t2)
+                                    # nextstatedirn1[gwg.actlistMO[a]]=len(gwg.states)
+                                    # b_acts.append(gwg.actlistMO[a])
+
+        for acts in list(itertools.product(actions0, actions1)):
+            if nextstatedirn0[acts[0]] == len(gwg.states) and nextstatedirn1[acts[1]] != len(gwg.states):
+                b2 = beliefcombs.index(beliefset0)
+                nextbelief[acts[0]][acts[1]] = b2 
+            if nextstatedirn0[acts[0]] != len(gwg.states) and nextstatedirn1[acts[1]] == len(gwg.states):
+                b2 = beliefcombs.index(beliefset1)
+                nextbelief[acts[0]][acts[1]] = b2
+            if nextstatedirn0[acts[0]] == len(gwg.states) and nextstatedirn1[acts[1]] == len(gwg.states):
+                b2 = beliefcombs.index(beliefset0.union(beliefset1))
+                nextbelief[acts[0]][acts[1]] = b2
+            if nextstatedirn0[acts[0]] != len(gwg.states) and nextstatedirn1[acts[1]] != len(gwg.states):
+                # b2 = beliefcombs.index(beliefset0)
+                nextbelief[acts[0]][acts[1]] = len(Bstates)-1 
+
+
+        
+
+
+        # for acts in list(itertools.product(b_acts0, b_acts1)):
+        #     if nextstatedirn0[acts[0]] == len(gwg.states)
+
+
+        # for act in b_acts:
+        #     if len(beliefset) > 0: #here we write the possible next belief state if the obstacle was at the edge of the visible range at the current step
+        #         b2 = beliefcombs.index(beliefset)
+        #         nextstatedirn[act]=len(gwg.states)
+        #         nextbelief[act] = b2      
+        #     else:
+        #         print 'Issue: action without next state'
+
+
 
 
         while True:
-            nextstate = None
-            while nextstate == None:
+            nextstate0 = None
+            nextstate1 = None
+            while nextstate0 == None or nextstate1 == None:
                 while True:
-                    arrow = gwg.getkeyinput()
-                    if arrow != None:
+                    arrow0 = gwg.getkeyinput()
+                    if arrow0 != None:
                         break
-                nextstate = nextstatedirn[arrow]
+                while True:
+                    arrow1 = gwg.getkeyinput()
+                    if arrow1 != None:
+                        break
+                nextstate0 = nextstatedirn0[arrow0]
+                nextstate1 = nextstatedirn1[arrow1]
 
-                if nextstate == None:
+                if nextstate0 == None or nextstate1 == None:
                     break
 
-                state_next['State']['st0'] = nextstate
+                state_next['State']['st0'] = nextstate0
+                state_next['State']['st1'] = nextstate1
                 # if nextstate
-                state_next['State']['belief'] = nextbelief[arrow]
+                state_next['State']['belief'] = nextbelief[arrow0][arrow1]
 
-                if state_next['State']['st0']==len(gwg.states):
-                    nbelief = nextbelief[arrow]
+                if state_next['State']['belief'] != len(Bstates)-1 :
+                    nbelief = nextbelief[arrow0][arrow1]
                     beliefcombstate = beliefcombs[nbelief]
                     beliefstates = set()
                     invisstates = invisibilityset[0][state_next['State']['s_c']]
@@ -412,20 +499,9 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
                     gwg.render()
                 
 
-                if nextstate == None:
+                if nextstate0 == None or nextstate1 == None:
                     break
                 else:
-                    if arrow == 'W':
-                        gridstate = gwg.moveobstacles[0] - 1
-                    elif arrow == 'E':
-                        gridstate = gwg.moveobstacles[0] + 1
-                    elif arrow == 'S':
-                        gridstate = gwg.moveobstacles[0] + gwg.ncols
-                    elif arrow == 'N':
-                        gridstate = gwg.moveobstacles[0] - gwg.ncols
-                    elif arrow == 'R':
-                        gridstate = gwg.moveobstacles[0]
-
                     nextInput = SlugsInput(inputVars, state_next, inbits)
                     slugsProcess.stdin.write("XMAKETRANS\n"+nextInput)
                     print "XMAKETRANS: "+nextInput
@@ -438,8 +514,56 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
                         print "belief:" +str(stateSL['State']['belief'])
                         print "s_c:" + str(stateSL['State']['s_c'])
                         print "st0:" + str(stateSL['State']['st0'])
+                        print "st1:" + str(stateSL['State']['st1'])
                     else:
                         print "ERROR"
+                        nextstate0 = None
+                        nextstate1 = None
+                        break
+
+                    if arrow0 == 'W':
+                        gridstate[0] = gwg.moveobstacles[0] - 1
+                    elif arrow0 == 'E':
+                        gridstate[0] = gwg.moveobstacles[0] + 1
+                    elif arrow0 == 'S':
+                        gridstate[0] = gwg.moveobstacles[0] + gwg.ncols
+                    elif arrow0 == 'N':
+                        gridstate[0] = gwg.moveobstacles[0] - gwg.ncols
+                    elif arrow0 == 'R':
+                        gridstate[0] = gwg.moveobstacles[0]
+
+                    if arrow1 == 'W':
+                        gridstate[1] = gwg.moveobstacles[1] - 1
+                    elif arrow1 == 'E':
+                        gridstate[1] = gwg.moveobstacles[1] + 1
+                    elif arrow1 == 'S':
+                        gridstate[1] = gwg.moveobstacles[1] + gwg.ncols
+                    elif arrow1 == 'N':
+                        gridstate[1] = gwg.moveobstacles[1] - gwg.ncols
+                    elif arrow1 == 'R':
+                        gridstate[1] = gwg.moveobstacles[1]
+
+                    # nextInput = SlugsInput(inputVars, state_next, inbits)
+                    # slugsProcess.stdin.write("XMAKETRANS\n"+nextInput)
+                    # print "XMAKETRANS: "+nextInput
+                    # slugsProcess.stdin.flush()
+                    # slugsProcess.stdout.readline() # Skip the prompt
+                    # nextLine = slugsProcess.stdout.readline().strip()
+                    # print "NextLine:   "+nextLine
+                    # if nextLine!="ERROR":
+                    #     stateSL, inputVars, inbits = parseSlugs(nextLine, inputAPs, outputAPs)
+                    #     print "belief:" +str(stateSL['State']['belief'])
+                    #     print "s_c:" + str(stateSL['State']['s_c'])
+                    #     print "st0:" + str(stateSL['State']['st0'])
+                    #     print "st1:" + str(stateSL['State']['st1'])
+                    # else:
+                    #     print "ERROR"
                     # print 'test'
-                    break
-            break
+
+
+                    if nextstate0 != None and nextstate1 != None:
+                        break
+                    # break
+            # break
+            if nextstate0 != None and nextstate1 != None:
+                break
