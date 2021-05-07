@@ -1,10 +1,9 @@
 #include "drake/examples/kuka_iiwa_arm/kuka_torque_controller.h"
 
-#include <utility>
-#include <vector>
+#include <memory>
 
+#include "drake/systems/controllers/inverse_dynamics.h"
 #include "drake/systems/controllers/pid_controller.h"
-#include "drake/systems/controllers/rbt_inverse_dynamics.h"
 #include "drake/systems/framework/diagram_builder.h"
 #include "drake/systems/framework/leaf_system.h"
 #include "drake/systems/primitives/adder.h"
@@ -13,6 +12,7 @@
 namespace drake {
 namespace examples {
 namespace kuka_iiwa_arm {
+namespace {
 
 using drake::systems::kVectorValued;
 using drake::systems::Adder;
@@ -21,18 +21,17 @@ using drake::systems::Context;
 using drake::systems::DiagramBuilder;
 using drake::systems::LeafSystem;
 using drake::systems::PassThrough;
-using drake::systems::controllers::rbt::InverseDynamics;
 using drake::systems::controllers::PidController;
 
 template <typename T>
 class StateDependentDamper : public LeafSystem<T> {
  public:
-  StateDependentDamper(const RigidBodyTree<T>& tree,
+  StateDependentDamper(const multibody::MultibodyPlant<T>& plant,
                        const VectorX<double>& stiffness,
                        const VectorX<double>& damping_ratio)
-      : tree_(tree), stiffness_(stiffness), damping_ratio_(damping_ratio) {
-    const int num_q = tree_.get_num_positions();
-    const int num_v = tree_.get_num_velocities();
+      : plant_(plant), stiffness_(stiffness), damping_ratio_(damping_ratio) {
+    const int num_q = plant_.num_positions();
+    const int num_v = plant_.num_velocities();
     const int num_x = num_q + num_v;
 
     DRAKE_DEMAND(stiffness.size() == num_v);
@@ -41,12 +40,18 @@ class StateDependentDamper : public LeafSystem<T> {
     this->DeclareInputPort(kVectorValued, num_x);
     this->DeclareVectorOutputPort(BasicVector<T>(num_v),
                                   &StateDependentDamper<T>::CalcTorque);
+    // Make context with default parameters.
+    plant_context_ = plant_.CreateDefaultContext();
   }
 
  private:
-  const RigidBodyTree<T>& tree_;
+  const multibody::MultibodyPlant<T>& plant_;
   const VectorX<double> stiffness_;
   const VectorX<double> damping_ratio_;
+
+  // This context is used solely for setting generalized positions and
+  // velocities in multibody_plant_.
+  std::unique_ptr<Context<T>> plant_context_;
 
   /**
    * Computes joint level damping forces by computing the damping ratio for each
@@ -57,31 +62,39 @@ class StateDependentDamper : public LeafSystem<T> {
    */
   void CalcTorque(const Context<T>& context, BasicVector<T>* torque) const {
     Eigen::VectorXd x = this->EvalVectorInput(context, 0)->get_value();
-    Eigen::VectorXd q = x.head(tree_.get_num_positions());
-    Eigen::VectorXd v = x.tail(tree_.get_num_velocities());
-    auto cache = tree_.doKinematics(q);
+    plant_.SetPositionsAndVelocities(plant_context_.get(), x);
+
+    const int num_v = plant_.num_velocities();
+    Eigen::MatrixXd H(num_v, num_v);
+    plant_.CalcMassMatrixViaInverseDynamics(*plant_context_, &H);
 
     // Compute critical damping gains and scale by damping ratio. Use Eigen
     // arrays (rather than matrices) for elementwise multiplication.
     Eigen::ArrayXd temp =
-        tree_.massMatrix(cache).diagonal().array() * stiffness_.array();
+        H.diagonal().array() * stiffness_.array();
     Eigen::ArrayXd damping_gains = 2 * temp.sqrt();
     damping_gains *= damping_ratio_.array();
 
     // Compute damping torque.
+    Eigen::VectorXd v = x.tail(plant_.num_velocities());
     torque->get_mutable_value() = -(damping_gains * v.array()).matrix();
   }
 };
 
-template <typename T>
-void KukaTorqueController<T>::SetUp(const VectorX<double>& stiffness,
-                                    const VectorX<double>& damping_ratio) {
-  DiagramBuilder<T> builder;
-  const RigidBodyTree<T>& tree = *robot_for_control_;
-  DRAKE_DEMAND(tree.get_num_positions() == stiffness.size());
-  DRAKE_DEMAND(tree.get_num_positions() == damping_ratio.size());
+}  // namespace
 
-  const int dim = tree.get_num_positions();
+template <typename T>
+KukaTorqueController<T>::KukaTorqueController(
+    const multibody::MultibodyPlant<T>& plant,
+    const VectorX<double>& stiffness,
+    const VectorX<double>& damping)
+    : plant_(plant) {
+
+  DiagramBuilder<T> builder;
+  DRAKE_DEMAND(plant_.num_positions() == stiffness.size());
+  DRAKE_DEMAND(plant_.num_positions() == damping.size());
+
+  const int dim = plant_.num_positions();
 
   /*
   torque_in ----------------------------
@@ -97,9 +110,11 @@ void KukaTorqueController<T>::SetUp(const VectorX<double>& stiffness,
   // Redirects estimated state input into PID and gravity compensation.
   auto pass_through = builder.template AddSystem<PassThrough<T>>(2 * dim);
 
-  // Add gravity compensator.
+  // Adds gravity compensator.
+  using drake::systems::controllers::InverseDynamics;
   auto gravity_comp =
-      builder.template AddSystem<InverseDynamics<T>>(&tree, true);
+      builder.template AddSystem<InverseDynamics<T>>(
+          &plant_, InverseDynamics<T>::kGravityCompensation);
 
   // Adds virtual springs.
   Eigen::VectorXd kd(dim);
@@ -110,7 +125,7 @@ void KukaTorqueController<T>::SetUp(const VectorX<double>& stiffness,
 
   // Adds virtual damper.
   auto damper = builder.template AddSystem<StateDependentDamper<T>>(
-      tree, stiffness, damping_ratio);
+      plant_, stiffness, damping);
 
   // Adds an adder to sum the gravity compensation, spring, damper, and
   // feedforward torque.
@@ -150,15 +165,6 @@ void KukaTorqueController<T>::SetUp(const VectorX<double>& stiffness,
 
   builder.BuildInto(this);
 }
-
-template <typename T>
-KukaTorqueController<T>::KukaTorqueController(
-    std::unique_ptr<RigidBodyTree<T>> tree, const VectorX<double>& stiffness,
-    const VectorX<double>& damping) {
-  robot_for_control_ = std::move(tree);
-  SetUp(stiffness, damping);
-}
-
 
 template class KukaTorqueController<double>;
 

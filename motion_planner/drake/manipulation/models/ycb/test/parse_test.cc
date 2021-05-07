@@ -53,21 +53,19 @@ TEST_P(ParseTest, Quantities) {
       "drake/manipulation/models/ycb/sdf/{}.sdf", object_name));
 
   DiagramBuilder<double> builder;
-  MultibodyPlant<double>* plant{};
-  SceneGraph<double>* scene_graph{};
-  std::tie(plant, scene_graph) = AddMultibodyPlantSceneGraph(&builder);
-  Parser(plant).AddModelFromFile(filename);
-  ConnectDrakeVisualizer(&builder, *scene_graph);
-  plant->Finalize();
+  auto [plant, scene_graph] = AddMultibodyPlantSceneGraph(&builder, 0.0);
+  Parser(&plant).AddModelFromFile(filename);
+  ConnectDrakeVisualizer(&builder, scene_graph);
+  plant.Finalize();
   auto diagram = builder.Build();
 
   // MultibodyPlant always creates at least two model instances, one for the
   // world and one for a default model instance for unspecified modeling
   // elements. Finally, there is a model instance for each YCB sdf file.
-  EXPECT_EQ(plant->num_model_instances(), 3);
+  EXPECT_EQ(plant.num_model_instances(), 3);
 
   // Each object has two bodies, the world body and the object body.
-  EXPECT_EQ(plant->num_bodies(), 2);
+  EXPECT_EQ(plant.num_bodies(), 2);
 
   if (FLAGS_visualize_sec > 0.) {
     drake::log()->info("Visualize: {}", object_name);
@@ -81,7 +79,7 @@ TEST_P(ParseTest, Quantities) {
   }
 }
 
-INSTANTIATE_TEST_CASE_P(Both, ParseTest, testing::Values(
+INSTANTIATE_TEST_SUITE_P(Both, ParseTest, testing::Values(
     "003_cracker_box",
     "004_sugar_box",
     "005_tomato_soup_can",

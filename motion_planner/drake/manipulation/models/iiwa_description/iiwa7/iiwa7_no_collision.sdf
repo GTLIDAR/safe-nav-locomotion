@@ -67,12 +67,12 @@
       <parent>iiwa_link_0</parent>
       <axis>
         <xyz>0 0 1</xyz>
-        <limit>
+        <!-- <limit>
           <lower>-2.96706</lower>
           <upper>2.96706</upper>
           <effort>300</effort>
           <velocity>10</velocity>
-        </limit>
+        </limit> -->
         <dynamics>
           <damping>0.0</damping>
           <friction>0</friction>
@@ -117,12 +117,12 @@
       <parent>iiwa_link_1</parent>
       <axis>
         <xyz>-0 1 0</xyz>
-        <limit>
+        <!-- <limit>
           <lower>-2.0944</lower>
           <upper>2.0944</upper>
           <effort>300</effort>
           <velocity>10</velocity>
-        </limit>
+        </limit> -->
         <dynamics>
           <damping>0.0</damping>
           <friction>0</friction>
@@ -167,12 +167,12 @@
       <parent>iiwa_link_2</parent>
       <axis>
         <xyz>0 0 1</xyz>
-        <limit>
+        <!-- <limit>
           <lower>-2.96706</lower>
           <upper>2.96706</upper>
           <effort>300</effort>
           <velocity>10</velocity>
-        </limit>
+        </limit> -->
         <dynamics>
           <damping>0.0</damping>
           <friction>0</friction>
@@ -217,12 +217,12 @@
       <parent>iiwa_link_3</parent>
       <axis>
         <xyz>0 -1 0</xyz>
-        <limit>
+        <!-- <limit>
           <lower>-2.0944</lower>
           <upper>2.0944</upper>
           <effort>300</effort>
           <velocity>10</velocity>
-        </limit>
+        </limit> -->
         <dynamics>
           <damping>0.0</damping>
           <friction>0</friction>
@@ -267,12 +267,12 @@
       <parent>iiwa_link_4</parent>
       <axis>
         <xyz>0 0 1</xyz>
-        <limit>
+        <!-- <limit>
           <lower>-2.96706</lower>
           <upper>2.96706</upper>
           <effort>300</effort>
           <velocity>10</velocity>
-        </limit>
+        </limit> -->
         <dynamics>
           <damping>0.0</damping>
           <friction>0</friction>
@@ -317,12 +317,12 @@
       <parent>iiwa_link_5</parent>
       <axis>
         <xyz>-0 1 -0</xyz>
-        <limit>
+        <!-- <limit>
           <lower>-2.0944</lower>
           <upper>2.0944</upper>
           <effort>300</effort>
           <velocity>10</velocity>
-        </limit>
+        </limit> -->
         <dynamics>
           <damping>0.0</damping>
           <friction>0</friction>
@@ -367,12 +367,12 @@
       <parent>iiwa_link_6</parent>
       <axis>
         <xyz>0 0 1</xyz>
-        <limit>
+        <!-- <limit>
           <lower>-3.05433</lower>
           <upper>3.05433</upper>
           <effort>300</effort>
           <velocity>10</velocity>
-        </limit>
+        </limit> -->
         <dynamics>
           <damping>0.0</damping>
           <friction>0</friction>

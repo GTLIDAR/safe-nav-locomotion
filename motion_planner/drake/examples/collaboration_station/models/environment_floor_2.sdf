@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<sdf version='1.6'>
+<model name="environment_floor_2">
+
+  <material name="white">
+    <color rgba="0.9 0.9 0.9 1.0"/>
+  </material>
+
+
+
+  <link name="center">
+    <pose>5.025 0 -1.2 0 0 0 </pose>
+  </link>
+
+  <joint name='floor_joint' type='fixed'>
+    <parent>center</parent>
+    <child>floor</child>
+  </joint>
+
+  <link name="floor">
+    <pose>0 0 0 0 0 0 </pose>
+    <inertial>
+      <mass>1</mass>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+    </inertial>
+
+    <visual name='tabletop'>
+      <pose>0 0 0 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>3 7 0.15</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+
+    <visual name='wall_1'>
+      <pose>0 -3.5 0.6 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>3 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual> 
+
+    <visual name='wall_2'>
+      <pose>0 3.5 0.6 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>3 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='wall_3'>
+      <pose>1.5 0.5 0.6 0 0 1.57079632679</pose>
+      <geometry>
+        <box> 
+          <size>6 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='wall_4'>
+      <pose>-1.5 0 0.6 0 0 1.57079632679</pose>
+      <geometry>
+        <box> 
+          <size>7 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+
+    <visual name='kuka_wall_left'>
+      <pose>1 0.5 0.6 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>1 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>    
+    </visual>
+
+    <visual name='kuka_wall_right'>
+      <pose>-1 0.5 0.6 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>1 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+
+    <visual name='kuka_table'>
+      <pose>0 0.5 0.665 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>1 0.4 0.05</size>
+        </box>
+      </geometry>
+      <material name="white"/>
+    </visual>
+
+    <visual name='box_table'>
+      <pose>0 1.6 0.6 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>1 0.5 0.05</size>
+        </box>
+      </geometry>
+      <material name="white"/>
+    </visual>
+
+    <visual name='kuka_platform'>
+      <pose>-0.25 1 0.5 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.25 0.25 0.05</size>
+        </box>
+      </geometry>
+      <material name="white"/>
+    </visual>
+
+
+   </link>
+</model>
+</sdf>

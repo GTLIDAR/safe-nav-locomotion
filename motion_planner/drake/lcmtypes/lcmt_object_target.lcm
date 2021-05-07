@@ -1,0 +1,15 @@
+package drake;
+
+struct lcmt_object_target {
+ // The timestamp in microseconds.
+  int64_t utime;
+
+  int64_t target;
+
+  double grasp_height;
+
+  double roll_angle;
+  double yaw_angle;
+  double pitch_angle;
+
+}

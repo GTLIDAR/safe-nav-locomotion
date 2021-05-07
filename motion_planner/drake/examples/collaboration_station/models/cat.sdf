@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<sdf version='1.6'>
+<model name="cat">
+  <link name="base_link">
+    <inertial>
+      <pose frame=''>0 0 0.025 0 0 0 </pose>
+      <mass>0.028</mass>
+        <inertia>
+          <ixx>1.17e-5</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1.9e-5</iyy>
+          <iyz>0</iyz>
+          <izz>1.9e-5</izz>
+        </inertia>
+    </inertial>
+    <visual name='base_link'>
+      <pose frame=''>0 0 0.025 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <scale>1 1 1</scale>
+          <uri>meshes/cup.obj</uri>
+        </mesh>
+      </geometry>
+      <material>
+        <diffuse>0.31 0.01 0.13 1.0</diffuse>
+      </material>
+    </visual>
+   </link>
+</model>
+</sdf>

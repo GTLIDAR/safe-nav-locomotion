@@ -1,0 +1,21 @@
+<robot name="forklift">
+  <material name="Box_color">
+    <color rgba="0.678 0.529 0.384 1.0"/>
+  </material>
+  <material name="Green">
+    <color rgba="0 1 0 1.0"/>
+  </material>
+
+    <link name="base">
+        <visual>
+            <origin xyz="-1 0 0" rpy="1.57 0 0"/>
+            <geometry>
+                <mesh filename="meshes/Forklift.obj" scale="0.004 0.004 0.004"/>
+            </geometry>
+
+        </visual>
+
+
+ 
+    </link>
+</robot>

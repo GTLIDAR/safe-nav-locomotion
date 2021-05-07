@@ -1,0 +1,324 @@
+# -*- python -*-
+# This file contains rules for Bazel; see drake/doc/bazel.rst.
+
+load(
+    "@drake//tools/skylark:drake_cc.bzl",
+    "drake_cc_binary",
+    "drake_cc_googletest",
+    "drake_cc_library",
+)
+load(
+    "@drake//tools/skylark:drake_py.bzl",
+    "drake_py_binary",
+    "drake_py_library",
+)
+
+load("@drake//tools/skylark:test_tags.bzl", "vtk_test_tags")
+load("//tools/install:install_data.bzl", "install_data")
+load("//tools/lint:lint.bzl", "add_lint_tests")
+load("//tools/skylark:test_tags.bzl", "vtk_test_tags")
+
+drake_cc_library(
+    name = "collaboration_station",
+    srcs = [
+        "collaboration_station.cc",
+    ],
+    hdrs = [
+        "collaboration_station.h",
+        "include/json.hpp",
+    ],
+    data = [
+        ":models",
+        "//examples/kuka_iiwa_arm:models",
+        "//manipulation/models/iiwa_description:models",
+        "//manipulation/models/wsg_50_description:models",
+        "//manipulation/models/cassie_description:models",
+        "//manipulation/models/ycb:models",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//common:find_resource",
+        "//geometry:scene_graph",
+        "//geometry/render:render_engine_vtk",
+        "//manipulation/schunk_wsg:schunk_wsg_constants",
+        "//manipulation/schunk_wsg:schunk_wsg_position_controller",
+        "//math:geometric_transform",
+        "//multibody/parsing",
+        "//multibody/plant",
+        "//systems/controllers:inverse_dynamics_controller",
+        "//systems/framework",
+        "//systems/sensors:rgbd_sensor",
+    ],
+)
+
+# drake_cc_binary(
+#     name = "simulation",
+#     srcs = [
+#         "simulation.cc",
+#     ],
+#     add_test_rule = 1,
+#     tags = vtk_test_tags(),
+#     test_rule_args = ["--target_realtime_rate=0.0 --duration=0.1"],
+#     deps = [
+#         ":collaboration_station",
+#         "//geometry:geometry_visualization",
+#         "//lcm",
+#         "//manipulation/kuka_iiwa:iiwa_command_receiver",
+#         "//manipulation/kuka_iiwa:iiwa_status_sender",
+#         "//manipulation/schunk_wsg:schunk_wsg_lcm",
+
+#         "//manipulation/cassie:cassie_command_receiver",
+#         "//manipulation/cassie:cassie_status_sender",
+#         "//systems/analysis:simulator",
+#         "//systems/lcm",
+#         "@gflags",
+#     ],
+# )
+
+# drake_cc_binary(
+#     name = "cassie_simulation",
+#     srcs = [
+#         "cassie_simulation.cc",
+#     ],
+#     deps = [
+#         "//common:add_text_logging_gflags",
+#         "//common:find_resource",
+#         "//geometry:geometry_visualization",
+#         "//multibody/parsing",
+#         "//multibody/plant",
+#         "//systems/analysis:simulator",
+#         "//systems/analysis:simulator_gflags",
+#         "//systems/framework:diagram",
+#         "//systems/primitives:constant_vector_source",
+
+#     ],
+#     data = [
+#         ":models",
+#         "//manipulation/models/cassie_description:models",
+#     ],
+# )
+
+# drake_cc_binary(
+#     name = "cassie_run_dynamics",
+#     srcs = [
+#         "cassie_run_dynamics.cc",
+#     ],
+#     data = [
+#         ":models",
+#         "//manipulation/models/cassie_description:models",
+#     ],    
+#     deps = [
+#         "//common:add_text_logging_gflags",
+#         "//common:find_resource",
+#         "//geometry:geometry_visualization",
+#         "//multibody/parsing",
+#         "//multibody/plant:contact_results_to_lcm",
+#         "//systems/analysis:simulator",
+#         "//systems/analysis:simulator_gflags",
+#         "//systems/framework:diagram",
+#         "@gflags",
+#     ],
+# )
+
+# cc_binary(
+#     name = "cassie_visualizer",
+#     srcs = ["cassie_visualizer.cc"],
+#     data = [
+#         ":models",
+#         "//manipulation/models/cassie_description:models",
+#         "//examples/cassie:models",
+
+#         "//manipulation/models/iiwa_description:models",
+#         "//manipulation/models/wsg_50_description:models",
+#         "//examples/mobile_robots/turtle_bot:models",
+
+#     ],  
+#     deps = [
+#         "@gflags",
+#         "@jsoncpp",
+#         "//common:add_text_logging_gflags",
+#         "//common:find_resource",
+#         "//examples/cassie/robot:cassie_lcm",
+#         "//geometry:geometry_visualization",
+#         "//lcm",
+#         "//math:geometric_transform",
+#         "//multibody/parsing",
+#         "//multibody/plant",
+#         "//multibody/plant:contact_results_to_lcm",
+#         # "//multibody/joints:quaternion_floating_joint",
+#         "//systems/analysis:simulator",
+#         "//systems/analysis:simulator_gflags",
+#         "//systems/framework:diagram",
+#         "//systems/primitives:constant_vector_source",
+#         "//systems/primitives:demultiplexer",
+#         "//systems/primitives:discrete_derivative",
+#         "//systems/primitives:subvector_pass_through",
+#         "//systems/rendering:multibody_position_to_geometry_pose",
+
+#     ],
+# )
+
+drake_cc_binary(
+    name = "simulation_visualizer",
+    srcs = ["simulation_visualizer.cc"],
+    data = [
+        ":models",
+        "//examples/athena_cassie:models",
+        "//examples/cassie:models",
+        "//examples/kuka_iiwa_arm:models",
+        "//examples/mobile_robots/turtle_bot:models",
+
+        "//manipulation/models/iiwa_description:models",
+        "//manipulation/models/wsg_50_description:models",
+
+    ],
+    deps = [
+        "@gflags",
+        "@jsoncpp",
+        ":object",
+        ":object_lcm",
+        "//common:text_logging_gflags",
+        "//common:find_resource",
+        "//examples/athena_cassie:athena_cassie",
+        "//examples/athena_cassie:athena_cassie_lcm",
+        "//examples/cassie:cassie",
+        "//examples/cassie:cassie_lcm",
+        "//examples/kuka_iiwa_arm:iiwa",
+        "//examples/kuka_iiwa_arm:iiwa_common",
+        "//examples/kuka_iiwa_arm:iiwa_lcm",
+        "//examples/collaboration_station:robot_time_sender",
+        "//examples/mobile_robots/turtle_bot:turtle_bot",
+        "//examples/mobile_robots/turtle_bot:turtle_lcm",
+        "//geometry:geometry_visualization",
+        "//multibody/parsing",
+        "//systems/analysis:simulator",
+        "//systems/analysis:simulator_gflags",
+        "//systems/framework:diagram",
+        "//systems/primitives:constant_vector_source",
+        "//systems/primitives:demultiplexer",
+        "//systems/primitives:multiplexer",
+        "//systems/rendering:multibody_position_to_geometry_pose",
+    ],
+)
+
+drake_cc_binary(
+    name = "simulation_visualizer_2",
+    srcs = ["simulation_visualizer_2.cc"],
+    data = [
+        ":models",
+        "//examples/athena_cassie:models",
+        "//examples/kuka_iiwa_arm:models",
+        "//examples/mobile_robots/turtle_bot:models",
+        "//examples/A1:models",
+
+        "//manipulation/models/iiwa_description:models",
+        "//manipulation/models/wsg_50_description:models",
+    ],
+    deps = [
+        "@gflags",
+        "@jsoncpp",
+
+        "//common:add_text_logging_gflags",
+        "//common:find_resource",
+        "//examples/athena_cassie:athena_cassie",
+        "//examples/athena_cassie:athena_cassie_lcm",
+        "//examples/kuka_iiwa_arm:iiwa",
+        "//examples/kuka_iiwa_arm:iiwa_common",
+        "//examples/kuka_iiwa_arm:iiwa_lcm",
+        "//examples/collaboration_station:robot_time_sender",
+        "//examples/A1:a1_lcm",
+
+        "//geometry:geometry_visualization",
+        "//manipulation/schunk_wsg:schunk_wsg_lcm",
+        "//manipulation/schunk_wsg:schunk_wsg_constants",
+        "//multibody/parsing",
+        "//systems/analysis:simulator",
+        "//systems/analysis:simulator_gflags",
+        "//systems/framework:diagram",
+        "//systems/primitives:constant_vector_source",
+        "//systems/primitives:demultiplexer",
+        "//systems/primitives:multiplexer",
+        "//systems/rendering:multibody_position_to_geometry_pose",
+    ],
+)
+
+cc_binary(
+    name = "object_position_publisher",
+    srcs = ["object_position_publisher.cc"],
+    data = [
+        ":models", 
+        "//examples/collaboration_station",     
+    ],  
+    deps = [
+        "@gflags",
+        "@jsoncpp",
+        "@lcmtypes_robotlocomotion",
+        
+        ":object_lcm",
+
+        "//common:add_text_logging_gflags",
+        "//common:find_resource",
+        "//geometry:geometry_visualization",
+        "//lcm",
+        "//math:geometric_transform",
+        "//multibody/parsing",
+        "//multibody/plant",
+        "//multibody/plant:contact_results_to_lcm",
+        "//systems/analysis:simulator",
+        "//systems/analysis:simulator_gflags",
+        "//systems/framework:diagram",
+        "//systems/primitives:constant_vector_source",
+        "//systems/primitives:demultiplexer",
+        "//systems/primitives:discrete_derivative",
+        "//systems/rendering:multibody_position_to_geometry_pose",
+
+
+    ],
+)
+
+drake_cc_library(
+    name = "object_lcm",
+    srcs = ["object_lcm.cc"],
+    hdrs = ["object_lcm.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//examples/collaboration_station/objects",
+    ],
+)
+
+drake_cc_library(
+    name = "object",
+    srcs = ["object.cc"],
+    hdrs = [
+        "object.h",
+    ],
+    data = [":models"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//common:default_scalars",
+        "//common:essential",
+        "//common:find_resource",
+        "//systems/framework",
+        "//systems/analysis",
+        "//multibody/plant",
+        "//multibody/parsing",
+
+    ],
+)
+
+
+drake_cc_library(
+    name = "robot_time_sender",
+    srcs = ["robot_time_sender.cc"],
+    hdrs = ["robot_time_sender.h"],
+    deps = [
+        "//common:essential",
+        "//lcmtypes:lcmtypes_drake_cc",
+        "//systems/framework:leaf_system",
+    ],
+)
+
+
+install_data()
+
+add_lint_tests()

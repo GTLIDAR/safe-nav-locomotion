@@ -1,0 +1,3206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.0-0-g9aa0fdb  Build Version: 1.5.7004.21443
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+
+<robot
+  name="upperbody">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.0271681964844178 -5.89445694907357E-06 0.0304343738268154"
+        rpy="0 0 0" />
+      <mass
+        value="0.830516427519914" />
+      <inertia
+        ixx="0.0020748302794507"
+        ixy="-4.46901469145072E-07"
+        ixz="5.82612969737142E-05"
+        iyy="0.00584150125330406"
+        iyz="-2.47698400412774E-10"
+        izz="0.00723794812755109" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/base_link.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/base_link.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="spine1">
+    <inertial>
+      <origin
+        xyz="-0.031576759363086 -0.00714404247255757 -0.0199990534036869"
+        rpy="0 0 0" />
+      <mass
+        value="0.156079617758376" />
+      <inertia
+        ixx="0.000127945771255769"
+        ixy="2.46576157394923E-05"
+        ixz="-1.02098588965075E-11"
+        iyy="0.000105303397817604"
+        iyz="1.2851997231944E-09"
+        izz="0.000154168065041229" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/spine1.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/spine1.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="spine_joint1"
+    type="continuous">
+    <origin
+      xyz="-0.0369163899668939 0.0199973824278774 0.112816600067286"
+      rpy="-1.5707963267949 0.636235427921291 1.86144953020538E-05" />
+    <parent
+      link="base_link" />
+    <child
+      link="spine1" />
+    <axis
+      xyz="0 0 1" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="spine2">
+    <inertial>
+      <origin
+        xyz="-0.0315767593630859 -0.00714404247255755 -0.0199990534036868"
+        rpy="0 0 0" />
+      <mass
+        value="0.156079617758377" />
+      <inertia
+        ixx="0.000127945771255769"
+        ixy="2.46576157394923E-05"
+        ixz="-1.02098588958933E-11"
+        iyy="0.000105303397817604"
+        iyz="1.28519972321151E-09"
+        izz="0.000154168065041229" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/spine2.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/spine2.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="spine_joint2"
+    type="continuous">
+    <origin
+      xyz="-0.0634269276585492 -0.0487618122206607 0.00050000846385951"
+      rpy="0 0 0.330027191177507" />
+    <parent
+      link="spine1" />
+    <child
+      link="spine2" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="middle-spine">
+    <inertial>
+      <origin
+        xyz="-0.0662254636751907 -0.0570825581192012 -0.020000000828125"
+        rpy="0 0 0" />
+      <mass
+        value="0.385862581724572" />
+      <inertia
+        ixx="0.000255472007327263"
+        ixy="5.89360174505416E-05"
+        ixz="-1.31929470423881E-09"
+        iyy="0.000266588693667131"
+        iyz="1.37244597849399E-09"
+        izz="0.000356714426305558" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/middle-spine.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/middle-spine.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="spine_joint3"
+    type="continuous">
+    <origin
+      xyz="-0.0634269276585498 -0.04876181222066 0.000500008463859673"
+      rpy="0 0 0.141161130517002" />
+    <parent
+      link="spine2" />
+    <child
+      link="middle-spine" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="spine5">
+    <inertial>
+      <origin
+        xyz="-0.0315767593630861 -0.00714404247255757 -0.0199990534036868"
+        rpy="0 0 0" />
+      <mass
+        value="0.156079617758377" />
+      <inertia
+        ixx="0.000127945771255769"
+        ixy="2.46576157394923E-05"
+        ixz="-1.0209858863998E-11"
+        iyy="0.000105303397817604"
+        iyz="1.28519972318777E-09"
+        izz="0.000154168065041228" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/spine5.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/spine5.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="spine_joint4"
+    type="continuous">
+    <origin
+      xyz="-0.144716632909506 -0.136313106103117 -0.0405000150203701"
+      rpy="3.14159265358979 0 1.00006728177212" />
+    <parent
+      link="middle-spine" />
+    <child
+      link="spine5" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="spine6">
+    <inertial>
+      <origin
+        xyz="-0.031576759363086 -0.00714404247255757 -0.0199990534036868"
+        rpy="0 0 0" />
+      <mass
+        value="0.156079617758377" />
+      <inertia
+        ixx="0.000127945771255769"
+        ixy="2.46576157394922E-05"
+        ixz="-1.02098589005765E-11"
+        iyy="0.000105303397817605"
+        iyz="1.28519972319787E-09"
+        izz="0.000154168065041229" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/spine6.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/spine6.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="spine_joint5"
+    type="continuous">
+    <origin
+      xyz="-0.0634269276585482 -0.0487618122206626 0.000500008463859621"
+      rpy="0 0 0.261883526358821" />
+    <parent
+      link="spine5" />
+    <child
+      link="spine6" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="top-spine">
+    <inertial>
+      <origin
+        xyz="-0.0423940376585602 -0.0114544991420722 -0.0199978313720171"
+        rpy="0 0 0" />
+      <mass
+        value="0.36565030823538" />
+      <inertia
+        ixx="0.000681236853149367"
+        ixy="1.08979333431909E-05"
+        ixz="-8.96812483674465E-09"
+        iyy="0.00063443105589629"
+        iyz="-2.87015608964167E-08"
+        izz="0.000390248272027245" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/top-spine.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/top-spine.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="spine_joint6"
+    type="continuous">
+    <origin
+      xyz="-0.0634269276585481 -0.0487618122206645 0.000500008463857074"
+      rpy="0 0 0.106854521267602" />
+    <parent
+      link="spine6" />
+    <child
+      link="top-spine" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="left_shoulder_base_link">
+    <inertial>
+      <origin
+        xyz="-0.025085019414928 -0.0250662406882534 0.0605313641735694"
+        rpy="0 0 0" />
+      <mass
+        value="0.234215866585939" />
+      <inertia
+        ixx="0.000105327787012575"
+        ixy="-1.85991734561405E-05"
+        ixz="-2.14705049623141E-08"
+        iyy="0.000328728777847631"
+        iyz="9.08069720220901E-11"
+        izz="0.000296410626547605" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/left_shoulder_base.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/left_shoulder_base.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="spine_joint7"
+    type="fixed">
+    <origin
+      xyz="-0.018556428298603 -0.00890079991317813 0.0424438392385636"
+      rpy="-0.78539089503804 3.03339151464759E-05 -1.6050868564874" />
+    <parent
+      link="top-spine" />
+    <child
+      link="left_shoulder_base_link" />
+    <axis
+      xyz="0 0 0" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="right_shoulder_casing">
+    <inertial>
+      <origin
+        xyz="-0.0250850194149284 -0.0250662406882534 -0.0605313641735695"
+        rpy="0 0 0" />
+      <mass
+        value="0.234215866585939" />
+      <inertia
+        ixx="0.000105327787012575"
+        ixy="-1.85991734561405E-05"
+        ixz="2.14705049624491E-08"
+        iyy="0.000328728777847632"
+        iyz="-9.08069718459073E-11"
+        izz="0.000296410626547606" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_shoulder_casing.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_shoulder_casing.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="spine_joint8"
+    type="fixed">
+    <origin
+      xyz="-0.0185612132750373 -0.00888815608300239 -0.0824489455090575"
+      rpy="0.785396446889809 0 -1.60511994978068" />
+    <parent
+      link="top-spine" />
+    <child
+      link="right_shoulder_casing" />
+    <axis
+      xyz="0 0 0" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+
+
+
+ 
+  <link
+    name="left_shoulder_shaft">
+    <inertial>
+      <origin
+        xyz="-8.68969131206831E-05 0.0129447327851698 0.0800224355522851"
+        rpy="0 0 0" />
+      <mass
+        value="0.138602706286948" />
+      <inertia
+        ixx="7.74543363875849E-05"
+        ixy="-3.35657281416131E-07"
+        ixz="-6.98132214199092E-10"
+        iyy="7.05425394068002E-05"
+        iyz="-5.10180770546653E-06"
+        izz="2.63672629850582E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/shoulder-shaft-1.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/shoulder-shaft-1.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_arm_joint0"
+    type="continuous">
+    <origin
+      xyz="0 0 0.0105000450577301"
+      rpy="0 0 -0.0645291234972142" />
+    <parent
+      link="left_shoulder_base_link" />
+    <child
+      link="left_shoulder_shaft" />
+    <axis
+      xyz="0 0 0.999999999968369" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="left_shoulder_connector">
+    <inertial>
+      <origin
+        xyz="-7.70514755592411E-09 1.21783166884271E-10 -6.61402873674063E-08"
+        rpy="0 0 0" />
+      <mass
+        value="0.0525702745387761" />
+      <inertia
+        ixx="1.41285936595613E-05"
+        ixy="-1.27590705825506E-11"
+        ixz="-1.64246063454642E-11"
+        iyy="1.41394878337253E-05"
+        iyz="-7.32749261969512E-12"
+        izz="1.41285139770387E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/shoulder-connector-1.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/shoulder-connector-1.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_arm_joint1"
+    type="continuous">
+    <origin
+      xyz="0 0 0.148171341490431"
+      rpy="1.57079229864715 0 0" />
+    <parent
+      link="left_shoulder_shaft" />
+    <child
+      link="left_shoulder_connector" />
+    <axis
+      xyz="0 0 -0.99999999998555" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="left_actuator_holder">
+    <inertial>
+      <origin
+        xyz="0.145005986419767 -0.00224693554862791 -0.00160902615037891"
+        rpy="0 0 0" />
+      <mass
+        value="0.264702721898597" />
+      <inertia
+        ixx="5.45498975860699E-05"
+        ixy="-2.44815004420348E-09"
+        ixz="-3.50204690459703E-07"
+        iyy="0.000553297225813402"
+        iyz="-1.82982842751702E-08"
+        izz="0.000558574906309705" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/actuator-holder-1.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/actuator-holder-1.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_arm_joint2"
+    type="continuous">
+    <origin
+      xyz="0 0 0"
+      rpy="1.5707963267949 0 1.57079424926566" />
+    <parent
+      link="left_shoulder_connector" />
+    <child
+      link="left_actuator_holder" />
+    <axis
+      xyz="0.00232505679026519 0.110418443552155 -0.993882468622141" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="left_elbow">
+    <inertial>
+      <origin
+        xyz="0.0928239897843642 -0.00654691564926128 0.00556635484190682"
+        rpy="0 0 0" />
+      <mass
+        value="0.154515812138515" />
+      <inertia
+        ixx="2.74594169275811E-05"
+        ixy="2.56831555920839E-05"
+        ixz="2.28560452572082E-05"
+        iyy="0.000309848719347991"
+        iyz="-3.39715474131153E-06"
+        izz="0.000307902766591408" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/Elbow.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/Elbow.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_arm_joint3"
+    type="continuous">
+    <origin
+      xyz="0.257287222361557 0 0"
+      rpy="-1.57078918475308 0 0" />
+    <parent
+      link="left_actuator_holder" />
+    <child
+      link="left_elbow" />
+    <axis
+      xyz="0 0 -0.999999999975682" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="left_forearm_shaft">
+    <inertial>
+      <origin
+        xyz="0.01338055939041 0.00153367543898633 0.105459538601267"
+        rpy="0 0 0" />
+      <mass
+        value="0.0791357028644574" />
+      <inertia
+        ixx="9.18048107254739E-05"
+        ixy="1.11290865320485E-07"
+        ixz="-1.48899552245709E-06"
+        iyy="9.07167060303967E-05"
+        iyz="4.2237819332228E-08"
+        izz="5.08146399969643E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/forearm-shaft.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/forearm-shaft.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_arm_joint4"
+    type="continuous">
+    <origin
+      xyz="0.07382794209901 0.00952535502235443 0"
+      rpy="-1.5707979444657 -0.110513829254021 -1.57079775618155" />
+    <parent
+      link="left_elbow" />
+    <child
+      link="left_forearm_shaft" />
+    <axis
+      xyz="0 0 0.999999999931971" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="left_wrist">
+    <inertial>
+      <origin
+        xyz="-1.65368595699011E-06 -2.88375656687379E-10 1.55381720109808E-06"
+        rpy="0 0 0" />
+      <mass
+        value="0.0155765686622442" />
+      <inertia
+        ixx="1.86055627511068E-06"
+        ixy="-8.80571880216436E-13"
+        ixz="2.13809731259556E-12"
+        iyy="1.86199778366498E-06"
+        iyz="8.04216202195726E-13"
+        izz="1.86055184410237E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/wrist.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/wrist.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_arm_joint5"
+    type="continuous">
+    <origin
+      xyz="0.00195808029418458 0.000215237679823028 0.185527976293825"
+      rpy="-1.57078820232371 0.00157881663534768 -1.46028226170509" />
+    <parent
+      link="left_forearm_shaft" />
+    <child
+      link="left_wrist" />
+    <axis
+      xyz="0 -1.09070481307435E-05 -0.999999999939304" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="left_hand_connector">
+    <inertial>
+      <origin
+        xyz="0.0148112270031847 -0.00819536838514449 -8.55227086435824E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.0253461986666853" />
+      <inertia
+        ixx="3.97049543593029E-06"
+        ixy="-2.57871215955462E-07"
+        ixz="3.98354959870015E-09"
+        iyy="4.1741610167364E-06"
+        iyz="-1.80181716711494E-09"
+        izz="4.16863608723329E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/hand-connector.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/hand-connector.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_arm_joint6"
+    type="continuous">
+    <origin
+      xyz="3.6426104960939E-05 2.12325284519865e-05 0"
+      rpy="-1.57064822611751 0 1.56922097737794" />
+
+    <parent
+      link="left_wrist" />
+    <child
+      link="left_hand_connector" />
+   <axis
+      xyz="0.000539335062512243 -0.0272015617412076 0.999629823562968" />    
+   <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="left_handbase">
+    <inertial>
+      <origin
+        xyz="-0.0122144651280427 0.0363929506050069 0.0622453184404723"
+        rpy="0 0 0" />
+      <mass
+        value="0.0382798069962907" />
+      <inertia
+        ixx="6.34222110156094E-06"
+        ixy="1.73939649485842E-07"
+        ixz="6.09653266509441E-07"
+        iyy="1.09219559927853E-05"
+        iyz="-3.90918780541005E-07"
+        izz="7.86339840484559E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/handbase.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/handbase.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_arm_joint7"
+    type="fixed">
+  <origin
+      xyz="-0.0304745428925474 0.0104374546329456 0"
+      rpy="-3.14112085598692 1.56651438902474 -0.00381039006084744" />
+    <parent
+      link="left_hand_connector" />
+    <child
+      link="left_handbase" />
+    <axis
+      xyz="0 0 0" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+
+
+
+
+  <link
+    name="finger2">
+    <inertial>
+      <origin
+        xyz="0.0263418868956136 0.00163277801087184 -0.00058038077978113"
+        rpy="0 0 0" />
+      <mass
+        value="0.00171171879458192" />
+      <inertia
+        ixx="9.15764951292732E-09"
+        ixy="-6.86376068604009E-10"
+        ixz="-2.5160863877107E-15"
+        iyy="2.1189900201296E-07"
+        iyz="2.45525820951161E-13"
+        izz="2.10888570734783E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/finger2.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/finger2.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint2"
+    type="continuous">
+    <origin
+      xyz="0.01687 0.026081 0.12498"
+      rpy="-1.5708 -1.5203 1.5708" />
+    <parent
+      link="left_handbase" />
+    <child
+      link="finger2" />
+    <axis
+      xyz="0.19014 -0.0096115 -0.98171" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+
+  <link
+    name="fingertip2">
+    <inertial>
+      <origin
+        xyz="-0.0371422068779563 -0.00182500148777331 -0.00706071114126825"
+        rpy="0 0 0" />
+      <mass
+        value="0.0108327595344572" />
+      <inertia
+        ixx="3.49761677010887E-07"
+        ixy="-6.073146940523E-08"
+        ixz="-5.24130058359317E-09"
+        iyy="1.65618995931094E-06"
+        iyz="-9.40668887682437E-10"
+        izz="1.57663619569401E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/fingertip2.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/fingertip2.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint2-2"
+    type="continuous">
+    <origin
+      xyz="0.052455 0.0021141 0.0035"
+      rpy="0 0 -2.1441" />
+    <parent
+      link="finger2" />
+    <child
+      link="fingertip2" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+    <mimic
+      joint="joint2"
+      multiplier="1"
+      offset="0" />
+  </joint>
+
+  <link
+    name="finger3">
+    <inertial>
+      <origin
+        xyz="0.0263419003306278 0.00163277968128005 -0.000580382212998228"
+        rpy="0 0 0" />
+      <mass
+        value="0.0017117206540238" />
+      <inertia
+        ixx="9.15765046080517E-09"
+        ixy="-6.86367079900787E-10"
+        ixz="-1.62553153132169E-15"
+        iyy="2.11898985841388E-07"
+        iyz="2.46254683828657E-13"
+        izz="2.10888555341789E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/finger3.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/finger3.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint3"
+    type="continuous">
+    <origin
+      xyz="-0.00535771615963207 0.0260805089366903 0.124501324427476"
+      rpy="-2.2563615416127 -1.47292628505155 2.25401184994037" />
+    <parent
+      link="left_handbase" />
+    <child
+      link="finger3" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="fingertip3">
+    <inertial>
+      <origin
+        xyz="-0.0414462744275363 -0.00113980844919989 -0.00363198504392956"
+        rpy="0 0 0" />
+      <mass
+        value="0.0129309313417341" />
+      <inertia
+        ixx="4.2423995728518E-07"
+        ixy="-2.27538738129513E-08"
+        ixz="-5.24110509207605E-09"
+        iyy="2.81658781631205E-06"
+        iyz="-9.40417813269934E-10"
+        izz="2.71628323484157E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/fingertip3.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/fingertip3.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint3-2"
+    type="continuous">
+    <origin
+      xyz="0.052455 0.0021141 0"
+      rpy="0 0 -2.117" />
+    <parent
+      link="finger3" />
+    <child
+      link="fingertip3" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+    <mimic
+      joint="joint3"
+      multiplier="1"
+      offset="0" />
+  </joint>
+  <link
+    name="finger4">
+    <inertial>
+      <origin
+        xyz="0.0263418924814806 0.00163277724816578 -0.000580380980095104"
+        rpy="0 0 0" />
+      <mass
+        value="0.00171171976415856" />
+      <inertia
+        ixx="9.15764952347635E-09"
+        ixy="-6.86375652030324E-10"
+        ixz="-2.56636666051934E-15"
+        iyy="2.11899002306291E-07"
+        iyz="2.45652581453399E-13"
+        izz="2.10888570757759E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/finger4.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/finger4.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint4"
+    type="continuous">
+    <origin
+      xyz="-0.0281227799724012 0.030580508648538 0.116270885535715"
+      rpy="3.07300932829791 -1.37878388797948 -3.07172945480788" />
+    <parent
+      link="left_handbase" />
+    <child
+      link="finger4" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="fingertip4">
+    <inertial>
+      <origin
+        xyz="-0.0371422356754426 -0.0018249809547982 -0.00706070781064935"
+        rpy="0 0 0" />
+      <mass
+        value="0.0108327143254283" />
+      <inertia
+        ixx="3.49758619553869E-07"
+        ixy="-6.07327037041682E-08"
+        ixz="-5.24106406843972E-09"
+        iyy="1.65618423434187E-06"
+        iyz="-9.40621346669512E-10"
+        izz="1.57662990282146E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/fingertip4.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/fingertip4.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint4-2"
+    type="continuous">
+    <origin
+      xyz="0.052455 0.0021141 0.0035"
+      rpy="0 0 -2.2128" />
+    <parent
+      link="finger4" />
+    <child
+      link="fingertip4" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+    <mimic
+      joint="joint4"
+      multiplier="1"
+      offset="0" />
+  </joint>
+  <link
+    name="finger5">
+    <inertial>
+      <origin
+        xyz="0.0255684353761092 -0.00654338847367894 -0.00058038226804346"
+        rpy="0 0 0" />
+      <mass
+        value="0.00171172474224703" />
+      <inertia
+        ixx="2.79122961631726E-08"
+        ixy="5.87458437372539E-08"
+        ixz="8.55752890247461E-14"
+        iyy="1.93144362235475E-07"
+        iyz="2.33211547451169E-13"
+        izz="2.10888568617442E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+
+      <geometry>
+        <mesh
+          filename="meshes/finger5.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/finger5.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint5"
+    type="continuous">
+    <origin
+      xyz="-0.0482710271962339 0.0350804926410104 0.106105599724244"
+      rpy="-2.47946945641843 -1.2046363474152 2.44595683064648" />
+    <parent
+      link="left_handbase" />
+    <child
+      link="finger5" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="fingertip5">
+    <inertial>
+      <origin
+        xyz="-0.0317083393342898 0.00702858582244734 -0.00327289935986477"
+        rpy="0 0 0" />
+      <mass
+        value="0.00654542934411221" />
+      <inertia
+        ixx="1.95474248130331E-07"
+        ixy="1.13106146981588E-07"
+        ixz="-5.25271391946236E-09"
+        iyy="5.59592699034367E-07"
+        iyz="8.7318585526033E-10"
+        izz="5.2034657094653E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/fingertip5.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/fingertip5.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint5-2"
+    type="continuous">
+    <origin
+      xyz="0.050565 -0.014112 0"
+      rpy="0 0 -2.2559" />
+    <parent
+      link="finger5" />
+    <child
+      link="fingertip5" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+    <mimic
+      joint="joint5"
+      multiplier="1"
+      offset="0" />
+  </joint>
+  <link
+    name="thumb">
+    <inertial>
+      <origin
+        xyz="0.00982437055636791 0.00240006315627704 0.0349173973895376"
+        rpy="0 0 0" />
+      <mass
+        value="0.00964862645480519" />
+      <inertia
+        ixx="1.3759639759995E-06"
+        ixy="-8.21353050418483E-09"
+        ixz="-1.31866609171797E-09"
+        iyy="1.26303483282502E-06"
+        iyz="3.57430889577549E-08"
+        izz="4.12796193242816E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/thumb.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/thumb.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint1"
+    type="continuous">
+    <origin
+      xyz="0.0422187050361915 0.020711269168423 0.047591961525814"
+      rpy="-0.595332204222307 0.395656144620018 0.933673566876262" />
+    <parent
+      link="left_handbase" />
+    <child
+      link="thumb" />
+    <axis
+      xyz="0 0 1" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="finger1">
+    <inertial>
+      <origin
+        xyz="0.0261466381007321 -0.00359364563014352 -0.000580379768805241"
+        rpy="0 0 0" />
+      <mass
+        value="0.00171171860135263" />
+      <inertia
+        ixx="1.67756677081287E-08"
+        ixy="3.85606616043815E-08"
+        ixz="4.62301967070368E-14"
+        iyy="2.04280953632642E-07"
+        iyz="2.42145596072483E-13"
+        izz="2.10888540986824E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/finger1.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/finger1.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint1-1"
+    type="continuous">
+    <origin
+      xyz="0.00991307125400413 -0.0186300568606768 0.0489856373071501"
+      rpy="1.59060328553477 -0.713589733468754 -1.55526930537321" />
+    <parent
+      link="thumb" />
+    <child
+      link="finger1" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="fingertip1">
+    <inertial>
+      <origin
+        xyz="-0.0272012820523739 0.00961023210873696 -0.00678760298877919"
+        rpy="0 0 0" />
+      <mass
+        value="0.00626571063158195" />
+      <inertia
+        ixx="1.93624036872708E-07"
+        ixy="7.80102815439755E-08"
+        ixz="-2.61884993488359E-09"
+        iyy="4.17214396789529E-07"
+        iyz="4.35760269205753E-10"
+        izz="3.90720534962133E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/fingertip1.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/fingertip1.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint1-2"
+    type="continuous">
+    <origin
+      xyz="0.051842 -0.008271 0.0035"
+      rpy="0 0 -1.7079" />
+    <parent
+      link="finger1" />
+    <child
+      link="fingertip1" />
+    <axis
+      xyz="0 0 1" />
+    <safety_controller
+      k_velocity="0" />
+    <mimic
+      joint="joint1-1"
+      multiplier="-1"
+      offset="0" />
+  </joint>
+
+
+
+
+<link
+    name="right_shoulder_shaft">
+    <inertial>
+      <origin
+        xyz="-8.68907699055884E-05 0.0129440348924872 -0.0800225047089751"
+        rpy="0 0 0" />
+      <mass
+        value="0.138602706286948" />
+      <inertia
+        ixx="7.74543363875847E-05"
+        ixy="-3.35657275340254E-07"
+        ixz="7.01047373559237E-10"
+        iyy="7.05426280211355E-05"
+        iyz="5.10142404559406E-06"
+        izz="2.63671743707239E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_shoulder_shaft.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_shoulder_shaft.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_joint0"
+    type="continuous">
+    <origin
+      xyz="0 0 -0.0104999801175812"
+      rpy="0 0 -0.0828610042212062" />
+    <parent
+      link="right_shoulder_casing" />
+    <child
+      link="right_shoulder_shaft" />
+    <axis
+      xyz="0 0 -0.999999999977655" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="right_shoulder_connector">
+    <inertial>
+      <origin
+        xyz="-7.70514756896832E-09 1.21783166884271E-10 -6.61402873398836E-08"
+        rpy="0 0 0" />
+      <mass
+        value="0.0525702745387761" />
+      <inertia
+        ixx="1.41285936595613E-05"
+        ixy="-1.27590706046474E-11"
+        ixz="-1.64246063424906E-11"
+        iyy="1.41394878337253E-05"
+        iyz="-7.32749261502651E-12"
+        izz="1.41285139770387E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_shoulder_connector.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_shoulder_connector.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_joint1"
+    type="continuous">
+    <origin
+      xyz="0 0 -0.14817132771907"
+      rpy="1.57079301121911 0 0" />
+    <parent
+      link="right_shoulder_shaft" />
+    <child
+      link="right_shoulder_connector" />
+    <axis
+      xyz="0 0 -0.99999999999845" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="right_actuator_holder">
+    <inertial>
+      <origin
+        xyz="-0.145005961371628 -0.00224718941922143 0.00160902494713629"
+        rpy="0 0 0" />
+      <mass
+        value="0.264702721898597" />
+      <inertia
+        ixx="5.45498975796662E-05"
+        ixy="1.67460699716143E-09"
+        ixz="-3.50204865485669E-07"
+        iyy="0.000553297225819805"
+        iyz="1.82977403242406E-08"
+        izz="0.000558574906309705" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_actuator_holder.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_actuator_holder.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_joint2"
+    type="continuous">
+    <origin
+      xyz="0 0 0"
+      rpy="1.5707963267949 0 1.57079424926566" />
+    <parent
+      link="right_shoulder_connector" />
+    <child
+      link="right_actuator_holder" />
+    <axis
+      xyz="-0.00232505679026519 -0.110418443552155 -0.993882468622141" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="right_elbow">
+    <inertial>
+      <origin
+        xyz="-0.0928409469147915 -0.00654904560509346 0.00556465910452296"
+        rpy="0 0 0" />
+      <mass
+        value="0.154515812138525" />
+      <inertia
+        ixx="2.74597778687058E-05"
+        ixy="-2.56598275827387E-05"
+        ixz="-2.28593031320598E-05"
+        iyy="0.0003098491149046"
+        iyz="-3.39755791457178E-06"
+        izz="0.00030790201009368" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_elbow.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_elbow.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_joint3"
+    type="continuous">
+    <origin
+      xyz="-0.257287310878503 0 0"
+      rpy="-1.57079410299768 0 0" />
+    <parent
+      link="right_actuator_holder" />
+    <child
+      link="right_elbow" />
+    <axis
+      xyz="0 0 -0.999999999950048" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="right_forearm_shaft">
+    <inertial>
+      <origin
+        xyz="0.00868580816404251 6.5038729628788E-05 -0.0977294186054712"
+        rpy="0 0 0" />
+      <mass
+        value="0.118912513565021" />
+      <inertia
+        ixx="0.000165135516355974"
+        ixy="-2.14039115852339E-08"
+        ixz="3.21824668119763E-06"
+        iyy="0.000163918901068929"
+        iyz="-4.11823118055067E-07"
+        izz="7.48366093063599E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_forearm_shaft.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_forearm_shaft.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_joint4"
+    type="continuous">
+    <origin
+      xyz="-0.0737720828362481 0.00952354792019222 0"
+      rpy="-1.57079446737799 1.20435502824939E-05 -1.57079446738171" />
+    <parent
+      link="right_elbow" />
+    <child
+      link="right_forearm_shaft" />
+    <axis
+      xyz="0 0 -0.999999999904986" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="right_wrist_joint">
+    <inertial>
+      <origin
+        xyz="-1.65368595695715E-06 -2.88375767709681E-10 1.55381720115273E-06"
+        rpy="0 0 0" />
+      <mass
+        value="0.0155765686622441" />
+      <inertia
+        ixx="1.86055627511068E-06"
+        ixy="-8.80571880401532E-13"
+        ixz="2.13809731045993E-12"
+        iyy="1.86199778366498E-06"
+        iyz="8.04216200128044E-13"
+        izz="1.86055184410237E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_wrist_joint.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_wrist_joint.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_joint5"
+    type="continuous">
+    <origin
+      xyz="0.00202631510660726 0 -0.185527664196829"
+      rpy="-1.57079782259228 0 -1.57081506163985" />
+    <parent
+      link="right_forearm_shaft" />
+    <child
+      link="right_wrist_joint" />
+    <axis
+      xyz="0 -1.09070481307433E-05 -0.999999999939304" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="right_hand_connection">
+    <inertial>
+      <origin
+        xyz="-0.014811227003182 -0.00819536838514375 8.55227086489245E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.0253461986666902" />
+      <inertia
+        ixx="3.97049543593048E-06"
+        ixy="2.57871215955687E-07"
+        ixz="3.98354959854846E-09"
+        iyy="4.17416101673674E-06"
+        iyz="1.8018171672147E-09"
+        izz="4.16863608723372E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_hand_connection.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_hand_connection.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_joint6"
+    type="continuous">
+    <origin
+      xyz="-2.9628997562032E-05 2.13365901761131E-05 0"
+      rpy="-1.57098282750738 0 -1.57237167724506" />
+    <parent
+      link="right_wrist_joint" />
+    <child
+      link="right_hand_connection" />
+    <axis
+      xyz="0.000539335062512243 -0.0272015617412075 0.999629823562967" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="right_handbase">
+    <inertial>
+      <origin
+        xyz="0.0122144213505439 0.0363929347311819 0.0622453380253615"
+        rpy="0 0 0" />
+      <mass
+        value="0.0382797373846658" />
+      <inertia
+        ixx="6.34217250991128E-06"
+        ixy="-1.73943561627051E-07"
+        ixz="-6.09670816130905E-07"
+        iyy="1.09218808769633E-05"
+        iyz="-3.90911576318284E-07"
+        izz="7.86337110240893E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_handbase.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_handbase.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_joint7"
+    type="fixed">
+    <origin
+      xyz="-0.0304745825441903 0.0104376593638248 0"
+      rpy="-3.14117442773137 1.5665143891268 -0.00386396229648076" />
+    <parent
+      link="right_hand_connection" />
+    <child
+      link="right_handbase" />
+    <axis
+      xyz="0 0 0" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+
+
+<link
+    name="right_thumb">
+    <inertial>
+      <origin
+        xyz="-0.0093559381538888 -0.00238671271305781 -0.0349103237640529"
+        rpy="0 0 0" />
+      <mass
+        value="0.00964862527525219" />
+      <inertia
+        ixx="1.37596591113719E-06"
+        ixy="-8.21453217679427E-09"
+        ixz="-1.31925620553979E-09"
+        iyy="1.26303663994077E-06"
+        iyz="3.5743435497202E-08"
+        izz="4.12796696147596E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_thumb.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_thumb.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_hand_joint1"
+    type="continuous">
+    <origin
+      xyz="-0.0422187488046205 0.0207113920689082 0.0475919058484851"
+      rpy="-2.88035954680278 -0.658632364787459 -2.39895808510465" />
+    <parent
+      link="right_handbase" />
+    <child
+      link="right_thumb" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="right_finger1">
+    <inertial>
+      <origin
+        xyz="0.0261466383239231 -0.00359364602243865 -0.000580379768805227"
+        rpy="0 0 0" />
+      <mass
+        value="0.00171171860135263" />
+      <inertia
+        ixx="1.67756677081288E-08"
+        ixy="3.85606616043815E-08"
+        ixz="4.6230196716963E-14"
+        iyy="2.04280953632642E-07"
+        iyz="2.42145596019544E-13"
+        izz="2.10888540986824E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger1.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger1.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_hand_joint1-1"
+    type="continuous">
+    <origin
+      xyz="-0.020408 0.018331 -0.049143"
+      rpy="-1.5876 0.46654 1.5918" />
+    <parent
+      link="right_thumb" />
+    <child
+      link="right_finger1" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="right_finger1-2">
+    <inertial>
+      <origin
+        xyz="-0.027201284614889 0.00961023149462546 -0.00328760334636824"
+        rpy="0 0 0" />
+      <mass
+        value="0.00626571063169653" />
+      <inertia
+        ixx="1.93624036878382E-07"
+        ixy="7.80102815562417E-08"
+        ixz="-2.6188499370425E-09"
+        iyy="4.17214396817053E-07"
+        iyz="4.35760270175751E-10"
+        izz="3.90720534994989E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger1-2.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger1-2.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_hand_joint1-2"
+    type="continuous">
+    <origin
+      xyz="0.051842 -0.008271 0"
+      rpy="0 0 -1.9704" />
+    <parent
+      link="right_finger1" />
+    <child
+      link="right_finger1-2" />
+    <axis
+      xyz="0 0 1" />
+    <safety_controller
+      k_velocity="0" />
+    <mimic
+      joint="right_hand_joint1-1"
+      multiplier="-1"
+      offset="0" />
+  </joint>
+  <link
+    name="right_finger2">
+    <inertial>
+      <origin
+        xyz="0.0263418845359903 0.00163277803977791 -0.000580380779781137"
+        rpy="0 0 0" />
+      <mass
+        value="0.00171171879458192" />
+      <inertia
+        ixx="9.15764951292734E-09"
+        ixy="-6.86376068604044E-10"
+        ixz="-2.51608637451087E-15"
+        iyy="2.1189900201296E-07"
+        iyz="2.45525820951805E-13"
+        izz="2.10888570734783E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger2.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger2.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_hand_joint2"
+    type="continuous">
+    <origin
+      xyz="-0.0273695489411645 0.0260805070979798 0.124980645772676"
+      rpy="1.57079249279401 -1.49453570216754 -1.57079250393727" />
+    <parent
+      link="right_handbase" />
+    <child
+      link="right_finger2" />
+    <axis
+      xyz="0 0 -0.999999999999915" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="right_finger2-2">
+    <inertial>
+      <origin
+        xyz="-0.0371422063171754 -0.0018250029333652 -0.00356071149889613"
+        rpy="0 0 0" />
+      <mass
+        value="0.0108327595344572" />
+      <inertia
+        ixx="3.49761677010881E-07"
+        ixy="-6.0731469405233E-08"
+        ixz="-5.24130058359351E-09"
+        iyy="1.65618995931095E-06"
+        iyz="-9.40668887682348E-10"
+        izz="1.576636195694E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger2-2.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger2-2.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_hand_joint2-2"
+    type="continuous">
+    <origin
+      xyz="0.052455 0.0021141 0"
+      rpy="0 0 -2.2807" />
+    <parent
+      link="right_finger2" />
+    <child
+      link="right_finger2-2" />
+    <axis
+      xyz="0 0 1" />
+    <safety_controller
+      k_velocity="0" />
+    <mimic
+      joint="right_hand_joint2"
+      multiplier="-1"
+      offset="0" />
+  </joint>
+  <link
+    name="right_finger3">
+    <inertial>
+      <origin
+        xyz="0.0263419009729406 0.00163277550327228 -0.000580382212998224"
+        rpy="0 0 0" />
+      <mass
+        value="0.0017117206540238" />
+      <inertia
+        ixx="9.15765046080534E-09"
+        ixy="-6.86367079900837E-10"
+        ixz="-1.62553152172948E-15"
+        iyy="2.11898985841388E-07"
+        iyz="2.462546837914E-13"
+        izz="2.10888555341789E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger3.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger3.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_hand_joint3"
+    type="continuous">
+    <origin
+      xyz="-0.00512214531092754 0.0260805089143349 0.125150892745248"
+      rpy="-0.000515137772612173 -1.50889183063567 0.00051651133170431" />
+    <parent
+      link="right_handbase" />
+    <child
+      link="right_finger3" />
+    <axis
+      xyz="0 0 -0.999999999999852" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="right_finger3-2">
+    <inertial>
+      <origin
+        xyz="-0.0414462781760071 -0.00113980795221025 -0.00363198504392957"
+        rpy="0 0 0" />
+      <mass
+        value="0.0129309313417341" />
+      <inertia
+        ixx="4.24239957285177E-07"
+        ixy="-2.27538738129521E-08"
+        ixz="-5.24110509207601E-09"
+        iyy="2.81658781631203E-06"
+        iyz="-9.40417813269171E-10"
+        izz="2.71628323484155E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger3-2.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger3-2.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_hand_joint3-2"
+    type="continuous">
+    <origin
+      xyz="0.052455 0.0021141 0"
+      rpy="0 0 -2.1984" />
+    <parent
+      link="right_finger3" />
+    <child
+      link="right_finger3-2" />
+    <axis
+      xyz="0 0 1" />
+    <safety_controller
+      k_velocity="0" />
+    <mimic
+      joint="right_hand_joint3"
+      multiplier="-1"
+      offset="0" />
+  </joint>
+  <link
+    name="right_finger4">
+    <inertial>
+      <origin
+        xyz="0.0263418937155284 0.00163277832127981 -0.000580381678587032"
+        rpy="0 0 0" />
+      <mass
+        value="0.00171171976415856" />
+      <inertia
+        ixx="9.15764952347635E-09"
+        ixy="-6.86375652030323E-10"
+        ixz="-2.56636667035329E-15"
+        iyy="2.11899002306291E-07"
+        iyz="2.45652581452643E-13"
+        izz="2.10888570757759E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger4.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger4.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_hand_joint4"
+    type="continuous">
+    <origin
+      xyz="0.0178148406109464 0.0305805121002065 0.118269949208781"
+      rpy="-0.000387688539009935 -1.37924027554188 0.00039509705917112" />
+    <parent
+      link="right_handbase" />
+    <child
+      link="right_finger4" />
+    <axis
+      xyz="0 0 -0.999999999999967" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="right_finger4-2">
+    <inertial>
+      <origin
+        xyz="-0.0371422396681538 -0.00182498165191278 -0.00356070816827722"
+        rpy="0 0 0" />
+      <mass
+        value="0.0108327143254283" />
+      <inertia
+        ixx="3.49758619553871E-07"
+        ixy="-6.0732703704165E-08"
+        ixz="-5.24106406844135E-09"
+        iyy="1.65618423434185E-06"
+        iyz="-9.40621346667265E-10"
+        izz="1.57662990282145E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger4-2.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger4-2.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_hand_joint4-2"
+    type="continuous">
+    <origin
+      xyz="0.052455 0.0021141 0"
+      rpy="0 0 -2.1983" />
+    <parent
+      link="right_finger4" />
+    <child
+      link="right_finger4-2" />
+    <axis
+      xyz="0 0 1" />
+    <safety_controller
+      k_velocity="0" />
+    <mimic
+      joint="right_hand_joint4"
+      multiplier="-1"
+      offset="0" />
+  </joint>
+  <link
+    name="right_finger5">
+    <inertial>
+      <origin
+        xyz="0.0255684340686573 -0.00654338711386397 -0.000580382268043509"
+        rpy="0 0 0" />
+      <mass
+        value="0.00171172474224703" />
+      <inertia
+        ixx="2.79122961631728E-08"
+        ixy="5.87458437372538E-08"
+        ixz="8.55752890214197E-14"
+        iyy="1.93144362235475E-07"
+        iyz="2.33211547479603E-13"
+        izz="2.10888568617442E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger5.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger5.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_hand_joint_5"
+    type="continuous">
+    <origin
+      xyz="0.0381983360280069 0.0350805023384805 0.109070559880353"
+      rpy="-0.807216400791763 -1.1501550996277 0.852624157940222" />
+    <parent
+      link="right_handbase" />
+    <child
+      link="right_finger5" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="right_finger5-2">
+    <inertial>
+      <origin
+        xyz="-0.0317083359440695 0.00702858379691565 -0.00327289935986477"
+        rpy="0 0 0" />
+      <mass
+        value="0.0065454293441122" />
+      <inertia
+        ixx="1.95474248130332E-07"
+        ixy="1.13106146981588E-07"
+        ixz="-5.25271391946255E-09"
+        iyy="5.59592699034369E-07"
+        iyz="8.73185855260348E-10"
+        izz="5.20346570946531E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger5-2.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_finger5-2.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_hand_joint5-2"
+    type="continuous">
+    <origin
+      xyz="0.050565 -0.014112 0"
+      rpy="0 0 -2.1684" />
+    <parent
+      link="right_finger5" />
+    <child
+      link="right_finger5-2" />
+    <axis
+      xyz="0 0 1" />
+    <safety_controller
+      k_velocity="0" />
+    <mimic
+      joint="right_hand_joint_5"
+      multiplier="-1"
+      offset="0" />
+  </joint>
+
+
+
+
+ <link
+    name="spine_motor1">
+    <inertial>
+      <origin
+        xyz="0.000654140908087256 0.0650637727959917 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.071999097102357" />
+      <inertia
+        ixx="0.000154561304574499"
+        ixy="-2.12816081013854E-06"
+        ixz="9.52912065661088E-22"
+        iyy="3.18901862998104E-06"
+        iyz="1.43598554339206E-21"
+        izz="0.000154854882468189" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/spine_motor1.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/spine_motor1.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_spine_actuator1"
+    type="continuous">
+    <origin
+      xyz="0.0720429443740811 -0.0127668553821179 0.106201628434077"
+      rpy="1.55054027243114 0.154442263095465 3.13625486306337" />
+    <parent
+      link="base_link" />
+    <child
+      link="spine_motor1" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="spine_motor2">
+    <inertial>
+      <origin
+        xyz="0.00065414090808727 0.0650637727959918 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.0719990971023571" />
+      <inertia
+        ixx="0.0001545613045745"
+        ixy="-2.12816081013853E-06"
+        ixz="2.96461531539005E-21"
+        iyy="3.18901862998105E-06"
+        iyz="-2.96461531539005E-21"
+        izz="0.000154854882468189" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/spine_motor2.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/spine_motor2.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_spine_actuator2"
+    type="continuous">
+    <origin
+      xyz="0.0720874053827536 0.00724792346056323 0.106602277198696"
+      rpy="1.55054027243114 0.154442263095465 3.13625486306337" />
+    <parent
+      link="base_link" />
+    <child
+      link="spine_motor2" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+
+
+
+
+  <link
+    name="spine_motor2-1">
+    <inertial>
+      <origin
+        xyz="0.000654140908087242 0.0650637727959917 1.73472347597681E-18"
+        rpy="0 0 0" />
+      <mass
+        value="0.0719990971023571" />
+      <inertia
+        ixx="0.0001545613045745"
+        ixy="-2.12816081013853E-06"
+        ixz="-2.62050818056799E-21"
+        iyy="3.18901862998105E-06"
+        iyz="-2.55433373156375E-21"
+        izz="0.000154854882468189" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/spine_motor1.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/spine_motor1.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_spine_actuator2-1"
+    type="continuous">
+    <origin
+      xyz="-0.134965942910872 -0.0283637677356221 -0.0299973181710497"
+      rpy="3.14159161630837 0 -1.44388608191678" />
+    <parent
+      link="middle-spine" />
+    <child
+      link="spine_motor2-1" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="spine_motor2-2">
+    <inertial>
+      <origin
+        xyz="0.000654140908087228 0.0650637727959917 -1.73472347597681E-18"
+        rpy="0 0 0" />
+      <mass
+        value="0.071999097102357" />
+      <inertia
+        ixx="0.000154561304574499"
+        ixy="-2.12816081013849E-06"
+        ixz="-2.99108509499175E-21"
+        iyy="3.18901862998104E-06"
+        iyz="-6.71008912903016E-21"
+        izz="0.000154854882468189" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/spine_motor2.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/spine_motor2.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_spine_actuator2-2"
+    type="continuous">
+    <origin
+      xyz="-0.13496592193042 -0.0283637684559803 -0.0100214999460812"
+      rpy="3.14159161630837 0 -1.44388608191678" />
+    <parent
+      link="middle-spine" />
+    <child
+      link="spine_motor2-2" />
+    <axis
+      xyz="0 0 -1" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+
+
+<link
+    name="right_arm_shoulder_motor1">
+    <inertial>
+      <origin
+        xyz="0.000654140908087256 0.0650637727959918 6.93889390390723E-18"
+        rpy="0 0 0" />
+      <mass
+        value="0.0719990971023571" />
+      <inertia
+        ixx="0.000154561304574499"
+        ixy="-2.12816081013855E-06"
+        ixz="-3.5827260281203E-22"
+        iyy="3.18901862998105E-06"
+        iyz="-1.81282003068216E-22"
+        izz="0.000154854882468189" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_arm_shoulder_motor1.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_arm_shoulder_motor1.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_right_arm_shoulder_motor1"
+    type="continuous">
+    <origin
+      xyz="-0.124394472291651 -0.0406945792915355 -0.0496508377179538"
+      rpy="0 0 -0.203756349062982" />
+    <parent
+      link="right_shoulder_casing" />
+    <child
+      link="right_arm_shoulder_motor1" />
+    <axis
+      xyz="0 0 -0.999999999988967" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="right_arm_shoulder_motor2">
+    <inertial>
+      <origin
+        xyz="0.000654140908087311 0.0650637727959917 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.0719990971023571" />
+      <inertia
+        ixx="0.000154561304574499"
+        ixy="-2.12816081013855E-06"
+        ixz="2.91167575618666E-22"
+        iyy="3.18901862998105E-06"
+        iyz="-3.06600895806798E-21"
+        izz="0.000154854882468189" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_arm_shoulder_motor2.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_arm_shoulder_motor2.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_right_arm_shoulder_motor2"
+    type="continuous">
+    <origin
+      xyz="-0.12439453672935 -0.0406945935584622 -0.0695201906481343"
+      rpy="0 0 -0.203756349062982" />
+    <parent
+      link="right_shoulder_casing" />
+    <child
+      link="right_arm_shoulder_motor2" />
+    <axis
+      xyz="0 0 -0.999999999988967" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="right_arm_shoulder_motor3">
+    <inertial>
+      <origin
+        xyz="0.000654140908087283 0.0650637727959918 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.0719990971023571" />
+      <inertia
+        ixx="0.0001545613045745"
+        ixy="-2.12816081013853E-06"
+        ixz="5.90684505545289E-22"
+        iyy="3.18901862998105E-06"
+        iyz="-2.05861565918098E-21"
+        izz="0.000154854882468189" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_arm_shoulder_motor3.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/right_arm_shoulder_motor3.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_right_arm_shoulder_motor3"
+    type="continuous">
+    <origin
+      xyz="-0.124394598620638 -0.0406946072615969 -0.0886043581863614"
+      rpy="0 0 -0.203756349062982" />
+    <parent
+      link="right_shoulder_casing" />
+    <child
+      link="right_arm_shoulder_motor3" />
+    <axis
+      xyz="0 0 -0.999999999988967" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+
+  <link
+    name="left_arm_shoulder_motor1">
+    <inertial>
+      <origin
+        xyz="0.000654140908087256 0.0650637727959918 6.93889390390723E-18"
+        rpy="0 0 0" />
+      <mass
+        value="0.0719990971023571" />
+      <inertia
+        ixx="0.000154561304574499"
+        ixy="-2.12816081013855E-06"
+        ixz="-3.5827260281203E-22"
+        iyy="3.18901862998105E-06"
+        iyz="-1.81282003068216E-22"
+        izz="0.000154854882468189" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/left_arm_shoulder_motor1.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/left_arm_shoulder_motor1.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_left_arm_shoulder_motor1"
+    type="continuous">
+    <origin
+      xyz="-0.124394472291651 -0.0406945792915355 0.0496508377179538"
+      rpy="0 0 -0.203756349062982" />
+    <parent
+      link="left_shoulder_base_link" />
+    <child
+      link="left_arm_shoulder_motor1" />
+    <axis
+
+      xyz="0 0 -0.999999999988967" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="left_arm_shoulder_motor2">
+    <inertial>
+      <origin
+        xyz="0.000654140908087311 0.0650637727959917 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.0719990971023571" />
+      <inertia
+        ixx="0.000154561304574499"
+        ixy="-2.12816081013855E-06"
+        ixz="2.91167575618666E-22"
+        iyy="3.18901862998105E-06"
+        iyz="-3.06600895806798E-21"
+        izz="0.000154854882468189" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/left_arm_shoulder_motor2.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/left_arm_shoulder_motor2.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+
+    name="joint_left_arm_shoulder_motor2"
+    type="continuous">
+    <origin
+      xyz="-0.12439453672935 -0.0406945935584622 0.0695201906481343"
+      rpy="0 0 -0.203756349062982" />
+    <parent
+      link="left_shoulder_base_link" />
+    <child
+      link="left_arm_shoulder_motor2" />
+    <axis
+      xyz="0 0 -0.999999999988967" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  <link
+    name="left_arm_shoulder_motor3">
+    <inertial>
+      <origin
+        xyz="0.000654140908087283 0.0650637727959918 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.0719990971023571" />
+      <inertia
+        ixx="0.0001545613045745"
+        ixy="-2.12816081013853E-06"
+        ixz="5.90684505545289E-22"
+        iyy="3.18901862998105E-06"
+        iyz="-2.05861565918098E-21"
+        izz="0.000154854882468189" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+
+          filename="meshes/left_arm_shoulder_motor3.obj" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/left_arm_shoulder_motor3.obj" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_left_arm_shoulder_motor3"
+    type="continuous">
+    <origin
+      xyz="-0.124394598620638 -0.0406946072615969 0.0886043581863614"
+      rpy="0 0 -0.203756349062982" />
+    <parent
+      link="left_shoulder_base_link" />
+    <child
+      link="left_arm_shoulder_motor3" />
+    <axis
+      xyz="0 0 -0.999999999988967" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+  
+
+
+
+
+
+</robot>

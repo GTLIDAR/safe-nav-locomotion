@@ -132,6 +132,11 @@ class SchunkWsgStatusReceiver : public systems::LeafSystem<double> {
     return this->get_output_port(force_output_port_);
   }
 
+  const systems::OutputPort<double>& get_gripper_position_output_port()
+  const {
+    return this->get_output_port(gripper_position_output_port_);
+  }
+
  private:
   void CopyStateOut(
       const systems::Context<double>& context,
@@ -141,9 +146,15 @@ class SchunkWsgStatusReceiver : public systems::LeafSystem<double> {
       const systems::Context<double>& context,
       systems::BasicVector<double>* output) const;
 
+  void CopyGripperPositionOut(
+      const systems::Context<double>& context,
+      systems::BasicVector<double>* output) const;
+
  private:
   const systems::OutputPortIndex state_output_port_{};
   const systems::OutputPortIndex force_output_port_{};
+  const systems::OutputPortIndex gripper_position_output_port_{};
+
 };
 
 

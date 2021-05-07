@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<sdf version='1.6'>
+<model name="charging_station_2">
+
+
+
+  <link name="base">
+    <pose>0 0 0 0 0 0 </pose>
+    <inertial>
+      <mass>1</mass>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+    </inertial>
+
+       <visual name='parking_line_1'>
+      <pose>-0.5 0 0 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>1 0.025 0.005</size>
+        </box>
+      </geometry>
+	  <material name="green">
+	    <color rgba="0 0.7 0 1.0"/>
+	  </material>
+    </visual>
+
+    <visual name='parking_line_2'>
+      <pose>-1 -0.25 0 0 0 1.57</pose>
+      <geometry>
+        <box> 
+          <size>0.525 0.025 0.005</size>
+        </box>
+      </geometry>
+	  <material name="green">
+	    <color rgba="0 0.7 0 1.0"/>
+	  </material>
+    </visual>
+
+    <visual name='parking_line_3'>
+      <pose>-1.25 -0.5 0 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.5 0.025 0.005</size>
+        </box>
+      </geometry>
+	  <material name="green">
+	    <color rgba="0 0.7 0 1.0"/>
+	  </material>
+    </visual>
+     
+    <visual name='platform'>
+      <pose>0 0 0 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.4 0.4 0.015</size>
+        </box>
+      </geometry>
+	  <material name="green">
+	    <color rgba="0 0.7 0 1.0"/>
+	  </material>
+    </visual>
+
+    <visual name='back_board'>
+      <pose>0.2 0 0.125 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.05 0.425 0.25</size>
+        </box>
+      </geometry>
+	  <material name="green">
+	    <color rgba="0 0.7 0 1.0"/>
+	  </material>
+    </visual>
+
+
+    <visual name='left_wall'>
+      <pose>0 0.2 0.025 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.4 0.025 0.05</size>
+        </box>
+      </geometry>
+	  <material name="green">
+	    <color rgba="0 0.7 0 1.0"/>
+	  </material>
+    </visual>
+
+    <visual name='right_wall'>
+      <pose>0 -0.2 0.025 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.4 0.025 0.05</size>
+        </box>
+      </geometry>
+	  <material name="green">
+	    <color rgba="0 0.7 0 1.0"/>
+	  </material>
+    </visual>
+   </link>
+</model>
+</sdf>

@@ -1,0 +1,43 @@
+<robot name="hand_cart">
+  <material name="Box_color">
+    <color rgba="0.678 0.529 0.384 1.0"/>
+  </material>
+  <material name="Box_color2">
+    <color rgba="0.75 0.6 0.45 1.0"/>
+  </material>
+  <material name="Green">
+    <color rgba="0 1 0 1.0"/>
+  </material>
+  <material name="Silver">
+    <color rgba="0.75 0.75 0.75 1.0"/>
+  </material>
+    <link name="base">
+        <inertial>
+            <origin xyz="0 0 0"/>
+            <mass value="1"/>
+            <inertia ixx="0.0267" ixy="0" ixz="0" iyy="0.0267" iyz="0" izz="0.0267"/>
+        </inertial>
+	<visual>
+            <origin xyz="0 0 0.03" rpy="-0.5 0 0"/>
+            <geometry>
+                <mesh filename="meshes/hand_truck.obj" scale="0.01 0.01 0.01"/>
+            </geometry>
+            <material name="Silver"/>
+        </visual>
+        <visual>
+            <origin xyz="0 -0.095 0.235" rpy="-0.5 0 0"/>
+            <geometry>
+                <box size="0.25 0.25 0.25"/>
+            </geometry>
+            <material name="Box_color"/>
+        </visual> 
+
+        <visual>
+            <origin xyz="0 0.02 0.46" rpy="-0.5 0 0"/>
+            <geometry>
+                <box size="0.25 0.25 0.25"/>
+            </geometry>
+            <material name="Box_color2"/>
+        </visual> 
+    </link>
+</robot>

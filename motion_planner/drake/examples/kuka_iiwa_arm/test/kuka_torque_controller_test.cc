@@ -5,9 +5,7 @@
 
 #include "drake/common/test_utilities/eigen_matrix_compare.h"
 #include "drake/examples/kuka_iiwa_arm/iiwa_common.h"
-#include "drake/multibody/parsers/urdf_parser.h"
-#include "drake/multibody/rigid_body_tree.h"
-#include "drake/multibody/rigid_body_tree_construction.h"
+#include "drake/multibody/parsing/parser.h"
 
 namespace drake {
 namespace examples {
@@ -15,14 +13,39 @@ namespace kuka_iiwa_arm {
 
 using drake::systems::BasicVector;
 
+namespace {
+Eigen::VectorXd CalcGravityCompensationTorque(
+    const multibody::MultibodyPlant<double>& plant,
+    const Eigen::VectorXd& q,
+    Eigen::MatrixXd* H = nullptr) {
+
+  // Compute gravity compensation torque.
+  std::unique_ptr<systems::Context<double>> plant_context =
+      plant.CreateDefaultContext();
+  Eigen::VectorXd zero_velocity = Eigen::VectorXd::Zero(kIiwaArmNumJoints);
+  plant.SetPositions(plant_context.get(), q);
+  plant.SetVelocities(plant_context.get(), zero_velocity);
+
+  if (H) {
+    plant.CalcMassMatrixViaInverseDynamics(*plant_context, H);
+  }
+
+  multibody::MultibodyForces<double> external_forces(plant);
+  plant.CalcForceElementsContribution(*plant_context, &external_forces);
+  return plant.CalcInverseDynamics(*plant_context, zero_velocity,
+                                   external_forces);
+}
+
+}  // namespace
+
 GTEST_TEST(KukaTorqueControllerTest, GravityCompensationTest) {
   const std::string kIiwaUrdf =
     "manipulation/models/iiwa_description/urdf/"
     "iiwa14_polytope_collision.urdf";
-  auto tree_ptr = std::make_unique<RigidBodyTree<double>>();
-  parsers::urdf::AddModelInstanceFromUrdfFileToWorld(
-      kIiwaUrdf, multibody::joints::kFixed, tree_ptr.get());
-  const RigidBodyTree<double>& tree = *tree_ptr;
+  multibody::MultibodyPlant<double> plant(0.0);
+  multibody::Parser(&plant).AddModelFromFile(kIiwaUrdf);
+  plant.WeldFrames(plant.world_frame(), plant.GetFrameByName("base"));
+  plant.Finalize();
 
   // Set stiffness and damping to zero.
   VectorX<double> stiffness(kIiwaArmNumJoints);
@@ -43,41 +66,31 @@ GTEST_TEST(KukaTorqueControllerTest, GravityCompensationTest) {
   torque_des.setZero();
 
   // Compute controller output.
-  KukaTorqueController<double> controller(std::move(tree_ptr), stiffness,
-                                          damping);
+  KukaTorqueController<double> controller(plant, stiffness, damping);
 
   std::unique_ptr<systems::Context<double>> context =
       controller.CreateDefaultContext();
   std::unique_ptr<systems::SystemOutput<double>> output =
       controller.AllocateOutput();
 
-  auto estimated_state_input =
-      std::make_unique<BasicVector<double>>(2 * kIiwaArmNumJoints);
-  estimated_state_input->get_mutable_value() << q, v;
+  VectorX<double> estimated_state_input(2 * kIiwaArmNumJoints);
+  estimated_state_input << q, v;
 
-  auto desired_state_input =
-      std::make_unique<BasicVector<double>>(2 * kIiwaArmNumJoints);
-  desired_state_input->get_mutable_value() << q_des, v_des;
+  VectorX<double> desired_state_input(2 * kIiwaArmNumJoints);
+  desired_state_input << q_des, v_des;
 
-  auto desired_torque_input =
-      std::make_unique<BasicVector<double>>(kIiwaArmNumJoints);
-  desired_torque_input->get_mutable_value() << torque_des;
+  VectorX<double> desired_torque_input(kIiwaArmNumJoints);
+  desired_torque_input << torque_des;
 
-  context->FixInputPort(
-      controller.get_input_port_estimated_state().get_index(),
-      std::move(estimated_state_input));
-  context->FixInputPort(controller.get_input_port_desired_state().get_index(),
-                        std::move(desired_state_input));
-  context->FixInputPort(
-      controller.get_input_port_commanded_torque().get_index(),
-      std::move(desired_torque_input));
+  controller.get_input_port_estimated_state().FixValue(context.get(),
+                                                       estimated_state_input);
+  controller.get_input_port_desired_state().FixValue(context.get(),
+                                                     desired_state_input);
+  controller.get_input_port_commanded_torque().FixValue(context.get(),
+                                                        desired_torque_input);
 
-  // Compute gravity compensation torque.
-  Eigen::VectorXd zero_velocity = Eigen::VectorXd::Zero(kIiwaArmNumJoints);
-  auto cache = tree.doKinematics(q, zero_velocity);
-  const RigidBodyTree<double>::BodyToWrenchMap no_external_wrenches;
-  auto expected_torque =
-      tree.dynamicsBiasTerm(cache, no_external_wrenches, false);
+  Eigen::VectorXd expected_torque =
+      CalcGravityCompensationTorque(plant, q);
 
   // Check output.
   controller.CalcOutput(*context, output.get());
@@ -90,10 +103,10 @@ GTEST_TEST(KukaTorqueControllerTest, SpringTorqueTest) {
   const std::string kIiwaUrdf =
     "manipulation/models/iiwa_description/urdf/"
     "iiwa14_polytope_collision.urdf";
-  auto tree_ptr = std::make_unique<RigidBodyTree<double>>();
-  parsers::urdf::AddModelInstanceFromUrdfFileToWorld(
-      kIiwaUrdf, multibody::joints::kFixed, tree_ptr.get());
-  const RigidBodyTree<double>& tree = *tree_ptr;
+  multibody::MultibodyPlant<double> plant(0.0);
+  multibody::Parser(&plant).AddModelFromFile(kIiwaUrdf);
+  plant.WeldFrames(plant.world_frame(), plant.GetFrameByName("base"));
+  plant.Finalize();
 
   // Set nonzero stiffness and zero damping.
   VectorX<double> stiffness(kIiwaArmNumJoints);
@@ -114,41 +127,32 @@ GTEST_TEST(KukaTorqueControllerTest, SpringTorqueTest) {
   torque_des.setZero();
 
   // Compute controller output.
-  KukaTorqueController<double> controller(std::move(tree_ptr), stiffness,
-                                          damping);
+  KukaTorqueController<double> controller(plant, stiffness, damping);
 
   std::unique_ptr<systems::Context<double>> context =
       controller.CreateDefaultContext();
   std::unique_ptr<systems::SystemOutput<double>> output =
       controller.AllocateOutput();
 
-  auto estimated_state_input =
-      std::make_unique<BasicVector<double>>(2 * kIiwaArmNumJoints);
-  estimated_state_input->get_mutable_value() << q, v;
+  VectorX<double> estimated_state_input(2 * kIiwaArmNumJoints);
+  estimated_state_input << q, v;
 
-  auto desired_state_input =
-      std::make_unique<BasicVector<double>>(2 * kIiwaArmNumJoints);
-  desired_state_input->get_mutable_value() << q_des, v_des;
+  VectorX<double> desired_state_input(2 * kIiwaArmNumJoints);
+  desired_state_input << q_des, v_des;
 
-  auto desired_torque_input =
-      std::make_unique<BasicVector<double>>(kIiwaArmNumJoints);
-  desired_torque_input->get_mutable_value() << torque_des;
+  VectorX<double> desired_torque_input(kIiwaArmNumJoints);
+  desired_torque_input << torque_des;
 
-  context->FixInputPort(
-      controller.get_input_port_estimated_state().get_index(),
-      std::move(estimated_state_input));
-  context->FixInputPort(controller.get_input_port_desired_state().get_index(),
-                        std::move(desired_state_input));
-  context->FixInputPort(
-      controller.get_input_port_commanded_torque().get_index(),
-      std::move(desired_torque_input));
+  controller.get_input_port_estimated_state().FixValue(context.get(),
+                                                       estimated_state_input);
+  controller.get_input_port_desired_state().FixValue(context.get(),
+                                                     desired_state_input);
+  controller.get_input_port_commanded_torque().FixValue(context.get(),
+                                                        desired_torque_input);
 
   // Compute gravity compensation torque.
-  Eigen::VectorXd zero_velocity = Eigen::VectorXd::Zero(kIiwaArmNumJoints);
-  auto cache = tree.doKinematics(q, zero_velocity);
-  const RigidBodyTree<double>::BodyToWrenchMap no_external_wrenches;
-  auto expected_torque =
-      tree.dynamicsBiasTerm(cache, no_external_wrenches, false);
+  Eigen::VectorXd expected_torque =
+      CalcGravityCompensationTorque(plant, q);
 
   // Compute spring torque.
   expected_torque += -((q - q_des).array() * stiffness.array()).matrix();
@@ -164,10 +168,10 @@ GTEST_TEST(KukaTorqueControllerTest, DampingTorqueTest) {
   const std::string kIiwaUrdf =
     "manipulation/models/iiwa_description/urdf/"
     "iiwa14_polytope_collision.urdf";
-  auto tree_ptr = std::make_unique<RigidBodyTree<double>>();
-  parsers::urdf::AddModelInstanceFromUrdfFileToWorld(
-      kIiwaUrdf, multibody::joints::kFixed, tree_ptr.get());
-  const RigidBodyTree<double>& tree = *tree_ptr;
+  multibody::MultibodyPlant<double> plant(0.0);
+  multibody::Parser(&plant).AddModelFromFile(kIiwaUrdf);
+  plant.WeldFrames(plant.world_frame(), plant.GetFrameByName("base"));
+  plant.Finalize();
 
   // Set arbitrary stiffness and damping.
   VectorX<double> stiffness(kIiwaArmNumJoints);
@@ -188,51 +192,42 @@ GTEST_TEST(KukaTorqueControllerTest, DampingTorqueTest) {
   torque_des.setZero();
 
   // Compute controller output.
-  KukaTorqueController<double> controller(std::move(tree_ptr), stiffness,
-                                          damping);
+  KukaTorqueController<double> controller(plant, stiffness, damping);
 
   std::unique_ptr<systems::Context<double>> context =
       controller.CreateDefaultContext();
   std::unique_ptr<systems::SystemOutput<double>> output =
       controller.AllocateOutput();
 
-  auto estimated_state_input =
-      std::make_unique<BasicVector<double>>(2 * kIiwaArmNumJoints);
-  estimated_state_input->get_mutable_value() << q, v;
+  VectorX<double> estimated_state_input(2 * kIiwaArmNumJoints);
+  estimated_state_input << q, v;
 
-  auto desired_state_input =
-      std::make_unique<BasicVector<double>>(2 * kIiwaArmNumJoints);
-  desired_state_input->get_mutable_value() << q_des, v_des;
+  VectorX<double> desired_state_input(2 * kIiwaArmNumJoints);
+  desired_state_input << q_des, v_des;
 
-  auto desired_torque_input =
-      std::make_unique<BasicVector<double>>(kIiwaArmNumJoints);
-  desired_torque_input->get_mutable_value() << torque_des;
+  VectorX<double> desired_torque_input(kIiwaArmNumJoints);
+  desired_torque_input << torque_des;
 
-  context->FixInputPort(
-      controller.get_input_port_estimated_state().get_index(),
-      std::move(estimated_state_input));
-  context->FixInputPort(controller.get_input_port_desired_state().get_index(),
-                        std::move(desired_state_input));
-  context->FixInputPort(
-      controller.get_input_port_commanded_torque().get_index(),
-      std::move(desired_torque_input));
+  controller.get_input_port_estimated_state().FixValue(context.get(),
+                                                       estimated_state_input);
+  controller.get_input_port_desired_state().FixValue(context.get(),
+                                                     desired_state_input);
+  controller.get_input_port_commanded_torque().FixValue(context.get(),
+                                                        desired_torque_input);
 
-  // Compute gravity compensation torque.
-  Eigen::VectorXd zero_velocity = Eigen::VectorXd::Zero(kIiwaArmNumJoints);
-  auto cache = tree.doKinematics(q, zero_velocity);
-  const RigidBodyTree<double>::BodyToWrenchMap no_external_wrenches;
-  auto expected_torque =
-      tree.dynamicsBiasTerm(cache, no_external_wrenches, false);
+  // Compute gravity compensation torque and mass matrix.
+  Eigen::MatrixXd H(kIiwaArmNumJoints, kIiwaArmNumJoints);
+  Eigen::VectorXd expected_torque =
+      CalcGravityCompensationTorque(plant, q, &H);
 
   // Compute spring torque.
   expected_torque += -((q - q_des).array() * stiffness.array()).matrix();
 
   // Compute damping torque.
   Eigen::VectorXd damping_torque(7);
-  auto M = tree.massMatrix(cache);
   for (int i = 0; i < kIiwaArmNumJoints; i++) {
     damping_torque(i) =
-        -v(i) * damping(i) * 2 * std::sqrt(M(i, i) * stiffness(i));
+        -v(i) * damping(i) * 2 * std::sqrt(H(i, i) * stiffness(i));
   }
   expected_torque += damping_torque;
 

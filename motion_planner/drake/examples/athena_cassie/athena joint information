@@ -1,0 +1,90 @@
+"athena_cassie_position2":[
+  1.0,
+  0.0,
+  0.0,
+  -1.0,
+  0.0,
+  1.0,    
+  1.0,    
+
+  0.0,   box
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,  hip forward
+
+  0.0,  leg forward
+  0.0,  4 bar
+  0.0,  other leg forward
+  0.0,  4 bar
+  0.0,  sternum
+  0.0,  sternum bone
+  0.0,
+  0.0,   knee
+  0.0,   knee
+  0.0,   upper sternum body
+  0.0,    lower knee?
+  0.0,   
+  0.0,   upper sternum
+  0.0,   ankle
+  0.0,   anke
+  0.0,   knee motor some kind of extension
+  0.0,   leaf spring
+  0.0,   toes
+  0.0,   knee motor
+  0.0,   leaf spring
+  0.0,   toes
+
+  0.0,   shoulder twist
+  0.0,   actuator on back
+  0.0,   2
+  0.0,   3  
+  0.0,   shoulder twist
+  0.0,   actuator on back
+  0.0,   2
+  0.0,   3  
+
+  0.0,   shoulder up
+  0.0,   shoulder up opp way
+  0.0,   shoulder in
+  0.0,   shoulder in same way  
+
+  0.0,   elbow
+  0.0,   elbow
+  0.0,    rottaiton
+  0.0,      rotation
+   
+  0.0,   wrist1
+  0.0,   wrist2
+  0.0,   wrist1
+  0.0,   wrist2
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0
+],
