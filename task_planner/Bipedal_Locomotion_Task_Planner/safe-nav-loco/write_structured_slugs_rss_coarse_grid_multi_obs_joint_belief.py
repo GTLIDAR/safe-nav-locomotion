@@ -692,14 +692,14 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
                                 if len(beliefset0) > 0:
                                     b2 = beliefcombs.index(beliefset0)
                                     # if b2 not in repeat0:
-                                    stri += '(st0\' = {} & st1 = {} & belief\' = {})'.format(len(gw.states),len(gw.states),b2)
+                                    stri += '(st0\' = {} & st1\' = {} & belief\' = {})'.format(len(gw.states),len(gw.states),b2)
                                     repeat0.add(b2)
 
                                     if len(stri0)>0:
-                                        stri = stri + " | "+ '((st1 = {} & belief\' = {})'.format(len(gw.states),b2) + "& (" + stri0 + "))"
+                                        stri = stri + " | "+ '((st1\' = {} & belief\' = {})'.format(len(gw.states),b2) + "& (" + stri0 + "))"
 
                                     if len(stri1)>0:
-                                        stri = stri + " | "+ '((st0 = {} & belief\' = {})'.format(len(gw.states),b2) + "& (" + stri1 + "))"
+                                        stri = stri + " | "+ '((st0\' = {} & belief\' = {})'.format(len(gw.states),b2) + "& (" + stri1 + "))"
                             
                                     # stri = stri[:-3]
                                     stri += ' | '
