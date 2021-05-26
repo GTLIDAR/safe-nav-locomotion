@@ -675,7 +675,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
                                             if t not in invisibilityset[s]:
                                                 if t in allowed_states and t not in repeat0:
                                                     stri0 += ' st0\' = {} \\/'.format(t)
-                                                    stri1 += ' st0\' = {} \\/'.format(t)
+                                                    stri1 += ' st1\' = {} \\/'.format(t)
                                                     repeat0.add(t)
                                             else:
                                                 if t in gw.targets[0]:
