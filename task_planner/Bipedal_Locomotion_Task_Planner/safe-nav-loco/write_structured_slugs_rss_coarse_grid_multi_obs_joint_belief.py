@@ -266,7 +266,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
                 stri = "(s_c = {}".format(s)
                 for n in range(0,len(initmovetarget)):
                     stri += " /\\ st{} = {}".format(n,st[n])
-                stri += ") -> "
+                stri += ") -> ("
                 beliefset0 = set()
                 beliefset1 = set()
 
@@ -343,8 +343,8 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
                     if b2 not in repeat0:
                         # if belief = len(Bstates)-1
                         # need to modify for when belief already exists
-                        stri += '('
-                        stri = stri + stri1
+                        stri += '(('
+                        stri = stri + stri1 + ")"
                         stri += ' & ( st0\' = {} & belief\' = {} & st1\' != {})'.format(len(gw.states),beliefcombs.index(beliefset0),len(gw.states))
                         repeat0.add(b2)
                         stri += ') | '
@@ -355,8 +355,8 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
                     if b2 not in repeat1:
                         # if belief = len(Bstates)-1
                         # need to modify for when belief already exists
-                        stri += '('
-                        stri = stri + stri0
+                        stri += '(('
+                        stri = stri + stri0  + ")"
                         stri += ' & (st1\' = {} & belief\' = {} & st0\' != {})'.format(len(gw.states),beliefcombs.index(beliefset1),len(gw.states))
                         repeat1.add(b2)
                         stri += ') | '
@@ -390,7 +390,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
                 
                 stri = stri[:-3]
 
-                # stri += ')'
+                stri += ')'
                 stri += '\n'
                 file.write(stri)
 
@@ -503,7 +503,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
                                         stri = stri + "(" +stri1 
                                     b2 = beliefcombs.index(beliefset1)
                                     # if b2 not in repeat0:
-                                    stri += ' (st0\' = {} & belief\' = {} & st1 != {})'.format(len(gw.states),b2, len(gw.states))
+                                    stri += ' (st0\' != {} & belief\' = {} & st1 = {})'.format(len(gw.states),b2, len(gw.states))
                                     repeat0.add(b2)
                                     if len(stri1)>0:
                                         stri += ")"
@@ -933,12 +933,12 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
         file.write('s_c != {}\n'.format(obs))
 
 
-    # for n in range(0,len(initmovetarget)):
-    #     for s in set(allowed_states):
-    #         stri = 'st{}\' = {} -> !s_c\' = {}\n'.format(n,s,s)
-    #         file.write(stri)
-    #         stri = 'st{}\' = {} -> !s_c = {}\n'.format(n,s,s)
-    #         file.write(stri)
+    for n in range(0,len(initmovetarget)):
+        for s in set(allowed_states):
+            stri = 'st{}\' = {} -> !s_c\' = {}\n'.format(n,s,s)
+            file.write(stri)
+            stri = 'st{}\' = {} -> !s_c = {}\n'.format(n,s,s)
+            file.write(stri)
 
 
 
