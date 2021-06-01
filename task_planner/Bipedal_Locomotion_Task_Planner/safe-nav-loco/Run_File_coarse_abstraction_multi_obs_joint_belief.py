@@ -56,7 +56,7 @@ if __name__ == '__main__':
     # example_name = 'Belief_Evasion_coarse_multi_obs_timefixedPointRecycling_individual_beliefs'
     # example_name = 'Belief_Evasion_coarse_multi_obs_joint_test_complete_colisTTT'
     # example_name = 'Belief_Evasion_coarse_seperate_belief_single_obs_2t'
-    example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_slugs_colis_next'
+    example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_slugs_no_colis_next_debug'
     
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
@@ -115,9 +115,9 @@ if __name__ == '__main__':
         print 'output file: ', outfile
         print 'input file name:', infile
 
-        # write_structured_slugs_rss_coarse_grid_multi_obs_joint_belief.write_to_slugs_part_dist(infile, gwg_c, initial_c[n], moveobstacles_c, iset, PUDO_targets = PUDO_t_c,
-        #                                                            visdist =  visdist[n], allowed_states = allowed_states[n],
-        #                                                            partitionGrid = pg[n])
+        write_structured_slugs_rss_coarse_grid_multi_obs_joint_belief.write_to_slugs_part_dist(infile, gwg_c, initial_c[n], moveobstacles_c, iset, PUDO_targets = PUDO_t_c,
+                                                                   visdist =  visdist[n], allowed_states = allowed_states[n],
+                                                                   partitionGrid = pg[n])
         
         noww = time.time()
         print('Writing specifications took ', noww - then, ' seconds')

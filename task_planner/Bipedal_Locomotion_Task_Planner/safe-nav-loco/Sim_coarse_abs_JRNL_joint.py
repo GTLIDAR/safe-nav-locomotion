@@ -20,7 +20,7 @@ example_name = 'Belief_Evasion_coarse_multi_obs_joint_test2_single_obs'
 example_name = 'Belief_Evasion_coarse_seperate_belief_single_obs'
 example_name = 'Belief_Evasion_coarse_seperate_belief_single_obs_2t'
 example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_slugs'
-example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_slugs_colis'
+# example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_slugs_colis_next2'
 
 
 trial_name = folder_locn + example_name

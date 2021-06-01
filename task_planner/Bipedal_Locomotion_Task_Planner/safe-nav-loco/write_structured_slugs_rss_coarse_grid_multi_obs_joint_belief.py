@@ -266,7 +266,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
                 stri = "(s_c = {}".format(s)
                 for n in range(0,len(initmovetarget)):
                     stri += " /\\ st{} = {}".format(n,st[n])
-                stri += ") -> ("
+                stri += ") -> "
                 beliefset0 = set()
                 beliefset1 = set()
 
@@ -390,7 +390,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
                 
                 stri = stri[:-3]
 
-                stri += ')'
+                # stri += ')'
                 stri += '\n'
                 file.write(stri)
 
@@ -832,7 +832,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     stri = "((s_c !=28 & s_c !=29 & s_c !=30) | belief! = {} | ".format(str(beliefcombs.index(set([4]))))
     for n in range(0,len(initmovetarget)):
-        stri += "st{} = {} | ".format(n,len(gw.states))
+        stri += "st{} != {} | ".format(n,len(gw.states))
     stri = stri[:-3]
     stri += ") -> !cond1'\n".format(str(beliefcombs.index(set([4]))))
     file.write(stri)
@@ -933,12 +933,12 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
         file.write('s_c != {}\n'.format(obs))
 
 
-    for n in range(0,len(initmovetarget)):
-        for s in set(allowed_states):
-            stri = 'st{}\' = {} -> !s_c\' = {}\n'.format(n,s,s)
-            file.write(stri)
-            stri = 'st{}\' = {} -> !s_c = {}\n'.format(n,s,s)
-            file.write(stri)
+    # for n in range(0,len(initmovetarget)):
+    #     for s in set(allowed_states):
+    #         stri = 'st{}\' = {} -> !s_c\' = {}\n'.format(n,s,s)
+    #         file.write(stri)
+    #         stri = 'st{}\' = {} -> !s_c = {}\n'.format(n,s,s)
+    #         file.write(stri)
 
 
 

@@ -144,7 +144,7 @@ def SlugsInput(inputVariables, state_next, inbits):
 
 
 def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,invisibilityset,jsonfile,allowed_states = [],targets = []):
-    
+    then = time.time()
     # Open Slugs
     slugsProcess = subprocess.Popen(slugsLink+" --interactiveStrategy "+" --biasForAction"+" "+filename, shell=True, bufsize=32000, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
 
@@ -158,6 +158,10 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
         lastLine = slugsProcess.stdout.readline().strip()
         if lastLine!="":
             inputAPs.append(lastLine)
+    
+    now = time.time()
+    print('Synthesis took ', now - then, ' seconds')
+
 
     # Get output APs
     slugsProcess.stdin.write("XPRINTOUTPUTS\n")
