@@ -202,7 +202,7 @@ class Gridworld():
         self.probR = {a: np.zeros((self.nstates, self.nstates)) for a in self.actlistR}
         
         self.trans = ['N4',"N3E2","N2E2","N2E3","E4","S2E3","S2E2","S3E2","S4","S3W2","S2W2","S2E3","W4","N2W3","N2W2","N3W2",'N3','E3','S3','W3', 
-                       "N5","E5","S5","W5","N1E2","N3E3","N2E1","S1E2","S3E3","S2E1","N1W2","N3W3","N2W1","S1W2","S3W3","S2W1","N2","E2s","S2","W2"]
+                       "N5","E5","S5","W5","N1E2","N3E3","N2E1","S1E2","S3E3","S2E1","N1W2","N3W3","N2W1","S1W2","S3W3","S2W1","N2","E2","S2","W2","N1","E1","S1","W1"]
         # self.transR = {o: {sl: {t: -1 for t in self.turns} for sl in self.RobotStepL} for o in self.orientation}
         self.transR = {s:{t:-1 for t in self.trans} for s in self.states}
 
@@ -465,6 +465,11 @@ class Gridworld():
         self.transR[state]['E2'] = self.MapState((row,col+2),state)
         self.transR[state]['S2'] = self.MapState((row+2,col),state)
         self.transR[state]['W2'] = self.MapState((row,col-2),state)
+
+        self.transR[state]['N1'] = self.MapState((row-1,col),state)
+        self.transR[state]['E1'] = self.MapState((row,col+1),state)
+        self.transR[state]['S1'] = self.MapState((row+1,col),state)
+        self.transR[state]['W1'] = self.MapState((row,col-1),state)
 
     def getStateRegion(self, state):
         if state in self.regions['deterministic']:
