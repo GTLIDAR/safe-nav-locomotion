@@ -1,13 +1,13 @@
 from gridworld_fine_auto_spec import *
-import simulateController_fine_abs as Simulator
+import simulateController_fine_abs_simple as Simulator
 import copy
 import compute_all_vis
 import cv2
 
 mapname = 'fine_abstraction'
 
-rownum = 23
-colnum = 23
+rownum = 26
+colnum = 26
 filename = 'figures/'+mapname+'.png'
 image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
 image = cv2.resize(image,dsize=(colnum,rownum),interpolation=cv2.INTER_AREA)
@@ -15,6 +15,7 @@ h, w = image.shape[:2]
 
 folder_locn = 'Examples/'
 example_name = 'Belief_Evasion_fine_abstraction_auto_spec_cross_turns_new_var_size_23'
+example_name = 'Belief_Evasion_fine_abstraction_straight_nondeterministic'
 trial_name = folder_locn + example_name
 
 outfile = trial_name + '.json'

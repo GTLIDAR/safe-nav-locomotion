@@ -91,10 +91,10 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles_f,invisibi
     output = BeliefIOParser(jsonfile)
     while True:
         # output.saveState(gwg, automaton, automaton_state,gridstate,moveobstacles_f)
-        try:
-            output.saveState(gwg, automaton, automaton_state,gridstate,moveobstacles_f)
-        except:
-            print "broken Output"
+        # try:
+        #     output.saveState(gwg, automaton, automaton_state,gridstate,moveobstacles_f)
+        # except:
+        #     print "broken Output"
         envstate = automaton[automaton_state]['State']['st']
         # try:
         #     print 'Agent state is J ', agentstate
@@ -140,24 +140,9 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles_f,invisibi
                     nextstatedirn['N'] = n
                 if nenvstate == 0:
                     nextstatedirn['R'] = n
-                if nenvstate not in xstates:
-                    nextstatedirn['Belief'].add(n)
+                if nenvstate not in [0,1,2,3,4]:
+                    print "error"
 
-
-        # for n in nextstates:
-        #     nenvstate = automaton[n]['State']['st']
-        #     if nenvstate == gwg.moveobstacles_f[0] - 1:
-        #         nextstatedirn['W'] = n
-        #     if nenvstate == gwg.moveobstacles_f[0] + 1:
-        #         nextstatedirn['E'] = n
-        #     if nenvstate == gwg.moveobstacles_f[0] + gwg.ncols:
-        #         nextstatedirn['S'] = n
-        #     if nenvstate == gwg.moveobstacles_f[0] - gwg.ncols:
-        #         nextstatedirn['N'] = n
-        #     if nenvstate == gwg.moveobstacles_f[0]:
-        #         nextstatedirn['R'] = n
-        #     if nenvstate not in xstates:
-        #         nextstatedirn['Belief'].add(n)
         while True:
             nextstate = None
             while nextstate == None:
@@ -177,30 +162,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles_f,invisibi
                         gridstate = gwg.moveobstacles_f[0] - gwg.ncols
                     elif arrow == 'R':
                         gridstate = gwg.moveobstacles_f[0]
-                    
-                    for n in nextstatedirn['Belief']:
-                        nenvstate = automaton[n]['State']['st']
-                        nextbeliefs = beliefcombs[len(beliefcombs) - (len(allstates) - allstates.index(nenvstate))]
-                        if any(gridstate in partitionGrid[x] for x in nextbeliefs):
-                            nextstate = copy.deepcopy(n)
-                            print 'Environment state in automaton is', allstates.index(nenvstate)
-                            print 'Belief state is', beliefcombs[allstates.index(nenvstate) - len(xstates)]
-                            nextagentstate = automaton[n]['State']['s']
-                            # Jonas
-                            invisstates = invisibilityset[0][nextagentstate]
-                            # visstates = set(xstates) - invisstates
-                            # Jonas
-                            visstates = set(xstates) - set(invisstates)
-                            if nenvstate not in xstates:
-                                beliefcombstate = beliefcombs[allstates.index(nenvstate) - len(xstates)]
-                                beliefstates = set()
-                                for b in beliefcombstate:
-                                    beliefstates = beliefstates.union(partitionGrid[b])
-                                truebeliefstates = beliefstates - beliefstates.intersection(visstates)
-                                gwg.colorstates[1] = copy.deepcopy(truebeliefstates)
-                                gwg.render()
-                                print 'True belief set is ', truebeliefstates
-                                print 'Size of true belief set is ', len(truebeliefstates)
+                   
                 else:
                     nenvstate = automaton[nextstate]['State']['st']
                     print 'Environment state in automaton is', allstates.index(nenvstate)
@@ -214,11 +176,7 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles_f,invisibi
                 break
 
         print 'Automaton state is ', nextstate
-        # print 'actions: \norientation: ' + str(automaton[nextstate]['State']['orientation']) + '\nstop: ' + str(automaton[nextstate]['State']['stop']) + '\nturn Left: ' + str(automaton[nextstate]['State']['turnLeft']) + '\nturn Right: ' + str(automaton[nextstate]['State']['turnRight']) + '\nforward: ' + str(automaton[nextstate]['State']['forward'])  + '\nstepL: ' + str(automaton[nextstate]['State']['stepL'])  + '\nstanceFoot: ' + str(automaton[nextstate]['State']['stanceFoot'])
-        # print 'sOld: ' + str(automaton[nextstate]['State']['sOld'])
         print 'stepL: ' + str(automaton[nextstate]['State']['stepL'])
-        # print 'pastTurnStanceMatchFoot: ' + str(automaton[nextstate]['State']['pastTurnStanceMatchFoot'])
-        # print str(automaton[nextstate]['State'])
         automaton_state = copy.deepcopy(nextstate)
 
 
