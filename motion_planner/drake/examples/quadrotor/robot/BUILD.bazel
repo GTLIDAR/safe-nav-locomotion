@@ -1,0 +1,85 @@
+# -*- python -*-
+
+load(
+    "@drake//tools/skylark:drake_cc.bzl",
+    "drake_cc_googletest",
+    "drake_cc_library",
+    "drake_cc_package_library",
+)
+load("//tools/lint:lint.bzl", "add_lint_tests")
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+drake_cc_package_library(
+    name = "robot",
+    deps = [
+        ":quadrotor_command_receiver",
+        ":quadrotor_command_sender",
+        ":quadrotor_constants",
+        ":quadrotor_status_receiver",
+        ":quadrotor_status_sender",
+    ],
+)
+
+drake_cc_library(
+    name = "quadrotor_constants",
+    srcs = ["quadrotor_constants.cc"],
+    hdrs = ["quadrotor_constants.h"],
+    deps = [
+        "//common:essential",
+    ],
+)
+
+drake_cc_library(
+    name = "quadrotor_command_receiver",
+    srcs = ["quadrotor_command_receiver.cc"],
+    hdrs = ["quadrotor_command_receiver.h"],
+    deps = [
+        ":quadrotor_constants",
+        "//common:essential",
+        "//lcmtypes:lcmtypes_drake_cc",
+        "//systems/framework:leaf_system",
+        "//systems/lcm:lcm_pubsub_system",
+    ],
+)
+
+drake_cc_library(
+    name = "quadrotor_command_sender",
+    srcs = ["quadrotor_command_sender.cc"],
+    hdrs = ["quadrotor_command_sender.h"],
+    deps = [
+        ":quadrotor_constants",
+        "//common:essential",
+        "//lcmtypes:lcmtypes_drake_cc",
+        "//systems/framework:leaf_system",
+    ],
+)
+
+drake_cc_library(
+    name = "quadrotor_status_receiver",
+    srcs = ["quadrotor_status_receiver.cc"],
+    hdrs = ["quadrotor_status_receiver.h"],
+    deps = [
+        ":quadrotor_constants",
+        "//common:essential",
+        "//lcmtypes:lcmtypes_drake_cc",
+        "//systems/framework:leaf_system",
+    ],
+)
+
+drake_cc_library(
+    name = "quadrotor_status_sender",
+    srcs = ["quadrotor_status_sender.cc"],
+    hdrs = ["quadrotor_status_sender.h"],
+    deps = [
+        ":quadrotor_constants",
+        "//common:essential",
+        "//lcmtypes:lcmtypes_drake_cc",
+        "//systems/framework:leaf_system",
+    ],
+)
+
+
+add_lint_tests()

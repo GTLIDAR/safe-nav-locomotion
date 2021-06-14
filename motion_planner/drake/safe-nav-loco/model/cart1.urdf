@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<robot name="locobot">
+<robot name="locobot1">
     <!-- Kobuki -->
     <link name="base_footprint"/>
     <!--
@@ -14,7 +14,7 @@
        to 0.352.
       -->
     <joint name="base_joint" type="fixed">
-        <origin rpy="0 0 1.57" xyz="-3 -3.5 -0.7"/>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
         <parent link="base_footprint"/>
         <child link="base_link"/>
     </joint>

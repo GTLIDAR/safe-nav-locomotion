@@ -14,7 +14,7 @@
        to 0.352.
       -->
     <joint name="base_joint" type="fixed">
-        <origin rpy="0 0 -0.5" xyz="-9 0 -0.7"/>
+        <origin rpy="0 0 -0.5" xyz="0 0 0"/>
         <parent link="base_footprint"/>
         <child link="base_link"/>
     </joint>

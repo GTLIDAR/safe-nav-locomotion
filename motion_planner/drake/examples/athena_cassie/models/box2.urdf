@@ -1,0 +1,56 @@
+<robot name="box2">
+  <material name="Box_color">
+    <color rgba="0.678 0.529 0.384 1.0"/>
+  </material>
+
+    <link name="base1">
+        <inertial>
+            <origin xyz="0 0 0"/>
+            <mass value="1"/>
+            <inertia ixx="0.0267" ixy="0" ixz="0" iyy="0.0267" iyz="0" izz="0.0267"/>
+        </inertial>
+        <!-- <visual>
+            <origin xyz="0 0 0"/>
+            <geometry>
+                <box size="0.4 0.4 0.4"/>
+            </geometry>
+            <material name="Box_color"/>
+        </visual> -->
+        <visual>
+            <origin xyz="0 0 -0.1"/>
+            <geometry>
+                <box size="0.4 0.4 0.01"/>
+            </geometry>
+            <material name="Box_color"/>
+        </visual>
+        <visual>
+            <origin xyz="0 0.195 0"/>
+            <geometry>
+                <box size="0.4 0.01 0.2"/>
+            </geometry>
+            <material name="Box_color"/>
+        </visual>
+        <visual>
+            <origin xyz="0 -0.195 0"/>
+            <geometry>
+                <box size="0.4 0.01 0.2"/>
+            </geometry>
+            <material name="Box_color"/>
+        </visual>
+
+        <visual>
+            <origin xyz="0.195 0 0"/>
+            <geometry>
+                <box size="0.01 0.4 0.2"/>
+            </geometry>
+            <material name="Box_color"/>
+        </visual>
+        <visual>
+            <origin xyz="-0.195 0 0"/>
+            <geometry>
+                <box size="0.01 0.4 0.2"/>
+            </geometry>
+            <material name="Box_color"/>
+        </visual>
+    </link>
+</robot>

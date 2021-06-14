@@ -8,8 +8,8 @@ namespace cassie{
 
   Cassie::Cassie()
   {  
-    DeclareDiscreteState(34); 
-    DeclareVectorOutputPort("floating_base_state", drake::systems::BasicVector<double>(34),
+    DeclareDiscreteState(41); 
+    DeclareVectorOutputPort("floating_base_state", drake::systems::BasicVector<double>(41),
                             &Cassie::CopyDiscreteStateOut);
     DeclarePeriodicDiscreteUpdate(0.001);
   }
@@ -19,7 +19,7 @@ namespace cassie{
       std::vector<Eigen::Matrix<double, 9, 1>> l_foot_l,
       std::vector<Eigen::Matrix<double, 9, 1>> r_foot_l,
       std::vector<Eigen::Matrix<double, 1, 1>> heading_l,
-      std::vector<Eigen::Matrix<double, 3, 1>> location_l)
+      std::vector<Eigen::Matrix<double, 6, 1>> location_l)
   {
       COM_list = COM_l;
       l_foot_list = l_foot_l;
@@ -177,14 +177,14 @@ namespace cassie{
 
     step = int(t / h);
 
-    Eigen::VectorXd state(34);
+    Eigen::VectorXd state(41);
    
     Eigen::VectorXd p = DoIK(COM_list[step], l_foot_list[step], r_foot_list[step], heading_list[step]);
     //Eigen::VectorXd po(7);
    // po << 1, 0, 0, 0, location_list[step](0, 0), location_list[step](1, 0), location_list[step](2, 0);
    //state <<  p;
    //  state << p[0], p[1], p[2], p[3], 1, 0, 0, 0, p[4], p[5], p[6], p[7], p[8], p[9], p[10], p[11], p[12], p[13], p[14], p[15], p[16], p[17], p[18], p[19], p[20], p[21], p[22], location_list[step](0, 0), location_list[step](1, 0), location_list[step](2, 0);
-     state <<   p[0], p[1], p[2], p[3], p[4], p[5] + 0.5, p[6], 1, 0, 0, 0, location_list[step](0, 0) + 9, location_list[step](1, 0), location_list[step](2, 0) + 0.652, p[7], p[8], p[9], p[10], p[11], p[12], p[13], p[14], p[15], p[16], p[17], p[18], p[19], p[20], p[21], p[22], p[23], p[24], p[25], p[26];
+     state <<   p[0], p[1], p[2], p[3], p[4], p[5] + 0.5, p[6], 1, 0, 0, 0, location_list[step](0, 0) , location_list[step](1, 0), location_list[step](2, 0) ,1, 0, 0, 0, location_list[step](3, 0), location_list[step](4, 0), location_list[step](5, 0), p[7], p[8], p[9], p[10], p[11], p[12], p[13], p[14], p[15], p[16], p[17], p[18], p[19], p[20], p[21], p[22], p[23], p[24], p[25], p[26];
      //state << 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.2, 0, -0.2, 0, 0, 0 , 0, 1.5708, 0, -1.0, 0.4, 0, -1.0, 0, 0;
 
    

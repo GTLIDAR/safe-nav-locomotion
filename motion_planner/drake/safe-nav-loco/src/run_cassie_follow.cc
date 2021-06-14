@@ -90,8 +90,8 @@ void DoMain() {
   read_data<1>(heading_list, file_name);
 
   file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_obstacle.txt";
-  std::vector<Eigen::Matrix<double, 3, 1>> location_list;
-  read_data<3>(location_list, file_name);
+  std::vector<Eigen::Matrix<double, 6, 1>> location_list;
+  read_data<6>(location_list, file_name);
 
 
 
@@ -120,8 +120,39 @@ void DoMain() {
   full_name1 = FindResourceOrThrow("drake/safe-nav-loco/model/cart.urdf");
   parser.AddModelFromFile(full_name1);
 
+  
+  std::string full_name2;
+  full_name2 = FindResourceOrThrow("drake/safe-nav-loco/model/cart1.urdf");
+  parser.AddModelFromFile(full_name2);
+
+/*
+  multibody::ModelInstanceIndex cart2 = parser.AddModelFromFile(
+          FindResourceOrThrow("drake/safe-nav-loco/model/cart1.urdf"));
+
+  RigidTransform<double> X_cart(Vector3d(0, 7, 0.65));
+  plant.WeldFrames(plant.world_frame(), plant.GetFrameByName("base_footprint", cart2), X_cart);
+*/
+
+  multibody::ModelInstanceIndex kuka1 = parser.AddModelFromFile(
+          FindResourceOrThrow("drake/safe-nav-loco/model/iiwa7_no_world_joint.urdf"));
+
+  RigidTransform<double> kuka1_xyz(Vector3d((2.70351)*3.5, 2.70351*1.65, 0.5));
+  plant.WeldFrames(plant.world_frame(), plant.GetFrameByName("iiwa_link_0", kuka1), kuka1_xyz);
+
+  multibody::ModelInstanceIndex kuka2 = parser.AddModelFromFile(
+          FindResourceOrThrow("drake/safe-nav-loco/model/kuka2.urdf"));
+
+  RigidTransform<double> kuka2_xyz(Vector3d((2.70351)*4.35, 2.70351*10.5, 0.5+1.2));
+  plant.WeldFrames(plant.world_frame(), plant.GetFrameByName("iiwa_link_0", kuka2), kuka2_xyz);
+
+  multibody::ModelInstanceIndex kuka3 = parser.AddModelFromFile(
+          FindResourceOrThrow("drake/safe-nav-loco/model/kuka3.urdf"));
+
+  RigidTransform<double> kuka3_xyz(Vector3d((2.70351)*2.5, 2.70351*1.65, 0.5));
+  plant.WeldFrames(plant.world_frame(), plant.GetFrameByName("iiwa_link_0", kuka3), kuka3_xyz);
+
   multibody::ModelInstanceIndex navigation_instance = parser.AddModelFromFile(
-          FindResourceOrThrow("drake/safe-nav-loco/model/CDC_environment.sdf"));
+          FindResourceOrThrow("drake/safe-nav-loco/model/jrnl_environment.sdf"));
   // Welding home_environment to make sure it doesn't move
   RigidTransform<double> X_WT(Vector3d(0, 0, 0));
   plant.WeldFrames(plant.world_frame(), plant.GetFrameByName("floor", navigation_instance), X_WT);
@@ -153,9 +184,9 @@ void DoMain() {
   
   // Set up simulator.
   auto simulator = std::make_unique<Simulator<double>>(*diagram, std::move(context));
-  simulator->set_target_realtime_rate(1); //runtime rate 
+  simulator->set_target_realtime_rate(0.25); //runtime rate 
   simulator->Initialize();
-  simulator->AdvanceTo(200);
+  simulator->AdvanceTo(500);
 
 }
 

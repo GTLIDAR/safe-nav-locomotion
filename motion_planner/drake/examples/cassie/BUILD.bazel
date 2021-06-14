@@ -1,0 +1,156 @@
+load(
+    "@drake//tools/skylark:drake_cc.bzl",
+    "drake_cc_binary",
+    "drake_cc_library",
+)
+load("//tools/install:install_data.bzl", "install_data")
+
+package(
+    default_visibility = [":__subpackages__"],
+)
+
+drake_cc_library(
+    name = "cassie",
+    srcs = ["cassie.cc"],
+    hdrs = [
+        "cassie.h",
+    ],
+    data = [":models"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//common:default_scalars",
+        "//common:essential",
+        "//common:find_resource",
+        "//systems/framework",
+        "//systems/analysis",
+        "//multibody/plant",
+        "//multibody/parsing",
+        "//multibody/inverse_kinematics",
+        "//solvers:constraint",
+        "//solvers:gurobi_qp",
+        "//solvers:gurobi_solver",
+        "//solvers:mathematical_program",
+        "//solvers:mathematical_program_result",
+        "//solvers:osqp_solver",
+        "//solvers:solve",
+    ],
+)
+
+drake_cc_library(
+    name = "cassie_lcm",
+    srcs = ["cassie_lcm.cc"],
+    hdrs = ["cassie_lcm.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//examples/cassie/robot",
+    ],
+)
+
+drake_cc_library(
+    name = "cassie_turtle",
+    srcs = ["cassie_turtle.cc"],
+    hdrs = [
+        "cassie_turtle.h",
+    ],
+    data = [
+        ":models",
+        "//examples/mobile_robots/turtle_bot:models",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//common:default_scalars",
+        "//common:essential",
+        "//common:find_resource",
+        "//examples/mobile_robots/turtle_bot:turtle_bot",
+        "//systems/framework",
+        "//systems/analysis",
+        "//multibody/plant",
+        "//multibody/parsing",
+        "//multibody/inverse_kinematics",
+        "//solvers:constraint",
+        "//solvers:gurobi_qp",
+        "//solvers:gurobi_solver",
+        "//solvers:mathematical_program",
+        "//solvers:mathematical_program_result",
+        "//solvers:osqp_solver",
+        "//solvers:solve",
+    ],
+)
+
+drake_cc_binary(
+    name = "run_cassie_follow",
+    srcs = ["run_cassie_follow.cc"],
+    data = [
+        ":models",
+    ],
+    deps = [
+        ":cassie",
+        "//common:add_text_logging_gflags",
+        "//common:find_resource",
+        "//geometry:geometry_visualization",
+        "//multibody/parsing",
+        "//systems/analysis:simulator",
+        "//systems/analysis:simulator_gflags",
+        "//systems/framework:diagram",
+        "//systems/rendering:multibody_position_to_geometry_pose",
+        "@gflags",
+    ],
+)
+
+drake_cc_binary(
+    name = "run_cassie_follow_turtle",
+    srcs = ["run_cassie_follow_turtle.cc"],
+    data = [
+        ":models",
+        "//examples/mobile_robots/turtle_bot:models",
+    ],
+    deps = [
+        ":cassie_turtle",
+        "//common:add_text_logging_gflags",
+        "//common:find_resource",
+        "//examples/mobile_robots/turtle_bot:turtle_bot",
+        "//geometry:geometry_visualization",
+        "//multibody/parsing",
+        "//systems/analysis:simulator",
+        "//systems/analysis:simulator_gflags",
+        "//systems/framework:diagram",
+        "//systems/rendering:multibody_position_to_geometry_pose",
+        "@gflags",
+    ],
+)
+
+cc_binary(
+    name = "cassie_position_publisher",
+    srcs = ["cassie_position_publisher.cc"],
+    data = [
+        ":models",   
+        "//examples/collaboration_station",     
+   
+    ],  
+    deps = [
+        "@gflags",
+        "@jsoncpp",
+        
+        ":cassie_lcm",
+
+        "//common:add_text_logging_gflags",
+        "//common:find_resource",
+        "//geometry:geometry_visualization",
+        "//lcm",
+        "//math:geometric_transform",
+        "//multibody/parsing",
+        "//multibody/plant",
+        "//multibody/plant:contact_results_to_lcm",
+        "//systems/analysis:simulator",
+        "//systems/analysis:simulator_gflags",
+        "//systems/framework:diagram",
+        "//systems/primitives:constant_vector_source",
+        "//systems/primitives:demultiplexer",
+        "//systems/primitives:discrete_derivative",
+        "//systems/primitives:subvector_pass_through",
+        "//systems/rendering:multibody_position_to_geometry_pose",
+
+    ],
+)
+
+install_data()

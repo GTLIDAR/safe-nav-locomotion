@@ -1,0 +1,123 @@
+# -*- python -*-
+
+load(
+    "@drake//tools/skylark:drake_cc.bzl",
+    "drake_cc_googletest",
+    "drake_cc_library",
+    "drake_cc_package_library",
+)
+load("//tools/lint:lint.bzl", "add_lint_tests")
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+drake_cc_library(
+    name = "turtle_bot",
+    srcs = ["turtle_bot.cc"],
+    hdrs = [
+        "turtle_bot.h",
+    ],
+    data = [":models"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//common:default_scalars",
+        "//common:essential",
+        "//common:find_resource",
+        "//systems/framework",
+        "//systems/analysis",
+        "//multibody/plant",
+        "//multibody/parsing",
+        "//multibody/inverse_kinematics",
+        "//solvers:constraint",
+        "//solvers:gurobi_qp",
+        "//solvers:gurobi_solver",
+        "//solvers:mathematical_program",
+        "//solvers:mathematical_program_result",
+        "//solvers:osqp_solver",
+        "//solvers:solve",
+    ],
+)
+
+drake_cc_library(
+    name = "turtle_lcm",
+    srcs = ["turtle_lcm.cc"],
+    hdrs = ["turtle_lcm.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//examples/mobile_robots/turtle_bot/robot",
+    ],
+)
+
+cc_binary(
+    name = "turtle_position_publisher",
+    srcs = ["turtle_position_publisher.cc"],
+    data = [
+        ":models", 
+        "//examples/collaboration_station",     
+    ],  
+    deps = [
+        "@gflags",
+        "@jsoncpp",
+        "@lcmtypes_robotlocomotion",
+        
+        ":turtle_lcm",
+
+        "//common:add_text_logging_gflags",
+        "//common:find_resource",
+        "//geometry:geometry_visualization",
+        "//lcm",
+        "//lcmtypes:object_target",
+        "//math:geometric_transform",
+        "//multibody/parsing",
+        "//multibody/plant",
+        "//multibody/plant:contact_results_to_lcm",
+        "//systems/analysis:simulator",
+        "//systems/analysis:simulator_gflags",
+        "//systems/framework:diagram",
+        "//systems/primitives:constant_vector_source",
+        "//systems/primitives:demultiplexer",
+        "//systems/primitives:discrete_derivative",
+        "//systems/primitives:subvector_pass_through",
+        "//systems/rendering:multibody_position_to_geometry_pose",
+
+    ],
+)
+
+cc_binary(
+    name = "turtle2_position_publisher",
+    srcs = ["turtle2_position_publisher.cc"],
+    data = [
+        ":models", 
+        "//examples/collaboration_station",     
+    ],  
+    deps = [
+        "@gflags",
+        "@jsoncpp",
+        "@lcmtypes_robotlocomotion",
+        
+        ":turtle_lcm",
+
+        "//common:add_text_logging_gflags",
+        "//common:find_resource",
+        "//geometry:geometry_visualization",
+        "//lcm",
+        "//lcmtypes:object_target",
+        "//math:geometric_transform",
+        "//multibody/parsing",
+        "//multibody/plant",
+        "//multibody/plant:contact_results_to_lcm",
+        "//systems/analysis:simulator",
+        "//systems/analysis:simulator_gflags",
+        "//systems/framework:diagram",
+        "//systems/primitives:constant_vector_source",
+        "//systems/primitives:demultiplexer",
+        "//systems/primitives:discrete_derivative",
+        "//systems/primitives:subvector_pass_through",
+        "//systems/rendering:multibody_position_to_geometry_pose",
+
+    ],
+)
+
+
+add_lint_tests()

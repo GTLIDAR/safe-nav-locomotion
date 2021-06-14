@@ -6,6 +6,8 @@ namespace drake {
 namespace manipulation {
 namespace kuka_iiwa {
 
+// using multibody::MultibodyPlant;
+// using multibody::ModelInstanceIndex;
 using systems::BasicVector;
 using systems::Context;
 
@@ -70,7 +72,25 @@ void IiwaStatusReceiver::CalcLcmOutput(
   // If we're using a default constructed message (i.e., we haven't received
   // any status message yet), output zero.
   if (status.num_joints == 0) {
-    output->get_mutable_value().setZero();
+    // 
+
+    if(init_state_.size() == 0){
+      output->get_mutable_value().setZero();
+    }
+    else if(init_state_.size() == 7){
+      Eigen::VectorXd init_state;
+      init_state.resize(7);
+      for(int i = 0; i < 7; i++){
+        init_state[i] = init_state_[i];
+      }
+      output->SetFromVector(init_state); // Set only the base position (4q,3xyz)
+    }
+    else{
+      output->SetFromVector(init_state_); // Set everything
+    }
+
+
+
   } else {
     const auto& status_field = status.*field_ptr;
     DRAKE_THROW_UNLESS(status.num_joints == num_joints_);
@@ -78,7 +98,18 @@ void IiwaStatusReceiver::CalcLcmOutput(
     output->get_mutable_value() = Eigen::Map<const Eigen::VectorXd>(
         status_field.data(), num_joints_);
   }
+  // plant_->SetPositions(context.get(),iiwa_instance_, output->CopyToVector());
 }
+
+
+void IiwaStatusReceiver::SetInitialPosition(Eigen::VectorXd init_state){
+  DRAKE_DEMAND(init_state.size() == num_joints_ || init_state.size() == 7);
+  // Try to ensure a valid quaternion value
+  DRAKE_DEMAND(!(init_state[0] == 0 && init_state[1] == 0 && 
+                init_state[2] == 0 && init_state[3] == 0));
+  init_state_ = init_state;
+}
+
 
 }  // namespace kuka_iiwa
 }  // namespace manipulation

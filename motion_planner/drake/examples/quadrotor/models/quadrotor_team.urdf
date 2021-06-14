@@ -1,0 +1,114 @@
+<?xml version="1.0" ?>
+
+<robot name="quadrotor">
+  <material name="Box_color">
+    <color rgba="0.678 0.529 0.384 1.0"/>
+  </material>
+  <material name="Rope_color">
+    <color rgba="0.8902 0.8118 0.3412 1.0"/>
+  </material>
+
+    <link name="base1"/>
+
+
+    <link name="rope_1">
+        <visual>
+            <origin xyz="0.253 -0.253 0.3299" rpy="0.5236 0 0.7854"/>
+            <geometry>
+                <cylinder length="0.3" radius="0.003"/>
+            </geometry>
+            <material name="Rope_color"/>
+        </visual>
+    </link>
+    <joint name="rope_box_1" type="fixed">
+        <parent link="base1"/>
+        <child link="rope_1"/>
+    </joint>
+  <link name="quadrotor_1">
+    <inertial>
+      <mass value="0.5"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.0023" ixy="0.0" ixz="0.0" iyy="0.0023" iyz="0.0" izz="0.004"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0.7854" xyz="0.3061 -0.3061 0.4598"/>
+      <geometry>
+        <mesh filename="../meshes/quadrotor_base.obj" scale=".08"/>
+      </geometry>
+    </visual>
+  </link>
+    <joint name="rope_quadrotor_1" type="fixed">
+        <parent link="rope_1"/>
+        <child link="quadrotor_1"/>
+    </joint>
+
+    <link name="rope_2">
+        <visual>
+            <origin xyz="-0.253 -0.253 0.3299" rpy="0.5236 0 -0.7854"/>
+            <geometry>
+                <cylinder length="0.3" radius="0.003"/>
+            </geometry>
+            <material name="Rope_color"/>
+        </visual>
+    </link>
+    <joint name="rope_box_2" type="fixed">
+        <parent link="base1"/>
+        <child link="rope_2"/>
+    </joint>
+  <link name="quadrotor_2">
+    <inertial>
+      <mass value="0.5"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.0023" ixy="0.0" ixz="0.0" iyy="0.0023" iyz="0.0" izz="0.004"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 -0.7854" xyz="-0.3061 -0.3061 0.4598"/>
+      <geometry>
+        <mesh filename="../meshes/quadrotor_base.obj" scale=".08"/>
+      </geometry>
+    </visual>
+  </link>
+    <joint name="rope_quadrotor_2" type="fixed">
+        <parent link="rope_2"/>
+        <child link="quadrotor_2"/>
+    </joint>
+
+    <link name="rope_3">
+        <visual>
+            <origin xyz="0 0.2473 0.3299" rpy="-0.3491 0 0"/>
+            <geometry>
+                <cylinder length="0.2765" radius="0.003"/>
+            </geometry>
+            <material name="Rope_color"/>
+        </visual>
+    </link>
+    <joint name="rope_box_3" type="fixed">
+        <parent link="base1"/>
+        <child link="rope_3"/>
+    </joint>
+  <link name="quadrotor_3">
+    <inertial>
+      <mass value="0.5"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.0023" ixy="0.0" ixz="0.0" iyy="0.0023" iyz="0.0" izz="0.004"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0.7854" xyz="0 0.2946 0.4598"/>
+      <geometry>
+        <mesh filename="../meshes/quadrotor_base.obj" scale=".08"/>
+      </geometry>
+    </visual>
+   <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius=".3" length=".1"/>
+      </geometry>
+    </collision> 
+  </link>
+    <joint name="rope_quadrotor_3" type="fixed">
+        <parent link="rope_3"/>
+        <child link="quadrotor_3"/>
+    </joint>
+
+
+</robot>

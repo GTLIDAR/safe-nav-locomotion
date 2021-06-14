@@ -301,13 +301,13 @@
         <use_parent_model_frame>0</use_parent_model_frame>
         <!-- Drake attaches an actuator to all and only joints with a nonzero
              effort limit. -->
-        <limit>
+        <!-- <limit>
           <lower>-0.055</lower>
           <upper>0</upper>
           <effort>80</effort>
           <stiffness>15000</stiffness>
           <dissipation>50</dissipation>
-        </limit>
+        </limit> -->
         <dynamics>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
@@ -337,13 +337,13 @@
         <use_parent_model_frame>0</use_parent_model_frame>
         <!-- Drake attaches an actuator to all and only joints with a nonzero
              effort limit. -->
-        <limit>
+        <!-- <limit>
           <lower>0</lower>
           <upper>0.055</upper>
           <effort>80</effort>
           <stiffness>15000</stiffness>
           <dissipation>50</dissipation>
-        </limit>
+        </limit> -->
         <dynamics>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>

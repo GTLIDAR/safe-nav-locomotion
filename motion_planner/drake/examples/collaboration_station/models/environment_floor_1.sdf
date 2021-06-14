@@ -1,0 +1,505 @@
+<?xml version="1.0"?>
+<sdf version='1.6'>
+<model name="environment_floor_1">
+
+  <material name="white">
+    <color rgba="0.9 0.9 0.9 1.0"/>
+  </material>
+
+
+  <link name="floor">
+    <pose>0 0 0 0 0 0 </pose>
+    <inertial>
+      <mass>1</mass>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+    </inertial>
+
+    <visual name='tabletop'>
+      <pose>0 0 0.015 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>7 7 0.02</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+
+    <visual name='wall_2'>
+      <pose>-2.5 1.5 0.6 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>1.99 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+  <!--  <visual name='wall_3'>
+      <pose>-1.5 1.75 0.6 0 0 1.57079632679</pose>
+      <geometry>
+        <box> 
+          <size>0.5 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='wall_4'>
+      <pose>-1.5 3.25 0.6 0 0 1.57079632679</pose>
+      <geometry>
+        <box> 
+          <size>0.5 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual> -->
+
+
+    <visual name='wall_5'>
+      <pose>1.5 -2.7475 0.6 0 0 1.57079632679</pose>
+      <geometry>
+        <box> 
+          <size>1.49 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='wall_6'>
+      <pose>2.5 -0.5 0.6 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>1.99 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='wall_7'>
+      <pose>1.5 -0.5 0.6 0 0 1.57079632679</pose>
+      <geometry>
+        <box> 
+          <size>1 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='wall_8'>
+      <pose>1.5 1.5 0.6 0 0 1.57079632679</pose>
+      <geometry>
+        <box> 
+          <size>1 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='wall_9'>
+      <pose>1.5 3.25 0.6 0 0 1.57079632679</pose>
+      <geometry>
+        <box> 
+          <size>0.5 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='wall_10'>
+      <pose>-3.5 0 0.6 0 0 1.57079632679</pose>
+      <geometry>
+        <box> 
+          <size>7 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='wall_11'>
+      <pose>-2.5 3.5 0.6 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>1.99 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='wall_12'>
+      <pose>2.5 3.5 0.6 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>1.99 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='wall_13'>
+      <pose>3.5 -2.0 0.6 0 0 1.57079632679</pose>
+      <geometry>
+        <box> 
+          <size>3 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='wall_14'>
+      <pose>0 -3.5 0.6 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>6.99 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='wall_15'>
+      <pose>3.0 -0.25 0.6 0 0 1.57079632679</pose>
+      <geometry>
+        <box> 
+          <size>0.5 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='wall_16'>
+      <pose>3.0 1.5 0.6 0 0 1.57079632679</pose>
+      <geometry>
+        <box> 
+          <size>1.0 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='wall_17'>
+      <pose>3.0 3.25 0.6 0 0 1.57079632679</pose>
+      <geometry>
+        <box> 
+          <size>0.5 0.01 1.2</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+
+
+<!-- 
+
+    <visual name='lower_right_post'>
+      <pose>0.5 -3.5  0.61 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>2 0.05 1.25</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='lower_left_post'>
+      <pose>-1 -2.5 0.61 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>1 0.05 1.25</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual> -->
+
+<!-- Exterior -->
+<!-- 
+    <visual name='upper_right_exterior'>
+      <pose>1.5 1.5 0.61 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.05 2 1.25</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='upper_left_exterior'>
+      <pose>-1.5 1.5 0.61 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.05 2 1.25</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='lower_right_exterior'>
+      <pose>1.5 -1.5  0.61 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.05 2 1.25</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='lower_left_exterior'>
+      <pose>-1.5 -1.5 0.61 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.05 2 1.25</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual> -->
+
+<!-- Outer walls -->
+
+    <visual name='kuka_table_1'>
+      <pose>1.5 0.5 0.615 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.5 1 0.05</size>
+        </box>
+      </geometry>
+      <material name="white"/>
+    </visual>
+
+    <visual name='kuka_table_2'>
+      <pose>1.5 2.5 0.615 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.5 1 0.05</size>
+        </box>
+      </geometry>
+      <material name="white"/>
+
+    </visual>
+
+    <visual name='kuka_platform_1'>
+      <pose>2.0 0.1 0.25 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.25 0.25 0.05</size>
+        </box>
+      </geometry>
+      <material name="white"/>
+    </visual>
+
+    <visual name='kuka_platform_2'>
+      <pose>2.0 2.1 0.25 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.25 0.25 0.05</size>
+        </box>
+      </geometry>
+      <material name="white"/>
+    </visual>
+
+<!-- 
+    <visual name='top_left_bar'>
+      <pose>2 0.371 1.4 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.965 0.038 0.038</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='top_middle_bar'>
+      <pose>2 0 1.4 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>1.220 0.038 0.038</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='top_right_bar'>
+      <pose>2 -0.371 1.4 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.965 0.038 0.038</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='top_back_bar'>
+      <pose>1.501 0 1.4 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.038 0.78 0.038</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+
+    <visual name='top_front_bar'>
+      <pose>2.501 0 1.4 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.038 0.78 0.038</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>0.57 0.63 0.67 1.0</diffuse>
+      </material>
+    </visual>
+ -->
+
+    <collision name='tabletop'>
+      <pose>0 0 -0.01 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>5 7 0.02</size>
+        </box>
+      </geometry>
+    </collision>
+<!-- 
+    <collision name='upper_right_post'>
+      <pose>0.559 0.330 0.61 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.076 0.038 1.219</size>
+        </box>
+      </geometry>
+    </collision>
+
+    <collision name='upper_left_post'>
+      <pose>0.559 -0.330 0.61 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.076 0.038 1.219</size>
+        </box>
+      </geometry>
+    </collision>
+
+    <collision name='lower_right_post'>
+      <pose>-0.559 0.330  0.61 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.076 0.038 1.219</size>
+        </box>
+      </geometry>
+    </collision>
+
+    <collision name='lower_left_post'>
+      <pose>-0.559 -0.330 0.61 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.076 0.038 1.219</size>
+        </box>
+      </geometry>
+    </collision>
+
+    <collision name='top_left_bar'>
+      <pose>0 0.371 1.171 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.964 0.037 0.037</size>
+        </box>
+      </geometry>
+    </collision>
+
+    <collision name='top_middle_bar'>
+      <pose>0 0 1.209 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>1.219 0.037 0.037</size>
+        </box>
+      </geometry>
+    </collision>
+
+    <collision name='top_right_bar'>
+      <pose>0 -0.371 1.171 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.964 0.037 0.037</size>
+        </box>
+      </geometry>
+    </collision>
+
+    <collision name='top_back_bar'>
+      <pose>-0.501 0 1.171 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.037 0.779 0.037</size>
+        </box>
+      </geometry>
+    </collision>
+
+    <collision name='top_front_bar'>
+      <pose>0.501 0 1.171 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>0.037 0.779 0.037</size>
+        </box>
+      </geometry>
+    </collision> -->
+
+   </link>
+</model>
+</sdf>

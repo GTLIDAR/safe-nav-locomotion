@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot  name="KukaConnector_3" xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller" xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface" xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"   xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <material name="Silver">
+    <color rgba="0.82 0.82 0.82 1.0"/>
+  </material>
+  <!-- Commented out world joint so it works with multibodyplant-->
+  <!-- <link name="world"/>
+  <joint name="connector_base" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="world"/>
+    <child link="connector_link"/>
+  </joint> -->
+  <link name="connector_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.031852" />
+      <inertia
+        ixx="7.8593E-06"
+        ixy="0"
+        ixz="1.4686E-12"
+        iyy="1.2853E-05"
+        iyz="0"
+        izz="7.2265E-06" />
+      </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 1.5707963267949" />
+      <geometry>
+        <mesh filename="../meshes/iiwa7_third/visual/Schunk_Adapter.obj" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name = "Silver"/>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 1.5707963267949" />
+      <geometry>
+        <mesh filename="../meshes/Schunk_Adapter_Collision.obj" scale="0.001 0.001 0.001" />
+      </geometry>
+    </collision> -->
+  </link>
+  <joint name="connector_joint" type="fixed">
+    <parent link="connector_link"/>
+    <child link="connector_frame_link"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+  <link name="connector_frame_link">
+  </link>
+  <frame link="connector_frame_link" name="connector_frame" rpy="0 0 0" xyz="0 0 0.0175"/>
+
+  <!-- Link0 -->
+  <gazebo reference="connector_link">
+    <material>Gazebo/Grey</material>
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+  </gazebo>
+
+</robot>

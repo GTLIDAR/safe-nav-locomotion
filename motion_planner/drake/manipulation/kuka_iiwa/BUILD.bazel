@@ -65,7 +65,9 @@ drake_cc_library(
         ":iiwa_constants",
         "//common:essential",
         "//lcmtypes:lcmtypes_drake_cc",
+        "//multibody/plant",
         "//systems/framework:leaf_system",
+        
     ],
 )
 

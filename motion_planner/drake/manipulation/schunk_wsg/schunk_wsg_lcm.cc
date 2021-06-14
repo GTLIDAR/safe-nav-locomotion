@@ -6,6 +6,7 @@
 
 #include "drake/common/drake_assert.h"
 #include "drake/common/eigen_types.h"
+#include "drake/lcm/lcm_messages.h"
 #include "drake/lcmt_schunk_wsg_command.hpp"
 #include "drake/lcmt_schunk_wsg_status.hpp"
 
@@ -37,7 +38,9 @@ void SchunkWsgCommandReceiver::CalcPositionOutput(
       this->get_input_port(0).Eval<lcmt_schunk_wsg_command>(context);
 
   double target_position = initial_position_;
-  if (message.utime != 0.0) {
+  // N.B. This works due to lcm::Serializer<>::CreateDefaultValue() using
+  // value-initialization.
+  if (!lcm::AreLcmMessagesEqual(message, lcmt_schunk_wsg_command{})) {
     target_position = message.target_position_mm / 1e3;
     if (std::isnan(target_position)) {
       target_position = 0;
@@ -53,7 +56,9 @@ void SchunkWsgCommandReceiver::CalcForceLimitOutput(
       this->get_input_port(0).Eval<lcmt_schunk_wsg_command>(context);
 
   double force_limit = initial_force_;
-  if (message.utime != 0.0) {
+  // N.B. This works due to lcm::Serializer<>::CreateDefaultValue() using
+  // value-initialization.
+  if (!lcm::AreLcmMessagesEqual(message, lcmt_schunk_wsg_command{})) {
     force_limit = message.force;
   }
 
@@ -90,7 +95,11 @@ SchunkWsgStatusReceiver::SchunkWsgStatusReceiver()
       force_output_port_(this->DeclareVectorOutputPort(
                                  "force", systems::BasicVector<double>(1),
                                  &SchunkWsgStatusReceiver::CopyForceOut)
-                             .get_index()) {
+                             .get_index()),
+      gripper_position_output_port_(this->DeclareVectorOutputPort(
+                                "gripper_position",systems::BasicVector<double>(2),
+                                &SchunkWsgStatusReceiver::CopyGripperPositionOut)
+                                .get_index()){
   this->DeclareAbstractInputPort("lcmt_schunk_wsg_status",
                                  Value<lcmt_schunk_wsg_status>());
 }
@@ -110,6 +119,15 @@ void SchunkWsgStatusReceiver::CopyForceOut(
   const auto& status =
       get_status_input_port().Eval<lcmt_schunk_wsg_status>(context);
   output->SetAtIndex(0, status.actual_force);
+}
+
+void SchunkWsgStatusReceiver::CopyGripperPositionOut(
+    const drake::systems::Context<double>& context,
+    drake::systems::BasicVector<double>* output) const {
+  const auto& status =
+      get_status_input_port().Eval<lcmt_schunk_wsg_status>(context);
+  output->SetAtIndex(0, (status.actual_position_mm / 1e3)/2);
+  output->SetAtIndex(1, -(status.actual_position_mm / 1e3)/2);
 }
 
 SchunkWsgStatusSender::SchunkWsgStatusSender() {

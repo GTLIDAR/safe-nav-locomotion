@@ -41,7 +41,7 @@ QuadrotorGeometry::QuadrotorGeometry(
   // Use (temporary) MultibodyPlant to parse the urdf and setup the
   // scene_graph.
   // TODO(SeanCurtis-TRI): Update this on resolution of #10775.
-  multibody::MultibodyPlant<double> mbp;
+  multibody::MultibodyPlant<double> mbp(0.0);
   multibody::Parser parser(&mbp, scene_graph);
 
   auto model_id = parser.AddModelFromFile(
@@ -69,7 +69,7 @@ void QuadrotorGeometry::OutputGeometryPose(
       math::RollPitchYawd(state.segment<3>(3)),
       state.head<3>());
 
-  *poses = {{frame_id_, pose.GetAsIsometry3()}};
+  *poses = {{frame_id_, pose}};
 }
 
 }  // namespace quadrotor

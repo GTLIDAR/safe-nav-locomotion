@@ -1,0 +1,319 @@
+<?xml version="1.0"?>
+<robot name="multi_static_boxes2">
+
+  <material name="Black">
+    <color rgba="0.0 0.0 0.0 1.0"/>
+  </material>
+  <material name="Blue">
+    <color rgba="0.0 0.0 0.8 1.0"/>
+  </material>
+  <material name="Green">
+    <color rgba="0.0 0.9 0.0 1.0"/>
+  </material>
+  <material name="Grey">
+    <color rgba="0.4 0.4 0.4 1.0"/>
+  </material>
+  <material name="Glas">
+    <color rgba="0.4 0.4 0.4 0.1"/>
+  </material>
+  <material name="Orange">
+    <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+  </material>
+  <material name="Brown">
+    <color rgba="0.870588235294 0.811764705882 0.764705882353 1.0"/>
+  </material>
+  <material name="Red">
+    <color rgba="0.8 0.0 0.0 1.0"/>
+  </material>
+  <material name="White">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+  <material name="Silver">
+    <color rgba="0.82 0.82 0.82 1.0"/>
+  </material>
+  <material name="Box_color">
+    <color rgba="0.678 0.529 0.384 1.0"/>
+  </material>
+
+
+
+  <link name="base"/>
+
+  <joint name="base_to_box_0" type="fixed">
+    <parent link="base"/>
+    <child link="box_0"/>
+    <origin rpy="0 0 0" xyz="-3 3 0.25"/>
+  </joint>
+
+  <link name="box_0">
+    <visual>
+      <origin xyz="0 0 0.05" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0 0.55" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0 1.05" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+    <visual>
+      <origin xyz="0.25 -0.5 -0.15" rpy="0 0 0" />
+      <geometry>
+        <box size="1 2 0.025" />
+      </geometry>
+      <material name="Silver"/>
+    </visual>
+    <visual>
+      <origin xyz="0.25 -0.5 0.35" rpy="0 0 0" />
+      <geometry>
+        <box size="1 2 0.025" />
+      </geometry>
+      <material name="Silver"/>
+    </visual>
+    <visual>
+      <origin xyz="0.25 -0.5 0.85" rpy="0 0 0" />
+      <geometry>
+        <box size="1 2 0.025" />
+      </geometry>
+      <material name="Silver"/>
+    </visual>
+
+    <visual>
+      <origin xyz="0.25 -1.5 0.35" rpy="1.57 0 0" />
+      <geometry>
+        <box size="1 2 0.025" />
+      </geometry>
+      <material name="Silver"/>
+    </visual>
+    <visual>
+      <origin xyz="0.25 0.5 0.35" rpy="1.57 0 0" />
+      <geometry>
+        <box size="1 2 0.025" />
+      </geometry>
+      <material name="Silver"/>
+    </visual>
+  </link>
+
+  <joint name="base_to_box_1" type="fixed">
+    <parent link="base"/>
+    <child link="box_1"/>
+    <origin rpy="0 0 0" xyz="-3 2.5 0.25"/>
+  </joint>
+
+  <link name="box_1">
+    <visual>
+      <origin xyz="0 0 0.05" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0 0.55" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0 1.05" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+  </link>
+
+  <joint name="base_to_box_2" type="fixed">
+    <parent link="base"/>
+    <child link="box_2"/>
+    <origin rpy="0 0 0" xyz="-2.5 2.5 0.25"/>
+  </joint>
+
+  <link name="box_2">
+    <visual>
+      <origin xyz="0 0 0.05" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0 0.55" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+
+  </link>
+
+  <joint name="base_to_box_3" type="fixed">
+    <parent link="base"/>
+    <child link="box_3"/>
+    <origin rpy="0 0 0" xyz="-2.5 3.0 0.25"/>
+  </joint>
+
+  <link name="box_3">
+    <visual>
+      <origin xyz="0 0 0.05" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0 0.55" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+
+    <visual>
+      <origin xyz="0 0 1.05" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+
+  </link>
+
+
+
+  <joint name="base_to_box_4" type="fixed">
+    <parent link="base"/>
+    <child link="box_4"/>
+    <origin rpy="0 0 0" xyz="-2.5 2.0 0.25"/>
+  </joint>
+
+  <link name="box_4">
+    <visual>
+      <origin xyz="0 0 0.05" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0 0.55" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0 1.05" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+  </link>
+
+  <joint name="base_to_box_5" type="fixed">
+    <parent link="base"/>
+    <child link="box_5"/>
+    <origin rpy="0 0 0" xyz="-3.0 2.0 0.25"/>
+  </joint>
+
+  <link name="box_5">
+    <visual>
+      <origin xyz="0 0 0.05" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0 0.55" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0 1.05" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+  </link>
+<!-- upstairs -->
+  <!-- <joint name="base_to_box_6" type="fixed">
+    <parent link="base"/>
+    <child link="box_6"/>
+    <origin rpy="0 0 1" xyz="-6.2 -3.1 1.5"/>
+  </joint>
+
+  <link name="box_6">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+  </link>
+
+  <joint name="base_to_box_7" type="fixed">
+    <parent link="base"/>
+    <child link="box_7"/>
+    <origin rpy="0 0 1.2" xyz="-6.1 -2.6 1.5"/>
+  </joint>
+
+  <link name="box_7">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+  </link>
+
+  <joint name="base_to_box_8" type="fixed">
+    <parent link="base"/>
+    <child link="box_8"/>
+    <origin rpy="0 0 0.9" xyz="-5.7 -3 1.5"/>
+  </joint>
+
+  <link name="box_8">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+  </link>
+
+  <joint name="base_to_box_9" type="fixed">
+    <parent link="base"/>
+    <child link="box_9"/>
+    <origin rpy="0 0 0.7" xyz="-5.9 -2.9 1.9"/>
+  </joint>
+
+  <link name="box_9">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.4 0.4" />
+      </geometry>
+      <material name="Box_color"/>
+    </visual>
+  </link> -->
+</robot>

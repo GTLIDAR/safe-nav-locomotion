@@ -6,12 +6,11 @@
 #include <iostream>
 #include <memory>
 
-#include <gflags/gflags.h>
 #include "robotlocomotion/robot_plan_t.hpp"
+#include <gflags/gflags.h>
 
 #include "drake/common/find_resource.h"
 #include "drake/common/text_logging.h"
-#include "drake/common/text_logging_gflags.h"
 #include "drake/examples/kuka_iiwa_arm/lcm_plan_interpolator.h"
 #include "drake/lcm/drake_lcm.h"
 #include "drake/lcmt_iiwa_command.hpp"
@@ -157,6 +156,5 @@ int DoMain() {
 
 int main(int argc, char* argv[]) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
-  drake::logging::HandleSpdlogGflags();
   return drake::examples::kuka_iiwa_arm::DoMain();
 }

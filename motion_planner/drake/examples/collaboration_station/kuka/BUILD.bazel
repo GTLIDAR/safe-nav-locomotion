@@ -1,0 +1,322 @@
+load(
+    "@drake//tools/skylark:drake_cc.bzl",
+    "drake_cc_binary",
+    "drake_cc_googletest",
+    "drake_cc_library",
+)
+
+package(default_visibility = ["//visibility:public"])
+
+drake_cc_library(
+    name = "high_level_planner",
+    srcs = ["high_level_planner.cc"],
+    hdrs = ["high_level_planner.h"],
+    data = [
+        "//examples/collaboration_station", 
+        
+        "//examples/kuka_iiwa_arm:models",
+        "//manipulation/models/iiwa_description:models",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@jsoncpp",
+        "@lcm",
+        "//examples/kuka_iiwa_arm:iiwa_common",
+        "//lcmtypes:iiwa",
+        "//lcmtypes:schunk",
+        "//lcmtypes:object",
+        "//manipulation/util:move_ik_demo_base",
+        "//math:geometric_transform",
+    ]
+)
+
+drake_cc_library(
+    name = "high_level_planner_1",
+    srcs = ["high_level_planner_1.cc"],
+    hdrs = ["high_level_planner_1.h"],
+    data = [
+        "//examples/collaboration_station", 
+        
+        "//examples/kuka_iiwa_arm:models",
+        "//manipulation/models/iiwa_description:models",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@jsoncpp",
+        "@lcm",
+        "//examples/kuka_iiwa_arm:iiwa_common",
+        "//lcmtypes:iiwa",
+        "//lcmtypes:schunk",
+        "//lcmtypes:object",
+        "//manipulation/util:move_ik_demo_base",
+        "//math:geometric_transform",
+    ]
+)
+
+drake_cc_library(
+    name = "high_level_planner_2",
+    srcs = ["high_level_planner_2.cc"],
+    hdrs = ["high_level_planner_2.h"],
+    data = [
+        "//examples/collaboration_station", 
+        
+        "//examples/kuka_iiwa_arm:models",
+        "//manipulation/models/iiwa_description:models",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@jsoncpp",
+        "@lcm",
+        "//examples/kuka_iiwa_arm:iiwa_common",
+        "//lcmtypes:iiwa",
+        "//lcmtypes:schunk",
+        "//lcmtypes:object",
+        "//manipulation/util:move_ik_demo_base",
+        "//math:geometric_transform",
+    ]
+)
+
+drake_cc_library(
+    name = "high_level_planner_3",
+    srcs = ["high_level_planner_3.cc"],
+    hdrs = ["high_level_planner_3.h"],
+    data = [
+        "//examples/collaboration_station", 
+        
+        "//examples/kuka_iiwa_arm:models",
+        "//manipulation/models/iiwa_description:models",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@jsoncpp",
+        "@lcm",
+        "//examples/kuka_iiwa_arm:iiwa_common",
+        "//lcmtypes:iiwa",
+        "//lcmtypes:schunk",
+        "//lcmtypes:object",
+        "//manipulation/util:move_ik_demo_base",
+        "//math:geometric_transform",
+    ]
+)
+
+cc_binary(
+    name = "iiwa_position_publisher",
+    srcs = ["iiwa_position_publisher.cc"],
+    data = [
+	    "//manipulation/models/iiwa_description:models", 
+        "//examples/collaboration_station",     
+    ],  
+    deps = [
+        "@gflags",
+        "@jsoncpp",
+        "@lcmtypes_robotlocomotion",
+        
+        "//examples/kuka_iiwa_arm:iiwa_common",
+        "//examples/kuka_iiwa_arm:iiwa_lcm",
+
+        "//common:add_text_logging_gflags",
+        "//common:find_resource",
+        "//geometry:geometry_visualization",
+        "//lcm",
+        "//lcmtypes:iiwa",
+        "//math:geometric_transform",
+        "//multibody/parsing",
+        "//multibody/plant",
+        "//multibody/plant:contact_results_to_lcm",
+        "//systems/analysis:simulator",
+        "//systems/analysis:simulator_gflags",
+        "//systems/framework:diagram",
+        "//systems/primitives:constant_vector_source",
+        "//systems/primitives:demultiplexer",
+        "//systems/primitives:discrete_derivative",
+        "//systems/rendering:multibody_position_to_geometry_pose",
+    ],
+)
+
+
+drake_cc_binary(
+    name = "kuka_position_publisher",
+    srcs = ["kuka_position_publisher.cc"],
+    data = [
+        "//examples/collaboration_station",     
+        "//examples/kuka_iiwa_arm:models",
+        "//manipulation/models/iiwa_description:models",
+    ],
+    deps = [
+        "@jsoncpp",
+        "@lcm",
+        "@lcmtypes_bot2_core",
+        "@lcmtypes_robotlocomotion",
+        "//lcmtypes:object_target",
+        "//examples/kuka_iiwa_arm:iiwa_common",
+        "//examples/kuka_iiwa_arm:iiwa_lcm",
+        "//math:geometric_transform",
+        "//multibody/parsing",
+        "//multibody/plant",
+    ],
+)
+
+drake_cc_binary(
+    name = "kuka_position_publisher_1",
+    srcs = ["kuka_position_publisher_1.cc"],
+    data = [
+        "//examples/collaboration_station",     
+        "//examples/kuka_iiwa_arm:models",
+        "//manipulation/models/iiwa_description:models",
+    ],
+    deps = [
+        "@jsoncpp",
+        "@lcm",
+        "@lcmtypes_bot2_core",
+        "@lcmtypes_robotlocomotion",
+        "//lcmtypes:object_target",
+	"//lcmtypes:start_time",
+        "//examples/kuka_iiwa_arm:iiwa_common",
+        "//examples/kuka_iiwa_arm:iiwa_lcm",
+        "//math:geometric_transform",
+        "//multibody/parsing",
+        "//multibody/plant",
+    ],
+)
+
+drake_cc_binary(
+    name = "kuka_position_publisher_2",
+    srcs = ["kuka_position_publisher_2.cc"],
+    data = [
+        "//examples/collaboration_station",     
+        "//examples/kuka_iiwa_arm:models",
+        "//manipulation/models/iiwa_description:models",
+    ],
+    deps = [
+        "@jsoncpp",
+        "@lcm",
+        "@lcmtypes_bot2_core",
+        "@lcmtypes_robotlocomotion",
+        "//lcmtypes:object_target",
+        "//examples/kuka_iiwa_arm:iiwa_common",
+        "//examples/kuka_iiwa_arm:iiwa_lcm",
+        "//math:geometric_transform",
+        "//multibody/parsing",
+        "//multibody/plant",
+    ],
+)
+
+drake_cc_binary(
+    name = "kuka_position_publisher_3",
+    srcs = ["kuka_position_publisher_3.cc"],
+    data = [
+        "//examples/collaboration_station",     
+        "//examples/kuka_iiwa_arm:models",
+        "//manipulation/models/iiwa_description:models",
+    ],
+    deps = [
+        "@jsoncpp",
+        "@lcm",
+        "@lcmtypes_bot2_core",
+        "@lcmtypes_robotlocomotion",
+        "//lcmtypes:object_target",
+        "//examples/kuka_iiwa_arm:iiwa_common",
+        "//examples/kuka_iiwa_arm:iiwa_lcm",
+        "//math:geometric_transform",
+        "//multibody/parsing",
+        "//multibody/plant",
+    ],
+)
+
+drake_cc_binary(
+    name = "move_iiwa_ee",
+    srcs = ["move_iiwa_ee.cc"],
+    data = [
+        "//examples/collaboration_station",     
+        "//examples/kuka_iiwa_arm:models",
+        "//manipulation/models/iiwa_description:models",
+    ],
+    deps = [
+        "@jsoncpp",
+        "//examples/kuka_iiwa_arm:iiwa_common",
+        ":high_level_planner",
+        "//common:add_text_logging_gflags",
+        "//lcmtypes:iiwa",
+        "//lcmtypes:object",
+        "//lcmtypes:object_target",
+        "//manipulation/util:move_ik_demo_base",
+        "//math:geometric_transform",
+        "@lcm",
+        "@lcmtypes_bot2_core",
+        "@lcmtypes_robotlocomotion",
+    ],
+)
+
+drake_cc_binary(
+    name = "move_iiwa_ee_1",
+    srcs = ["move_iiwa_ee_1.cc"],
+    data = [
+        "//examples/collaboration_station",     
+        "//examples/kuka_iiwa_arm:models",
+        "//manipulation/models/iiwa_description:models",
+    ],
+    deps = [
+        "@jsoncpp",
+        "//examples/kuka_iiwa_arm:iiwa_common",
+        ":high_level_planner_1",
+        "//common:add_text_logging_gflags",
+        "//lcmtypes:iiwa",
+        "//lcmtypes:object",
+        "//lcmtypes:object_target",
+	"//lcmtypes:start_time",
+        "//manipulation/util:move_ik_demo_base",
+        "//math:geometric_transform",
+        "@lcm",
+        "@lcmtypes_bot2_core",
+        "@lcmtypes_robotlocomotion",
+    ],
+)
+
+drake_cc_binary(
+    name = "move_iiwa_ee_2",
+    srcs = ["move_iiwa_ee_2.cc"],
+    data = [
+        "//examples/collaboration_station",     
+        "//examples/kuka_iiwa_arm:models",
+        "//manipulation/models/iiwa_description:models",
+    ],
+    deps = [
+        "@jsoncpp",
+        "//examples/kuka_iiwa_arm:iiwa_common",
+        ":high_level_planner_2",
+        "//common:add_text_logging_gflags",
+        "//lcmtypes:iiwa",
+        "//lcmtypes:object",
+        "//lcmtypes:object_target",
+        "//manipulation/util:move_ik_demo_base",
+        "//math:geometric_transform",
+        "@lcm",
+        "@lcmtypes_bot2_core",
+        "@lcmtypes_robotlocomotion",
+    ],
+)
+
+drake_cc_binary(
+    name = "move_iiwa_ee_3",
+    srcs = ["move_iiwa_ee_3.cc"],
+    data = [
+        "//examples/collaboration_station",     
+        "//examples/kuka_iiwa_arm:models",
+        "//manipulation/models/iiwa_description:models",
+    ],
+    deps = [
+        "@jsoncpp",
+        "//examples/kuka_iiwa_arm:iiwa_common",
+        ":high_level_planner_3",
+        "//common:add_text_logging_gflags",
+        "//lcmtypes:iiwa",
+        "//lcmtypes:object",
+        "//lcmtypes:object_target",
+        "//manipulation/util:move_ik_demo_base",
+        "//math:geometric_transform",
+        "@lcm",
+        "@lcmtypes_bot2_core",
+        "@lcmtypes_robotlocomotion",
+    ],
+)
+

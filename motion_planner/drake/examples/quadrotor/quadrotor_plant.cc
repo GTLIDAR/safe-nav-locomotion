@@ -13,16 +13,16 @@ namespace quadrotor {
 namespace {
 Matrix3d default_moment_of_inertia() {
   return (Eigen::Matrix3d() <<  // BR
-          0.0023, 0, 0,  // BR
-          0, 0.0023, 0,  // BR
-          0, 0, 0.0040).finished();
+          0.0015, 0, 0,  // BR
+          0, 0.0025, 0,  // BR
+          0, 0, 0.0035).finished();
 }
 }  // namespace
 
 template <typename T>
 QuadrotorPlant<T>::QuadrotorPlant()
-    : QuadrotorPlant(0.5,    // m (kg)
-                     0.175,  // L (m)
+    : QuadrotorPlant(0.775,  // m (kg)
+                     0.15,  // L (m)
                      default_moment_of_inertia(),
                      1.0,    // kF
                      0.0245  // kM
@@ -32,8 +32,7 @@ template <typename T>
 QuadrotorPlant<T>::QuadrotorPlant(double m_arg, double L_arg,
                                   const Matrix3d& I_arg, double kF_arg,
                                   double kM_arg)
-    : systems::LeafSystem<T>(
-          systems::SystemTypeTag<quadrotor::QuadrotorPlant>{}),
+    : systems::LeafSystem<T>(systems::SystemTypeTag<QuadrotorPlant>{}),
       g_{9.81}, m_(m_arg), L_(L_arg), kF_(kF_arg), kM_(kM_arg), I_(I_arg) {
   // Four inputs -- one for each propellor.
   this->DeclareInputPort("propellor_force", systems::kVectorValued, 4);
@@ -42,6 +41,7 @@ QuadrotorPlant<T>::QuadrotorPlant(double m_arg, double L_arg,
   this->DeclareVectorOutputPort("state", systems::BasicVector<T>(12),
                                 &QuadrotorPlant::CopyStateOut,
                                 {this->all_state_ticket()});
+  // TODO(russt): Declare input limits.  R2 has @ 2:1 thrust to weight ratio.
 }
 
 template <typename T>
@@ -59,6 +59,7 @@ void QuadrotorPlant<T>::CopyStateOut(const systems::Context<T> &context,
       context.get_continuous_state_vector().CopyToVector());
 }
 
+// TODO(russt): Generalize this to support the rotor locations on the Skydio R2.
 template <typename T>
 void QuadrotorPlant<T>::DoCalcTimeDerivatives(
     const systems::Context<T> &context,
@@ -141,7 +142,7 @@ std::unique_ptr<systems::AffineSystem<double>> StabilizingLQRController(
   Eigen::VectorXd u0 = Eigen::VectorXd::Constant(
       4, quadrotor_plant->m() * quadrotor_plant->g() / 4);
 
-  quad_context_goal->FixInputPort(0, u0);
+  quadrotor_plant->get_input_port(0).FixValue(quad_context_goal.get(), u0);
   quad_context_goal->SetContinuousState(x0);
 
   // Setup LQR cost matrices (penalize position error 10x more than velocity

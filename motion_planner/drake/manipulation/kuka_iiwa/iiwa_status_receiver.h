@@ -6,6 +6,7 @@
 #include "drake/common/drake_deprecated.h"
 #include "drake/lcmt_iiwa_status.hpp"
 #include "drake/manipulation/kuka_iiwa/iiwa_constants.h"
+#include "drake/multibody/plant/multibody_plant.h"
 #include "drake/systems/framework/leaf_system.h"
 
 namespace drake {
@@ -20,7 +21,7 @@ namespace kuka_iiwa {
 ///
 /// This system has one abstract-valued input port of type lcmt_iiwa_status.
 ///
-/// This system has many vector-valued ouput ports, each of which has exactly
+/// This system has many vector-valued output ports, each of which has exactly
 /// num_joints elements.  The ports will output zeros until an input message is
 /// received.
 //
@@ -51,12 +52,17 @@ class IiwaStatusReceiver : public systems::LeafSystem<double> {
   const systems::OutputPort<double>& get_torque_external_output_port() const;
   //@}
 
+  void SetInitialPosition(Eigen::VectorXd init_state);
+
+
  private:
   template <std::vector<double> drake::lcmt_iiwa_status::*>
   void CalcLcmOutput(const systems::Context<double>&,
                      systems::BasicVector<double>*) const;
 
+  Eigen::VectorXd init_state_;
   const int num_joints_;
+
 };
 
 }  // namespace kuka_iiwa

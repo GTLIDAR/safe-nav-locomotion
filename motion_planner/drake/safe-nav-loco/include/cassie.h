@@ -35,7 +35,7 @@ private:
   std::vector<Eigen::Matrix<double, 9, 1>> l_foot_list;
   std::vector<Eigen::Matrix<double, 9, 1>> r_foot_list;
   std::vector<Eigen::Matrix<double, 1, 1>> heading_list;
-  std::vector<Eigen::Matrix<double, 3, 1>> location_list;
+  std::vector<Eigen::Matrix<double, 6, 1>> location_list;
 
   mutable int step = 0;
 
@@ -49,7 +49,7 @@ public:
                   std::vector<Eigen::Matrix<double, 9, 1>> l_foot_l,
                   std::vector<Eigen::Matrix<double, 9, 1>> r_foot_l,
                   std::vector<Eigen::Matrix<double, 1, 1>> heading_l,
-                  std::vector<Eigen::Matrix<double, 3, 1>> location_l);
+                  std::vector<Eigen::Matrix<double, 6, 1>> location_l);
 
 private:
   Eigen::Matrix<double, 27, 1> DoIK(const Eigen::Matrix<double, 9, 1>& COM,

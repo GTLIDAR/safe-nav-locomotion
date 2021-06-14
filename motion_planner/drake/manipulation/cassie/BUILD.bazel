@@ -1,0 +1,84 @@
+# -*- python -*-
+
+load(
+    "@drake//tools/skylark:drake_cc.bzl",
+    "drake_cc_googletest",
+    "drake_cc_library",
+    "drake_cc_package_library",
+)
+load("//tools/lint:lint.bzl", "add_lint_tests")
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+drake_cc_package_library(
+    name = "cassie",
+    deps = [
+        ":cassie_command_receiver",
+        ":cassie_command_sender",
+        ":cassie_constants",
+        ":cassie_status_receiver",
+        ":cassie_status_sender",
+    ],
+)
+
+drake_cc_library(
+    name = "cassie_constants",
+    srcs = ["cassie_constants.cc"],
+    hdrs = ["cassie_constants.h"],
+    deps = [
+        "//common:essential",
+    ],
+)
+
+drake_cc_library(
+    name = "cassie_command_receiver",
+    srcs = ["cassie_command_receiver.cc"],
+    hdrs = ["cassie_command_receiver.h"],
+    deps = [
+        ":cassie_constants",
+        "//common:essential",
+        "//lcmtypes:lcmtypes_drake_cc",
+        "//systems/framework:leaf_system",
+        "//systems/lcm:lcm_pubsub_system",
+    ],
+)
+
+drake_cc_library(
+    name = "cassie_command_sender",
+    srcs = ["cassie_command_sender.cc"],
+    hdrs = ["cassie_command_sender.h"],
+    deps = [
+        ":cassie_constants",
+        "//common:essential",
+        "//lcmtypes:lcmtypes_drake_cc",
+        "//systems/framework:leaf_system",
+    ],
+)
+
+drake_cc_library(
+    name = "cassie_status_receiver",
+    srcs = ["cassie_status_receiver.cc"],
+    hdrs = ["cassie_status_receiver.h"],
+    deps = [
+        ":cassie_constants",
+        "//common:essential",
+        "//lcmtypes:lcmtypes_drake_cc",
+        "//systems/framework:leaf_system",
+    ],
+)
+
+drake_cc_library(
+    name = "cassie_status_sender",
+    srcs = ["cassie_status_sender.cc"],
+    hdrs = ["cassie_status_sender.h"],
+    deps = [
+        ":cassie_constants",
+        "//common:essential",
+        "//lcmtypes:lcmtypes_drake_cc",
+        "//systems/framework:leaf_system",
+    ],
+)
+
+add_lint_tests()

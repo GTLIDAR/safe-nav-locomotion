@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<sdf version='1.6'>
+<model name="navigation_environment">
+  <link name="floor">
+    <pose>0 0 0 0 0 0 </pose>
+    <inertial>
+      <mass>1</mass>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+    </inertial>
+
+    <visual name='ground'>
+      <pose> 5.975 13.145 -0.25 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>11.95 26.29 0.5</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>250 251 245 1.0</diffuse>
+      </material>
+    </visual>
+
+        <visual name='border_top'>
+      <pose> -0.075 13.145 1.5 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>.15 26.29 3</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>245 241 222 1.0</diffuse>
+      </material>
+    </visual>
+
+        <visual name='border_bottom'>
+      <pose> 12.025 13.145 1.5 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>.15 26.29 3</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>245 241 222 1.0</diffuse>
+      </material>
+    </visual>
+
+            <visual name='border_left'>
+      <pose> 5.975 -0.075 1.5 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>11.95 0.15 3</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>245 241 222 1.0</diffuse>
+      </material>
+    </visual>
+
+            <visual name='border_right'>
+      <pose> 5.975 26.365 1.5 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>11.95 0.15 3</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>245 241 222 1.0</diffuse>
+      </material>
+    </visual>
+
+            <visual name='sep_wall'>
+      <pose> 2.39 19.12 1.5 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>4.78 0.15 3</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>245 241 222 1.0</diffuse>
+      </material>
+    </visual>
+
+                <visual name='sep_wall2'>
+      <pose> 9.56 19.12 1.5 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>4.78 0.15 3</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>245 241 222 1.0</diffuse>
+      </material>
+    </visual>
+
+           <visual name='cube_obs'>
+      <pose> 5.975 8.365 1.5 0 0 0</pose>
+      <geometry>
+        <box> 
+          <size>2.39 2.39 3</size>
+        </box>
+      </geometry>
+      <material>
+        <diffuse>245 241 222 1.0</diffuse>
+      </material>
+    </visual>
+
+
+
+
+   </link>
+</model>
+</sdf>

@@ -43,6 +43,14 @@ drake_lcm_cc_library(
 )
 
 drake_lcm_cc_library(
+    name = "TAMP_waypoint",
+    lcm_package = "drake",
+    lcm_srcs = [
+        "lcmt_TAMP_waypoint.lcm",
+    ],
+)
+
+drake_lcm_cc_library(
     name = "body_acceleration",
     lcm_package = "drake",
     lcm_srcs = ["lcmt_body_acceleration.lcm"],
@@ -292,6 +300,22 @@ drake_lcm_cc_library(
 )
 
 drake_lcm_cc_library(
+    name = "object",
+    lcm_package = "drake",
+    lcm_srcs = [
+        "lcmt_object_status.lcm",
+    ],
+)
+
+drake_lcm_cc_library(
+    name = "object_target",
+    lcm_package = "drake",
+    lcm_srcs = [
+	    "lcmt_object_target.lcm"
+    ],
+)
+
+drake_lcm_cc_library(
     name = "viewer2_comms",
     lcm_package = "drake",
     lcm_srcs = [
@@ -338,6 +362,8 @@ LCMTYPES_CC = [
     ":iiwa",
     ":inverse_dynamics_debug_info",
     ":jaco",
+    ":object",
+    ":object_target",
     ":joint_pd_override",
     ":manipulator_plan_move_end_effector",
     ":piecewise_polynomial",

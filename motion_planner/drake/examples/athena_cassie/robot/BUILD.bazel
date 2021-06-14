@@ -1,0 +1,84 @@
+# -*- python -*-
+
+load(
+    "@drake//tools/skylark:drake_cc.bzl",
+    "drake_cc_googletest",
+    "drake_cc_library",
+    "drake_cc_package_library",
+)
+load("//tools/lint:lint.bzl", "add_lint_tests")
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+drake_cc_package_library(
+    name = "robot",
+    deps = [
+        ":athena_cassie_command_receiver",
+        ":athena_cassie_command_sender",
+        ":athena_cassie_constants",
+        ":athena_cassie_status_receiver",
+        ":athena_cassie_status_sender",
+    ],
+)
+
+drake_cc_library(
+    name = "athena_cassie_constants",
+    srcs = ["athena_cassie_constants.cc"],
+    hdrs = ["athena_cassie_constants.h"],
+    deps = [
+        "//common:essential",
+    ],
+)
+
+drake_cc_library(
+    name = "athena_cassie_command_receiver",
+    srcs = ["athena_cassie_command_receiver.cc"],
+    hdrs = ["athena_cassie_command_receiver.h"],
+    deps = [
+        ":athena_cassie_constants",
+        "//common:essential",
+        "//lcmtypes:lcmtypes_drake_cc",
+        "//systems/framework:leaf_system",
+        "//systems/lcm:lcm_pubsub_system",
+    ],
+)
+
+drake_cc_library(
+    name = "athena_cassie_command_sender",
+    srcs = ["athena_cassie_command_sender.cc"],
+    hdrs = ["athena_cassie_command_sender.h"],
+    deps = [
+        ":athena_cassie_constants",
+        "//common:essential",
+        "//lcmtypes:lcmtypes_drake_cc",
+        "//systems/framework:leaf_system",
+    ],
+)
+
+drake_cc_library(
+    name = "athena_cassie_status_receiver",
+    srcs = ["athena_cassie_status_receiver.cc"],
+    hdrs = ["athena_cassie_status_receiver.h"],
+    deps = [
+        ":athena_cassie_constants",
+        "//common:essential",
+        "//lcmtypes:lcmtypes_drake_cc",
+        "//systems/framework:leaf_system",
+    ],
+)
+
+drake_cc_library(
+    name = "athena_cassie_status_sender",
+    srcs = ["athena_cassie_status_sender.cc"],
+    hdrs = ["athena_cassie_status_sender.h"],
+    deps = [
+        ":athena_cassie_constants",
+        "//common:essential",
+        "//lcmtypes:lcmtypes_drake_cc",
+        "//systems/framework:leaf_system",
+    ],
+)
+
+add_lint_tests()

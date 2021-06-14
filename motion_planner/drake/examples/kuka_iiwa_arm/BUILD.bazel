@@ -13,13 +13,30 @@ load(
 load("@drake//tools/install:install.bzl", "install")
 load("@drake//tools/install:install_data.bzl", "install_data")
 load("//tools/lint:lint.bzl", "add_lint_tests")
-load(
-    "@drake//tools/skylark:drake_py.bzl",
-    "drake_py_test",
-)
 
 package(
     default_visibility = [":__subpackages__"],
+)
+
+
+drake_cc_library(
+    name = "iiwa",
+    srcs = ["iiwa.cc"],
+    hdrs = [
+        "iiwa.h",
+    ],
+    data = [":models"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//common:default_scalars",
+        "//common:essential",
+        "//common:find_resource",
+        "//systems/framework",
+        "//systems/analysis",
+        "//multibody/plant",
+        "//multibody/parsing",
+        "//multibody/inverse_kinematics",
+    ],
 )
 
 drake_cc_library(
@@ -32,11 +49,10 @@ drake_cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        "//attic/multibody:rigid_body_tree",
-        "//attic/multibody/parsers",
         "//common:find_resource",
         "//common/trajectories:piecewise_polynomial",
         "//manipulation/kuka_iiwa:iiwa_constants",
+        "//manipulation/util:robot_plan_utils",
         "@lcmtypes_bot2_core",
         "@lcmtypes_robotlocomotion",
     ],
@@ -46,30 +62,9 @@ drake_cc_library(
     name = "iiwa_lcm",
     srcs = ["iiwa_lcm.cc"],
     hdrs = ["iiwa_lcm.h"],
-    # TODO(hongkai.dai): move this package to manipulation folder.
     visibility = ["//visibility:public"],
     deps = [
-        ":iiwa_common",
-        "//attic/multibody:inverse_kinematics",
-        "//attic/multibody:rigid_body_tree",
-        "//attic/multibody/rigid_body_plant:contact_results",
-        "//common/trajectories:piecewise_polynomial",
-        "//lcmtypes:iiwa",
         "//manipulation/kuka_iiwa",
-        "//systems/framework:leaf_system",
-        "//systems/lcm:lcm_pubsub_system",
-    ],
-)
-
-drake_cc_library(
-    name = "oracular_state_estimator",
-    srcs = ["oracular_state_estimator.cc"],
-    hdrs = ["oracular_state_estimator.h"],
-    visibility = ["//visibility:public"],
-    deps = [
-        "//attic/manipulation/util:robot_state_msg_translator",
-        "//systems/framework:leaf_system",
-        "@lcmtypes_bot2_core",
     ],
 )
 
@@ -96,8 +91,8 @@ drake_cc_library(
     hdrs = ["kuka_torque_controller.h"],
     visibility = ["//visibility:public"],
     deps = [
-        "//attic/multibody:rigid_body_tree",
-        "//attic/systems/controllers:rbt_inverse_dynamics",
+        "//multibody/plant",
+        "//systems/controllers:inverse_dynamics",
         "//systems/controllers:pid_controller",
         "//systems/controllers:state_feedback_controller_interface",
         "//systems/framework:diagram_builder",
@@ -117,37 +112,9 @@ drake_cc_binary(
     deps = [
         ":iiwa_common",
         ":lcm_plan_interpolator",
-        "//common:text_logging_gflags",
+        "//common:add_text_logging_gflags",
         "//lcm:drake_lcm",
         "//systems/analysis:simulator",
-    ],
-)
-
-drake_cc_binary(
-    name = "iiwa_wsg_simulation",
-    srcs = ["iiwa_wsg_simulation.cc"],
-    add_test_rule = 1,
-    data = [
-        ":models",
-        "//manipulation/models/iiwa_description:models",
-        "//manipulation/models/wsg_50_description:models",
-    ],
-    # TODO(kyle.edwards@kitware.com): Re-enable this test when it no longer
-    # causes timeouts in kcov.
-    tags = ["no_kcov"],
-    test_rule_args = ["--simulation_sec=0.01"],
-    deps = [
-        ":iiwa_common",
-        ":iiwa_lcm",
-        ":oracular_state_estimator",
-        "//common:text_logging_gflags",
-        "//examples/kuka_iiwa_arm/iiwa_world:iiwa_wsg_diagram_factory",
-        "//lcm",
-        "//manipulation/schunk_wsg",
-        "//systems/analysis",
-        "//systems/primitives:constant_vector_source",
-        "//systems/primitives:demultiplexer",
-        "//systems/primitives:discrete_derivative",
     ],
 )
 
@@ -167,13 +134,13 @@ drake_cc_binary(
         ":iiwa_common",
         ":iiwa_lcm",
         ":kuka_torque_controller",
-        "//attic/manipulation/util:sim_diagram_builder",
-        "//attic/multibody:rigid_body_tree_construction",
-        "//attic/multibody/rigid_body_plant:frame_visualizer",
-        "//attic/systems/controllers:rbt_inverse_dynamics_controller",
-        "//common:text_logging_gflags",
+        "//common:add_text_logging_gflags",
+        "//geometry:geometry_visualization",
         "//lcm",
+        "//multibody/parsing",
+        "//multibody/plant",
         "//systems/analysis",
+        "//systems/controllers:inverse_dynamics_controller",
         "//systems/controllers:state_feedback_controller_interface",
         "//systems/primitives:constant_vector_source",
         "//systems/primitives:demultiplexer",
@@ -191,6 +158,8 @@ drake_cc_binary(
     deps = [
         ":iiwa_common",
         ":iiwa_lcm",
+        "//multibody/parsing",
+        "//multibody/plant",
         "@lcmtypes_bot2_core",
         "@lcmtypes_robotlocomotion",
     ],
@@ -205,10 +174,9 @@ drake_cc_binary(
     ],
     deps = [
         ":iiwa_common",
-        "//attic/manipulation/planner:constraint_relaxing_ik",
-        "//attic/multibody/parsers",
-        "//common:text_logging_gflags",
+        "//common:add_text_logging_gflags",
         "//lcmtypes:iiwa",
+        "//manipulation/util:move_ik_demo_base",
         "//math:geometric_transform",
         "@lcm",
         "@lcmtypes_bot2_core",
@@ -231,18 +199,6 @@ alias(
 # === test/ ===
 
 drake_cc_googletest(
-    name = "iiwa_lcm_test",
-    data = [
-        "//manipulation/models/iiwa_description:models",
-    ],
-    deps = [
-        ":iiwa_lcm",
-        "//attic/manipulation/util:world_sim_tree_builder",
-        "//systems/framework",
-    ],
-)
-
-drake_cc_googletest(
     name = "kuka_torque_controller_test",
     data = [
         "//manipulation/models/iiwa_description:models",
@@ -253,6 +209,7 @@ drake_cc_googletest(
         "//attic/multibody:rigid_body_tree",
         "//attic/multibody:rigid_body_tree_construction",
         "//common/test_utilities:eigen_matrix_compare",
+        "//multibody/parsing",
     ],
 )
 
@@ -278,7 +235,6 @@ sh_test(
         "--urdf",
         "$(location :dual_iiwa14_polytope_collision.urdf)",
         "--simulation_sec=0.01",
-        "--novisualize_frames",
     ],
     data = [
         ":dual_iiwa14_polytope_collision.urdf",
@@ -292,12 +248,10 @@ sh_test(
 install(
     name = "install",
     install_tests = [
-        ":test/iiwa_wsg_simulation_installed_test.py",
         ":test/kuka_plan_runner_installed_test.py",
         ":test/kuka_simulation_installed_test.py",
     ],
     targets = [
-        ":iiwa_wsg_simulation",
         ":kuka_plan_runner",
         ":kuka_simulation",
     ],
@@ -315,7 +269,6 @@ install(
 
 add_lint_tests(
     python_lint_extra_srcs = [
-        ":test/iiwa_wsg_simulation_installed_test.py",
         ":test/kuka_plan_runner_installed_test.py",
         ":test/kuka_simulation_installed_test.py",
     ],
