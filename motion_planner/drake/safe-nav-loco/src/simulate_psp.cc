@@ -3,10 +3,9 @@
 #include "drake/safe-nav-loco/include/beliefIOParser.h"
 #include "drake/safe-nav-loco/include/phase_space_planner.h"
 
-namespace phase_space_planner
-{
-namespace
-{
+namespace drake {
+namespace phase_space_planner {
+namespace {
 
 template <int Derived>
 int read_data(std::vector<Eigen::Matrix<double, Derived, 1>>& data, std::string& file_name) 
@@ -99,7 +98,7 @@ int DoMain()
   obs0 << (0*cellsize)+(cellsize/2), (cellsize*0)+(cellsize/2), 2.25;
  
 
-  PhaseSpacePlanner psp;
+  ::phase_space_planner::PhaseSpacePlanner psp;
   psp.Init(apex0, d0, foot0);
   psp.InitObstacle(obs0,obs20);
 
@@ -109,7 +108,7 @@ int DoMain()
   double v;
   double pre_v = 0.1;
 
-  for (int i = 0; i < 60; i++) 
+  for (int i = 0; i < 460; i++) 
   {
     std::vector<int> obstacle_location = parser.getPropertyArray("obstacle_location");
     Eigen::Matrix<double, 3, 1> obs;
@@ -148,26 +147,13 @@ int DoMain()
     {
 
       dheight = 0;
-   //   v = pre_v + 0.05;
-    //  if (pre_v >= 0.45)
-    //  {
-    //    v = 0.45;
-    //  }
-     // std::cout << "flat: ";
+
     }
     else if (stepH == 2)
     {
       
       dheight = -0.1;
-     // std::cout << "down: ";
-     /*
-      v = pre_v + 0.05;
-      
-      if (pre_v > 0.4)
-      {
-        v = 0.4;
-      }
-      */
+
       v = pre_v + 0.05;
       if (pre_v >= 0.6)
       {
@@ -178,37 +164,17 @@ int DoMain()
     {
       
       dheight = 0.1;
-     // std::cout << "down: ";
-     /*
-      v = pre_v + 0.05;
-      
-      if (pre_v > 0.4)
-      {
-        v = 0.4;
-      }
-      */
+
       v = pre_v + 0.05;
       if (pre_v >= 0.6)
       {
         v = 0.6;
       }
     }
-    /*
-    if ( turn == 2)
-    {
-      turn = 3;
-    }
-    if ( turn == 1)
-    {
-      turn = 2;
-    }
-
-  */
-
 
     if (turn == 0)
     {
-      dheading = 0.261799;//0.3926991;
+      dheading =0.3926991;// 0.261799;//
       std::cout << "Turn left 22.5: ";
       if (v > 0.3)
       {
@@ -220,7 +186,7 @@ int DoMain()
         }
 
       }
-      //v =0.2;
+
 
     }
         else if (turn == 1)
@@ -244,16 +210,16 @@ int DoMain()
     {
       dheading = 0;      
     }
-        else if (turn == 22)
+    else if (turn == 22)
     {
-      dheading = 0.00001;      
+      dheading = 0.000001;      
     }
 
 
     else if (turn == 3)
     { 
 
-      dheading = -0.261799;//-0.3926991;
+      dheading = -0.3926991;//-0.261799;//-0.3926991;
       std::cout << "Turn Right 22.5: ";
 
       if (v > 0.3)
@@ -578,9 +544,9 @@ int DoMain()
 
 }  // namespace
 }  // namespace phase_space_planner
-
+} //namesoace drake
 int main(int argc, char* argv[]) 
 {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
-  return phase_space_planner::DoMain();
+  return drake::phase_space_planner::DoMain();
 }

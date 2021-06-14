@@ -184,7 +184,7 @@ void DoMain() {
   
   // Set up simulator.
   auto simulator = std::make_unique<Simulator<double>>(*diagram, std::move(context));
-  simulator->set_target_realtime_rate(1); //runtime rate 
+  simulator->set_target_realtime_rate(0.25); //runtime rate 
   simulator->Initialize();
   simulator->AdvanceTo(500);
 

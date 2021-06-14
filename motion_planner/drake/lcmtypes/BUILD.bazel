@@ -43,6 +43,14 @@ drake_lcm_cc_library(
 )
 
 drake_lcm_cc_library(
+    name = "TAMP_waypoint",
+    lcm_package = "drake",
+    lcm_srcs = [
+        "lcmt_TAMP_waypoint.lcm",
+    ],
+)
+
+drake_lcm_cc_library(
     name = "body_acceleration",
     lcm_package = "drake",
     lcm_srcs = ["lcmt_body_acceleration.lcm"],

@@ -23,7 +23,7 @@ public:
 
   double d_t;
   double Tstep=0;
-  
+  double sag;
   // Discrete Trajectory
   std::vector<Eigen::Matrix<double, 5, 1>> apex_list;
   std::vector<Eigen::Matrix<double, 5, 1>> d_list;
@@ -51,7 +51,7 @@ public:
   // Moving Obstacle
   std::vector<Eigen::Matrix<double, 6, 1>> obstacle_list;
 
-
+  double N,S,E,W;
 
     // wsq
   std::vector<Eigen::Matrix<double, 2, 1>> WSQlist;

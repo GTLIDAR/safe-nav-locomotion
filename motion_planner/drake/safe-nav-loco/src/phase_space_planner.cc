@@ -99,7 +99,7 @@ namespace phase_space_planner
 
     double opt_vn;
        
-
+    double fine_num=0;
     // Switch
     double s_switch, ds_switch, l_switch, dl_switch, v_switch, dv_switch;
 
@@ -134,58 +134,12 @@ namespace phase_space_planner
               if (counter == 60) // if done with the for loop, do an extra one but chose the mid-point
               {
                 
-                //prim(3, 0) = good_vn[(sweep_c/2)];
-               /*
-                if(sweep_c == 0)
-                {
-                  prim(3, 0) = 0.2;
-                  //goodlateral(0,0) = 0;
-                  if (l2 > 0)
-                  {
-                  //COS = std::cos(X_apex(3, 0) + prim(1, 0)-0.5*std::abs((0.2 - l2)));
-                  //SIN = std::sin(X_apex(3, 0) + prim(1, 0)-0.5*std::abs((0.2 - l2)));
-                    phi = 0;//-0.1 - waypoint(3,0);
-                    //prim(1, 0)=prim(1,0)+phi;
-                    COS = std::cos(X_apex(3, 0) + prim(1, 0)+phi);
-                    SIN = std::sin(X_apex(3, 0) + prim(1, 0)+phi);
-                  }
-                  else{
-                  //COS = std::cos(X_apex(3, 0) + prim(1, 0)+0.5*std::abs((0.2 - l2)));
-                  //SIN = std::sin(X_apex(3, 0) + prim(1, 0)+0.5*std::abs((0.2 - l2)));
-                   phi = 0;//0.1 - waypoint(3,0);
-                    //prim(1, 0)=prim(1,0)+phi;
-                    COS = std::cos(X_apex(3, 0) + prim(1, 0)+phi);
-                    SIN = std::sin(X_apex(3, 0) + prim(1, 0)+phi);
-                  }
-                  
 
-                }
-                */
-               // else{
-                 // if (goodlateral(0,0) == 0)
-                 // {
-                 //    prim(3, 0) = good_vn[0];
-                 //     std::cout << "prev is bad lateral"   << std::endl;
-                      //phi = 0;
-                 // }
-                 // else
-                 // {
                   prim(3, 0) = good_vn[((sweep_c-1)/2)];
                   prim(3, 0) = opt_vn;
-                  //std::cout << "prev is good lateral"   << std::endl;
-                  //goodlateral(0,0) = 0;
-                  //phi = 0;
-                 //} 
-                 //goodlateral(0,0) = 1;
+     
                   phi = 0 ;//- waypoint(3,0);
-                  
-                // }
-
-                //prim(3, 0) = sum_vn/sweep_c;
-                //std::cout <<  "availble vn= "<< good_vn[0] << ", " << good_vn[sweep_c-1]<< std::endl;
-                //std::cout <<  "used vn= "<< prim (3, 0) << std::endl;
-                //std::cout << "good_vn size= "<< sweep_c-1   << std::endl;
-                //std::cout <<  "phi= "<< phi << std::endl;
+     
               }
             //}
            // else //if turning exit the for loop and don't change the assigned apex velocity
@@ -410,187 +364,109 @@ namespace phase_space_planner
 
           if(stance == 1) 
            {
-           /* 
-            if (prim(0, 0 ) < 0.4)
-            {
-                  if (l2 < 0)
-                {
-                  good_vn[sweep_c]=prim(3, 0);
-                  //std::cout << "good_vn= "<< good_vn[sweep_c]<< std::endl;
-                  sweep_c= sweep_c+1;
-                  sum_vn = sum_vn + prim(3,0);
-                  //std::cout << "I am here"<< std::endl;
 
-                  new_cost = std::abs((-0.1-l2)) + 5*std::abs((-0.135-(l2_foot - l2)));  //delta_y1 + delta_y2
-                    //std::cout << "vn= "<< prim(3, 0) << std::endl;
-                    //std::cout << "new_cost= "<< new_cost << std::endl;   
-                  if(new_cost < cost)
-                  {
-                    cost = new_cost;
-                    opt_vn = prim(3, 0);
-                   // std::cout << "opt_vn= "<< opt_vn << std::endl;
-                   // std::cout << "cost= "<< cost << std::endl;                    
-                  }
+              if (prim(1, 0) == 0)
+              {
+          
+                        good_vn[sweep_c]=prim(3, 0);
+                        //std::cout << "good_vn= "<< good_vn[sweep_c]<< std::endl;
+                        sweep_c= sweep_c+1;
+                        sum_vn = sum_vn + prim(3,0);
 
-
-
-                }
-            }
-            */
-
-          // else{
-            if (prim(1, 0) == 0)
-            {
-                //    if ((l2 < 0)  && (std::abs(l2_foot-l2) < 0.3) && (l2_foot > -0.5))
-                 //   {
-                      good_vn[sweep_c]=prim(3, 0);
-                      //std::cout << "good_vn= "<< good_vn[sweep_c]<< std::endl;
-                      sweep_c= sweep_c+1;
-                      sum_vn = sum_vn + prim(3,0);
-
-                      new_cost = std::abs((-0.1-l2)) + std::abs((-0.135-(l2_foot - l2)));  //delta_y1 + delta_y2
-                      //std::cout << "vn= "<< prim(3, 0) << std::endl;
-                      //std::cout << "new_cost= "<< new_cost << std::endl;                         
-                      if(new_cost < cost)
-                      {
-                        cost = new_cost;
-                        opt_vn = prim(3, 0);
-                        //std::cout << "opt_vn= "<< opt_vn << std::endl;
-                      //std::cout << "cost= "<< cost << std::endl;                        
-                      }
-                      
-                  // }
-
-            }
-            else{
-
-                //    if ((l2 < 0)  && (std::abs(l2_foot-l2) < 0.3) && (l2_foot > -0.5))
-                 //   {
-                      good_vn[sweep_c]=prim(3, 0);
-                      //std::cout << "good_vn= "<< good_vn[sweep_c]<< std::endl;
-                      sweep_c= sweep_c+1;
-                      sum_vn = sum_vn + prim(3,0);
-
-                      new_cost = 7*std::abs((l2)) + 4*std::abs((-0.075-(l2_foot - l2)));  //delta_y1 + delta_y2
-                      //std::cout << "vn= "<< prim(3, 0) << std::endl;
-                      //std::cout << "new_cost= "<< new_cost << std::endl;                         
-                      if(new_cost < cost)
-                      {
-                        cost = new_cost;
-                        if (prim(3, 0)>= 0.4)
+                        new_cost = std::abs((-0.1-l2)) + std::abs((-0.135-(l2_foot - l2)));  //delta_y1 + delta_y2
+                        //std::cout << "vn= "<< prim(3, 0) << std::endl;
+                        //std::cout << "new_cost= "<< new_cost << std::endl;                         
+                        if(new_cost < cost)
                         {
-                            opt_vn = 0.4;
+                          cost = new_cost;
+                          opt_vn = prim(3, 0);
+                          //std::cout << "opt_vn= "<< opt_vn << std::endl;
+                        //std::cout << "cost= "<< cost << std::endl;                        
                         }
-                        else{
-                        opt_vn = prim(3, 0);
+
+              }
+              else{
+
+                        good_vn[sweep_c]=prim(3, 0);
+                        //std::cout << "good_vn= "<< good_vn[sweep_c]<< std::endl;
+                        sweep_c= sweep_c+1;
+                        sum_vn = sum_vn + prim(3,0);
+
+                        new_cost = 7*std::abs((l2)) + 4*std::abs((-0.135-(l2_foot - l2)));  //delta_y1 + delta_y2
+                        //std::cout << "vn= "<< prim(3, 0) << std::endl;
+                        //std::cout << "new_cost= "<< new_cost << std::endl;                         
+                        if(new_cost < cost)
+                        {
+                          cost = new_cost;
+                          if (prim(3, 0)>= 0.4)
+                          {
+                              opt_vn = 0.4;
+                          }
+                          else{
+                          opt_vn = prim(3, 0);
+                          }
+                          //std::cout << "opt_vn= "<< opt_vn << std::endl;
+                        //std::cout << "cost= "<< cost << std::endl;                        
                         }
-                        //std::cout << "opt_vn= "<< opt_vn << std::endl;
-                      //std::cout << "cost= "<< cost << std::endl;                        
-                      }
-                      
-                  // }
 
-            }
-
-   
-               // }
+                  }
 
            }
            else
            {
-             /* 
-              if (prim(0, 0 ) < 0.4)
-              {
-                if (l2 > 0)
-                  {
-                    good_vn[sweep_c]=prim(3, 0);
-                    //std::cout << "good_vn= "<< good_vn[sweep_c]<< std::endl;
-                    sweep_c= sweep_c + 1;
-                    sum_vn = sum_vn + prim(3,0);
-                    //std::cout << "I am here"<< std::endl;
-                    new_cost = std::abs((0.1-l2)) + 5*std::abs((0.135-(l2_foot - l2)));  //delta_y1 + delta_y2
-                    //std::cout << "vn= "<< prim(3, 0) << std::endl;
-                    //std::cout << "new_cost= "<< new_cost << std::endl;                       
-                    if(new_cost < cost)
-                    {
-                      cost = new_cost;
-                      opt_vn = prim(3, 0);
-                     // std::cout << "opt_vn= "<< opt_vn << std::endl;
-                     // std::cout << "cost= "<< cost << std::endl;                      
-                    }
 
-                  }
+                if(prim(1, 0)==0)
+                {
 
-              }
-              */
-             //else
-             // {
-            if(prim(1, 0)==0)
-            {
-                               // if ((l2 > 0) && (std::abs(l2_foot-l2) < 0.3) && (l2_foot < 0.5))
-                 // {
-                    good_vn[sweep_c]=prim(3, 0);
-                    //std::cout << "good_vn= "<< good_vn[sweep_c]<< std::endl;
-                    sweep_c= sweep_c + 1;
-                    sum_vn = sum_vn + prim(3,0);
-                    //std::cout << "sweep_c= "<< sweep_c << std::endl;
-                    new_cost = std::abs((0.1-l2)) + std::abs((0.135-(l2_foot - l2)));  //delta_y1 + delta_y2
-                    //std::cout << "vn= "<< prim(3, 0) << std::endl;
-                    //std::cout << "new_cost= "<< new_cost << std::endl;   
-                    if(new_cost < cost)
-                    {
-                      cost = new_cost;
-                      opt_vn = prim(3, 0);
-                      //std::cout << "opt_vn= "<< opt_vn << std::endl;
-                     // std::cout << "cost= "<< cost << std::endl;
-                    }
-
-                 // }
-
-
-            }
-            else
-            {
-
-                    // if ((l2 > 0) && (std::abs(l2_foot-l2) < 0.3) && (l2_foot < 0.5))
-                 // {
-                    good_vn[sweep_c]=prim(3, 0);
-                    //std::cout << "good_vn= "<< good_vn[sweep_c]<< std::endl;
-                    sweep_c= sweep_c + 1;
-                    sum_vn = sum_vn + prim(3,0);
-                    //std::cout << "sweep_c= "<< sweep_c << std::endl;
-                    new_cost = 7*std::abs((l2)) + 4*std::abs((0.075-(l2_foot - l2)));  //delta_y1 + delta_y2
-                    //std::cout << "vn= "<< prim(3, 0) << std::endl;
-                    //std::cout << "new_cost= "<< new_cost << std::endl;   
-                    if(new_cost < cost)
-                    {
-                      cost = new_cost;
-                        if (prim(3, 0)>= 0.4)
+                        good_vn[sweep_c]=prim(3, 0);
+                        //std::cout << "good_vn= "<< good_vn[sweep_c]<< std::endl;
+                        sweep_c= sweep_c + 1;
+                        sum_vn = sum_vn + prim(3,0);
+                        //std::cout << "sweep_c= "<< sweep_c << std::endl;
+                        new_cost = std::abs((0.1-l2)) + std::abs((0.135-(l2_foot - l2)));  //delta_y1 + delta_y2
+                        //std::cout << "vn= "<< prim(3, 0) << std::endl;
+                        //std::cout << "new_cost= "<< new_cost << std::endl;   
+                        if(new_cost < cost)
                         {
-                            opt_vn = 0.4;
+                          cost = new_cost;
+                          opt_vn = prim(3, 0);
+                          //std::cout << "opt_vn= "<< opt_vn << std::endl;
+                         // std::cout << "cost= "<< cost << std::endl;
                         }
-                        else{
-                        opt_vn = prim(3, 0);
+
+                }
+                else
+                {
+                        good_vn[sweep_c]=prim(3, 0);
+                        //std::cout << "good_vn= "<< good_vn[sweep_c]<< std::endl;
+                        sweep_c= sweep_c + 1;
+                        sum_vn = sum_vn + prim(3,0);
+                        //std::cout << "sweep_c= "<< sweep_c << std::endl;
+                        new_cost = 7*std::abs((l2)) + 4*std::abs((0.135-(l2_foot - l2)));  //delta_y1 + delta_y2
+                        //std::cout << "vn= "<< prim(3, 0) << std::endl;
+                        //std::cout << "new_cost= "<< new_cost << std::endl;   
+                        if(new_cost < cost)
+                        {
+                          cost = new_cost;
+                            if (prim(3, 0)>= 0.4)
+                            {
+                                opt_vn = 0.4;
+                            }
+                            else{
+                            opt_vn = prim(3, 0);
+                            }
+                          //std::cout << "opt_vn= "<< opt_vn << std::endl;
+                         // std::cout << "cost= "<< cost << std::endl;
                         }
-                      //std::cout << "opt_vn= "<< opt_vn << std::endl;
-                     // std::cout << "cost= "<< cost << std::endl;
-                    }
-
-                 // }
-
-
-            }
-
-              // }
+                }
            }
-        
-
+    
 
         }
-        //std::cout << "dy1_n= " << l2 << ", l2_foot= "<< l2_foot << std::endl ;
+        //std::cout << "dy1_n= " << l2 << ", stance= "<< stance << std::endl ;
         //std::cout <<  "phi= "<< phi << std::endl;
         std::cout <<  "step length= "<< prim(0,0) << std::endl;
-        std::cout <<  "used vn= "<< prim (3, 0) << std::endl << std::endl << std::endl;
+        //std::cout <<  "used vn= "<< prim (3, 0) << std::endl << std::endl << std::endl;
 
      Eigen::Matrix<double, 8, 1> psp;
      psp << (X_apex(0, 0) - X_d(0, 0))*COS + (X_apex(1, 0) - X_d(1, 0))*SIN, s1_foot, X_apex(4, 0)*std::cos(prim(1, 0)-phi), s2, s2_foot, s2_dot, eps*forward_num, eps*backward_num;
@@ -625,19 +501,350 @@ namespace phase_space_planner
     X_apex(2, 0) = p_foot(2, 0) + prim(4, 0); 
     X_apex(3, 0) += prim(1, 0) ; //X_d(3, 0) + prim(1, 0) + phi;
     X_apex(4, 0) = prim(3, 0);
+    
 
- 
-  
-    X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)); //X_apex(0, 0);//prim(0, 0)*std::cos(X_apex(3, 0));
-    X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)); //X_apex(1, 0) ;//prim(0, 0)*std::sin(X_apex(3, 0));
-    X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
-    X_d(3, 0) += prim(1, 0);
-    X_d(4, 0) = prim(3, 0);
+    Eigen::Matrix<double, 5, 1> pre_apex = apex_list[step-1];
+    double prev_heading = pre_apex(3, 0);
+    //std::cout << "current= " << X_apex(3,0) << "  prev= " << prev_heading << std::endl << std::endl << std::endl;
+      if (prim(0, 0) > 0.4 && prim(0, 0) < 0.5)
+      {
+        sag = 4;
+      }
+      else if (prim(0, 0) > 0.5)
+      {
+        sag = 5;
+      }
+      else if (prim(0, 0) > 0.3 && prim(0, 0) < 0.4)
+      {
+        sag = 3;
+      }
+      else if (prim(0, 0) > 0.2 && prim(0, 0) < 0.3)
+      {
+        sag = 2;
+      }
 
-    waypoint(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)+phi);
-    waypoint(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)+phi);
+
+    if ((prim(1, 0) == 0) && (X_apex(3,0) != prev_heading))
+    {
+
+
+
+    /*  // nominal next fine cell number difference     
+      if(std::sin(X_apex(3, 0)) > 0.8 )
+      {
+        fine_num = 4;
+      }
+      else if(std::sin(X_apex(3, 0)) < -0.8)
+      {
+        fine_num = -4;
+      }
+      else if(std::cos(X_apex(3, 0)) < -0.8 )
+      {
+        fine_num = -4*26;
+      }     
+      else if(std::cos(X_apex(3, 0)) > 0.8)
+      {
+        fine_num = 4*26;
+      }      
+    */
+      if (stance == 0) //fine cell adjusment 
+      {
+          if (l2 > 0.314)
+        {
+           X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)) -0.208*std::sin(X_apex(3, 0)); //X_apex(0, 0);
+           X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)) +0.208*std::cos(X_apex(3, 0)); //X_apex(1, 0);
+           X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
+           X_d(3, 0) += prim(1, 0);
+           X_d(4, 0) = prim(3, 0);
+            
+           //fine cell adjustment 
+              if(std::sin(X_apex(3, 0)) > 0.8 )
+              {
+                fine_num = -26;
+                N=2; S=0; E=sag; W=0;
+              }
+              else if(std::sin(X_apex(3, 0)) < -0.8)
+              {
+                fine_num = 26;
+                N=0; S=2; E=0; W=sag;
+              }
+              else if(std::cos(X_apex(3, 0)) < -0.8 )
+              {
+                fine_num = -1;
+                N=sag; S=0; E=0; W=2;
+              }     
+              else if(std::cos(X_apex(3, 0)) > 0.8)
+              {
+                fine_num = 1;
+                N=0; S=sag; E=2; W=0;
+              } 
+
+         }
+          else if (l2 > 0.2)
+        {
+           X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)) -0.104*std::sin(X_apex(3, 0)); //X_apex(0, 0);
+           X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)) +0.104*std::cos(X_apex(3, 0)); //X_apex(1, 0);
+           X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
+           X_d(3, 0) += prim(1, 0);
+           X_d(4, 0) = prim(3, 0);
+            
+           //fine cell adjustment 
+              if(std::sin(X_apex(3, 0)) > 0.8 )
+              {
+                fine_num = -26;
+                N=1; S=0; E=sag; W=0;
+              }
+              else if(std::sin(X_apex(3, 0)) < -0.8)
+              {
+                fine_num = 26;
+                N=0; S=1; E=0; W=sag;
+              }
+              else if(std::cos(X_apex(3, 0)) < -0.8 )
+              {
+                fine_num = -1;
+                N=sag; S=0; E=0; W=1;
+              }     
+              else if(std::cos(X_apex(3, 0)) > 0.8)
+              {
+                fine_num = 1;
+                N=0; S=sag; E=1; W=0;
+              } 
+
+         }
+         
+         else if (l2 < 0)
+         {
+          if (l2 + 0.104)
+          {
+           X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)) +0.104*std::sin(X_apex(3, 0)); //X_apex(0, 0);
+           X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)) -0.104*std::cos(X_apex(3, 0)); //X_apex(1, 0);
+           X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
+           X_d(3, 0) += prim(1, 0);
+           X_d(4, 0) = prim(3, 0);
+          }
+          else
+          {
+           X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)) +0.208*std::sin(X_apex(3, 0)); //X_apex(0, 0);
+           X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)) -0.208*std::cos(X_apex(3, 0)); //X_apex(1, 0);
+           X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
+           X_d(3, 0) += prim(1, 0);
+           X_d(4, 0) = prim(3, 0);
+
+          }
+           //X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)) +0.104*std::sin(X_apex(3, 0)); //X_apex(0, 0);
+          // X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)) -0.104*std::cos(X_apex(3, 0)); //X_apex(1, 0);
+          // X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
+          // X_d(3, 0) += prim(1, 0);
+          // X_d(4, 0) = prim(3, 0);
+            //std::cout <<  "here 11 " << std::endl;
+
+              if(std::sin(X_apex(3, 0)) > 0.8 )
+              {
+                fine_num = 26;
+                N=0; S=1; E=sag; W=0;
+              }
+              else if(std::sin(X_apex(3, 0)) < -0.8)
+              {
+                fine_num = -26;
+                N=1; S=0; E=0; W=sag;
+              }
+              else if(std::cos(X_apex(3, 0)) < -0.8 )
+              {
+                fine_num = 1;
+                N=sag; S=0; E=1; W=0;
+              }     
+              else if(std::cos(X_apex(3, 0)) > 0.8)
+              {
+                fine_num = -1;
+                N=0; S=sag; E=0; W=1;
+              } 
+         }
+         
+           else{
+            X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)); //X_apex(0, 0);
+            X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)); //X_apex(1, 0);
+            X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
+            X_d(3, 0) += prim(1, 0);
+            X_d(4, 0) = prim(3, 0);  
+                    if(std::sin(X_apex(3, 0)) > 0.8 )
+                    {
+                       N=0;  S=0;  E=sag;  W=0;          
+                    }
+                    else if(std::sin(X_apex(3, 0)) < -0.8)
+                    {
+                       N=0;  S=0;  E=0;  W=sag;  
+                    }
+                    else if(std::cos(X_apex(3, 0)) < -0.8 )
+                    {
+                      N=sag;  S=0;  E=0;  W=0;  
+                    }     
+                    else if(std::cos(X_apex(3, 0)) > 0.8)
+                    {
+                      N=0;  S=sag;  E=0;  W=0;  
+                    }      
+
+           }
+      }
+      else
+      {
+          if (l2 < -0.314)
+        {
+          X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)) +0.208*std::sin(X_apex(3, 0)); //X_apex(0, 0);
+          X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)) -0.208*std::cos(X_apex(3, 0)); //X_apex(1, 0);
+          X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
+          X_d(3, 0) += prim(1, 0);
+          X_d(4, 0) = prim(3, 0);
+             // std::cout <<  "here 2 " << std::endl;
+              if(std::sin(X_apex(3, 0)) > 0.8 )
+              {
+                fine_num = 26;
+                N=0; S=2; E=sag; W=0;
+              }
+              else if(std::sin(X_apex(3, 0)) < -0.8)
+              {
+                fine_num = -26;
+                N=2; S=0; E=0; W=sag;                
+              }
+              else if(std::cos(X_apex(3, 0)) < -0.8 )
+              {
+                fine_num = 1;
+                N=sag; S=0; E=2; W=0;                
+              }     
+              else if(std::cos(X_apex(3, 0)) > 0.8)
+              {
+                fine_num = -1;
+                N=0; S=sag; E=0; W=2;               
+              } 
+
+
+
+        }
+
+         else if (l2 < -0.2)
+        {
+          X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)) +0.104*std::sin(X_apex(3, 0)); //X_apex(0, 0);
+          X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)) -0.104*std::cos(X_apex(3, 0)); //X_apex(1, 0);
+          X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
+          X_d(3, 0) += prim(1, 0);
+          X_d(4, 0) = prim(3, 0);
+           //   std::cout <<  "here 2 " << std::endl;
+              if(std::sin(X_apex(3, 0)) > 0.8 )
+              {
+                fine_num = 26;
+                N=0; S=1; E=sag; W=0;
+              }
+              else if(std::sin(X_apex(3, 0)) < -0.8)
+              {
+                fine_num = -26;
+                N=1; S=0; E=0; W=sag;                
+              }
+              else if(std::cos(X_apex(3, 0)) < -0.8 )
+              {
+                fine_num = 1;
+                N=sag; S=0; E=1; W=0;                
+              }     
+              else if(std::cos(X_apex(3, 0)) > 0.8)
+              {
+                fine_num = -1;
+                N=0; S=sag; E=0; W=1;               
+              } 
+
+
+
+        }
+        else if (l2 > 0)
+        {
+          X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)) -0.104*std::sin(X_apex(3, 0)); //X_apex(0, 0);
+          X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)) +0.104*std::cos(X_apex(3, 0)); //X_apex(1, 0);
+          X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
+          X_d(3, 0) += prim(1, 0);
+          X_d(4, 0) = prim(3, 0);
+             // std::cout <<  "here 22 " << std::endl;
+              if(std::sin(X_apex(3, 0)) > 0.8 )
+              {
+                fine_num = -26;
+                N=1; S=0; E=sag; W=0; 
+              }
+              else if(std::sin(X_apex(3, 0)) < -0.8)
+              {
+                fine_num = 26;
+                N=0; S=1; E=0; W=sag; 
+              }
+              else if(std::cos(X_apex(3, 0)) < -0.8 )
+              {
+                fine_num = -1;
+                N=4; S=0; E=0; W=1; 
+              }     
+              else if(std::cos(X_apex(3, 0)) > 0.8)
+              {
+                fine_num = 1;
+                N=0; S=sag; E=1; W=0;            
+              } 
+        }
+        
+        else{
+          X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)); //X_apex(0, 0);
+          X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)); //X_apex(1, 0);
+          X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
+          X_d(3, 0) += prim(1, 0);
+          X_d(4, 0) = prim(3, 0);
+                    if(std::sin(X_apex(3, 0)) > 0.8 )
+                    {
+                       N=0;  S=0;  E=sag;  W=0;          
+                    }
+                    else if(std::sin(X_apex(3, 0)) < -0.8)
+                    {
+                      fine_num = -4;
+                       N=0;  S=0;  E=0;  W=sag;  
+                    }
+                    else if(std::cos(X_apex(3, 0)) < -0.8 )
+                    {
+                      fine_num = -4*26;
+                      N=sag;  S=0;  E=0;  W=0;  
+                    }     
+                    else if(std::cos(X_apex(3, 0)) > 0.8)
+                    {
+                      fine_num = 4*26;
+                      N=0;  S=sag;  E=0;  W=0;  
+                    }      
+        }
+      }
+    } 
+    else
+    {
+      X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)); //X_apex(0, 0);
+      X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)); //X_apex(1, 0);
+      X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
+      X_d(3, 0) += prim(1, 0);
+      X_d(4, 0) = prim(3, 0);
+                    if(std::sin(X_apex(3, 0)) > 0.8 )
+                    {
+                       N=0;  S=0;  E=sag;  W=0;          
+                    }
+                    else if(std::sin(X_apex(3, 0)) < -0.8)
+                    {
+                      fine_num = -4;
+                       N=0;  S=0;  E=0;  W=sag;  
+                    }
+                    else if(std::cos(X_apex(3, 0)) < -0.8 )
+                    {
+                      fine_num = -4*26;
+                      N=sag;  S=0;  E=0;  W=0;  
+                    }     
+                    else if(std::cos(X_apex(3, 0)) > 0.8)
+                    {
+                      fine_num = 4*26;
+                      N=0;  S=sag;  E=0;  W=0;  
+                    }      
+    }
+
+
+    //std::cout << "stance= " << stance << "N= " << N << "S= " << S << "E= " << E << "W= " << W <<  std::endl << std::endl;
+
+    waypoint(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0));
+    waypoint(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0));
     waypoint(2, 0) =  p_foot(2, 0) + prim(4, 0); 
-    waypoint(3, 0) += phi;
+    waypoint(3, 0) += prim(1, 0);
     waypoint(4, 0) = prim(3, 0);
 
  
@@ -924,8 +1131,8 @@ namespace phase_space_planner
     double T = step_period[step-1](0, 0);
     double dt = 0.001;
     int num = T/dt;
-    //double tt1=step_period[step-1](0, 0);
-    //double tt2=step_period[step-1](1, 0);
+    double tt1=step_period[step-1](0, 0);
+    double tt2=step_period[step-1](1, 0);
     
 
     Eigen::Matrix<double, 1, 1> TS;
@@ -933,12 +1140,13 @@ namespace phase_space_planner
     TS << Tstep;
     //Tlist.push_back(TS);
     
-    Eigen::Matrix<double, 6, 1> start;
+    //Eigen::Matrix<double, 6, 1> start;
+    /*
     start << apex_list[step-1](0, 0), apex_list[step-1](1, 0), apex_list[step-1](2, 0), 
              apex_list[step-1](4, 0)*cos(apex_list[step-1](3, 0)), 
              apex_list[step-1](4, 0)*sin(apex_list[step-1](3, 0)), 0;
-             
-    //Eigen::Matrix<double, 6, 1> start = apextraj_list[step-1];
+     */        
+    Eigen::Matrix<double, 6, 1> start = apextraj_list[step-1];
     Eigen::Matrix<double, 6, 1> end = switch_list[step-1];
     Eigen::Matrix<double, 2, 1> wwsq = WSQlist[step-2];
     Eigen::Matrix<double, 3, 1> pre_foot;
@@ -1008,40 +1216,68 @@ namespace phase_space_planner
     double w_sq = wwsq(1, 0); 
     
     double inc_x, inc_y;
-    //int numtt= (tt1+tt2)/dt;
-    //int num11= (tt1)/dt;
+    int numtt= (tt1+tt2)/dt;
+    int num11= (tt1)/dt;
     // step time, t1, t2
     /*
       Eigen::Matrix<double, 3, 1> time;
       time << TS, t1, t2;
       Tlist.push_back(time);
       */
-    for (int i = 0; i < num; i++)
+    for (int i = 0; i < numtt; i++)
     {
       d_t += 0.001;
+      if( i < num11)
+      {
+        x_ddot = w_sq * (x - cur_foot(0, 0));
+        inc_x = dt * x_dot + 0.5 * dt * dt * x_ddot;
+        x = x + inc_x;
+        x_dot = x_dot + dt * x_ddot;
 
-      x_ddot = w_sq * (x - cur_foot(0, 0));
-      inc_x = dt * x_dot + 0.5 * dt * dt * x_ddot;
-      x = x + inc_x;
-      x_dot = x_dot + dt * x_ddot;
+        y_ddot = w_sq * (y - cur_foot(1, 0));
+        inc_y = dt * y_dot + 0.5 * dt * dt * y_ddot;
+        y = y + inc_y;
+        y_dot = y_dot + dt * y_ddot;
 
-      y_ddot = w_sq * (y - cur_foot(1, 0));
-      inc_y = dt * y_dot + 0.5 * dt * dt * y_ddot;
-      y = y + inc_y;
-      y_dot = y_dot + dt * y_ddot;
+        z_ddot = slope(0, 0) * x_ddot + slope(1, 0) * y_ddot;
+        z = z + slope(0, 0) * inc_x + slope(1, 0) * inc_y;
+        z_dot = slope(0, 0) * x_dot + slope(1, 0) * y_dot;
+              Eigen::Matrix<double, 1, 1> heading;
+      heading << (direction_list[step-1](1, 0) - direction_list[step-1](0, 0))
+                  *(i  + 1)/num + direction_list[step-1](0, 0);
+      heading_list.push_back(heading);
 
-      z_ddot = slope(0, 0) * x_ddot + slope(1, 0) * y_ddot;
-      z = z + slope(0, 0) * inc_x + slope(1, 0) * inc_y;
-      z_dot = slope(0, 0) * x_dot + slope(1, 0) * y_dot;
+      }
+      
+      else
+      { 
+
+          x_ddot = w_sq * (x - nex_foot(0, 0));
+          inc_x = dt * x_dot + 0.5 * dt * dt * x_ddot;
+          x = x + inc_x;
+          x_dot = x_dot + dt * x_ddot;
+
+          y_ddot = w_sq * (y - nex_foot(1, 0));
+          inc_y = dt * y_dot + 0.5 * dt * dt * y_ddot;
+          y = y + inc_y;
+          y_dot = y_dot + dt * y_ddot;
+
+        z_ddot = slope(0, 0) * x_ddot + slope(1, 0) * y_ddot;
+        z = z + slope(0, 0) * inc_x + slope(1, 0) * inc_y;
+        z_dot = slope(0, 0) * x_dot + slope(1, 0) * y_dot;
+
+                   Eigen::Matrix<double, 1, 1> heading;
+      heading << (direction_list[step-1](1, 0) - direction_list[step-1](0, 0))
+                  *(i  + 1)/num + direction_list[step-1](0, 0);
+      heading_list.push_back(heading);
+      }
+
 
       Eigen::Matrix<double, 10, 1> COM;
       COM << x, y, z, x_dot, y_dot, z_dot, x_ddot, y_ddot, z_ddot, d_t;
       COM_list.push_back(COM);
 
-      Eigen::Matrix<double, 1, 1> heading;
-      heading << (direction_list[step-1](1, 0) - direction_list[step-1](0, 0))
-                  *(i  + 1)/num + direction_list[step-1](0, 0);
-      heading_list.push_back(heading);
+
 
       x_swing = pre_foot(0, 0) + x_distance / 2 * (1 - std::cos(PI * i / num));
       dx_swing = x_distance / 2 * std::sin(PI * i / num) * PI / T;

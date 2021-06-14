@@ -73,6 +73,18 @@ drake_cc_binary(
     ],
 )
 
+drake_cc_binary(
+    name = "simulate_psp_lcm",
+    srcs = ["src/simulate_psp_lcm.cc"],
+    data = ["vis/actions_CDC_Sub.json"],
+    deps = [
+        ":beliefIOParser",
+        ":phase_space_planner",
+        "@gflags",
+        "//lcm",
+        "//lcmtypes:TAMP_waypoint",
+    ],
+)
 
 drake_cc_library(
     name = "cassie",
