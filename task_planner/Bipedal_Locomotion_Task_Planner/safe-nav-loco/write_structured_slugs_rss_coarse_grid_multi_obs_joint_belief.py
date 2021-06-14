@@ -933,12 +933,12 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
         file.write('s_c != {}\n'.format(obs))
 
 
-    for n in range(0,len(initmovetarget)):
-        for s in set(allowed_states):
-            stri = 'st{}\' = {} -> !s_c\' = {}\n'.format(n,s,s)
-            file.write(stri)
-            stri = 'st{}\' = {} -> !s_c = {}\n'.format(n,s,s)
-            file.write(stri)
+    # for n in range(0,len(initmovetarget)):
+    #     for s in set(allowed_states):
+    #         stri = 'st{}\' = {} -> !s_c\' = {}\n'.format(n,s,s)
+    #         file.write(stri)
+    #         stri = 'st{}\' = {} -> !s_c = {}\n'.format(n,s,s)
+    #         file.write(stri)
 
 
 

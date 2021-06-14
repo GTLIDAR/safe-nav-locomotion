@@ -1,0 +1,23 @@
+package drake;
+
+struct lcmt_TAMP_waypoint
+{
+	// Action from navigation planner
+
+	int8_t stepL;
+	int8_t stepH;
+	int8_t turn;
+	int8_t stop;
+	int8_t forward;
+	int8_t stanceFoot;
+	int8_t orientation;
+	int16_t s;
+	
+
+
+	// new nextfine cell position
+	double N;  // number of fine cells between current and next waypoint in north direction
+	double S;
+	double E;
+	double W;
+}

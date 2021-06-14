@@ -1,4 +1,4 @@
-__author__ = 'sudab'
+__author__ = 'Jonas'
 import random
 import simplejson as json
 import time
@@ -10,6 +10,15 @@ from beliefIOParser import BeliefIOParser
 import subprocess
 import os
 from itertools import repeat, permutations
+import lcm
+from drake import lcmt_TAMP_waypoint
+import datetime
+# from statistics import mean
+
+# global msg1
+lc = lcm.LCM()
+msg = lcmt_TAMP_waypoint()
+msg1 = lcmt_TAMP_waypoint()
 
 
 def powerset(s):
@@ -142,10 +151,26 @@ def SlugsInput(inputVariables, state_next, inbits):
 
     return bits.join(bits_l)
 
+def my_handler(channel, data):
+    global msg1
+    msg1 = lcmt_TAMP_waypoint.decode(data)
+    print "received N: " + str(msg1.N)
+    print "received E: " + str(msg1.E)
+    print "received S: " + str(msg1.S)
+    print "received W: " + str(msg1.W)
+    print "test"
+    # return msg1
+    return
+
 
 def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,invisibilityset,jsonfile,filename_f,gwg_f,partitionGrid_f,moveobstacles_f,invisibilityset_f,jsonfile_f,allowed_states = [],targets = []):
+    # lc = lcm.LCM()
     then = time.time()
-    print "Start time is: " + str(then)
+    # msg = lcmt_TAMP_waypoint()
+    # msg1 = lcmt_TAMP_waypoint()
+
+    # print "Start time is: " + str(then)
+    print 'Start time is: ' + str(datetime.datetime.now().time())
     # Open Slugs
     slugsProcess = subprocess.Popen(slugsLink+" --interactiveStrategy "+" --biasForAction"+" "+filename, shell=True, bufsize=32000, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
 
@@ -314,73 +339,73 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
           
 
             nextstates_f = automaton_f[automaton_state_f]['Successors']
-            nextstatedirn_f = {"1":{"1":{'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}, "0":{'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}},"0":{"1":{'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}, "0":{'4':None,'2':None,'3':None,'1':None,'0':None, 'Belief':set()}}}
+            # nextstatedirn_f = {"1":{"1":{'4':None,'2':None,'3':None,'1':None,'0':None}, "0":{'4':None,'2':None,'3':None,'1':None,'0':None}},"0":{"1":{'4':None,'2':None,'3':None,'1':None,'0':None}, "0":{'4':None,'2':None,'3':None,'1':None,'0':None}}}
+            
+            nextstatedirn_f ={}
+
             ### nextstatedirn_f first number is stair boolean, second number is direcion request
             for n in nextstates_f:
-                nenv_dir_req = automaton_f[n]['State']['directionrequest']
-                nenv_stair_req = automaton_f[n]['State']['stair']
-                nenv_stairN_req = automaton_f[n]['State']['stairN']
-                if nenv_stair_req ==1:
-                    if nenv_stairN_req ==1:
-                        if nenv_dir_req == 4:
-                            nextstatedirn_f["1"]["1"]['4'] = n
-                        if nenv_dir_req == 2:
-                            nextstatedirn_f["1"]["1"]['2'] = n
-                        if nenv_dir_req == 3:
-                            nextstatedirn_f["1"]["1"]['3'] = n
-                        if nenv_dir_req == 1:
-                            nextstatedirn_f["1"]["1"]['1'] = n
-                        if nenv_dir_req == 0:
-                            nextstatedirn_f["1"]["1"]['0'] = n
-                        if nenv_dir_req not in xstates_f:
-                            nextstatedirn_f["1"]['Belief'].add(n)
-                    else:
-                        if nenv_dir_req == 4:
-                            nextstatedirn_f["1"]["0"]['4'] = n
-                        if nenv_dir_req == 2:
-                            nextstatedirn_f["1"]["0"]['2'] = n
-                        if nenv_dir_req == 3:
-                            nextstatedirn_f["1"]["0"]['3'] = n
-                        if nenv_dir_req == 1:
-                            nextstatedirn_f["1"]["0"]['1'] = n
-                        if nenv_dir_req == 0:
-                            nextstatedirn_f["1"]["0"]['0'] = n
-                        if nenv_dir_req not in xstates_f:
-                            nextstatedirn_f["1"]["0"]['Belief'].add(n)
-                else:
-                    if nenv_stairN_req ==1:
-                        if nenv_dir_req == 4:
-                            nextstatedirn_f["0"]["1"]['4'] = n
-                        if nenv_dir_req == 2:
-                            nextstatedirn_f["0"]["1"]['2'] = n
-                        if nenv_dir_req == 3:
-                            nextstatedirn_f["0"]["1"]['3'] = n
-                        if nenv_dir_req == 1:
-                            nextstatedirn_f["0"]["1"]['1'] = n
-                        if nenv_dir_req == 0:
-                            nextstatedirn_f["0"]["1"]['0'] = n
-                        if nenv_dir_req not in xstates_f:
-                            nextstatedirn_f["0"]['Belief'].add(n)
-                    else:
-                        if nenv_dir_req == 4:
-                            nextstatedirn_f["0"]["0"]['4'] = n
-                        if nenv_dir_req == 2:
-                            nextstatedirn_f["0"]["0"]['2'] = n
-                        if nenv_dir_req == 3:
-                            nextstatedirn_f["0"]["0"]['3'] = n
-                        if nenv_dir_req == 1:
-                            nextstatedirn_f["0"]["0"]['1'] = n
-                        if nenv_dir_req == 0:
-                            nextstatedirn_f["0"]["0"]['0'] = n
-                        if nenv_dir_req not in xstates_f:
-                            nextstatedirn_f["0"]["0"]['Belief'].add(n)
+                # nenv_dir_req = automaton_f[n]['State']['directionrequest']
+                # nenv_stair_req = automaton_f[n]['State']['stair']
+                # nenv_stairN_req = automaton_f[n]['State']['stairN']
+                if stateSL['State']['stairs'] != automaton_f[n]['State']['stair']:
+                    continue
+                if stateSL['State']['stairsN'] != automaton_f[n]['State']['stairN']:
+                    continue
+                if stateSL['State']['directionrequest'] != automaton_f[n]['State']['directionrequest']:
+                    continue
+
+                nextstatedirn_f[automaton_f[n]['State']['s']] = n
+
+
+                
               
             while True:
+
+                msg.stepL = automaton_f[automaton_state_f]['State']['stepL']
+                msg.stepH = automaton_f[automaton_state_f]['State']['stepH']
+                msg.turn = automaton_f[automaton_state_f]['State']['turn']
+                msg.stop =automaton_f[automaton_state_f]['State']['stop']
+                msg.forward = automaton_f[automaton_state_f]['State']['forward']
+                msg.stanceFoot = automaton_f[automaton_state_f]['State']['stanceFoot']
+                msg.orientation = automaton_f[automaton_state_f]['State']['orientation']
+                msg.s = automaton_f[automaton_state_f]['State']['s']
+                lc.publish("new_waypoint", msg.encode())
+
                 nextstate_f = None
                 while nextstate_f == None:
                     time.sleep(0.2)
+
+                    msg.N = 1
+                    lc.publish("new_waypoint", msg.encode())
+
+                    subscription = lc.subscribe("new_waypoint", my_handler)
+                    try:
+                        # while True:
+                        lc.handle()
+                    except KeyboardInterrupt:
+                        pass
+
+
+                    lc.unsubscribe(subscription)
+
+
+                    # row,col = gwg_f.coords(agentstate_f)
                     # nextstate_f = nextstatedirn_f[str(automaton[automaton_state]['State']['stairs'])][str(automaton[automaton_state]['State']['stairsN'])][str(automaton[automaton_state]['State']['directionrequest'])]
-                    nextstate_f = nextstatedirn_f[str(stateSL['State']['stairs'])][str(stateSL['State']['stairsN'])][str(stateSL['State']['directionrequest'])]
+                    # nextstate_f = nextstatedirn_f[str(stateSL['State']['stairs'])][str(stateSL['State']['stairsN'])][str(stateSL['State']['directionrequest'])]
+                    if len(nextstatedirn_f) == 1:
+                        nextstate_f = nextstatedirn_f[nextstatedirn_f.keys()[0]]
+                    else:
+                        # ave = np.mean(nextstatedirn_f.keys())
+                        # nstate = ave
+                        # if msg1.N == 1:
+                        # nstate = gw.transR[gw.transR[nstate]['W5'][0]]['S1'][0]
+                        row,col = gwg_f.coords(agentstate_f)
+                        nextgrids = gwg_f.MapState((row + msg1.S - msg1.N, col + msg1.W - msg1.S),agentstate_f)[0]
+                        nextstate_f = nextstatedirn_f[nextgrids]
+
+
+
                     nenv_dir_req = automaton_f[nextstate_f]['State']['st']
                     print 'Environment state in fine automaton is', allstates.index(nenv_dir_req)
                     print 'Environment state in fine grid is', nenv_dir_req
@@ -414,6 +439,16 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
             gwg_f.colorstates[0].update(invisibilityset_f[0][agentstate_f])
             gwg_f.render()
 
+            # msg.stepL = automaton_f[automaton_state_f]['State']['stepL']
+            # msg.stepH = automaton_f[automaton_state_f]['State']['stepH']
+            # msg.turn = automaton_f[automaton_state_f]['State']['turn']
+            # msg.stop =automaton_f[automaton_state_f]['State']['stop']
+            # msg.forward = automaton_f[automaton_state_f]['State']['forward']
+            # msg.stanceFoot = automaton_f[automaton_state_f]['State']['stanceFoot']
+            # msg.orientation = automaton_f[automaton_state_f]['State']['orientation']
+            # msg.s = automaton_f[automaton_state_f]['State']['s']
+            # lc.publish("new_waypoint", msg.encode())
+
             # if automaton_f[automaton_state_f]['State']['requestPending1'] == 5:
             #     break
             if automaton_f[automaton_state_f]['State']['TaskAchieved'] == 1:
@@ -421,7 +456,7 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
 
 
 
-        # <<<<<<  insert fine level controller here
+        # <<<<<<  insert fine level controller above
 
 
         time.sleep(0.5)

@@ -57,6 +57,7 @@ if __name__ == '__main__':
     # example_name = 'Belief_Evasion_coarse_multi_obs_joint_test_complete_colisTTT'
     # example_name = 'Belief_Evasion_coarse_seperate_belief_single_obs_2t'
     example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_slugs_no_colis_next_debug_paren'
+    example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_no_colis'
     
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
