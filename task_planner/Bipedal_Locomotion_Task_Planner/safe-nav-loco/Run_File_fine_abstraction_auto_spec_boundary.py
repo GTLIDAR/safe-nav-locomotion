@@ -5,6 +5,7 @@ from gridworld_fine_auto_spec import *
 # import write_structured_slugs_fine_staight
 # import write_structured_slugs_fine_staight_nondeterministic
 import write_structured_slugs_fine_staight_nondeterministic_every_step
+# import write_structured_slugs_fine_staight_nondeterministic_sagital
 import compute_all_vis
 import cv2
 # import visibility
@@ -35,7 +36,8 @@ if __name__ == '__main__':
     
     folder_locn = 'Examples/'
     example_name = 'Belief_Evasion_fine_abstraction_straight'
-    example_name = 'Belief_Evasion_fine_abstraction_straight_nondeterministic_every_step'
+    example_name = 'Belief_Evasion_fine_abstraction_nondeterministic_last_step_of_turn_no_short'
+    # example_name = 'Belief_Evasion_fine_abstraction_nondeterministic_sagital'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'

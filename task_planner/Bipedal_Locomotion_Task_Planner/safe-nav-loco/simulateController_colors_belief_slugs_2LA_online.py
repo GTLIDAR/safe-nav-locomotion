@@ -158,7 +158,7 @@ def my_handler(channel, data):
     print "received E: " + str(msg1.E)
     print "received S: " + str(msg1.S)
     print "received W: " + str(msg1.W)
-    print "test"
+    # print "test"
     # return msg1
     return
 
@@ -168,6 +168,7 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
     then = time.time()
     # msg = lcmt_TAMP_waypoint()
     # msg1 = lcmt_TAMP_waypoint()
+    subscription = lc.subscribe("new_waypoint", my_handler)
 
     # print "Start time is: " + str(then)
     print 'Start time is: ' + str(datetime.datetime.now().time())
@@ -376,18 +377,21 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
                 while nextstate_f == None:
                     time.sleep(0.2)
 
-                    msg.N = 1
-                    lc.publish("new_waypoint", msg.encode())
+                    # subscription = lc.subscribe("new_waypoint", my_handler)
 
-                    subscription = lc.subscribe("new_waypoint", my_handler)
+                    # msg.N = 1
+                    # lc.publish("new_waypoint", msg.encode())
+
+                    # subscription = lc.subscribe("new_waypoint", my_handler)
                     try:
                         # while True:
+                        lc.handle()
                         lc.handle()
                     except KeyboardInterrupt:
                         pass
 
 
-                    lc.unsubscribe(subscription)
+                    # lc.unsubscribe(subscription)
 
 
                     # row,col = gwg_f.coords(agentstate_f)
@@ -401,7 +405,7 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
                         # if msg1.N == 1:
                         # nstate = gw.transR[gw.transR[nstate]['W5'][0]]['S1'][0]
                         row,col = gwg_f.coords(agentstate_f)
-                        nextgrids = gwg_f.MapState((row + msg1.S - msg1.N, col + msg1.W - msg1.S),agentstate_f)[0]
+                        nextgrids = gwg_f.MapState((row + msg1.S - msg1.N, col + msg1.E - msg1.W),agentstate_f)[0]
                         nextstate_f = nextstatedirn_f[nextgrids]
 
 

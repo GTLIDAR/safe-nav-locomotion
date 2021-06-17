@@ -464,9 +464,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
 
     # file.write("\n\n\n #specs_for_turning\n\n")
-    # top3_edge = gw.top_edge+gw.top_edge2+gw.top_edge3
-    # top2_edge = gw.top_edge+gw.top_edge2
-    # right3_edge = gw.right_edge+gw.right_edge2+gw.right_edge3
+    # top3_edge = gw.sagitalw.right_edge+gw.right_edge2+gw.right_edge3
     # right2_edge = gw.right_edge+gw.right_edge2
     # bottom3_edge = gw.bottom_edge+gw.bottom_edge2+gw.bottom_edge3
     # bottom2_edge = gw.bottom_edge+gw.bottom_edge2
@@ -643,6 +641,8 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
     stri += "stop -> stepL=0\n"
     stri += "!forward -> (stepL=0 & turn=2)\n\n"
     stri += "stop <-> !forward'\n\n"
+
+    stri += "stepL' != 5\n\n"
 
 
 

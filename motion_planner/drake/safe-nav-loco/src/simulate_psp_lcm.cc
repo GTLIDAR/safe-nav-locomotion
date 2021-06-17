@@ -114,7 +114,7 @@ int DoMain()
     //std::cout << "N= " << psp.N << "S= " << psp.S << "E= " << psp.E << "W= " << psp.W <<  std::endl << std::endl;
     {
       lcmt_TAMP_waypoint initial_action{};
-      initial_action.stepL = 0;
+      initial_action.N = 1;
       initial_action.stepH = 0;
       initial_action.turn = 2;
       initial_action.stop = 1;
@@ -122,18 +122,22 @@ int DoMain()
       initial_action.stanceFoot= 0;
       Publish(&lcm, channel_waypoint, initial_action);
     }
-
+     while(!(lcm.HandleSubscriptions(0))) //HOLD FOR NEW Action
+    {
+    
+    }
   //
   //BeliefIOParser parser("/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/Belief_Evasion_fine_abstraction_straight.json");
   //parser.advanceStep();
   double v;
   double pre_v = 0.1;
 
-  for (int i = 0; i < 60; i++) 
+  for (int i = 0; i < 300; i++) 
   {
 
      while(!(lcm.HandleSubscriptions(0))) //HOLD FOR NEW Action
     {
+    
     }
 
     // revieve msg.x
@@ -295,7 +299,7 @@ int DoMain()
 
     if (stepL == 0)
     {
-      step_length = 0.3119+0.104;//0.55;0.3119+0.104;
+      step_length = 0.3119+0.104;//0.55;0.3119+0.104; //4 fine cells
       //v= 0.45;
       v = pre_v + 0.05;
       if (pre_v >= 0.6)
@@ -305,11 +309,11 @@ int DoMain()
     }
     else if (stepL == 1)
     {
-      step_length = 0.28;
+      step_length = 0.28; //3 fine cells
     }
     else if (stepL == 2)
     {
-      step_length = 0.43;
+      step_length = 0.43; //4 fine cells
     }
     else if (stepL == 3)
     {
@@ -324,7 +328,7 @@ int DoMain()
     }
     else if (stepL == 5)
     {
-      step_length = .207962;
+      step_length =  .207962;
       //v=0.3;
     }
     else if (stepL == 6)
@@ -459,7 +463,7 @@ int DoMain()
     //lcmt_TAMP_waypoint rec{};
     //rec.N = msg_x.N;
     //std::cout << "psp.N = " << psp.N << "rec.N= " << rec.N << std::endl << std::endl << std::endl ;
-
+/*
     {
       lcmt_TAMP_waypoint all_action{};
       all_action.stepL = 0;
@@ -470,7 +474,7 @@ int DoMain()
       all_action.stanceFoot= stanceFoot;
       Publish(&lcm, channel_waypoint, all_action);
     }
-
+*/
   }
 
 
@@ -478,49 +482,49 @@ int DoMain()
   // Log 
   std::string file_name;
   
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_apex.txt";
+  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_apex.txt";
   write_data<5>(psp.apex_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_d.txt";
+  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_d.txt";
   write_data<5>(psp.d_list, file_name);
-    file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_waypoint.txt";
+    file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_waypoint.txt";
   write_data<5>(psp.waypoint_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_switch.txt";
+  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_switch.txt";
   write_data<6>(psp.switch_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_apextraj.txt";
+  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_apextraj.txt";
   write_data<6>(psp.apextraj_list, file_name);
 
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_p_foot.txt";
+  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_p_foot.txt";
   write_data<3>(psp.p_foot_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_COM.txt";
+  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_COM.txt";
   write_data<10>(psp.COM_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_l_foot.txt";
+  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_l_foot.txt";
   write_data<10>(psp.l_foot_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_r_foot.txt";
+  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_r_foot.txt";
   write_data<10>(psp.r_foot_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_heading.txt";
+  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_heading.txt";
   write_data<1>(psp.heading_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_obstacle.txt";
+  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_obstacle.txt";
   write_data<6>(psp.obstacle_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/T_step.txt";
+  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/T_step.txt";
   write_data<3>(psp.Tlist, file_name);
   
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_delta.txt";
+  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_delta.txt";
   write_data<3>(psp.sim_list, file_name);
 
-  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_step.txt";
+  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_step.txt";
   write_data<2>(psp.step_list, file_name);
 
-   file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_psp.txt";
+   file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_psp.txt";
   write_data<8>(psp.psp_list, file_name);
   
   return 0;

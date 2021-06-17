@@ -243,7 +243,7 @@ namespace phase_space_planner
           //std::cout << "delta y1=" << l1 << std::endl;
           // Foot2
           s2_foot = s2;
-           
+          // std::cout << "s2= " << s2 << " s2_foot= "<< s2_foot << std::endl;
 
           //double dis = 0;
           if (stance == 1)
@@ -503,14 +503,14 @@ namespace phase_space_planner
     X_apex(4, 0) = prim(3, 0);
     
 
-    Eigen::Matrix<double, 5, 1> pre_apex = apex_list[step-1];
-    double prev_heading = pre_apex(3, 0);
+    //Eigen::Matrix<double, 5, 1> pre_apex = apex_list[step-1];
+    //double prev_heading = pre_apex(3, 0);
     //std::cout << "current= " << X_apex(3,0) << "  prev= " << prev_heading << std::endl << std::endl << std::endl;
-      if (prim(0, 0) > 0.4 && prim(0, 0) < 0.5)
+      if (prim(0, 0) > 0.4 && prim(0, 0) < 0.46)
       {
         sag = 4;
       }
-      else if (prim(0, 0) > 0.5)
+      else if (prim(0, 0) > 0.46)
       {
         sag = 5;
       }
@@ -520,14 +520,14 @@ namespace phase_space_planner
       }
       else if (prim(0, 0) > 0.2 && prim(0, 0) < 0.3)
       {
-        sag = 2;
+        sag = 3;
       }
 
 
-    if ((prim(1, 0) == 0) && (X_apex(3,0) != prev_heading))
+    if ((prim(1, 0) != 0) && ( (std::cos(X_apex(3,0)) > 0.95) || (std::cos(X_apex(3,0)) < -0.95) || (std::sin(X_apex(3,0))>0.95) || (std::sin(X_apex(3,0)) < -0.95)  )) //((prim(1, 0) == 0) && (X_apex(3,0) != prev_heading))
     {
 
-
+        std::cout << "**here**" << std::endl << std::endl;
 
     /*  // nominal next fine cell number difference     
       if(std::sin(X_apex(3, 0)) > 0.8 )
@@ -773,7 +773,7 @@ namespace phase_space_planner
               else if(std::cos(X_apex(3, 0)) < -0.8 )
               {
                 fine_num = -1;
-                N=4; S=0; E=0; W=1; 
+                N=sag; S=0; E=0; W=1; 
               }     
               else if(std::cos(X_apex(3, 0)) > 0.8)
               {

@@ -47,10 +47,10 @@ y_d = log_d[:, 1]
 z_d = log_d[:, 2]
 ax1.plot(x_d, y_d, label="High-level waypoints", color="black", marker="o")
 
-x_w = log_waypoint[:, 0]
-y_w = log_waypoint[:, 1]
-z_w = log_waypoint[:, 2]
-ax1.plot(x_w, y_w, color="orange", marker="o")
+#x_w = log_waypoint[:, 0]
+#y_w = log_waypoint[:, 1]
+#z_w = log_waypoint[:, 2]
+#ax1.plot(x_w, y_w, color="orange", marker="o")
 
 x_switch = log_switch[:, 0]
 y_switch = log_switch[:, 1]

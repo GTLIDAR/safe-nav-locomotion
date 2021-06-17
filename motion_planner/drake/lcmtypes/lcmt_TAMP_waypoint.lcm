@@ -10,6 +10,9 @@ struct lcmt_TAMP_waypoint
 	int8_t stop;
 	int8_t forward;
 	int8_t stanceFoot;
+	int8_t orientation;
+	int16_t s;
+	
 
 
 	// new nextfine cell position
