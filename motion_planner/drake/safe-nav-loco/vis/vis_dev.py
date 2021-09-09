@@ -45,7 +45,7 @@ ax1.axis('equal')
 x_d = log_d[:, 0]
 y_d = log_d[:, 1]
 z_d = log_d[:, 2]
-ax1.plot(x_d, y_d, label="High-level waypoints", color="black", marker="o")
+ax1.scatter(x_d, y_d, label="High-level waypoints", color="black", marker="o")
 
 #x_w = log_waypoint[:, 0]
 #y_w = log_waypoint[:, 1]
@@ -82,7 +82,7 @@ y_apex = log_apex[:, 1]
 z_apex = log_apex[:, 2]
 xd_apex = log_apex[:,4]
 
-ax1.scatter(x_apex, y_apex, linewidth=2, label="Apex", color="red",marker="o")
+#ax1.scatter(x_apex, y_apex, linewidth=2, label="Apex", color="red",marker="o")
 #ax1.scatter(x_switch, y_switch, linewidth=2, label="Apex", color="black",marker="o")
 #ax2.scatter(x_apex, xd_apex, label="Apex", color="red",marker="o")
 #ax2.scatter(x_switch, xd_switch, label="Apex", color="red",marker="o")
@@ -90,12 +90,12 @@ ax1.scatter(x_apex, y_apex, linewidth=2, label="Apex", color="red",marker="o")
 x_l_foot = log_l_foot[:, 0]
 y_l_foot = log_l_foot[:, 1]
 z_l_foot = log_l_foot[:, 2]
-ax1.plot(x_l_foot, y_l_foot, label="left foot", color="blue")
+#ax1.plot(x_l_foot, y_l_foot, label="left foot", color="blue")
 
 x_r_foot = log_r_foot[:, 0]
 y_r_foot = log_r_foot[:, 1]
 z_r_foot = log_r_foot[:, 2]
-ax1.plot(x_r_foot, y_r_foot, label="right foot", color="yellow")
+#ax1.plot(x_r_foot, y_r_foot, label="right foot", color="yellow")
 
 '''
 x_ground, y_ground = np.meshgrid(np.linspace(0,5*cellz, 100), np.linspace(0,8*cellz, 100))
