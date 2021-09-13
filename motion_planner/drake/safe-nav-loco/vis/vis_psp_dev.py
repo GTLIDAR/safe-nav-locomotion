@@ -19,24 +19,24 @@ log_waypoint = np.loadtxt("log_waypoint.txt")
 
 fig = plt.figure()
 
-ax1=fig.add_subplot(3,1,1)
-ax1.axis('equal')
+#ax1=fig.add_subplot(1,2,1)
+#ax1.axis('equal')
 
-ax2=fig.add_subplot(3,1,2)
+ax2=fig.add_subplot(1,1,1)
 ax2.axis('equal')
 
-ax3=fig.add_subplot(3,1,3)
-
+#ax3=fig.add_subplot(1,2,2)
+#ax3.axis('equal')
 
 x_d = log_d[:, 0]
 y_d = log_d[:, 1]
 z_d = log_d[:, 2]
-ax1.scatter(x_d, y_d, label="High-level waypoints", color="yellow", marker="o")
+#ax1.scatter(x_d, y_d, label="High-level waypoints", color="yellow", marker="o")
 
 x_w = log_waypoint[:, 0]
 y_w = log_waypoint[:, 1]
 z_w = log_waypoint[:, 2]
-ax1.plot(x_w, y_w, color="orange", marker="o")
+#ax1.plot(x_w, y_w, color="orange", marker="o")
 
 x_switch = log_switch[:, 0]
 y_switch = log_switch[:, 1]
@@ -46,10 +46,10 @@ x_p_foot = log_p_foot[:, 0]
 y_p_foot = log_p_foot[:, 1]
 z_p_foot = log_p_foot[:, 2]
 
-ax1.scatter(x_p_foot, y_p_foot, label="foot placement", color="purple", marker="o")
-ax1.scatter(x_switch, y_switch, linewidth=2, label="Apex", color="black",marker="o")
-ax2.scatter(x_p_foot, x_p_foot*0, label="foot placement", color="purple", marker="o")
-ax3.scatter(y_p_foot, y_p_foot*0, label="foot placement", color="purple", marker="o")
+#ax1.scatter(x_p_foot, y_p_foot, label="foot placement", color="purple", marker="o")
+#ax1.scatter(x_switch, y_switch, linewidth=2, label="Apex", color="black",marker="o")
+#ax2.scatter(x_p_foot, x_p_foot*0, label="foot placement", color="purple", marker="o")
+#ax3.scatter(y_p_foot, y_p_foot*0, label="foot placement", color="purple", marker="o")
 
 x_COM = log_COM[:, 0]
 y_COM = log_COM[:, 1]
@@ -58,9 +58,9 @@ xd_COM = log_COM[:, 3]
 yd_COM = log_COM[:, 4]
 zd_COM = log_COM[:, 5]
 
-ax1.plot(x_COM, y_COM, linewidth=2, label="walker CoM trajectory", color="red")
+#ax1.plot(x_COM, y_COM, linewidth=2, label="walker CoM trajectory", color="red")
 ax2.plot(x_COM,xd_COM)
-ax3.plot(y_COM,yd_COM)
+#ax3.plot(y_COM,yd_COM)
 
 
 x_apex = log_apex[:, 0]
@@ -68,7 +68,7 @@ y_apex = log_apex[:, 1]
 z_apex = log_apex[:, 2]
 xd_apex = log_apex[:,4]
 
-ax1.scatter(x_apex, y_apex, linewidth=2, label="Apex", color="red",marker="o")
+#ax1.scatter(x_apex, y_apex, linewidth=2, label="Apex", color="red",marker="o")
 ax2.scatter(x_apex, xd_apex, label="Apex", color="red",marker="o")
 
 

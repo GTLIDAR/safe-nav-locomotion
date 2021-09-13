@@ -1,7 +1,7 @@
 #pragma once
 
 #include "drake/safe-nav-loco/include/utils.h"
-
+#include "drake/common/find_resource.h"
 
 namespace phase_space_planner 
 {
@@ -87,6 +87,15 @@ public:
 
   //
   Eigen::Matrix<double, 1, 1> goodlateral;
+
+  //std::vector<double> w2_bkwrd ;
+  //std::vector<double> w1_frwrd;
+  std::vector<Eigen::Matrix<double, 1, 1>> w2_bkwrd;
+  std::vector<Eigen::Matrix<double, 1, 1>> w1_frwrd;
+  std::vector<Eigen::Matrix<double, 2, 1>> noise1_list;
+  std::vector<Eigen::Matrix<double, 2, 1>> noise2_list;
+  std::map<std::pair<int,int>, double> map_of_control_fhws;
+  std::map<std::pair<int,int>, double> map_of_control_shws;
   
 private:
   Eigen::Matrix<double, 3, 1> ForwardProp(
@@ -106,6 +115,7 @@ public:
   void FirstStep();
   void LastStep();
   void End();
+   
 
   void InitObstacle(Eigen::Matrix<double, 3, 1> obs_init,
                     Eigen::Matrix<double, 3, 1> obs2_init) ;
@@ -115,7 +125,11 @@ public:
   void Stand(Eigen::Matrix<double, 3, 1> obs,
              Eigen::Matrix<double, 3, 1> obs2);
 
-  void side_step();
+  void InitControlMap();
+
+  void perturbed_traj();
+
+  void UpdateKeyframe_pert();
 
 
 };

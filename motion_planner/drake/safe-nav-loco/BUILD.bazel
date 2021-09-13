@@ -50,14 +50,19 @@ drake_cc_library(
 drake_cc_library(
     name = "phase_space_planner",
     srcs = ["src/phase_space_planner.cc"],
+    data = ["fhws2_2.txt", 
+            "shws2_2.txt"
+            ],
     hdrs = [
         "include/phase_space_planner.h",
         "include/utils.h",
+
     ],
     visibility = ["//visibility:public"],
     deps = [
         "//common:default_scalars",
         "//common:essential",
+        "//common:find_resource",
     ],
 )
 
@@ -82,6 +87,20 @@ drake_cc_binary(
         ":phase_space_planner",
         "@gflags",
         "//lcm",
+        "//lcmtypes:TAMP_waypoint",
+    ],
+)
+
+drake_cc_binary(
+    name = "simulate_psp_lcm_perturb",
+    srcs = ["src/simulate_psp_lcm_perturb.cc"],
+    data = ["fhws2_2.txt"],
+    deps = [
+        ":beliefIOParser",
+        ":phase_space_planner",
+        "@gflags",
+        "//lcm",
+        "//common:find_resource",
         "//lcmtypes:TAMP_waypoint",
     ],
 )

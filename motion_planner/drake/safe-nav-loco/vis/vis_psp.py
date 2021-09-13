@@ -24,6 +24,7 @@ ax1.set_aspect('equal')
 ax1.set_xlabel('x')
 ax1.set_ylabel('y')
 ax1.set_zlabel('z')
+
 ax1.set_xlim(-7*cellz, 7*cellz)
 ax1.set_ylim(-13*cellz, 13*cellz)
 ax1.set_zlim(-5, 5)
@@ -36,7 +37,7 @@ ax1.set_aspect(1)
 x_d = log_d[:, 0]
 y_d = log_d[:, 1]
 z_d = log_d[:, 2]
-ax1.scatter(x_d, y_d, z_d, label="High-level waypoints", color="yellow", marker="o")
+ax1.scatter(x_d, y_d, 0*z_d, label="High-level waypoints", color="yellow", marker="o")
 
 
 x_switch = log_switch[:, 0]
@@ -46,7 +47,7 @@ z_switch = log_switch[:, 2]
 x_p_foot = log_p_foot[:, 0]
 y_p_foot = log_p_foot[:, 1]
 z_p_foot = log_p_foot[:, 2]
-ax1.scatter(x_p_foot, y_p_foot, z_p_foot, label="foot placement", color="purple", marker="o")
+ax1.scatter(x_p_foot, y_p_foot, 0*z_p_foot, label="foot placement", color="purple", marker="o")
 
 x_COM = log_COM[:, 0]
 y_COM = log_COM[:, 1]
@@ -54,8 +55,8 @@ z_COM = log_COM[:, 2]
 xd_COM = log_COM[:, 3]
 yd_COM = log_COM[:, 4]
 zd_COM = log_COM[:, 5]
-ax1.plot(x_COM, y_COM, z_COM, linewidth=2, label="walker CoM trajectory", color="red")
-
+ax1.plot(x_COM, y_COM, 0*z_COM, linewidth=2, label="walker CoM trajectory", color="red")
+'''
 x_l_foot = log_l_foot[:, 0]
 y_l_foot = log_l_foot[:, 1]
 z_l_foot = log_l_foot[:, 2]
@@ -65,7 +66,8 @@ x_r_foot = log_r_foot[:, 0]
 y_r_foot = log_r_foot[:, 1]
 z_r_foot = log_r_foot[:, 2]
 ax1.plot(x_r_foot, y_r_foot, z_r_foot, label="right foot", color="yellow")
-
+'''
+'''
 x_ground, y_ground = np.meshgrid(np.linspace(0,5*cellz, 100), np.linspace(0,8*cellz, 100))
 X_ground = x_ground.T
 Y_ground = y_ground.T
@@ -77,7 +79,6 @@ X_ground2 = x_ground2.T
 Y_ground2 = y_ground2.T
 Z_ground2 = 0.6* np.ones((100, 100))
 ax1.plot_surface(X_ground2, Y_ground2, Z_ground2, color="w", alpha=0.5)
-
 
 verts1 = [(0, cellz, 0), (cellz, cellz, 0), (0, 2*cellz, 0), (cellz, 2*cellz, 0), (0, cellz, 0.5), (cellz, cellz, 0.5), (0, 2*cellz, 0.5), (cellz, 2*cellz, 0.5)]
 faces1 = [[0, 1, 3, 2], [4, 5, 7, 6], [0, 1, 5, 4], [2, 3, 7, 6], [0, 2, 6, 4], [1, 3, 7, 5]]
@@ -146,7 +147,7 @@ faces1 = [[0, 1, 3, 2], [4, 5, 7, 6], [0, 1, 5, 4], [2, 3, 7, 6], [0, 2, 6, 4], 
 poly3d1 = [[verts1[vert_id] for vert_id in face] for face in faces1]
 ax1.add_collection3d(Poly3DCollection(poly3d1, facecolors='green', linewidths=1, alpha=1))
 ax1.add_collection3d(Line3DCollection(poly3d1, colors='k', linewidths=0.5, linestyles=':'))
-
+'''
 ax1.view_init(azim=-2)
 plt.axis('off')
 
