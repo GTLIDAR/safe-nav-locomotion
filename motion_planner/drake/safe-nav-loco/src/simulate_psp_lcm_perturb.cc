@@ -186,6 +186,7 @@ int DoMain()
       initial_action.stop = 1;
       initial_action.forward = 
       initial_action.stanceFoot= 0;
+      initial_action.TaskAchieved=0;
       Publish(&lcm, channel_waypoint, initial_action);
     }
     // while(!(lcm.HandleSubscriptions(0))) //HOLD FOR NEW Action
@@ -231,7 +232,7 @@ int DoMain()
     int stop = msg_x.stop; //parser.getProperty("stop");
     int forward =msg_x.forward; //parser.getProperty("forward");
     int stanceFoot =msg_x.stanceFoot;// parser.getProperty("stanceFoot");
-    
+    int pert_flag = msg_x.TaskAchieved; //flag
     if (stanceFoot == 0)
     {
       stanceFoot = 1;
@@ -492,7 +493,7 @@ int DoMain()
         psp.UpdatePrimitive(acn);
         
         
-        if(i == 70 )
+        if(pert_flag)
         {
           //psp.UpdateKeyframe();
           psp.UpdateKeyframe_pert();
@@ -545,17 +546,33 @@ int DoMain()
     //lcmt_TAMP_waypoint rec{};
     //rec.N = msg_x.N;
     //std::cout << "psp.N = " << psp.N << "rec.N= " << rec.N << std::endl << std::endl << std::endl ;
-
+    /*
     {
       lcmt_TAMP_waypoint all_action{};
       all_action.stepL = 0;
       all_action.stepH = 0;
       all_action.turn = 2;
+      //if( i == 12)
+      //{
+      //  all_action.stop = 1;
+      //  all_action.forward = 1;
+      //}
+     // else if( i == 13)
+      //{
+      //  all_action.stop = 1;
+      //  all_action.forward = 0;
+      //  all_action.stanceFoot= 1;
+     // }
+     // else{
       all_action.stop = 0;
       all_action.forward = 1;
       all_action.stanceFoot= stanceFoot;
+   // }
+
+      
       Publish(&lcm, channel_waypoint, all_action);
     }
+    */
 
   }
 

@@ -28,15 +28,15 @@ ax2.axis('equal')
 #ax3=fig.add_subplot(1,2,2)
 #ax3.axis('equal')
 
-x_d = log_d[:, 0]
+x_d = log_d[14:17, 0]
 y_d = log_d[:, 1]
 z_d = log_d[:, 2]
-#ax1.scatter(x_d, y_d, label="High-level waypoints", color="yellow", marker="o")
+ax2.scatter(x_d, 0.4+ 0*x_d, label="High-level waypoints", color="black", marker="o")
 
-x_w = log_waypoint[:, 0]
-y_w = log_waypoint[:, 1]
+x_w = log_waypoint[14:17, 0]
+y_w = log_waypoint[14:17, 1]
 z_w = log_waypoint[:, 2]
-#ax1.plot(x_w, y_w, color="orange", marker="o")
+ax2.scatter(x_w, 0.4 +0*y_w, color="orange", marker="o")
 
 x_switch = log_switch[:, 0]
 y_switch = log_switch[:, 1]
@@ -51,10 +51,10 @@ z_p_foot = log_p_foot[:, 2]
 #ax2.scatter(x_p_foot, x_p_foot*0, label="foot placement", color="purple", marker="o")
 #ax3.scatter(y_p_foot, y_p_foot*0, label="foot placement", color="purple", marker="o")
 
-x_COM = log_COM[:, 0]
+x_COM = log_COM[7300:9000, 0]
 y_COM = log_COM[:, 1]
 z_COM = log_COM[:, 2]
-xd_COM = log_COM[:, 3]
+xd_COM = log_COM[7300:9000, 3]
 yd_COM = log_COM[:, 4]
 zd_COM = log_COM[:, 5]
 
@@ -63,10 +63,10 @@ ax2.plot(x_COM,xd_COM)
 #ax3.plot(y_COM,yd_COM)
 
 
-x_apex = log_apex[:, 0]
+x_apex = log_apex[14:17, 0]
 y_apex = log_apex[:, 1]
 z_apex = log_apex[:, 2]
-xd_apex = log_apex[:,4]
+xd_apex = log_apex[14:17,4]
 
 #ax1.scatter(x_apex, y_apex, linewidth=2, label="Apex", color="red",marker="o")
 ax2.scatter(x_apex, xd_apex, label="Apex", color="red",marker="o")

@@ -471,7 +471,7 @@ namespace phase_space_planner
         }
         //std::cout << "dy1_n= " << l2 << ", stance= "<< stance << std::endl ;
         //std::cout <<  "phi= "<< phi << std::endl;
-        std::cout <<  "step length= "<< prim(0,0) << std::endl;
+        std::cout <<  "step length= "<< s2-(X_apex(0, 0) - X_d(0, 0))*COS + (X_apex(1, 0) - X_d(1, 0))*SIN << std::endl;
         //std::cout <<  "Bkward Num= "<< backward_num<< std::endl << std::endl << std::endl;
 
      Eigen::Matrix<double, 8, 1> psp;
@@ -533,7 +533,7 @@ namespace phase_space_planner
     if ((prim(1, 0) != 0) && ( (std::cos(X_apex(3,0)) > 0.95) || (std::cos(X_apex(3,0)) < -0.95) || (std::sin(X_apex(3,0))>0.95) || (std::sin(X_apex(3,0)) < -0.95)  )) //((prim(1, 0) == 0) && (X_apex(3,0) != prev_heading))
     {
 
-        std::cout << "**here**" << std::endl << std::endl;
+       // std::cout << "**here**" << std::endl << std::endl;
 
     /*  // nominal next fine cell number difference     
       if(std::sin(X_apex(3, 0)) > 0.8 )
@@ -916,29 +916,30 @@ namespace phase_space_planner
 
   void PhaseSpacePlanner::UpdateTrajectory() 
   {
-    double T = step_period[step-3](1, 0) + step_period[step-2](0, 0);
+    double T = step_period[step-2](1, 0) + step_period[step-1](0, 0);
     double dt = 0.001; 
     int num = T/dt;
-    double tt1=step_period[step-2](0, 0);
-    double tt2=step_period[step-2](1, 0);
+    double tt1=step_period[step-1](0, 0);
+    double tt2=step_period[step-1](1, 0);
     Eigen::Matrix<double, 1, 1> TS;
     Tstep = Tstep + T;
     TS << Tstep;
+    double tt3=step_period[step-2](1, 0);
     //Tlist.push_back(TS);
     //std::cout << "num= " << num << std::endl;
 
  
 
-    Eigen::Matrix<double, 6, 1> start = apextraj_list[step-2];//apextraj_list[step-1];//switch_list[step-2];
-    Eigen::Matrix<double, 6, 1> end = switch_list[step-2];//apextraj_list[step];//switch_list[step-1];
+    Eigen::Matrix<double, 6, 1> start = apextraj_list[step-1];//apextraj_list[step-1];//switch_list[step-2];
+    Eigen::Matrix<double, 6, 1> end = switch_list[step-1];//apextraj_list[step];//switch_list[step-1];
 
-    Eigen::Matrix<double, 3, 1> pre_foot = p_foot_list[step-3];
-    Eigen::Matrix<double, 3, 1> cur_foot = p_foot_list[step-2];
-    Eigen::Matrix<double, 3, 1> nex_foot = p_foot_list[step-1];
+    Eigen::Matrix<double, 3, 1> pre_foot = p_foot_list[step-2];
+    Eigen::Matrix<double, 3, 1> cur_foot = p_foot_list[step-1];
+    Eigen::Matrix<double, 3, 1> nex_foot = p_foot_list[step];
     Eigen::Matrix<double, 3, 1> nex2_foot = p_foot_list[step];
 
-    Eigen::Matrix<double, 2, 1> slope1 = step_surface[step-2];
-    Eigen::Matrix<double, 2, 1> slope2 = step_surface[step-2];
+    Eigen::Matrix<double, 2, 1> slope1 = step_surface[step-1];
+    Eigen::Matrix<double, 2, 1> slope2 = step_surface[step-1];
 
     Eigen::Matrix<double, 2, 1> wwsq = WSQlist[step-3];
 
@@ -946,13 +947,28 @@ namespace phase_space_planner
     double y_ddot, y_dot = start(4, 0), y = start(1, 0);
     double z_ddot, z_dot = start(5, 0), z = start(2, 0);
 
+    Eigen::Matrix<double, 10, 1> swing_init_foot;
+    if(stance == 1)
+    {
+        swing_init_foot=l_foot_list.back();
+    }
+    else
+    {
+        swing_init_foot=r_foot_list.back();
+    }
 
-    double x_swing, dx_swing, ddx_swing;
-    double y_swing, dy_swing, ddy_swing;
-    double z_swing, dz_swing, ddz_swing;
-
+    double x_swing0 = swing_init_foot(0,0) , dx_swing, ddx_swing;
+    double y_swing0 = swing_init_foot(1,0), dy_swing, ddy_swing;
+    double z_swing0 = swing_init_foot(2,0), dz_swing, ddz_swing;
+    double x_swing;
+    double y_swing;
+    double z_swing;
+    //z_swing0=0;
+    //x_swing0=0;
+    //y_swing0=0;
     double x_distance = nex_foot(0, 0) - pre_foot(0, 0); 
     double y_distance = nex_foot(1, 0) - pre_foot(1, 0);
+    //std::cout << y_distance << "   " << x_distance << std::endl;
     double dh = 0.3;
     double h1 = dh;
     double h2 = dh + pre_foot(2, 0) - nex_foot(2, 0);
@@ -986,17 +1002,20 @@ namespace phase_space_planner
     }
 
     int num0 = step_period[step-2](1, 0) / dt;
-    int num1 = t1 / dt;
-    int num2 = t2 / dt;
-    int num3 = ts / dt;
+    //int num1 = t1 / dt;
+    //int num2 = t2 / dt;
+    //int num3 = ts / dt;
+    int num4 = tt3/dt;
+
 
     int numtt= (tt1+tt2)/dt;
     int num11= (tt1)/dt;
+    int num22= tt2/dt;
 
     double w_sq = wwsq(1, 0);
     
     double inc_x, inc_y;
-
+    Eigen::Matrix<double, 10, 1> stance_foot;
 
     for (int i = 0; i < numtt; i++)//(int i = 0; i < num; i++)
     { 
@@ -1036,6 +1055,19 @@ namespace phase_space_planner
                   *(i + 1)/num0 
                   + direction_list[step-2](1, 0);
         heading_list.push_back(heading);
+
+        //x_swing = pre_foot(0, 0) + x_distance / 2 * (1 - std::cos(PI * (i+num4) / numtt));
+        x_swing = nex_foot(0, 0) + (x_swing0 - nex_foot(0, 0)) * (std::cos(0.5*PI * (i+num4) / numtt));
+        dx_swing = x_distance / 2 * std::sin(PI * i / numtt) * PI / T;
+        ddx_swing = x_distance / 2 * std::cos(PI * i / numtt) * std::pow(PI / T, 2);
+
+        //y_swing = pre_foot(1, 0) + y_distance / 2 * (1 - std::cos(PI * (i+num4) / numtt));
+        y_swing = nex_foot(1, 0) + (y_swing0 - nex_foot(1, 0)) * (std::cos(0.5*PI * (i+num4) / numtt));
+        dy_swing = y_distance / 2 * std::sin(PI * i / numtt) * PI / T;
+        ddy_swing = y_distance / 2 * std::cos(PI * i / numtt) * std::pow(PI / T, 2);
+
+        //Eigen::Matrix<double, 10, 1> stance_foot;
+        stance_foot << cur_foot(0, 0), cur_foot(1, 0), cur_foot(2, 0), 0, 0, 0, 0, 0, 0, d_t;
       }
       else
       { 
@@ -1059,46 +1091,72 @@ namespace phase_space_planner
                   *(i  + 1 - num0)/(num - num0)
                   + direction_list[step-1](0, 0);
         heading_list.push_back(heading);
+        
+        x_swing = cur_foot(0, 0) + x_distance / 4 * (1 - std::cos(PI * (i-num11) / num22));
+        dx_swing = x_distance / 4 * std::sin(PI * (i-num11)/ num22) * PI / T;
+        ddx_swing = x_distance / 4 * std::cos(PI * (i-num11) / num22) * std::pow(PI / T, 2);
+
+        y_swing = cur_foot(1, 0) + y_distance / 4 * (1 - std::cos(PI * (i-num11)/ num22));
+        dy_swing = y_distance / 4 * std::sin(PI * (i-num11) / num22) * PI / T;
+        ddy_swing = y_distance / 4 * std::cos(PI * (i-num11) / num22) * std::pow(PI / T, 2);
+
+      //Eigen::Matrix<double, 10, 1> stance_foot;
+        stance_foot << nex_foot(0, 0), nex_foot(1, 0), nex_foot(2, 0), 0, 0, 0, 0, 0, 0, d_t;
       }
 
       Eigen::Matrix<double, 10, 1> COM;
       COM << x, y, z, x_dot, y_dot, z_dot, x_ddot, y_ddot, z_ddot, d_t;
       COM_list.push_back(COM);
 
-      x_swing = pre_foot(0, 0) + x_distance / 2 * (1 - std::cos(PI * i / num));
-      dx_swing = x_distance / 2 * std::sin(PI * i / num) * PI / T;
-      ddx_swing = x_distance / 2 * std::cos(PI * i / num) * std::pow(PI / T, 2);
+      //x_swing = cur_foot(0, 0) + x_distance / 2 * (1 - std::cos(PI * i / num));
+      //dx_swing = x_distance / 2 * std::sin(PI * i / num) * PI / T;
+      //ddx_swing = x_distance / 2 * std::cos(PI * i / num) * std::pow(PI / T, 2);
 
-      y_swing = pre_foot(1, 0) + y_distance / 2 * (1 - std::cos(PI * i / num));
-      dy_swing = y_distance / 2 * std::sin(PI * i / num) * PI / T;
-      ddy_swing = y_distance / 2 * std::cos(PI * i / num) * std::pow(PI / T, 2);
+     // y_swing = cur_foot(1, 0) + y_distance / 2 * (1 - std::cos(PI * i / num));
+     // dy_swing = y_distance / 2 * std::sin(PI * i / num) * PI / T;
+     // ddy_swing = y_distance / 2 * std::cos(PI * i / num) * std::pow(PI / T, 2);
 
 
-      if(i < num1)
+      if(i < num11)
       {
-        z_swing = pre_foot(2, 0) + h1 / 2 * (1 - std::cos(PI * i / num1));
-        dz_swing = h1 / 2 * std::sin(PI * i / num1) * PI / t1;
-        ddz_swing = h1 / 2 * std::cos(PI * i / num1) * std::pow(PI / t1, 2);
+        z_swing =nex_foot(2,0)  + (z_swing0 - nex_foot(2,0)) * (std::cos(0.5 * PI * (i) / num11));
+        //std::cout <<  (std::cos(PI * (i) / numtt)) << std::endl;
+        dz_swing = -h1 / 2 * std::sin(PI * i / num11) * PI / tt1;
+        ddz_swing = -h1 / 2 * std::cos(PI * i / num11) * std::pow(PI / tt1, 2);
+        //std::cout << z_swing << std::endl;
       }
-      else if (i < num1 + num3)
-      {
-        z_swing = pre_foot(2, 0) + h1;
-        dz_swing = 0;
-        ddz_swing = 0;
-      }
+     // else if (i < num1 + num3)
+      //{
+       // z_swing = pre_foot(2, 0) + h1;
+      // // dz_swing = 0;
+      //  ddz_swing = 0;
+     // }  
       else
       {
-        z_swing = nex_foot(2, 0) + h2 / 2 * (1 + std::cos(PI * (i-num1-num3) / num2));
-        dz_swing = -h2 / 2 * std::sin(PI * (i-num1-num3) / num2) * PI / t2;
-        ddz_swing = -h2 / 2 * std::cos(PI * (i-num1-num3) / num2) * std::pow(PI / t2, 2);
+        z_swing = cur_foot(2, 0) + h2/2 * ( std::sin(0.5* PI * (i-num11) / num22));
+        
+        dz_swing = h2 / 2 * std::sin(PI * (i-num11) / num22) * PI / t2;
+        ddz_swing = h2 / 2 * std::cos(PI * (i-num11) / num22) * std::pow(PI / t2, 2);
       }
 
       Eigen::Matrix<double, 10, 1> swing_foot;
       swing_foot << x_swing, y_swing, z_swing, dx_swing, dy_swing, dz_swing, 
                     ddx_swing, ddy_swing, ddz_swing, d_t;
-      Eigen::Matrix<double, 10, 1> stance_foot;
-      stance_foot << cur_foot(0, 0), cur_foot(1, 0), cur_foot(2, 0), 0, 0, 0, 0, 0, 0, d_t;
-
+    if(i < num11)
+    {
+      if (stance == 0)
+      {
+        r_foot_list.push_back(swing_foot);
+        l_foot_list.push_back(stance_foot);
+      }
+      else
+      {
+        l_foot_list.push_back(swing_foot);
+        r_foot_list.push_back(stance_foot);
+      }
+    }
+    else
+    {
       if (stance == 1)
       {
         r_foot_list.push_back(swing_foot);
@@ -1109,7 +1167,10 @@ namespace phase_space_planner
         l_foot_list.push_back(swing_foot);
         r_foot_list.push_back(stance_foot);
       }
+
+    }
       d_t += 0.001;
+    
     }
   }
 
@@ -1140,7 +1201,7 @@ namespace phase_space_planner
     int num = T/dt;
     double tt1=step_period[step-1](0, 0);
     double tt2=step_period[step-1](1, 0);
-    
+    double tt3=step_period[step-2](1, 0);
 
     Eigen::Matrix<double, 1, 1> TS;
     Tstep = Tstep + T;
@@ -1177,11 +1238,31 @@ namespace phase_space_planner
     double x_ddot, x_dot = start(3, 0), x = start(0, 0);
     double y_ddot, y_dot = start(4, 0), y = start(1, 0);
     double z_ddot, z_dot = start(5, 0), z = start(2, 0);
-
+/*
     double x_swing, dx_swing, ddx_swing;
     double y_swing, dy_swing, ddy_swing;
     double z_swing, dz_swing, ddz_swing;
+*/  
 
+    Eigen::Matrix<double, 10, 1> swing_init_foot;
+    if(stance == 1)
+    {
+        swing_init_foot=l_foot_list.back();
+    }
+    else
+    {
+        swing_init_foot=r_foot_list.back();
+    }
+
+    double x_swing0 = swing_init_foot(0,0) , dx_swing, ddx_swing;
+    double y_swing0 = swing_init_foot(1,0), dy_swing, ddy_swing;
+    double z_swing0 = swing_init_foot(2,0), dz_swing, ddz_swing;
+    double x_swing;
+    double y_swing;
+    double z_swing;
+
+    //y_swing0=0;
+    //x_swing0=0;
     double x_distance = nex_foot(0, 0) - pre_foot(0, 0); 
     double y_distance = nex_foot(1, 0) - pre_foot(1, 0);
     double dh = 0.3;
@@ -1216,15 +1297,22 @@ namespace phase_space_planner
       ts = T - t1 - t2;
     }
 
-    int num1 = t1 / dt;
-    int num2 = t2 / dt;
-    int num3 = ts / dt;
+    //int num1 = t1 / dt;
+   // int num2 = t2 / dt;
+    //int num3 = ts / dt;
 
     double w_sq = wwsq(1, 0); 
     
     double inc_x, inc_y;
     int numtt= (tt1+tt2)/dt;
     int num11= (tt1)/dt;
+    int num22= tt2/dt;
+
+    int num4 = tt3/dt;
+
+
+    Eigen::Matrix<double, 10, 1> stance_foot;
+
     // step time, t1, t2
     /*
       Eigen::Matrix<double, 3, 1> time;
@@ -1253,7 +1341,26 @@ namespace phase_space_planner
       heading << (direction_list[step-1](1, 0) - direction_list[step-1](0, 0))
                   *(i  + 1)/num + direction_list[step-1](0, 0);
       heading_list.push_back(heading);
+/*
+       y_swing = pre_foot(1, 0) + y_distance / 2 * (1 - std::cos(PI * i / num11));
+       dy_swing = y_distance / 2 * std::sin(PI * i / num11) * PI / T;
+       ddy_swing = y_distance / 2 * std::cos(PI * i / num11) * std::pow(PI / T, 2);
+       x_swing = pre_foot(0, 0) + x_distance / 2 * (1 - std::cos(PI * i / num11));
+       dx_swing = x_distance / 2 * std::sin(PI * i / num11) * PI / T;
+       ddx_swing = x_distance / 2 * std::cos(PI * i / num11) * std::pow(PI / T, 2);
+*/
 
+        x_swing = nex_foot(0, 0) + (x_swing0 - nex_foot(0, 0)) * (std::cos(0.5*PI * (i+num4) / numtt));
+        dx_swing = x_distance / 2 * std::sin(PI * i / numtt) * PI / T;
+        ddx_swing = x_distance / 2 * std::cos(PI * i / numtt) * std::pow(PI / T, 2);
+
+        //y_swing = pre_foot(1, 0) + y_distance / 2 * (1 - std::cos(PI * (i+num4) / numtt));
+        y_swing = nex_foot(1, 0) + (y_swing0 - nex_foot(1, 0)) * (std::cos(0.5*PI * (i+num4) / numtt));
+        dy_swing = y_distance / 2 * std::sin(PI * i / numtt) * PI / T;
+        ddy_swing = y_distance / 2 * std::cos(PI * i / numtt) * std::pow(PI / T, 2);
+
+        //Eigen::Matrix<double, 10, 1> stance_foot;
+        stance_foot << cur_foot(0, 0), cur_foot(1, 0), cur_foot(2, 0), 0, 0, 0, 0, 0, 0, d_t;
       }
       
       else
@@ -1277,6 +1384,17 @@ namespace phase_space_planner
       heading << (direction_list[step-1](1, 0) - direction_list[step-1](0, 0))
                   *(i  + 1)/num + direction_list[step-1](0, 0);
       heading_list.push_back(heading);
+
+        x_swing = cur_foot(0, 0) + x_distance / 4 * (1 - std::cos(PI * (i-num11) / num22));
+        dx_swing = x_distance / 4 * std::sin(PI * (i-num11)/ num22) * PI / T;
+        ddx_swing = x_distance / 4 * std::cos(PI * (i-num11) / num22) * std::pow(PI / T, 2);
+
+        y_swing = cur_foot(1, 0) + y_distance / 4 * (1 - std::cos(PI * (i-num11)/ num22));
+        dy_swing = y_distance / 4 * std::sin(PI * (i-num11) / num22) * PI / T;
+        ddy_swing = y_distance / 4 * std::cos(PI * (i-num11) / num22) * std::pow(PI / T, 2);
+
+      //Eigen::Matrix<double, 10, 1> stance_foot;
+        stance_foot << nex_foot(0, 0), nex_foot(1, 0), nex_foot(2, 0), 0, 0, 0, 0, 0, 0, d_t;
       }
 
 
@@ -1286,41 +1404,50 @@ namespace phase_space_planner
 
 
 
-      x_swing = pre_foot(0, 0) + x_distance / 2 * (1 - std::cos(PI * i / num));
-      dx_swing = x_distance / 2 * std::sin(PI * i / num) * PI / T;
-      ddx_swing = x_distance / 2 * std::cos(PI * i / num) * std::pow(PI / T, 2);
-
-      y_swing = pre_foot(1, 0) + y_distance / 2 * (1 - std::cos(PI * i / num));
-      dy_swing = y_distance / 2 * std::sin(PI * i / num) * PI / T;
-      ddy_swing = y_distance / 2 * std::cos(PI * i / num) * std::pow(PI / T, 2);
+    
 
 
 
-      if(i < num1)
+      if(i < num11)
       {
-        z_swing = pre_foot(2, 0) + h1 / 2 * (1 - std::cos(PI * i / num1));
-        dz_swing = h1 / 2 * std::sin(PI * i / num1) * PI / t1;
-        ddz_swing = h1 / 2 * std::cos(PI * i / num1) * std::pow(PI / t1, 2);
-      }
-      else if (i < num1 + num3)
-      {
-        z_swing = pre_foot(2, 0) + h1;
-        dz_swing = 0;
-        ddz_swing = 0;
+        z_swing =nex_foot(2,0)  + (h2/2 + z_swing0 - nex_foot(2,0)) * (std::sin(PI * (i) / num11));
+        //std::cout <<  (std::cos(PI * (i) / numtt)) << std::endl;
+        dz_swing = -h1 / 2 * std::sin(PI * i / num11) * PI / tt1;
+        ddz_swing = -h1 / 2 * std::cos(PI * i / num11) * std::pow(PI / tt1, 2);
+        //std::cout << z_swing << std::endl;
       }
       else
       {
-        z_swing = nex_foot(2, 0) + h2 / 2 * (1 + std::cos(PI * (i-num1-num3) / num2));
-        dz_swing = -h2 / 2 * std::sin(PI * (i-num1-num3) / num2) * PI / t2;
-        ddz_swing = -h2 / 2 * std::cos(PI * (i-num1-num3) / num2) * std::pow(PI / t2, 2);
+        z_swing = cur_foot(2, 0) + h2/2 * ( std::sin(0.5* PI * (i-num11) / num22));
+        
+        dz_swing = h2 / 2 * std::sin(PI * (i-num11) / num22) * PI / t2;
+        ddz_swing = h2 / 2 * std::cos(PI * (i-num11) / num22) * std::pow(PI / t2, 2);
       }
+      //if(i < num1)
+     // {
+     //   z_swing = pre_foot(2, 0) + h1 / 2 * (1 - std::cos(PI * i / num1));
+      //  dz_swing = h1 / 2 * std::sin(PI * i / num1) * PI / t1;
+      //  ddz_swing = h1 / 2 * std::cos(PI * i / num1) * std::pow(PI / t1, 2);
+      //}
+      //else if (i < num1 + num3)
+     // {
+      //  z_swing = pre_foot(2, 0) + h1;
+      //  ddz_swing = 0;
+     // }
+     // else
+     // {
+     //   z_swing = nex_foot(2, 0) + h2 / 2 * (1 + std::cos(PI * (i-num1-num3) / num2));
+     //   dz_swing = -h2 / 2 * std::sin(PI * (i-num1-num3) / num2) * PI / t2;
+     //   ddz_swing = -h2 / 2 * std::cos(PI * (i-num1-num3) / num2) * std::pow(PI / t2, 2);
+     // }
 
       Eigen::Matrix<double, 10, 1> swing_foot;
       swing_foot << x_swing, y_swing, z_swing, dx_swing, dy_swing, dz_swing, 
                     ddx_swing, ddy_swing, ddz_swing, d_t;
-      Eigen::Matrix<double, 10, 1> stance_foot;
-      stance_foot << cur_foot(0, 0), cur_foot(1, 0), cur_foot(2, 0), 0, 0, 0, 0, 0, 0, d_t;
-
+      //Eigen::Matrix<double, 10, 1> stance_foot;
+      //stance_foot << cur_foot(0, 0), cur_foot(1, 0), cur_foot(2, 0), 0, 0, 0, 0, 0, 0, d_t;
+    if(i < num11)
+    {
       if (stance == 0)
       {
         r_foot_list.push_back(swing_foot);
@@ -1331,6 +1458,33 @@ namespace phase_space_planner
         l_foot_list.push_back(swing_foot);
         r_foot_list.push_back(stance_foot);
       }
+    }
+    else
+    {
+      if (stance == 1)
+      {
+        r_foot_list.push_back(swing_foot);
+        l_foot_list.push_back(stance_foot);
+      }
+      else
+      {
+        l_foot_list.push_back(swing_foot);
+        r_foot_list.push_back(stance_foot);
+      }
+
+    }
+    /*
+      if (stance == 0)
+      {
+        r_foot_list.push_back(swing_foot);
+        l_foot_list.push_back(stance_foot);
+      }
+      else
+      {
+        l_foot_list.push_back(swing_foot);
+        r_foot_list.push_back(stance_foot);
+      }
+      */
     }
     
   }
@@ -1381,12 +1535,31 @@ namespace phase_space_planner
     double y_ddot, y_dot = start(4, 0), y = start(1, 0);
     double z_ddot, z_dot = start(5, 0), z = start(2, 0);
 
-    double x_swing, dx_swing, ddx_swing;
-    double y_swing, dy_swing, ddy_swing;
-    double z_swing, dz_swing, ddz_swing;
+    //double x_swing, dx_swing, ddx_swing;
+    //double y_swing, dy_swing, ddy_swing;
+    //double z_swing, dz_swing, ddz_swing;
 
-    double x_distance = nex_foot(0, 0) - pre_foot(0, 0); 
-    double y_distance = nex_foot(1, 0) - pre_foot(1, 0);
+    Eigen::Matrix<double, 10, 1> swing_init_foot;
+    if(stance == 0)
+    {
+        swing_init_foot=l_foot_list.back();
+    }
+    else
+    {
+        swing_init_foot=r_foot_list.back();
+    }
+
+    double x_swing0 = swing_init_foot(0,0) , dx_swing, ddx_swing;
+    double y_swing0 = swing_init_foot(1,0), dy_swing, ddy_swing;
+    double z_swing0 = swing_init_foot(2,0), dz_swing, ddz_swing;
+    double x_swing;
+    double y_swing;
+    double z_swing;
+    //z_swing0=0;
+
+    double x_distance = nex_foot(0, 0) - x_swing0;// 
+    double y_distance = cur_foot(1, 0) - y_swing0;
+    //std::cout << x_distance << "  " << y_distance << std::endl;
     double dh = 0.3;
     double h1 = dh;
     double h2 = dh + pre_foot(2, 0) - nex_foot(2, 0);
@@ -1460,34 +1633,35 @@ namespace phase_space_planner
                 *(i + 1)/num + direction_list[step-1](1, 0);
       heading_list.push_back(heading);
 
-      x_swing = pre_foot(0, 0) + x_distance / 2 * (1 - std::cos(PI * i / num));
+      x_swing = x_swing0 + x_distance / 2 * (1 - std::cos(PI * i / num));
       dx_swing = x_distance / 2 * std::sin(PI * i / num) * PI / T;
       ddx_swing = x_distance / 2 * std::cos(PI * i / num) * std::pow(PI / T, 2);
 
-      y_swing = pre_foot(1, 0) + y_distance / 2 * (1 - std::cos(PI * i / num));
+      y_swing = y_swing0 + y_distance / 2 * (1 - std::cos(PI * i / num));
       dy_swing = y_distance / 2 * std::sin(PI * i / num) * PI / T;
       ddy_swing = y_distance / 2 * std::cos(PI * i / num) * std::pow(PI / T, 2);
 
 
 
-      if(i < num1)
-      {
-        z_swing = pre_foot(2, 0) + h1 / 2 * (1 - std::cos(PI * i / num1));
-        dz_swing = h1 / 2 * std::sin(PI * i / num1) * PI / t1;
-        ddz_swing = h1 / 2 * std::cos(PI * i / num1) * std::pow(PI / t1, 2);
-      }
-      else if (i < num1 + num3)
-      {
-        z_swing = pre_foot(2, 0) + h1;
-        dz_swing = 0;
-        ddz_swing = 0;
-      }
-      else
-      {
-        z_swing = nex_foot(2, 0) + h2 / 2 * (1 + std::cos(PI * (i-num1-num3) / num2));
+     // if(i < num1)
+     // {
+       // z_swing = z_swing0 -  h1 / 2 * (1 - std::cos(PI * i / num1));
+       // dz_swing = h1 / 2 * std::sin(PI * i / num1) * PI / t1;
+       // ddz_swing = h1 / 2 * std::cos(PI * i / num1) * std::pow(PI / t1, 2);
+
+    //  }
+     // else if (i < num1 + num3)
+     // {
+      //  z_swing = pre_foot(2, 0) + h1;
+      //  dz_swing = 0;
+       // ddz_swing = 0;
+      //}
+     // else
+     // {
+        z_swing = nex_foot(2,0) + (z_swing0-nex_foot(2, 0)) * (std::cos(0.5*PI * (i) / num));
         dz_swing = -h2 / 2 * std::sin(PI * (i-num1-num3) / num2) * PI / t2;
         ddz_swing = -h2 / 2 * std::cos(PI * (i-num1-num3) / num2) * std::pow(PI / t2, 2);
-      }
+      //}
 
       Eigen::Matrix<double, 10, 1> swing_foot;
       swing_foot << x_swing, y_swing, z_swing, dx_swing, dy_swing, dz_swing, 
@@ -1683,9 +1857,26 @@ void PhaseSpacePlanner::perturbed_traj()
     //double init_x_dot = x_dot;
     double init_x= x;
 
-    double x_swing, dx_swing, ddx_swing;
-    double y_swing, dy_swing, ddy_swing;
-    double z_swing, dz_swing, ddz_swing;
+
+    Eigen::Matrix<double, 10, 1> swing_init_foot;
+    if(stance == 1)
+    {
+        swing_init_foot=l_foot_list.back();
+    }
+    else
+    {
+        swing_init_foot=r_foot_list.back();
+    }
+
+    double x_swing0 = swing_init_foot(0,0) , dx_swing, ddx_swing;
+    double y_swing0 = swing_init_foot(1,0), dy_swing, ddy_swing;
+    double z_swing0 = swing_init_foot(2,0), dz_swing, ddz_swing;
+    double x_swing;
+    double y_swing;
+    double z_swing;
+
+    //x_swing0 = 0;
+    //y_swing0 = 0;
 
     double x_distance = nex_foot(0, 0) - pre_foot(0, 0); 
     double y_distance = nex_foot(1, 0) - pre_foot(1, 0);
@@ -1730,12 +1921,18 @@ void PhaseSpacePlanner::perturbed_traj()
     }
 
     int num0 = step_period[step-2](1, 0) / dt;
-    int num1 = t1 / dt;
-    int num2 = t2 / dt;
-    int num3 = ts / dt;
+    //int num1 = t1 / dt;
+    //int num2 = t2 / dt;
+    //int num3 = ts / dt;
 
+    double tt3=step_period[step-2](1, 0);
+    int num4 = tt3/dt;
     int numtt= (tt1+tt2)/dt;
     int num11= (tt1)/dt;
+    int num22= tt2/dt;
+
+    
+    Eigen::Matrix<double, 10, 1> stance_foot;
 
       double backward_flag = 1;
    // double w_sq = wwsq(1, 0);
@@ -1748,14 +1945,7 @@ void PhaseSpacePlanner::perturbed_traj()
     double bkwrd_num = 0;
     for (int i = 0; i < numtt; i++)  //(x <= nex_foot(0,0) )//(int i = 0; i < num; i++)
     { 
-      /*
-      double xx_c = 0.016;
-        double dxx_c = 0.348;
-        std::pair<double, double> key_of_controll(xx_c, dxx_c);
-        double u = map_of_control_fhws[key_of_controll];
-        std::cout << u << std::endl;
-*/
-      //++;
+
 
       int x_c = (0.002 * std::round((x-init_x) / 0.002))*1000;
       int dx_c = (0.004 * std::round((x_dot) / 0.004))*1000;
@@ -1806,6 +1996,19 @@ void PhaseSpacePlanner::perturbed_traj()
 
         backward_flag=1;
         fw_num = fw_num + 1; 
+
+       // x_swing = pre_foot(0, 0) + x_distance / 2 * (1 - std::cos(PI * (i+num4) / numtt));
+        x_swing = nex_foot(0, 0) + (x_swing0 - nex_foot(0, 0)) * (std::cos(0.5*PI * (i+num4) / numtt));
+        dx_swing = x_distance / 2 * std::sin(PI * i / numtt) * PI / T;
+        ddx_swing = x_distance / 2 * std::cos(PI * i / numtt) * std::pow(PI / T, 2);
+
+        //y_swing = pre_foot(1, 0) + y_distance / 2 * (1 - std::cos(PI * (i+num4) / numtt));
+        y_swing = nex_foot(1, 0) + (y_swing0 - nex_foot(1, 0)) * (std::cos(0.5*PI * (i+num4) / numtt));
+        dy_swing = y_distance / 2 * std::sin(PI * i / numtt) * PI / T;
+        ddy_swing = y_distance / 2 * std::cos(PI * i / numtt) * std::pow(PI / T, 2);
+
+        //Eigen::Matrix<double, 10, 1> stance_foot;
+        stance_foot << cur_foot(0, 0), cur_foot(1, 0), cur_foot(2, 0), 0, 0, 0, 0, 0, 0, d_t;
       }
       else
       { 
@@ -1836,46 +2039,58 @@ void PhaseSpacePlanner::perturbed_traj()
                   + direction_list[step-1](0, 0);
         heading_list.push_back(heading);
         bkwrd_num = bkwrd_num +1;
+
+        x_swing = cur_foot(0, 0) + x_distance / 4 * (1 - std::cos(PI * (i-num11) / num22));
+        dx_swing = x_distance / 4 * std::sin(PI * (i-num11)/ num22) * PI / T;
+        ddx_swing = x_distance / 4 * std::cos(PI * (i-num11) / num22) * std::pow(PI / T, 2);
+
+        y_swing = cur_foot(1, 0) + y_distance / 4 * (1 - std::cos(PI * (i-num11)/ num22));
+        dy_swing = y_distance / 4 * std::sin(PI * (i-num11) / num22) * PI / T;
+        ddy_swing = y_distance / 4 * std::cos(PI * (i-num11) / num22) * std::pow(PI / T, 2);
+
+      //Eigen::Matrix<double, 10, 1> stance_foot;
+        stance_foot << nex_foot(0, 0), nex_foot(1, 0), nex_foot(2, 0), 0, 0, 0, 0, 0, 0, d_t;
       }
 
       Eigen::Matrix<double, 10, 1> COM;
       COM << x, y, z, x_dot, y_dot, z_dot, x_ddot, y_ddot, z_ddot, d_t;
       COM_list.push_back(COM);
 
-      x_swing = pre_foot(0, 0) + x_distance / 2 * (1 - std::cos(PI * i / num));
-      dx_swing = x_distance / 2 * std::sin(PI * i / num) * PI / T;
-      ddx_swing = x_distance / 2 * std::cos(PI * i / num) * std::pow(PI / T, 2);
-
-      y_swing = pre_foot(1, 0) + y_distance / 2 * (1 - std::cos(PI * i / num));
-      dy_swing = y_distance / 2 * std::sin(PI * i / num) * PI / T;
-      ddy_swing = y_distance / 2 * std::cos(PI * i / num) * std::pow(PI / T, 2);
+      
 
 
-      if(i < num1)
+      if(i < num11)
       {
-        z_swing = pre_foot(2, 0) + h1 / 2 * (1 - std::cos(PI * i / num1));
-        dz_swing = h1 / 2 * std::sin(PI * i / num1) * PI / t1;
-        ddz_swing = h1 / 2 * std::cos(PI * i / num1) * std::pow(PI / t1, 2);
+        z_swing =nex_foot(2,0)  + (z_swing0 - nex_foot(2,0)) * (std::cos(0.5 * PI * (i) / num11));
+        //std::cout <<  (std::cos(PI * (i) / numtt)) << std::endl;
+        dz_swing = -h1 / 2 * std::sin(PI * i / num11) * PI / tt1;
+        ddz_swing = -h1 / 2 * std::cos(PI * i / num11) * std::pow(PI / tt1, 2);
+        /*
+        z_swing =  z_swing0  * (std::cos(PI * (i) / numtt));
+        //std::cout <<  z_swing0 << std::endl;
+        dz_swing = -h1 / 2 * std::sin(PI * i / numtt) * PI / tt1;
+        ddz_swing = -h1 / 2 * std::cos(PI * i / numtt) * std::pow(PI / tt1, 2);
+        */
       }
-      else if (i < num1 + num3)
-      {
-        z_swing = pre_foot(2, 0) + h1;
-        dz_swing = 0;
-        ddz_swing = 0;
-      }
+     // else if (i < num1 + num3)
+      //{
+       // z_swing = pre_foot(2, 0) + h1;
+      // // dz_swing = 0;
+      //  ddz_swing = 0;
+     // }
       else
       {
-        z_swing = nex_foot(2, 0) + h2 / 2 * (1 + std::cos(PI * (i-num1-num3) / num2));
-        dz_swing = -h2 / 2 * std::sin(PI * (i-num1-num3) / num2) * PI / t2;
-        ddz_swing = -h2 / 2 * std::cos(PI * (i-num1-num3) / num2) * std::pow(PI / t2, 2);
+        z_swing = cur_foot(2, 0) + h2/2 * (1 - std::cos(PI * (i-num11) / num22));
+        //std::cout << (1 - std::cos(PI * (i-num11) / num22)) << std::endl;
+        dz_swing = h2 / 2 * std::sin(PI * (i-num11) / num22) * PI / t2;
+        ddz_swing = h2 / 2 * std::cos(PI * (i-num11) / num22) * std::pow(PI / t2, 2);
       }
 
       Eigen::Matrix<double, 10, 1> swing_foot;
       swing_foot << x_swing, y_swing, z_swing, dx_swing, dy_swing, dz_swing, 
                     ddx_swing, ddy_swing, ddz_swing, d_t;
-      Eigen::Matrix<double, 10, 1> stance_foot;
-      stance_foot << cur_foot(0, 0), cur_foot(1, 0), cur_foot(2, 0), 0, 0, 0, 0, 0, 0, d_t;
-
+    if(i < num11)
+    {
       if (stance == 0)
       {
         r_foot_list.push_back(swing_foot);
@@ -1886,12 +2101,27 @@ void PhaseSpacePlanner::perturbed_traj()
         l_foot_list.push_back(swing_foot);
         r_foot_list.push_back(stance_foot);
       }
+    }
+    else
+    {
+      if (stance == 1)
+      {
+        r_foot_list.push_back(swing_foot);
+        l_foot_list.push_back(stance_foot);
+      }
+      else
+      {
+        l_foot_list.push_back(swing_foot);
+        r_foot_list.push_back(stance_foot);
+      }
+
+    }
       d_t += 0.001;
     }
     //std::cout << fw_num << " ::::: " << bkwrd_num << std::endl;
   }
 
-  void PhaseSpacePlanner::UpdateKeyframe_pert() 
+void PhaseSpacePlanner::UpdateKeyframe_pert() 
   {
     double COS = std::cos(X_apex(3, 0) + prim(1, 0));
     double SIN = std::sin(X_apex(3, 0) + prim(1, 0));
@@ -1917,7 +2147,7 @@ void PhaseSpacePlanner::perturbed_traj()
     double w_sq11 =1000; 
     double w_sq22 =1000;
       
-
+    double new_foot;
    
 
     Eigen::Matrix<double, 10, 1> cont_start = COM_list.back();
@@ -1987,10 +2217,11 @@ void PhaseSpacePlanner::perturbed_traj()
           //std::cout << "delta y2=" << l1_foot - l1 << std::endl;
           //std::cout << "delta y1=" << l1 << std::endl;
           // Foot2
+          double og_s2_foot = s2;
           s2_foot = s2;
           // std::cout << "s2= " << s2 << " s2_foot= "<< s2_foot << std::endl;
           double pos_guard = 0.5*(((s2_dot*s2_dot - s1_dot*s1_dot)/(3.1*3.1))/(s2_foot-s1_foot) + (s1_foot + s2_foot));//(s2-s1)*0.5 ;
-          std::cout << "s2= " << s2 << " s1 = "<< s1 << " pos_guard = " << pos_guard << std::endl;
+          //std::cout << "s2= " << s2 << " s1 = "<< s1 << " pos_guard = " << pos_guard << std::endl;
 
 
           if (stance == 1)
@@ -2014,8 +2245,8 @@ void PhaseSpacePlanner::perturbed_traj()
           double controllable_flag = 1;
           double inc_s1, inc_l1, inc_s2;
           
-          double app_pert =   -((0.05 + 0.05) * ( static_cast<double>(std::rand()) / static_cast<double>(RAND_MAX) ) -0.05)*2;
-          double app_pert_dot= ((0.2 + 0.2) * ( static_cast<double>(std::rand()) / static_cast<double>(RAND_MAX) ) -0.2)*2;
+          double app_pert =   -((0.1 + 0.1) * ( static_cast<double>(std::rand()) / static_cast<double>(RAND_MAX) ) -0.1)*2;
+          double app_pert_dot= -((0.2 + 0.2) * ( static_cast<double>(std::rand()) / static_cast<double>(RAND_MAX) ) -0.2)*2.5;
 
           while (s2 <= s2_foot ) 
           {
@@ -2025,7 +2256,7 @@ void PhaseSpacePlanner::perturbed_traj()
 
             double x_pert = 0;//(0.005 + 0.005) * ( static_cast<double>(std::rand()) / static_cast<double>(RAND_MAX) ) -0.005;
             double xd_pert =0;//(0.005 + 0.005) * ( static_cast<double>(std::rand()) / static_cast<double>(RAND_MAX) ) -0.005;
-            if (forward_num == 160)
+            if (forward_num == 200)
             {
             x_pert  = app_pert;
             xd_pert = app_pert_dot;
@@ -2107,8 +2338,8 @@ void PhaseSpacePlanner::perturbed_traj()
 
               ///std::cout << "capt SHWS" << std::endl;
               //std::cout << "shws" << std::endl;
-
-              s2_foot = pos_guard + 1/(3.1)*std::sqrt((s1_dot*s1_dot - prim(3, 0)*prim(3, 0)));
+              new_foot = pos_guard + 1/(3.1)*std::sqrt((s1_dot*s1_dot - prim(3, 0)*prim(3, 0)));
+              s2_foot = new_foot;//pos_guard + 1/(3.1)*std::sqrt((s1_dot*s1_dot - prim(3, 0)*prim(3, 0)));
               //std::cout << "new foot1 = " << s1_dot*s1_dot - prim(3, 0)*prim(3, 0) << std::endl ;
               //std::cout << "x = s2 = " << s2 << std::endl;
               //double x_pert = 0;//(0.005 + 0.005) * ( static_cast<double>(std::rand()) / static_cast<double>(RAND_MAX) ) -0.005;
@@ -2327,7 +2558,20 @@ void PhaseSpacePlanner::perturbed_traj()
     X_apex(2, 0) = p_foot(2, 0) + prim(4, 0); 
     X_apex(3, 0) += prim(1, 0) ; //X_d(3, 0) + prim(1, 0) + phi;
     X_apex(4, 0) = prim(3, 0);
+    double delta_sag = 0;
+
+   
+      if((new_foot - og_s2_foot) < -0.05195)
+      {
+        delta_sag = -1;
+      }
+      if((new_foot - og_s2_foot) > 0.05195)
+      {
+        delta_sag =-1;
+        std::cout << "here" <<std::endl;
+      }
     
+
 
       if (prim(0, 0) > 0.4 && prim(0, 0) < 0.46)
       {
@@ -2346,6 +2590,9 @@ void PhaseSpacePlanner::perturbed_traj()
         sag = 3;
       }
 
+      sag = sag+delta_sag;
+      std::cout << sag << "  " << delta_sag << "  " << new_foot - og_s2_foot  << std::endl;
+
 
     if ((prim(1, 0) != 0) && ( (std::cos(X_apex(3,0)) > 0.95) || (std::cos(X_apex(3,0)) < -0.95) || (std::sin(X_apex(3,0))>0.95) || (std::sin(X_apex(3,0)) < -0.95)  )) //((prim(1, 0) == 0) && (X_apex(3,0) != prev_heading))
     {
@@ -2357,8 +2604,8 @@ void PhaseSpacePlanner::perturbed_traj()
       {
           if (l2 > 0.314)
         {
-           X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)) -0.208*std::sin(X_apex(3, 0)); //X_apex(0, 0);
-           X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)) +0.208*std::cos(X_apex(3, 0)); //X_apex(1, 0);
+           X_d(0, 0) += s2_foot*std::cos(X_apex(3, 0)) -0.208*std::sin(X_apex(3, 0)); //X_apex(0, 0);
+           X_d(1, 0) += s2_foot*std::sin(X_apex(3, 0)) +0.208*std::cos(X_apex(3, 0)); //X_apex(1, 0);
            X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
            X_d(3, 0) += prim(1, 0);
            X_d(4, 0) = prim(3, 0);
@@ -2388,8 +2635,8 @@ void PhaseSpacePlanner::perturbed_traj()
          }
           else if (l2 > 0.2)
         {
-           X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)) -0.104*std::sin(X_apex(3, 0)); //X_apex(0, 0);
-           X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)) +0.104*std::cos(X_apex(3, 0)); //X_apex(1, 0);
+           X_d(0, 0) += s2_foot*std::cos(X_apex(3, 0)) -0.104*std::sin(X_apex(3, 0)); //X_apex(0, 0);
+           X_d(1, 0) += s2_foot*std::sin(X_apex(3, 0)) +0.104*std::cos(X_apex(3, 0)); //X_apex(1, 0);
            X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
            X_d(3, 0) += prim(1, 0);
            X_d(4, 0) = prim(3, 0);
@@ -2422,16 +2669,16 @@ void PhaseSpacePlanner::perturbed_traj()
          {
           if (l2 + 0.104)
           {
-           X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)) +0.104*std::sin(X_apex(3, 0)); //X_apex(0, 0);
-           X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)) -0.104*std::cos(X_apex(3, 0)); //X_apex(1, 0);
+           X_d(0, 0) += s2_foot*std::cos(X_apex(3, 0)) +0.104*std::sin(X_apex(3, 0)); //X_apex(0, 0);
+           X_d(1, 0) += s2_foot*std::sin(X_apex(3, 0)) -0.104*std::cos(X_apex(3, 0)); //X_apex(1, 0);
            X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
            X_d(3, 0) += prim(1, 0);
            X_d(4, 0) = prim(3, 0);
           }
           else
           {
-           X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)) +0.208*std::sin(X_apex(3, 0)); //X_apex(0, 0);
-           X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)) -0.208*std::cos(X_apex(3, 0)); //X_apex(1, 0);
+           X_d(0, 0) += s2_foot*std::cos(X_apex(3, 0)) +0.208*std::sin(X_apex(3, 0)); //X_apex(0, 0);
+           X_d(1, 0) += s2_foot*std::sin(X_apex(3, 0)) -0.208*std::cos(X_apex(3, 0)); //X_apex(1, 0);
            X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
            X_d(3, 0) += prim(1, 0);
            X_d(4, 0) = prim(3, 0);
@@ -2461,8 +2708,8 @@ void PhaseSpacePlanner::perturbed_traj()
          }
          
            else{
-            X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)); //X_apex(0, 0);
-            X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)); //X_apex(1, 0);
+            X_d(0, 0) += s2_foot*std::cos(X_apex(3, 0)); //X_apex(0, 0);
+            X_d(1, 0) += s2_foot*std::sin(X_apex(3, 0)); //X_apex(1, 0);
             X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
             X_d(3, 0) += prim(1, 0);
             X_d(4, 0) = prim(3, 0);  
@@ -2489,8 +2736,8 @@ void PhaseSpacePlanner::perturbed_traj()
       {
           if (l2 < -0.314)
         {
-          X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)) +0.208*std::sin(X_apex(3, 0)); //X_apex(0, 0);
-          X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)) -0.208*std::cos(X_apex(3, 0)); //X_apex(1, 0);
+          X_d(0, 0) += s2_foot*std::cos(X_apex(3, 0)) +0.208*std::sin(X_apex(3, 0)); //X_apex(0, 0);
+          X_d(1, 0) += s2_foot*std::sin(X_apex(3, 0)) -0.208*std::cos(X_apex(3, 0)); //X_apex(1, 0);
           X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
           X_d(3, 0) += prim(1, 0);
           X_d(4, 0) = prim(3, 0);
@@ -2522,8 +2769,8 @@ void PhaseSpacePlanner::perturbed_traj()
 
          else if (l2 < -0.2)
         {
-          X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)) +0.104*std::sin(X_apex(3, 0)); //X_apex(0, 0);
-          X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)) -0.104*std::cos(X_apex(3, 0)); //X_apex(1, 0);
+          X_d(0, 0) += s2_foot*std::cos(X_apex(3, 0)) +0.104*std::sin(X_apex(3, 0)); //X_apex(0, 0);
+          X_d(1, 0) += s2_foot*std::sin(X_apex(3, 0)) -0.104*std::cos(X_apex(3, 0)); //X_apex(1, 0);
           X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
           X_d(3, 0) += prim(1, 0);
           X_d(4, 0) = prim(3, 0);
@@ -2554,8 +2801,8 @@ void PhaseSpacePlanner::perturbed_traj()
         }
         else if (l2 > 0)
         {
-          X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)) -0.104*std::sin(X_apex(3, 0)); //X_apex(0, 0);
-          X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)) +0.104*std::cos(X_apex(3, 0)); //X_apex(1, 0);
+          X_d(0, 0) += s2_foot*std::cos(X_apex(3, 0)) -0.104*std::sin(X_apex(3, 0)); //X_apex(0, 0);
+          X_d(1, 0) += s2_foot*std::sin(X_apex(3, 0)) +0.104*std::cos(X_apex(3, 0)); //X_apex(1, 0);
           X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
           X_d(3, 0) += prim(1, 0);
           X_d(4, 0) = prim(3, 0);
@@ -2583,8 +2830,8 @@ void PhaseSpacePlanner::perturbed_traj()
         }
         
         else{
-          X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)); //X_apex(0, 0);
-          X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)); //X_apex(1, 0);
+          X_d(0, 0) += s2_foot*std::cos(X_apex(3, 0)); //X_apex(0, 0);
+          X_d(1, 0) += s2_foot*std::sin(X_apex(3, 0)); //X_apex(1, 0);
           X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
           X_d(3, 0) += prim(1, 0);
           X_d(4, 0) = prim(3, 0);
@@ -2612,8 +2859,8 @@ void PhaseSpacePlanner::perturbed_traj()
     } 
     else
     {
-      X_d(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0)); //X_apex(0, 0);
-      X_d(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0)); //X_apex(1, 0);
+      X_d(0, 0) += s2_foot*std::cos(X_apex(3, 0)); //X_apex(0, 0);
+      X_d(1, 0) += s2_foot*std::sin(X_apex(3, 0)); //X_apex(1, 0);
       X_d(2, 0) =  p_foot(2, 0) + prim(4, 0); 
       X_d(3, 0) += prim(1, 0);
       X_d(4, 0) = prim(3, 0);

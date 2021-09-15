@@ -108,7 +108,7 @@ int DoMain()
   double v;
   double pre_v = 0.1;
 
-  for (int i = 0; i < 200; i++) 
+  for (int i = 0; i < 120; i++) 
   {
     std::vector<int> obstacle_location = parser.getPropertyArray("obstacle_location");
     Eigen::Matrix<double, 3, 1> obs;
@@ -441,6 +441,7 @@ int DoMain()
         psp.UpdateKeyframe();
         psp.UpdateObstacle(obs, obs2);
         psp.FirstStep();
+        //std::cout<< "first step" << std::endl;
         //psp.UpdateTrajectory();
     
         
@@ -471,6 +472,7 @@ int DoMain()
         psp.UpdateKeyframe();
         psp.UpdateObstacle(obs, obs2);
         psp.UpdateTrajectory();
+        //std::cout<< "new" << std::endl;
 
         //if (psp.goodlateral(0,0) == 0)
         //{

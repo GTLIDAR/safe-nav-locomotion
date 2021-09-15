@@ -15,58 +15,63 @@ log_COM = np.loadtxt("log_COM.txt")
 log_l_foot = np.loadtxt("log_l_foot.txt")
 log_r_foot = np.loadtxt("log_r_foot.txt")
 log_obstacle = np.loadtxt("log_obstacle.txt")
+log_waypoint = np.loadtxt("log_waypoint.txt")
 
 cellz = 2.70351;
 stairz = 4*0.104;
 fig = plt.figure()
-ax1 = fig.add_subplot(1, 1, 1, projection="3d")
+ax1 = fig.add_subplot(1, 1, 1)
 ax1.set_aspect('equal')
 ax1.set_xlabel('x')
 ax1.set_ylabel('y')
-ax1.set_zlabel('z')
+#ax1.set_zlabel('z')
 
 ax1.set_xlim(-7*cellz, 7*cellz)
 ax1.set_ylim(-13*cellz, 13*cellz)
-ax1.set_zlim(-5, 5)
+#ax1.set_zlim(-5, 5)
 
 ax1.axis('equal')
 ax1.set_aspect(1)
 
 
 
-x_d = log_d[:, 0]
-y_d = log_d[:, 1]
+x_d = log_d[14:17, 0]
+y_d = log_d[14:17, 1]
 z_d = log_d[:, 2]
-ax1.scatter(x_d, y_d, 0*z_d, label="High-level waypoints", color="yellow", marker="o")
+ax1.scatter(x_d, y_d, label="High-level waypoints", color="yellow", marker="o")
 
+x_w = log_waypoint[14:17, 0]
+y_w = log_waypoint[14:17, 1]
+z_w = log_waypoint[:, 2]
+ax1.scatter(x_w, y_w, color="orange", marker="o")
 
 x_switch = log_switch[:, 0]
 y_switch = log_switch[:, 1]
 z_switch = log_switch[:, 2]
 
-x_p_foot = log_p_foot[:, 0]
-y_p_foot = log_p_foot[:, 1]
-z_p_foot = log_p_foot[:, 2]
-ax1.scatter(x_p_foot, y_p_foot, 0*z_p_foot, label="foot placement", color="purple", marker="o")
+x_p_foot = log_p_foot[14:17, 0]
+y_p_foot = log_p_foot[14:17, 1]
+z_p_foot = log_p_foot[14:17, 2]
+ax1.scatter(x_p_foot, y_p_foot, label="foot placement", color="purple", marker="o")
 
-x_COM = log_COM[:, 0]
-y_COM = log_COM[:, 1]
+x_COM = log_COM[7300:9000, 0]
+y_COM = log_COM[7300:9000, 1]
 z_COM = log_COM[:, 2]
 xd_COM = log_COM[:, 3]
 yd_COM = log_COM[:, 4]
 zd_COM = log_COM[:, 5]
-ax1.plot(x_COM, y_COM, 0*z_COM, linewidth=2, label="walker CoM trajectory", color="red")
-'''
+ax1.plot(x_COM, y_COM, linewidth=2, label="walker CoM trajectory", color="red")
+
 x_l_foot = log_l_foot[:, 0]
 y_l_foot = log_l_foot[:, 1]
 z_l_foot = log_l_foot[:, 2]
-ax1.plot(x_l_foot, y_l_foot, z_l_foot, label="left foot", color="blue")
+#ax1.plot(x_l_foot, y_l_foot, z_l_foot, label="left foot", color="blue")
 
 x_r_foot = log_r_foot[:, 0]
 y_r_foot = log_r_foot[:, 1]
 z_r_foot = log_r_foot[:, 2]
-ax1.plot(x_r_foot, y_r_foot, z_r_foot, label="right foot", color="yellow")
-'''
+#ax1.plot(x_r_foot, y_r_foot, z_r_foot, label="right foot", color="yellow")
+
 '''
 x_ground, y_ground = np.meshgrid(np.linspace(0,5*cellz, 100), np.linspace(0,8*cellz, 100))
 X_ground = x_ground.T
@@ -148,7 +153,7 @@ poly3d1 = [[verts1[vert_id] for vert_id in face] for face in faces1]
 ax1.add_collection3d(Poly3DCollection(poly3d1, facecolors='green', linewidths=1, alpha=1))
 ax1.add_collection3d(Line3DCollection(poly3d1, colors='k', linewidths=0.5, linestyles=':'))
 '''
-ax1.view_init(azim=-2)
-plt.axis('off')
+#ax1.view_init(azim=-2)
+plt.axis('on')
 
 plt.show()
