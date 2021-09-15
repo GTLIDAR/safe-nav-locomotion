@@ -1,5 +1,6 @@
 from gridworld_fine_auto_spec import *
-import simulateController_fine_abs_simple as Simulator
+# import simulateController_fine_abs_simple as Simulator
+import simulateController_fine_abs as Simulator
 import copy
 import compute_all_vis
 import cv2

@@ -58,7 +58,11 @@ plt.xlim([0,15])
 x_d = log_d[0:180, 0]#+0.18771484
 y_d = log_d[0:180, 1]#+0.46665456
 z_d = log_d[:, 2]
+<<<<<<< HEAD
 ax1.scatter(x_d, y_d, label="High-level waypoints", color="black", marker="o", s=13)
+=======
+ax1.scatter(x_d, y_d, label="High-level waypoints", color="black", marker="o")
+>>>>>>> d2e66b1eea99a0a59030d749dcce0d8776c9cde0
 
 #ax1.scatter(x_d+0.235, y_d, color="blue")
 #ax1.scatter(x_d-0.235, y_d, color="blue")
@@ -107,12 +111,12 @@ xd_apex = log_apex[:,4]
 x_l_foot = log_l_foot[0:123292, 0]
 y_l_foot = log_l_foot[0:123292, 1]
 z_l_foot = log_l_foot[:, 2]
-ax1.plot(x_l_foot, y_l_foot, label="left foot", color="blue")
+#ax1.plot(x_l_foot, y_l_foot, label="left foot", color="blue")
 
 x_r_foot = log_r_foot[0:123292, 0]
 y_r_foot = log_r_foot[0:123292, 1]
 z_r_foot = log_r_foot[:, 2]
-ax1.plot(x_r_foot, y_r_foot, label="right foot", color="yellow")
+#ax1.plot(x_r_foot, y_r_foot, label="right foot", color="yellow")
 
 '''
 x_ground, y_ground = np.meshgrid(np.linspace(0,5*cellz, 100), np.linspace(0,8*cellz, 100))

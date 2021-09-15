@@ -47,7 +47,8 @@ if __name__ == '__main__':
     h_c, w_c = image_c.shape[:2]
     
     folder_locn = 'Examples/'
-    example_name = 'Belief_Evasion_coarse_JRNL_crt3_2stair_no_colis_spec'
+    # example_name = 'Belief_Evasion_coarse_JRNL_crt3_2stair_no_colis_spec'
+    example_name = 'test'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'

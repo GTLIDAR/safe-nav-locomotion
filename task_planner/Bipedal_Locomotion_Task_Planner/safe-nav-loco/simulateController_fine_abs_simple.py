@@ -162,7 +162,23 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles_f,invisibi
                         gridstate = gwg.moveobstacles_f[0] - gwg.ncols
                     elif arrow == 'R':
                         gridstate = gwg.moveobstacles_f[0]
-                   
+                        
+                    for n in nextstatedirn['Belief']:
+                        nenvstate = automaton[n]['State']['st']
+                        nextbeliefs = beliefcombs[len(beliefcombs) - (len(allstates) - allstates.index(nenvstate))]
+                        if any(gridstate in partitionGrid[x] for x in nextbeliefs):
+                            nextstate = copy.deepcopy(n)
+                            print 'Environment state in automaton is', allstates.index(nenvstate)
+                            print 'Belief state is', beliefcombs[allstates.index(nenvstate) - len(xstates)]
+                            nextagentstate = automaton[n]['State']['s']
+                            # Jonas
+                            invisstates = invisibilityset[0][nextagentstate]
+                            # visstates = set(xstates) - invisstates
+                            # Jonas
+                            visstates = set(xstates) - set(invisstates)
+                            if nenvstate not in xstates:
+                                beliefcombstate = beliefcombs[allstates.index(nenvstate) - len(xstates)]
+                                beliefstates = set()
                 else:
                     nenvstate = automaton[nextstate]['State']['st']
                     print 'Environment state in automaton is', allstates.index(nenvstate)
@@ -181,19 +197,4 @@ def userControlled_partition(filename,gwg,partitionGrid,moveobstacles_f,invisibi
 
 
 
-                    for n in nextstatedirn['Belief']:
-                        nenvstate = automaton[n]['State']['st']
-                        nextbeliefs = beliefcombs[len(beliefcombs) - (len(allstates) - allstates.index(nenvstate))]
-                        if any(gridstate in partitionGrid[x] for x in nextbeliefs):
-                            nextstate = copy.deepcopy(n)
-                            print 'Environment state in automaton is', allstates.index(nenvstate)
-                            print 'Belief state is', beliefcombs[allstates.index(nenvstate) - len(xstates)]
-                            nextagentstate = automaton[n]['State']['s']
-                            # Jonas
-                            invisstates = invisibilityset[0][nextagentstate]
-                            # visstates = set(xstates) - invisstates
-                            # Jonas
-                            visstates = set(xstates) - set(invisstates)
-                            if nenvstate not in xstates:
-                                beliefcombstate = beliefcombs[allstates.index(nenvstate) - len(xstates)]
-                                beliefstates = set()
+                   

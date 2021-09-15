@@ -740,7 +740,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     
    
-    file.write("\nstair'  & directionrequest' = 2 & !TaskAchieved' -> (stepL' = 0 & stepH' = 4) \/ ((stepL' = 1 & stepH' = 4)) \/ ((stepL' = 2 & stepH' = 6))\n")
+    file.write("\nstair'  & directionrequest' = 2 & !TaskAchieved' -> (stepL' = 0 & stepH' = 4) \/ ((stepL' = 1 & stepH' = 5)) \/ ((stepL' = 2 & stepH' = 6))\n")
     file.write("stair' & directionrequest' = 4 & !TaskAchieved' -> (stepL' = 0 & stepH' = 2) \/ ((stepL' = 1 & stepH' = 1)) \/ ((stepL' = 2 & stepH' = 0))\n\n")
     
     file.write("stair' & TaskAchieved' & stairN' & directionrequest' = 2 -> (stepL' = 0 & stepH' = 4) \/ ((stepL' = 1 & stepH' = 4)) \/ ((stepL' = 2 & stepH' = 6))\n")

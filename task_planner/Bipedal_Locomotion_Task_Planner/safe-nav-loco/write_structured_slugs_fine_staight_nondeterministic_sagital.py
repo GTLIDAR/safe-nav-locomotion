@@ -252,40 +252,71 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
    
 
     #### Walking Straight ####
-    # stri += "((orientation=15 & turn=3) | (orientation=1 & turn=1))  & s={} & forward & (stepL=0 | stepL=1) -> (s'={} | s'={} | s'={} | s'={} | s'={})\n".format(s,gw.transR[s]['N3'][0],gw.transR[gw.transR[s]['N3'][0]]['E1'][0],gw.transR[gw.transR[s]['N3'][0]]['W1'][0],gw.transR[gw.transR[s]['N3'][0]]['E2'][0],gw.transR[gw.transR[s]['N3'][0]]['W2'][0])
-    # stri += "((orientation=3 & turn=3) | (orientation=5 & turn=1))  & s={} & forward & (stepL=0 | stepL=1) -> (s'={} | s'={} | s'={} | s'={} | s'={})\n".format(s,gw.transR[s]['E3'][0],gw.transR[gw.transR[s]['E3'][0]]['N1'][0],gw.transR[gw.transR[s]['E3'][0]]['S1'][0],gw.transR[gw.transR[s]['E3'][0]]['N2'][0],gw.transR[gw.transR[s]['E3'][0]]['S2'][0])
-        
-
     stri = ""
     for s in gw.states:
-        stri += "((orientation=0 & turn=2)) & s={} & forward & (stepL=0 | stepL=1) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['N4'][0],gw.transR[gw.transR[s]['N4'][0]]['N1'][0],gw.transR[gw.transR[s]['N4'][0]]['S1'][0])
-        stri += "((orientation=4 & turn=2)) & s={} & forward & (stepL=0 | stepL=1) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['E4'][0],gw.transR[gw.transR[s]['E4'][0]]['E1'][0],gw.transR[gw.transR[s]['E4'][0]]['W1'][0])
-        stri += "((orientation=8 & turn=2)) & s={} & forward & (stepL=0 | stepL=1) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['S4'][0],gw.transR[gw.transR[s]['S4'][0]]['S1'][0],gw.transR[gw.transR[s]['S4'][0]]['N1'][0])
-        stri += "((orientation=12 & turn=2)) & s={} & forward & (stepL=0 | stepL=1) -> (s' = {} | s'={} | s'={})\n\n".format(s,gw.transR[s]['W4'][0],gw.transR[gw.transR[s]['W4'][0]]['W1'][0],gw.transR[gw.transR[s]['W4'][0]]['E1'][0])
+        stri += "((orientation=0 & turn=2)) & s={} & forward & TaskAchieved & (stepL=0 | stepL=1) -> s' = {}\n".format(s,gw.transR[s]['N4'][0])
+        stri += "((orientation=4 & turn=2)) & s={} & forward & TaskAchieved & (stepL=0 | stepL=1) -> s' = {}\n".format(s,gw.transR[s]['E4'][0])
+        stri += "((orientation=8 & turn=2)) & s={} & forward & TaskAchieved & (stepL=0 | stepL=1) -> s' = {}\n".format(s,gw.transR[s]['S4'][0])
+        stri += "((orientation=12 & turn=2)) & s={} & forward & TaskAchieved & (stepL=0 | stepL=1) -> s' = {}\n\n".format(s,gw.transR[s]['W4'][0])
     file.write(stri)
 
     stri = ""
     for s in gw.states:
-        stri += "((orientation=0 & turn=2)) & s={} & forward & (stepL=5) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['N2'][0],gw.transR[gw.transR[s]['N2'][0]]['N1'][0],gw.transR[gw.transR[s]['N2'][0]]['S1'][0])
-        stri += "((orientation=4 & turn=2)) & s={} & forward & (stepL=5) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['E2'][0],gw.transR[gw.transR[s]['E2'][0]]['E1'][0],gw.transR[gw.transR[s]['E2'][0]]['W1'][0])
-        stri += "((orientation=8 & turn=2)) & s={} & forward & (stepL=5) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['S2'][0],gw.transR[gw.transR[s]['S2'][0]]['S1'][0],gw.transR[gw.transR[s]['S2'][0]]['N1'][0])
-        stri += "((orientation=12 & turn=2)) & s={} & forward & (stepL=5) -> (s' = {} | s'={} | s'={})\n\n".format(s,gw.transR[s]['W2'][0],gw.transR[gw.transR[s]['W2'][0]]['W1'][0],gw.transR[gw.transR[s]['W2'][0]]['E1'][0])
+        stri += "((orientation=0 & turn=2)) & s={} & forward & TaskAchieved & (stepL=5) -> s' = {}\n".format(s,gw.transR[s]['N2'][0])
+        stri += "((orientation=4 & turn=2)) & s={} & forward & TaskAchieved & (stepL=5) -> s' = {}\n".format(s,gw.transR[s]['E2'][0])
+        stri += "((orientation=8 & turn=2)) & s={} & forward & TaskAchieved & (stepL=5) -> s' = {}\n".format(s,gw.transR[s]['S2'][0])
+        stri += "((orientation=12 & turn=2)) & s={} & forward & TaskAchieved & (stepL=5) -> s' = {}\n\n".format(s,gw.transR[s]['W2'][0])
     file.write(stri)
 
     stri = ""
     for s in gw.states:
-        stri += "((orientation=0 & turn=2)) & s={} & forward & (stepL=6) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['N3'][0],gw.transR[gw.transR[s]['N3'][0]]['N1'][0],gw.transR[gw.transR[s]['N3'][0]]['S1'][0])
-        stri += "((orientation=4 & turn=2)) & s={} & forward & (stepL=6) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['E3'][0],gw.transR[gw.transR[s]['E3'][0]]['E1'][0],gw.transR[gw.transR[s]['E3'][0]]['W1'][0])
-        stri += "((orientation=8 & turn=2)) & s={} & forward & (stepL=6) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['S3'][0],gw.transR[gw.transR[s]['S3'][0]]['S1'][0],gw.transR[gw.transR[s]['S3'][0]]['N1'][0])
-        stri += "((orientation=12 & turn=2)) & s={} & forward & (stepL=6) -> (s' = {} | s'={} | s'={})\n\n".format(s,gw.transR[s]['W3'][0],gw.transR[gw.transR[s]['W3'][0]]['W1'][0],gw.transR[gw.transR[s]['W3'][0]]['E1'][0])
+        stri += "((orientation=0 & turn=2)) & s={} & forward & TaskAchieved & (stepL=6) -> s' = {}\n".format(s,gw.transR[s]['N3'][0])
+        stri += "((orientation=4 & turn=2)) & s={} & forward & TaskAchieved & (stepL=6) -> s' = {}\n".format(s,gw.transR[s]['E3'][0])
+        stri += "((orientation=8 & turn=2)) & s={} & forward & TaskAchieved & (stepL=6) -> s' = {}\n".format(s,gw.transR[s]['S3'][0])
+        stri += "((orientation=12 & turn=2)) & s={} & forward & TaskAchieved & (stepL=6) -> s' = {}\n\n".format(s,gw.transR[s]['W3'][0])
     file.write(stri)
 
     stri = ""
     for s in gw.states:
-        stri += "((orientation=0 & turn=2)) & s={} & forward & (stepL=7) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['N5'][0],gw.transR[gw.transR[s]['N5'][0]]['N1'][0],gw.transR[gw.transR[s]['N5'][0]]['S1'][0])
-        stri += "((orientation=4 & turn=2)) & s={} & forward & (stepL=7) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['E5'][0],gw.transR[gw.transR[s]['E5'][0]]['E1'][0],gw.transR[gw.transR[s]['E5'][0]]['W1'][0])
-        stri += "((orientation=8 & turn=2)) & s={} & forward & (stepL=7) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['S5'][0],gw.transR[gw.transR[s]['S5'][0]]['S1'][0],gw.transR[gw.transR[s]['S5'][0]]['N1'][0])
-        stri += "((orientation=12 & turn=2)) & s={} & forward & (stepL=7) -> (s' = {} | s'={} | s'={})\n\n".format(s,gw.transR[s]['W5'][0],gw.transR[gw.transR[s]['W5'][0]]['W1'][0],gw.transR[gw.transR[s]['W5'][0]]['E1'][0])
+        stri += "((orientation=0 & turn=2)) & s={} & forward & TaskAchieved & (stepL=7) -> s' = {}\n".format(s,gw.transR[s]['N5'][0])
+        stri += "((orientation=4 & turn=2)) & s={} & forward & TaskAchieved & (stepL=7) -> s' = {}\n".format(s,gw.transR[s]['E5'][0])
+        stri += "((orientation=8 & turn=2)) & s={} & forward & TaskAchieved & (stepL=7) -> s' = {}\n".format(s,gw.transR[s]['S5'][0])
+        stri += "((orientation=12 & turn=2)) & s={} & forward & TaskAchieved & (stepL=7) -> s' = {}\n\n".format(s,gw.transR[s]['W5'][0])
+    file.write(stri)    
+
+
+
+
+    stri = ""
+    for s in gw.states:
+        stri += "((orientation=0 & turn=2)) & s={} & forward & !TaskAchieved & (stepL=0 | stepL=1) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['N4'][0],gw.transR[gw.transR[s]['N4'][0]]['N1'][0],gw.transR[gw.transR[s]['N4'][0]]['S1'][0])
+        stri += "((orientation=4 & turn=2)) & s={} & forward & !TaskAchieved & (stepL=0 | stepL=1) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['E4'][0],gw.transR[gw.transR[s]['E4'][0]]['E1'][0],gw.transR[gw.transR[s]['E4'][0]]['W1'][0])
+        stri += "((orientation=8 & turn=2)) & s={} & forward & !TaskAchieved & (stepL=0 | stepL=1) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['S4'][0],gw.transR[gw.transR[s]['S4'][0]]['S1'][0],gw.transR[gw.transR[s]['S4'][0]]['N1'][0])
+        stri += "((orientation=12 & turn=2)) & s={} & forward & !TaskAchieved & (stepL=0 | stepL=1) -> (s' = {} | s'={} | s'={})\n\n".format(s,gw.transR[s]['W4'][0],gw.transR[gw.transR[s]['W4'][0]]['W1'][0],gw.transR[gw.transR[s]['W4'][0]]['E1'][0])
+    file.write(stri)
+
+    stri = ""
+    for s in gw.states:
+        stri += "((orientation=0 & turn=2)) & s={} & forward & !TaskAchieved & (stepL=5) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['N2'][0],gw.transR[gw.transR[s]['N2'][0]]['N1'][0],gw.transR[gw.transR[s]['N2'][0]]['S1'][0])
+        stri += "((orientation=4 & turn=2)) & s={} & forward & !TaskAchieved & (stepL=5) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['E2'][0],gw.transR[gw.transR[s]['E2'][0]]['E1'][0],gw.transR[gw.transR[s]['E2'][0]]['W1'][0])
+        stri += "((orientation=8 & turn=2)) & s={} & forward & !TaskAchieved & (stepL=5) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['S2'][0],gw.transR[gw.transR[s]['S2'][0]]['S1'][0],gw.transR[gw.transR[s]['S2'][0]]['N1'][0])
+        stri += "((orientation=12 & turn=2)) & s={} & forward & !TaskAchieved & (stepL=5) -> (s' = {} | s'={} | s'={})\n\n".format(s,gw.transR[s]['W2'][0],gw.transR[gw.transR[s]['W2'][0]]['W1'][0],gw.transR[gw.transR[s]['W2'][0]]['E1'][0])
+    file.write(stri)
+
+    stri = ""
+    for s in gw.states:
+        stri += "((orientation=0 & turn=2)) & s={} & forward & !TaskAchieved & (stepL=6) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['N3'][0],gw.transR[gw.transR[s]['N3'][0]]['N1'][0],gw.transR[gw.transR[s]['N3'][0]]['S1'][0])
+        stri += "((orientation=4 & turn=2)) & s={} & forward & !TaskAchieved & (stepL=6) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['E3'][0],gw.transR[gw.transR[s]['E3'][0]]['E1'][0],gw.transR[gw.transR[s]['E3'][0]]['W1'][0])
+        stri += "((orientation=8 & turn=2)) & s={} & forward & !TaskAchieved & (stepL=6) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['S3'][0],gw.transR[gw.transR[s]['S3'][0]]['S1'][0],gw.transR[gw.transR[s]['S3'][0]]['N1'][0])
+        stri += "((orientation=12 & turn=2)) & s={} & forward & !TaskAchieved & (stepL=6) -> (s' = {} | s'={} | s'={})\n\n".format(s,gw.transR[s]['W3'][0],gw.transR[gw.transR[s]['W3'][0]]['W1'][0],gw.transR[gw.transR[s]['W3'][0]]['E1'][0])
+    file.write(stri)
+
+    stri = ""
+    for s in gw.states:
+        stri += "((orientation=0 & turn=2)) & s={} & forward & !TaskAchieved & (stepL=7) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['N5'][0],gw.transR[gw.transR[s]['N5'][0]]['N1'][0],gw.transR[gw.transR[s]['N5'][0]]['S1'][0])
+        stri += "((orientation=4 & turn=2)) & s={} & forward & !TaskAchieved & (stepL=7) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['E5'][0],gw.transR[gw.transR[s]['E5'][0]]['E1'][0],gw.transR[gw.transR[s]['E5'][0]]['W1'][0])
+        stri += "((orientation=8 & turn=2)) & s={} & forward & !TaskAchieved & (stepL=7) -> (s' = {} | s'={} | s'={})\n".format(s,gw.transR[s]['S5'][0],gw.transR[gw.transR[s]['S5'][0]]['S1'][0],gw.transR[gw.transR[s]['S5'][0]]['N1'][0])
+        stri += "((orientation=12 & turn=2)) & s={} & forward & !TaskAchieved & (stepL=7) -> (s' = {} | s'={} | s'={})\n\n".format(s,gw.transR[s]['W5'][0],gw.transR[gw.transR[s]['W5'][0]]['W1'][0],gw.transR[gw.transR[s]['W5'][0]]['E1'][0])
     file.write(stri)
 
     
@@ -743,7 +774,7 @@ def write_to_slugs_part_dist(infile,gw,init,initmovetarget,invisibilityset,PUDO_
 
     
    
-    file.write("\nstair'  & directionrequest' = 2 & !TaskAchieved' -> (stepL' = 0 & stepH' = 4) \/ ((stepL' = 1 & stepH' = 4)) \/ ((stepL' = 2 & stepH' = 6))\n")
+    file.write("\nstair'  & directionrequest' = 2 & !TaskAchieved' -> (stepL' = 0 & stepH' = 4) \/ ((stepL' = 1 & stepH' = 5)) \/ ((stepL' = 2 & stepH' = 6))\n")
     file.write("stair' & directionrequest' = 4 & !TaskAchieved' -> (stepL' = 0 & stepH' = 2) \/ ((stepL' = 1 & stepH' = 1)) \/ ((stepL' = 2 & stepH' = 0))\n\n")
     
     file.write("stair' & TaskAchieved' & stairN' & directionrequest' = 2 -> (stepL' = 0 & stepH' = 4) \/ ((stepL' = 1 & stepH' = 4)) \/ ((stepL' = 2 & stepH' = 6))\n")
