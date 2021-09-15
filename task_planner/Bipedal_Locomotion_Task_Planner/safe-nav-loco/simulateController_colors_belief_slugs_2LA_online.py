@@ -416,6 +416,7 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
                     print 'Stair Boolean is ', automaton_f[nextstate_f]['State']['stair']
                     print 'Step Length is ', automaton_f[nextstate_f]['State']['stepL']
                     print 'turn is ', automaton_f[nextstate_f]['State']['turn']
+                    print 'Agent location in action planner is ', str(nextstate_f)
                     gridstate_f = copy.deepcopy(nenv_dir_req)
                     gwg_f.colorstates[1] = set()
                     # gwg_f.render()

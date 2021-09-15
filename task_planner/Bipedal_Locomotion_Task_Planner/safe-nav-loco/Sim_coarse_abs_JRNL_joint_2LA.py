@@ -93,6 +93,7 @@ h_f, w_f = image_f.shape[:2]
 example_name_f = 'Belief_Evasion_fine_abstraction_straight_nondeterministic'
 example_name_f = 'Belief_Evasion_fine_abstraction_straight_nondeterministic_every_step'
 example_name_f = 'Belief_Evasion_fine_abstraction_nondeterministic_last_step_of_turn_no_short'
+example_name_f = 'Belief_Evasion_fine_abstraction_nondeterministic_sagital_once'
 jsonfile_name_f = folder_locn + "Integration/" + example_name_f + ".json"
 trial_name_f = folder_locn + example_name_f
 outfile_f = trial_name_f + '.json'
