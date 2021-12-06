@@ -2245,6 +2245,7 @@ void PhaseSpacePlanner::UpdateKeyframe_pert()
           double controllable_flag = 1;
           double inc_s1, inc_l1, inc_s2;
           
+          // applied perturbation 
           double app_pert =   -((0.1 + 0.1) * ( static_cast<double>(std::rand()) / static_cast<double>(RAND_MAX) ) -0.1)*2;
           double app_pert_dot= -((0.2 + 0.2) * ( static_cast<double>(std::rand()) / static_cast<double>(RAND_MAX) ) -0.2)*2.5;
 

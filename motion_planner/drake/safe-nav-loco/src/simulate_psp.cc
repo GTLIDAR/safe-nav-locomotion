@@ -58,7 +58,9 @@ int DoMain()
 {
   Eigen::Matrix<double, 5, 1> d0;
   float cellsize= 2.70351;
-  //iros
+  
+  // ******* setting the starting location **********//
+
     //cellsize = 2.39;
     //float finecell = 0.103981;
   //CDC2020 Start Position 
@@ -67,9 +69,6 @@ int DoMain()
   d0 << (3.5*cellsize)-0.2, (9.5*cellsize)-0.5, 0.985+1.2, 1.5708, 0.1;
   //HW
   //d0 << 0, 0, 0.985, 0, 0.1;
-
-  //IROS
-   //d0 << (4*cellsize)+(15.5*finecell), (5*cellsize)+(6.5*finecell)-0.5, 0.985, 1.5708, 0.1;
 
   Eigen::Matrix<double, 5, 1> apex0;
   
@@ -102,7 +101,7 @@ int DoMain()
   psp.Init(apex0, d0, foot0);
   psp.InitObstacle(obs0,obs20);
 
-
+  //****** select the json file ********//
   BeliefIOParser parser("/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/Belief_Evasion_fine_abstraction_JRNL_Boundary6_b2b_stair.json");
   parser.advanceStep();
   double v;

@@ -131,8 +131,10 @@ int DoMain()
   //CDC2020 Start Position 
   //d0 << (4*cellsize)+(cellsize/2), (cellsize*9)+(cellsize/2), 0.985+0.6, 1.5708, 0.1;
   //jrnl
-  d0 << (3.5*cellsize)-0.2, (9.5*cellsize)-0.5, 0.985+1.2, 1.5708, 0.1;
-  //HW
+  //d0 << (3.5*cellsize)-0.2, (9.5*cellsize)-0.5, 0.985+1.2, 1.5708, 0.1;
+  // perturbation starting location 
+
+
   d0 << 0, 15, 0.985, 0, 0.4;
 
   //IROS

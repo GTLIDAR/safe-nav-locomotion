@@ -70,24 +70,35 @@ Drake installation steps can be found [here](https://drake.mit.edu/installation.
 
 ### Local adjustments 
 
-in [motion_planner/drake/safe-nav-loco/src/simulate_psp.cc](motion_planner/drake/safe-nav-loco/src/simulate_psp.cc) and [motion_planner/drake/safe-nav-loco/src/run_cassie_follow.cc](motion_planner/drake/safe-nav-loco/src/run_cassie_follow.cc) adjust the path in `file_name = "path/drake/safe-nav-loco/vis/..."` to match the path to the drake directory on your local machine. 
+in [motion_planner/drake/safe-nav-loco/src/simulate_psp_lcm.cc](motion_planner/drake/safe-nav-loco/src/simulate_psp_lcm.cc) and [motion_planner/drake/safe-nav-loco/src/run_cassie_follow.cc](motion_planner/drake/safe-nav-loco/src/run_cassie_follow.cc) adjust the path in `file_name = "path/drake/safe-nav-loco/vis/..."` to match the path to the drake directory on your local machine. 
 
-## Running the code
-### Setting up action.json file from task_planner
-* Once an action.json file is generated from task_planner, copy and paste the file into [motion_planner/drake/safe-nav-loco/vis/](motion_planner/drake/safe-nav-loco/vis/).
-Note:[actions_CDC_Subs.json](motion_planner/drake/safe-nav-loco/vis/actions_CDC_Sub.json) is the action file used in our publication
-
-* In [motion_planner/drake/safe-nav-loco/src/simulate_psp.cc](motion_planner/drake/safe-nav-loco/src/simulate_psp.cc) adjust the path in 
-`BeliefIOParser parser("path/drake/safe-nav-loco/vis/actions_CDC_Sub.json");` and choose the desired action file.
+## Running the code for nominal Phase-space planning through lcm
 
 ### Phase-Space Planning and trajectory generation 
-* Open terminal and go to the drake folder `cd path/drake/`
+* Open a new terminal and go to the drake folder `cd path/drake/`
+
+* run `CC=clang-6.0 CXX=clang++-6.0 bazel run safe-nav-loco:simulate_psp_lcm`
+This will generate the trajectory .txt files.
+
+* In another terminal run the the task planner. (See Task planner section)
+
+
+## Runing the code for Phase-space planning under CoM perturbation 
+* Open a new terminal and go to the drake folder `cd path/drake/`
+
+* run `CC=clang-6.0 CXX=clang++-6.0 bazel run safe-nav-loco:simulate_psp_lcm_perturb`
+This will generate the trajectory .txt files.
+
+* the applied pertubation value can be adjusted in [phase_space_planner.cc](motion_planner/drake/safe-nav-loco/src/phase_space_planner.cc)
+
+## Running the code for nominal Phase-space planning from a .json file
+* Open a new terminal and go to the drake folder `cd path/drake/`
 
 * run `CC=clang-6.0 CXX=clang++-6.0 bazel run safe-nav-loco:simulate_psp`
 This will generate the trajectory .txt files.
 
 ### Drake Visualization 
-<img src="https://i.imgur.com/taoI3AF.gif" />
+<img src="https://i.imgur.com/rR9tZI2.gif" />
 
 Make sure that the trajectories are generated beforehand as shown in the previous section.
 
@@ -116,22 +127,30 @@ CC=clang-6.0 CXX=clang++-6.0 bazel run safe-nav-loco:run_cassie_follow
 ```
 
 ### Py.plot Visualization 
-<img src="https://i.imgur.com/jJ5KXOj.png" />
 
 * Open terminal and run the command to visualize the center of mass and foot trajectories as well as high-level waypoints, and foot stance locations.
 
 ```
 cd path/drake/safe-nav-loco/vis/
-python vis_psp.py 
+python vis_psp.py || vis_dev.py || vis_psp_dev.py
 ```
 
 
 # Project and Related Publications 
 
-This work is a part of our ongoing work on robust and reactive decision-making and AI planning of collaborative and agile robots in complex environments. More information and related publications can be found [here](http://lab-idar.gatech.edu/robust-and-reactive-decision-making-and-ai-planning-of-collaborative-and-agile-robots-in-complex-environments/)
+This work is a part of our ongoing work on robust and reactive decision-making and AI planning of collaborative and agile robots in complex environments. More information and related publications can be found [here](http://lab-idar.gatech.edu/planning-collaborative-robots/)
 
 
-This repo contains the code used for implementation in our [published work](https://arxiv.org/abs/2009.05168):-
+This repo contains the code used for implementation in our published work:-
+```
+@article{shamsah2021integrated,
+  title={Integrated Task and Motion Planning for Safe Legged Navigation in Partially Observable Environments},
+  author={Shamsah, Abdulaziz and Warnke, Jonas and Gu, Zhaoyuan and Zhao, Ye},
+  journal={arXiv preprint arXiv:2110.12097},
+  year={2021}
+}
+```
+
 ```
 @article{warnketowards,
   title={Towards Safe Locomotion Navigation in 
@@ -145,7 +164,13 @@ This repo contains the code used for implementation in our [published work](http
 
 ### Reference Citation
 
-[Jonas Warnke*, Abdulaziz Shamsah*, Yingke Li*, and Ye Zhao. Towards Safe Locomotion Navigation in Partially Observable Environments with Uneven Terrain, (*equally contributed), IEEE Conference on Decision and Control, 2020.](https://arxiv.org/abs/2009.05168)
+[Shamsah, Abdulaziz, et al. "Integrated Task and Motion Planning for Safe Legged Navigation in Partially Observable Environments." arXiv preprint arXiv:2110.12097 (2021).](https://arxiv.org/abs/2110.12097) [[Vidoe]](https://www.youtube.com/watch?v=w-SrjuUbO78)
 
 
-# About
+[Jonas Warnke*, Abdulaziz Shamsah*, Yingke Li*, and Ye Zhao. Towards Safe Locomotion Navigation in Partially Observable Environments with Uneven Terrain, (*equally contributed), IEEE Conference on Decision and Control, 2020.](https://arxiv.org/abs/2009.05168) [[Video]](https://www.youtube.com/watch?v=q2qkb7nJ9-Y)
+
+
+
+
+
+
