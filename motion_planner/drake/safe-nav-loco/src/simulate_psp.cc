@@ -66,25 +66,30 @@ int DoMain()
   //CDC2020 Start Position 
   //d0 << (4*cellsize)+(cellsize/2), (cellsize*9)+(cellsize/2), 0.985+0.6, 1.5708, 0.1;
   //jrnl
-  d0 << (3.5*cellsize)-0.2, (9.5*cellsize)-0.5, 0.985+1.2, 1.5708, 0.1;
+  //d0 << (3.5*cellsize)-0.2, (9.5*cellsize)-0.5, 0.985+1.2, 1.5708, 0.1;
   //HW
-  //d0 << 0, 0, 0.985, 0, 0.1;
+  d0 << 0, 0, 1.01, 0, 0.3;
 
   Eigen::Matrix<double, 5, 1> apex0;
   
   //CDC
   //apex0 << d0(0, 0)+0.11, d0(1, 0), d0(2, 0), d0(3, 0), d0(4, 0);
   //jrnl
-   apex0 << d0(0, 0)+0.11+0.08, d0(1, 0), d0(2, 0), d0(3, 0), d0(4, 0);
+  //apex0 << d0(0, 0)+0.11+0.08, d0(1, 0), d0(2, 0), d0(3, 0), d0(4, 0);
   //HW
-   //apex0 << d0(0, 0), d0(1, 0)-0.11-0.08, d0(2, 0), d0(3, 0), d0(4, 0);
+  //apex0 << d0(0, 0), d0(1, 0)-0.1, d0(2, 0), d0(3, 0), d0(4, 0);
+  //digit
+  apex0 << d0(0, 0), d0(1, 0)-0.03, d0(2, 0), d0(3, 0), d0(4, 0);
 
 
   Eigen::Matrix<double, 3, 1> foot0;
   //CDC
-  foot0 << d0(0, 0)+0.135+0.08, d0(1, 0), d0(2,0)-0.985;
+  //foot0 << d0(0, 0)+0.135+0.08, d0(1, 0), d0(2,0)-0.985;
   //HW
-  //foot0 << d0(0, 0), d0(1, 0)-0.135-0.08, d0(2,0)-0.985;
+  //foot0 << d0(0, 0)-0.03, d0(1, 0)-0.135, d0(2,0)-0.985;
+  //digit
+  foot0 << d0(0, 0), d0(1, 0)-0.10012-0.03, d0(2,0)-1.01;
+
   
 
 
@@ -102,12 +107,12 @@ int DoMain()
   psp.InitObstacle(obs0,obs20);
 
   //****** select the json file ********//
-  BeliefIOParser parser("/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/Belief_Evasion_fine_abstraction_JRNL_Boundary6_b2b_stair.json");
+  BeliefIOParser parser("/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/JRNL_straight.json");
   parser.advanceStep();
   double v;
   double pre_v = 0.1;
 
-  for (int i = 0; i < 120; i++) 
+  for (int i = 0; i < 70; i++) 
   {
     std::vector<int> obstacle_location = parser.getPropertyArray("obstacle_location");
     Eigen::Matrix<double, 3, 1> obs;
@@ -117,7 +122,7 @@ int DoMain()
     obs << (30*(cellsize/10))-cellsize/2, (50*(cellsize/10))-cellsize/2, 0;
     obs2 << ((40)*(cellsize/10))-cellsize/2, ((70)*(cellsize/10))-cellsize/2, 0;
 
-    double h = 0.985;
+    double h = 12;//0.985;
     
     int stepL = parser.getProperty("stepL");
     int stepH = parser.getProperty("stepH");
@@ -139,6 +144,8 @@ int DoMain()
     double step_length = 0;
     double dheading = 0;
     double dheight = 0;
+
+    double step_factor =0.4;
 
     
 
@@ -176,7 +183,7 @@ int DoMain()
     if (turn == 0)
     {
       dheading =0.3926991;// 0.261799;//
-      std::cout << "Turn left 22.5: ";
+      //std::cout << "Turn left 22.5: ";
       if (v > 0.3)
       {
         pre_v = 0.25;
@@ -190,10 +197,10 @@ int DoMain()
 
 
     }
-        else if (turn == 1)
+    else if (turn == 1)
     {
             dheading = 0.3926991;
-      std::cout << "Turn left 22.5: ";
+      //std::cout << "Turn left 22.5: ";
       if (v > 0.3)
       {
         pre_v = 0.25;
@@ -221,7 +228,7 @@ int DoMain()
     { 
 
       dheading = -0.3926991;//-0.261799;//-0.3926991;
-      std::cout << "Turn Right 22.5: ";
+      //std::cout << "Turn Right 22.5: ";
 
       if (v > 0.3)
       {
@@ -239,7 +246,7 @@ int DoMain()
     { 
 
       dheading = -0.3926991;
-      std::cout << "Turn Right 22.5: ";
+      //std::cout << "Turn Right 22.5: ";
 
       if (v > 0.3)
       {
@@ -435,7 +442,8 @@ int DoMain()
         //std::cout << "vapex:" << v << std::endl;
         //std::cout << "Start: ";
         psp.Start(stanceFoot);
-        Primitive acn(step_length, 0, dheight, v, h); 
+        
+        Primitive acn(step_length*step_factor, dheading, dheight, v, h); 
         psp.UpdatePrimitive(acn);
         psp.UpdateKeyframe();
         psp.UpdateObstacle(obs, obs2);
@@ -452,7 +460,7 @@ int DoMain()
         //std::cout << "Stop: ";
         //v = 0.1;
        // std::cout << "vapex:" << v << std::endl;
-        Primitive acn(step_length, dheading, dheight, 0.1, h);
+        Primitive acn(step_length*step_factor, dheading, dheight, 0.1, h);
         psp.UpdatePrimitive(acn);
         psp.UpdateKeyframe();
         psp.UpdateObstacle(obs, obs2);
@@ -466,7 +474,7 @@ int DoMain()
        // std::cout << "vapex:" << v << std::endl;
         //std::cout << "update: ";
 
-        Primitive acn(step_length, dheading, dheight, v, h);
+        Primitive acn(step_length*step_factor, dheading, dheight, 0.5, h);
         psp.UpdatePrimitive(acn);
         psp.UpdateKeyframe();
         psp.UpdateObstacle(obs, obs2);
@@ -496,6 +504,7 @@ int DoMain()
    
   // Log 
   std::string file_name;
+
   
   file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_apex.txt";
   write_data<5>(psp.apex_list, file_name);

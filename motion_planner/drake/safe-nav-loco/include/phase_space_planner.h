@@ -64,7 +64,7 @@ public:
  
 
    // PSP local length sagittal and lateral [x1 xf1 x1d x2 xf2 x2d ]
-  std::vector<Eigen::Matrix<double, 8, 1>> psp_list;
+  std::vector<Eigen::Matrix<double, 13, 1>> psp_list;
  
 
    // Keyframe: X_apex = [x_apex, y_apex, z_apex, theta_apex, v_apex]
@@ -113,6 +113,10 @@ public:
 
   void Start(int stance_start);
   void FirstStep();
+  /*
+  void stand2apex(Eigen::Matrix<double, 3, 1> foot,
+                  Eigen::Matrix<double, 3, 1> COM);
+  */
   void LastStep();
   void End();
    

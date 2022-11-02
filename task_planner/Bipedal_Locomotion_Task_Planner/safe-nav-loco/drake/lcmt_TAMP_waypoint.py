@@ -10,11 +10,11 @@ except ImportError:
 import struct
 
 class lcmt_TAMP_waypoint(object):
-    __slots__ = ["stepL", "stepH", "turn", "stop", "forward", "stanceFoot", "orientation", "s", "N", "S", "E", "W"]
+    __slots__ = ["stepL", "stepH", "turn", "stop", "forward", "stanceFoot", "orientation", "s", "TaskAchieved", "N", "S", "E", "W"]
 
-    __typenames__ = ["int8_t", "int8_t", "int8_t", "int8_t", "int8_t", "int8_t", "int8_t", "int16_t", "double", "double", "double", "double"]
+    __typenames__ = ["int8_t", "int8_t", "int8_t", "int8_t", "int8_t", "int8_t", "int8_t", "int16_t", "int8_t", "double", "double", "double", "double"]
 
-    __dimensions__ = [None, None, None, None, None, None, None, None, None, None, None, None]
+    __dimensions__ = [None, None, None, None, None, None, None, None, None, None, None, None, None]
 
     def __init__(self):
         self.stepL = 0
@@ -25,6 +25,7 @@ class lcmt_TAMP_waypoint(object):
         self.stanceFoot = 0
         self.orientation = 0
         self.s = 0
+        self.TaskAchieved = 0
         self.N = 0.0
         self.S = 0.0
         self.E = 0.0
@@ -37,7 +38,7 @@ class lcmt_TAMP_waypoint(object):
         return buf.getvalue()
 
     def _encode_one(self, buf):
-        buf.write(struct.pack(">bbbbbbbhdddd", self.stepL, self.stepH, self.turn, self.stop, self.forward, self.stanceFoot, self.orientation, self.s, self.N, self.S, self.E, self.W))
+        buf.write(struct.pack(">bbbbbbbhbdddd", self.stepL, self.stepH, self.turn, self.stop, self.forward, self.stanceFoot, self.orientation, self.s, self.TaskAchieved, self.N, self.S, self.E, self.W))
 
     def decode(data):
         if hasattr(data, 'read'):
@@ -51,13 +52,13 @@ class lcmt_TAMP_waypoint(object):
 
     def _decode_one(buf):
         self = lcmt_TAMP_waypoint()
-        self.stepL, self.stepH, self.turn, self.stop, self.forward, self.stanceFoot, self.orientation, self.s, self.N, self.S, self.E, self.W = struct.unpack(">bbbbbbbhdddd", buf.read(41))
+        self.stepL, self.stepH, self.turn, self.stop, self.forward, self.stanceFoot, self.orientation, self.s, self.TaskAchieved, self.N, self.S, self.E, self.W = struct.unpack(">bbbbbbbhbdddd", buf.read(42))
         return self
     _decode_one = staticmethod(_decode_one)
 
     def _get_hash_recursive(parents):
         if lcmt_TAMP_waypoint in parents: return 0
-        tmphash = (0xa385382643abc9ed) & 0xffffffffffffffff
+        tmphash = (0x58def159ff74fe94) & 0xffffffffffffffff
         tmphash  = (((tmphash<<1)&0xffffffffffffffff) + (tmphash>>63)) & 0xffffffffffffffff
         return tmphash
     _get_hash_recursive = staticmethod(_get_hash_recursive)

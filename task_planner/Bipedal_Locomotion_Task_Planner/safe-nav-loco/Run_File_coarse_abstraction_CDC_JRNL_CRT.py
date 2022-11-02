@@ -10,6 +10,9 @@ import copy
 import cPickle as pickle
 from tqdm import *
 import simulateController_colors as Simulator
+# import simulateController_colors_belief_slugs_2LA_online as Simulator
+# import simulateController_colors_belief as Simulator
+
 import itertools
 import Control_Parser
 import json
@@ -37,9 +40,9 @@ if __name__ == '__main__':
     # moveobstacles_c = [38]
     # PUDO_t_c = [53,45]
 
-    initial_c = [56]
+    initial_c = [65]
     moveobstacles_c = [61]
-    PUDO_t_c = [57,49]
+    PUDO_t_c = [54,49]
 
     filename_c = 'figures/'+mapname_coarse+'.png'
     image_c = cv2.imread(filename_c, cv2.IMREAD_GRAYSCALE)
@@ -48,7 +51,7 @@ if __name__ == '__main__':
     
     folder_locn = 'Examples/'
     # example_name = 'Belief_Evasion_coarse_JRNL_crt3_2stair_no_colis_spec'
-    example_name = 'test'
+    example_name = 'test2'
     jsonfile_name = folder_locn + "Integration/" + example_name + ".json"
     trial_name = folder_locn + example_name
     version = '01'
@@ -142,5 +145,6 @@ if __name__ == '__main__':
     now = time.time()
     print('Total synthesis took ', now - then, ' seconds')
     print('Actual synthesis took ', now - noww, ' seconds')
-
+    print(filename_c)
     Simulator.userControlled_partition(filename_c[0], gwg_c, pg[0], moveobstacles_c, invisibilityset, jsonfile_name)
+    # Simulator.userControlled_partition(slugs,filename[0], gwg, pg[0], moveobstacles, invisibilityset, jsonfile_name,filename_f[0], gwg_f, pg_f[0], moveobstacles_f, invisibilityset_f,jsonfile_name_f,allowed_states)

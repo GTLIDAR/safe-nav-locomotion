@@ -217,7 +217,8 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
     while True:
         # output.saveState(gwg, automaton, automaton_state,gridstate,moveobstacles,gwg)
         state_next = copy.deepcopy(stateSL)
-
+        print(stateSL)
+        print(stateSL['State']['st0'])
         envstate0 = stateSL['State']['st0']
         envstate1 = stateSL['State']['st1']
         # try:

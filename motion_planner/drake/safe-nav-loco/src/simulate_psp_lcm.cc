@@ -66,7 +66,7 @@ int DoMain()
   //CDC2020 Start Position 
   //d0 << (4*cellsize)+(cellsize/2), (cellsize*9)+(cellsize/2), 0.985+0.6, 1.5708, 0.1;
   //jrnl
-  d0 << (3.5*cellsize)-0.2, (9.5*cellsize)-0.5, 0.985+1.2, 1.5708, 0.1;
+  d0 << 0, 0, 1.01, 1.5708, 0.3;
   //HW
   //d0 << 0, 0, 0.985, 0, 0.1;
 
@@ -78,9 +78,10 @@ int DoMain()
   //CDC
   //apex0 << d0(0, 0)+0.11, d0(1, 0), d0(2, 0), d0(3, 0), d0(4, 0);
   //jrnl
-   apex0 << d0(0, 0)+0.11+0.08, d0(1, 0), d0(2, 0), d0(3, 0), d0(4, 0);
+   apex0 << d0(0, 0)+0.11+0.07, d0(1, 0), d0(2, 0), d0(3, 0), d0(4, 0);
   //HW
    //apex0 << d0(0, 0), d0(1, 0)-0.11-0.08, d0(2, 0), d0(3, 0), d0(4, 0);
+   apex0 << d0(0, 0)+0.03, d0(1, 0), d0(2, 0), d0(3, 0), d0(4, 0);
 
 
   Eigen::Matrix<double, 3, 1> foot0;
@@ -88,6 +89,7 @@ int DoMain()
   foot0 << d0(0, 0)+0.135+0.08, d0(1, 0), d0(2,0)-0.985;
   //HW
   //foot0 << d0(0, 0), d0(1, 0)-0.135-0.08, d0(2,0)-0.985;
+  foot0 << d0(0, 0)+0.10012+0.03, d0(1, 0), d0(2,0)-1.01;
   
 
 
@@ -104,14 +106,14 @@ int DoMain()
   psp.Init(apex0, d0, foot0);
   psp.InitObstacle(obs0,obs20);
 
-  //lcm setup from acrobot_lcm_msg_generator.cc
+  
 
   drake::lcm::DrakeLcm lcm;
   const std::string channel_waypoint = "new_waypoint";
   drake::lcm::Subscriber<lcmt_TAMP_waypoint> subscription(&lcm, channel_waypoint);
   const lcmt_TAMP_waypoint& msg_x = subscription.message();
 
-    //std::cout << "N= " << psp.N << "S= " << psp.S << "E= " << psp.E << "W= " << psp.W <<  std::endl << std::endl;
+
     {
       lcmt_TAMP_waypoint initial_action{};
       initial_action.N = 1;
@@ -126,13 +128,11 @@ int DoMain()
     {
     
     }
-  //
-  //BeliefIOParser parser("/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/Belief_Evasion_fine_abstraction_straight.json");
-  //parser.advanceStep();
+
   double v;
   double pre_v = 0.1;
 
-  for (int i = 0; i < 500; i++) 
+  for (int i = 0; i < 120; i++) 
   {
 
      while(!(lcm.HandleSubscriptions(0))) //HOLD FOR NEW Action
@@ -149,7 +149,7 @@ int DoMain()
     obs << 0,0,0;//(obstacle_location[0]*(cellsize/10))-cellsize/2, (obstacle_location[1]*(cellsize/10))-cellsize/2, 2.25;
     obs2 << 0,0,0;//((obstacle_location[2])*(cellsize/10))-cellsize/2, ((obstacle_location[3])*(cellsize/10))-cellsize/2+(2*cellsize), 0;
  
-    double h = 0.985;
+    double h =1.01 ;//0.985;
     /*
     int stepL = parser.getProperty("stepL");
     int stepH = parser.getProperty("stepH");
@@ -178,6 +178,8 @@ int DoMain()
     double step_length = 0;
     double dheading = 0;
     double dheight = 0;
+
+    double step_factor =0.3;
 
     
 
@@ -391,7 +393,7 @@ int DoMain()
         //std::cout << "vapex:" << v << std::endl;
         //std::cout << "Start: ";
         psp.Start(stanceFoot);
-        Primitive acn(step_length, 0, dheight, v, h); 
+        Primitive acn(step_length*step_factor, 0, dheight, v, h); 
         psp.UpdatePrimitive(acn);
         psp.UpdateKeyframe();
         psp.UpdateObstacle(obs, obs2);
@@ -407,7 +409,7 @@ int DoMain()
         //std::cout << "Stop: ";
         //v = 0.1;
        // std::cout << "vapex:" << v << std::endl;
-        Primitive acn(step_length, dheading, dheight, 0.1, h);
+        Primitive acn(step_length*step_factor, dheading, dheight, 0.1, h);
         psp.UpdatePrimitive(acn);
         psp.UpdateKeyframe();
         psp.UpdateObstacle(obs, obs2);
@@ -421,7 +423,7 @@ int DoMain()
        // std::cout << "vapex:" << v << std::endl;
         //std::cout << "update: ";
 
-        Primitive acn(step_length, dheading, dheight, v, h);
+        Primitive acn(step_length*step_factor, dheading, dheight, v, h);
         psp.UpdatePrimitive(acn);
         psp.UpdateKeyframe();
         psp.UpdateObstacle(obs, obs2);
@@ -437,8 +439,14 @@ int DoMain()
     }
     else 
     { 
-
-        //psp.Stand(obs, obs2);
+        
+        Eigen::Matrix<double, 13, 1> psp_param;
+        psp_param << 0, 0, 0, 0.25 ,0.4, 0, 0.2, 0.2, 0.1, 0, 0, 0, 0;
+        psp.psp_list.push_back(psp_param);
+        // Primitive acn(0.02, 0, 0, 0.05, h);
+        // psp.UpdatePrimitive(acn);
+        // psp.UpdateKeyframe();
+        // //psp.Stand(obs, obs2);
         //v = 0.1;
       
     }
@@ -459,6 +467,7 @@ int DoMain()
     {
     }
 
+    
     // revieve msg.x
     //lcmt_TAMP_waypoint rec{};
     //rec.N = msg_x.N;
@@ -482,50 +491,50 @@ int DoMain()
   // Log 
   std::string file_name;
   
-  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_apex.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_apex.txt";
   write_data<5>(psp.apex_list, file_name);
 
-  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_d.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_d.txt";
   write_data<5>(psp.d_list, file_name);
-    file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_waypoint.txt";
+    file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_waypoint.txt";
   write_data<5>(psp.waypoint_list, file_name);
 
-  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_switch.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_switch.txt";
   write_data<6>(psp.switch_list, file_name);
 
-  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_apextraj.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_apextraj.txt";
   write_data<6>(psp.apextraj_list, file_name);
 
 
-  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_p_foot.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_p_foot.txt";
   write_data<3>(psp.p_foot_list, file_name);
 
-  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_COM.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_COM.txt";
   write_data<10>(psp.COM_list, file_name);
 
-  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_l_foot.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_l_foot.txt";
   write_data<10>(psp.l_foot_list, file_name);
 
-  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_r_foot.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_r_foot.txt";
   write_data<10>(psp.r_foot_list, file_name);
 
-  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_heading.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_heading.txt";
   write_data<1>(psp.heading_list, file_name);
 
-  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_obstacle.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_obstacle.txt";
   write_data<6>(psp.obstacle_list, file_name);
 
-  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/T_step.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/T_step.txt";
   write_data<3>(psp.Tlist, file_name);
   
-  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_delta.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_delta.txt";
   write_data<3>(psp.sim_list, file_name);
 
-  file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_step.txt";
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_step.txt";
   write_data<2>(psp.step_list, file_name);
 
-   file_name = "/home/jwarnke3/Documents/github/Bipedal_Planning/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_psp.txt";
-  write_data<8>(psp.psp_list, file_name);
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_psp.txt";
+  write_data<13>(psp.psp_list, file_name);
   
   return 0;
 }

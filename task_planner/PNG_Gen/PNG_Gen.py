@@ -53,17 +53,17 @@ import cv2
 #add path to figures folder below
 # os.chdir(r'/path')
 
-filename = 'fine_abstraction.png'
+filename = '/home/sa-zhao/code/safe-nav-locomotion/task_planner/Bipedal_Locomotion_Task_Planner/safe-nav-loco/figures/fine_abstraction.png'
 # image = cv2.imread(specFile, cv2.IMREAD_GRAYSCALE)
 # print(image)
 
 pngfile2 = Image.open(filename)
-img2=pngfile2.resize((13,7),PIL.Image.ANTIALIAS)
-img2.paste((255),(0,0,13,7))
+img2=pngfile2.resize((8,8),PIL.Image.ANTIALIAS)
+img2.paste((255),(0,0,8,6))
 # img2.show()
 pixels=img2.load()
 
-
+'''
 pixels[2,1] = 0
 pixels[4,3] = 0
 pixels[4,5] = 0
@@ -121,14 +121,51 @@ pixels[10,6] = 0
 pixels[11,6] = 0
 pixels[12,6] = 0
 
+'''
+
+pixels[0,0] = 0
+pixels[1,0] = 0
+pixels[2,0] = 0
+pixels[3,0] = 0
+pixels[4,0] = 0
+pixels[5,0] = 0
+pixels[6,0] = 0
+pixels[7,0] = 0
+
+pixels[0,7] = 0
+pixels[1,7] = 0
+pixels[2,7] = 0
+pixels[3,7] = 0
+pixels[4,7] = 0
+pixels[5,7] = 0
+pixels[6,7] = 0
+pixels[7,7] = 0
+
+pixels[7,0] = 0
+pixels[7,1] = 0
+pixels[7,2] = 0
+pixels[7,3] = 0
+pixels[7,4] = 0
+pixels[7,5] = 0
+pixels[7,6] = 0
+pixels[7,7] = 0
 
 
+pixels[0,0] = 0
+pixels[0,1] = 0
+pixels[0,2] = 0
+pixels[0,3] = 0
+pixels[0,4] = 0
+pixels[0,5] = 0
+pixels[0,6] = 0
+pixels[0,7] = 0
 
+# pixels[1,1] = 0
+# pixels[2,1] = 0
 
-
-
+# pixels[3,3] = 0
 
 #
 img2.show()
 #
-img2.save("BeliefEvasion_CDC.png")
+img2.save("CCB.png")

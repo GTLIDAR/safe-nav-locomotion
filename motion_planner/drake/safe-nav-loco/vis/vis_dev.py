@@ -2,9 +2,9 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-import mpl_toolkits.mplot3d.axes3d as p3
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection,Line3DCollection
+#import matplotlib.animation as animation
+#import mpl_toolkits.mplot3d.axes3d as p3
+#from mpl_toolkits.mplot3d.art3d import Poly3DCollection,Line3DCollection
 import matplotlib.ticker as plticker
 
 log_apex = np.loadtxt("log_apex.txt")
@@ -27,6 +27,7 @@ ax1.set_aspect('equal')
 ax1.set_xlabel('x')
 ax1.set_ylabel('y')
 ax1.set_zlabel('z')
+
 ax1.set_xlim(-7*cellz, 7*cellz)
 ax1.set_ylim(-13*cellz, 13*cellz)
 ax1.set_zlim(-5, 5)
@@ -37,8 +38,8 @@ ax1.set_aspect(1)
 ax1=fig.add_subplot(1,1,1)
 #ax1.axis('equal')
 ax1.set_aspect(1)
-plt.xlim([0,15])
-plt.xlim([0,15])
+#plt.xlim([0,15])
+#plt.xlim([0,15])
 #ax2=fig.add_subplot(3,1,2)
 #ax2.axis('equal')
 
@@ -55,14 +56,13 @@ plt.xlim([0,15])
 #ax1.grid(which='major', axis='both', linestyle='-')
 
 
-x_d = log_d[0:180, 0]#+0.18771484
-y_d = log_d[0:180, 1]#+0.46665456
+x_d = log_d[:, 0]#+0.18771484
+y_d = log_d[:, 1]#+0.46665456
 z_d = log_d[:, 2]
-<<<<<<< HEAD
+
 ax1.scatter(x_d, y_d, label="High-level waypoints", color="black", marker="o", s=13)
-=======
-ax1.scatter(x_d, y_d, label="High-level waypoints", color="black", marker="o")
->>>>>>> d2e66b1eea99a0a59030d749dcce0d8776c9cde0
+ax1.plot(x_d, y_d, label="High-level waypoints", color="black", marker="o")
+
 
 #ax1.scatter(x_d+0.235, y_d, color="blue")
 #ax1.scatter(x_d-0.235, y_d, color="blue")
@@ -78,16 +78,16 @@ x_switch = log_switch[:, 0]
 y_switch = log_switch[:, 1]
 z_switch = log_switch[:, 2]
 xd_switch = log_switch[:,3]
-x_p_foot = log_p_foot[0:180, 0]#+0.18771484
-y_p_foot = log_p_foot[0:180, 1]#+0.46665456
+x_p_foot = log_p_foot[:, 0]#+0.18771484
+y_p_foot = log_p_foot[:, 1]#+0.46665456
 z_p_foot = log_p_foot[:, 2]
 
 ax1.scatter(x_p_foot, y_p_foot, label="foot placement", color="purple", marker="o", s=13)
 #ax2.scatter(x_p_foot, x_p_foot*0, label="foot placement", color="purple", marker="o")
 #ax3.scatter(y_p_foot, y_p_foot*0, label="foot placement", color="purple", marker="o")
 
-x_COM = log_COM[0:123292, 0]#+0.18771484
-y_COM = log_COM[0:123292, 1]#+0.46665456
+x_COM = log_COM[:, 0]#+0.18771484
+y_COM = log_COM[:, 1]#+0.46665456
 z_COM = log_COM[:, 2]
 xd_COM = log_COM[:, 3]
 yd_COM = log_COM[:, 4]
@@ -103,20 +103,22 @@ y_apex = log_apex[:, 1]#+0.46665456
 z_apex = log_apex[:, 2]
 xd_apex = log_apex[:,4]
 
-#ax1.scatter(x_apex, y_apex, linewidth=2, label="Apex", color="red",marker="o")
-#ax1.scatter(x_switch, y_switch, linewidth=2, label="Apex", color="black",marker="o")
+ax1.scatter(x_apex, y_apex, linewidth=2, label="Apex", color="red",marker="o")
+# ax1.scatter(x_switch, y_switch, linewidth=2, label="Apex", color="black",marker="o")
 #ax2.scatter(x_apex, xd_apex, label="Apex", color="red",marker="o")
 #ax2.scatter(x_switch, xd_switch, label="Apex", color="red",marker="o")
 
-x_l_foot = log_l_foot[0:123292, 0]
-y_l_foot = log_l_foot[0:123292, 1]
-z_l_foot = log_l_foot[:, 2]
-#ax1.plot(x_l_foot, y_l_foot, label="left foot", color="blue")
 
-x_r_foot = log_r_foot[0:123292, 0]
-y_r_foot = log_r_foot[0:123292, 1]
+
+x_l_foot = log_l_foot[:, 0]
+y_l_foot = log_l_foot[:, 1]
+z_l_foot = log_l_foot[:, 2]
+# ax1.plot(x_l_foot, y_l_foot, label="left foot", color="blue")
+
+x_r_foot = log_r_foot[:, 0]
+y_r_foot = log_r_foot[:, 1]
 z_r_foot = log_r_foot[:, 2]
-#ax1.plot(x_r_foot, y_r_foot, label="right foot", color="yellow")
+# ax1.plot(x_r_foot, y_r_foot, label="right foot", color="yellow")
 
 '''
 x_ground, y_ground = np.meshgrid(np.linspace(0,5*cellz, 100), np.linspace(0,8*cellz, 100))

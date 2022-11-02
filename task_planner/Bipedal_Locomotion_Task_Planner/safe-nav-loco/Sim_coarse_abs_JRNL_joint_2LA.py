@@ -1,7 +1,10 @@
 from gridworld_JRNL_color import *
 # import simulateController_colors_belief_slugs as Simulator
 # import simulateController_colors_belief_slugs_2LA as Simulator
-import simulateController_colors_belief_slugs_2LA_online as Simulator
+# import simulateController_colors_belief_slugs_2LA_online as Simulator
+import simulateController_colors_belief_slugs_2LA as Simulator
+
+# import simulateController_colors as Simulator
 import copy
 import compute_all_vis
 import cv2
@@ -20,15 +23,18 @@ h, w = image.shape[:2]
 folder_locn = 'Examples/'
 example_name = 'Belief_Evasion_coarse_JRNLtest'
 example_name = 'Belief_Evasion_coarse_multi_obs_joint_test2_single_obs'
-example_name = 'Belief_Evasion_coarse_seperate_belief_single_obs'
-example_name = 'Belief_Evasion_coarse_seperate_belief_single_obs_2t'
-example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_slugs'
-example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_slugs_colis_next2'
-example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_slugs_no_colis_next_debug_paren'
+# example_name = 'Belief_Evasion_coarse_seperate_belief_single_obs'
+# example_name = 'Belief_Evasion_coarse_seperate_belief_single_obs_2t'
+# example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_slugs'
+# example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_slugs_colis_next2'
+# example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_slugs_no_colis_next_debug_paren'
 # example_name = 'Belief_Evasion_coarse_multi_obs_time_test'
 # example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_no_colis'
 # example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_no_belief'
-
+example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_no_belief_aziz'
+# example_name = 'Belief_Evasion_coarse_multi_obs_purturb'
+# example_name = 'Belief_Evasion_coarse_multi_obs_joint_belief_no_belief_aziz'
+# example_name = 'test2'
 
 
 
@@ -50,8 +56,16 @@ targets = [[]]
 # moveobstacles = [28]
 
 initial = [56]
-# moveobstacles = [61]
+moveobstacles = [61]
 moveobstacles = [61,62]
+
+# initial_c = [56]
+# moveobstacles = [61]
+
+initial= [65]
+moveobstacles = [61]
+PUDO_t_c = [54,49]
+
 
 filename = [filename,(colnum,rownum),cv2.INTER_AREA]
 
@@ -91,9 +105,10 @@ image_f = cv2.imread(filename_f, cv2.IMREAD_GRAYSCALE)
 image_f = cv2.resize(image_f,dsize=(colnum_f,rownum_f),interpolation=cv2.INTER_AREA)
 h_f, w_f = image_f.shape[:2]
 example_name_f = 'Belief_Evasion_fine_abstraction_straight_nondeterministic'
-example_name_f = 'Belief_Evasion_fine_abstraction_straight_nondeterministic_every_step'
-example_name_f = 'Belief_Evasion_fine_abstraction_nondeterministic_last_step_of_turn_no_short'
-example_name_f = 'Belief_Evasion_fine_abstraction_nondeterministic_sagital_once'
+# example_name_f = 'Belief_Evasion_fine_abstraction_straight_nondeterministic_every_step'
+# example_name_f = 'Belief_Evasion_fine_abstraction_nondeterministic_last_step_of_turn_no_short'
+# example_name_f = 'Belief_Evasion_fine_abstraction_nondeterministic_sagital_once'
+example_name_f = 'test2'
 jsonfile_name_f = folder_locn + "Integration/" + example_name_f + ".json"
 trial_name_f = folder_locn + example_name_f
 outfile_f = trial_name_f + '.json'

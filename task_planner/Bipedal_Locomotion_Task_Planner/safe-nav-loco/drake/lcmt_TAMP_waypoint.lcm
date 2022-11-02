@@ -12,6 +12,7 @@ struct lcmt_TAMP_waypoint
 	int8_t stanceFoot;
 	int8_t orientation;
 	int16_t s;
+	int8_t TaskAchieved;
 	
 
 

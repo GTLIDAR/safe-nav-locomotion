@@ -371,6 +371,8 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
                 msg.stanceFoot = automaton_f[automaton_state_f]['State']['stanceFoot']
                 msg.orientation = automaton_f[automaton_state_f]['State']['orientation']
                 msg.s = automaton_f[automaton_state_f]['State']['s']
+                msg.TaskAchieved = automaton_f[automaton_state_f]['State']['TaskAchieved']
+                print 'sent TaskAchieved is ',msg.TaskAchieved
                 lc.publish("new_waypoint", msg.encode())
 
                 nextstate_f = None
@@ -387,7 +389,8 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
                         # while True:
                         lc.handle()
                         lc.handle()
-                    except KeyboardInterrupt:
+                        print "Test LC Handle"
+                    except:
                         pass
 
 
