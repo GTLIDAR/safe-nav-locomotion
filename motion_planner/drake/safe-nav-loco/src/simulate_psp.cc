@@ -107,12 +107,12 @@ int DoMain()
   psp.InitObstacle(obs0,obs20);
 
   //****** select the json file ********//
-  BeliefIOParser parser("/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/JRNL_straight.json");
+  BeliefIOParser parser("/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/JRNL.json");
   parser.advanceStep();
   double v;
   double pre_v = 0.1;
 
-  for (int i = 0; i < 70; i++) 
+  for (int i = 0; i < 300; i++) 
   {
     std::vector<int> obstacle_location = parser.getPropertyArray("obstacle_location");
     Eigen::Matrix<double, 3, 1> obs;
@@ -122,7 +122,7 @@ int DoMain()
     obs << (30*(cellsize/10))-cellsize/2, (50*(cellsize/10))-cellsize/2, 0;
     obs2 << ((40)*(cellsize/10))-cellsize/2, ((70)*(cellsize/10))-cellsize/2, 0;
 
-    double h = 12;//0.985;
+    double h = 1.01;//0.985;
     
     int stepL = parser.getProperty("stepL");
     int stepH = parser.getProperty("stepH");
@@ -182,7 +182,7 @@ int DoMain()
 
     if (turn == 0)
     {
-      dheading =0.3926991;// 0.261799;//
+      dheading = 0.3926991;// 0.261799;//
       //std::cout << "Turn left 22.5: ";
       if (v > 0.3)
       {
@@ -548,9 +548,9 @@ int DoMain()
   file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_step.txt";
   write_data<2>(psp.step_list, file_name);
 
-   file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_psp.txt";
-  write_data<8>(psp.psp_list, file_name);
-  
+  file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_psp.txt";
+  write_data<13>(psp.psp_list, file_name);
+
   return 0;
 }
 

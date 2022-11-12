@@ -36,10 +36,11 @@ ax1.axis('equal')
 ax1.set_aspect(1)
 '''
 ax1=fig.add_subplot(1,1,1)
-#ax1.axis('equal')
+# ax1.axis('equal')
+# ax1.set_aspect(1)
+plt.xlim([0,15])
+plt.xlim([0,15])
 ax1.set_aspect(1)
-#plt.xlim([0,15])
-#plt.xlim([0,15])
 #ax2=fig.add_subplot(3,1,2)
 #ax2.axis('equal')
 
@@ -93,7 +94,7 @@ xd_COM = log_COM[:, 3]
 yd_COM = log_COM[:, 4]
 zd_COM = log_COM[:, 5]
 ax1.plot(x_COM, y_COM, linewidth=1, label="walker CoM trajectory", color="red")
-#ax1.plot(log_obstacle[:,0], log_obstacle[:,1], linewidth=2, label="walker CoM trajectory", color="green")
+ax1.plot(log_obstacle[:,0], log_obstacle[:,1], linewidth=2, label="walker CoM trajectory", color="green")
 #ax2.plot(x_COM,xd_COM)
 #ax3.plot(y_COM,yd_COM)
 

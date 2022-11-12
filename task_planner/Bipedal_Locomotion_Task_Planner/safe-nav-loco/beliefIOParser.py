@@ -42,11 +42,11 @@ class BeliefIOParser():
         obs_location = []
         for n in range(0,len(moveobstacles)):
             try:
-                a, b = gwg_c.coords(gridstate[n])
+                a, b = gwg.moveobstacles
                 obs_location.append(a)
                 obs_location.append(b)
             except:
-                obs_location = gwg.coords(gridstate)
+                obs_location =gwg.moveobstacles
 
         output = json.dumps({'agent_state': agent_state, 'agent_location': agent_location, \
             'env_state': env_state, 'obstacle_location': obs_location, \

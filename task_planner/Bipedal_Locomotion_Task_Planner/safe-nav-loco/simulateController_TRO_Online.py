@@ -170,7 +170,7 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
     # msg = lcmt_TAMP_waypoint()
     # msg1 = lcmt_TAMP_waypoint()
     subscription = lc.subscribe("new_waypoint", my_handler)
-
+    
     # print "Start time is: " + str(then)
     print 'Start time is: ' + str(datetime.datetime.now().time())
     # Open Slugs
@@ -340,7 +340,7 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
 
         while True:
             # output.saveState(gwg_f, automaton_f, automaton_state_f,gridstate_f,moveobstacles_f)
-            # output.saveState(gwg_f, automaton_f, automaton_state_f,gridstate,moveobstacles_c, gwg_c)
+            output.saveState(gwg, automaton_f, automaton_state_f,gridstate, gwg.moveobstacles, gwg_f)
             agentstate_f = automaton_f[automaton_state_f]['State']['s']
           
 
@@ -375,8 +375,10 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
                 msg.forward = automaton_f[automaton_state_f]['State']['forward']
                 msg.stanceFoot = automaton_f[automaton_state_f]['State']['stanceFoot']
                 msg.orientation = automaton_f[automaton_state_f]['State']['orientation']
-                msg.s = automaton_f[automaton_state_f]['State']['s']
-                msg.TaskAchieved = automaton_f[automaton_state_f]['State']['TaskAchieved']
+                msg.s = gridstate[0] # automaton_f[automaton_state_f]['State']['s']
+                msg.TaskAchieved = gridstate[1] # automaton_f[automaton_state_f]['State']['TaskAchieved']
+                # msg.obs1 = automaton_f[automaton_state_f]['State']['turn'] #gridstate[0]
+                # msg.obs2 = automaton_f[automaton_state_f]['State']['turn'] # gridstate[1]
                 print 'sent TaskAchieved is ',msg.TaskAchieved
                 lc.publish("new_waypoint", msg.encode())
 
@@ -425,6 +427,8 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
                     print 'Step Length is ', automaton_f[nextstate_f]['State']['stepL']
                     print 'turn is ', automaton_f[nextstate_f]['State']['turn']
                     print 'Agent location in action planner is ', str(nextstate_f)
+                    print 'moving obsatcles = ' ,moveobstacles 
+                    print 'gwg.moveobstacles', gridstate
                     gridstate_f = copy.deepcopy(nenv_dir_req)
                     gwg_f.colorstates[1] = set()
                     # gwg_f.render()

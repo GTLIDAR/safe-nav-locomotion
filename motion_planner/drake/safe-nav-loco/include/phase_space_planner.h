@@ -65,6 +65,8 @@ public:
 
    // PSP local length sagittal and lateral [x1 xf1 x1d x2 xf2 x2d ]
   std::vector<Eigen::Matrix<double, 13, 1>> psp_list;
+
+  Eigen::Matrix<double, 13, 1> psp_log;
  
 
    // Keyframe: X_apex = [x_apex, y_apex, z_apex, theta_apex, v_apex]

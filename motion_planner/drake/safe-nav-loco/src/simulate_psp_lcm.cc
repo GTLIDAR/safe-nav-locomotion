@@ -66,7 +66,7 @@ int DoMain()
   //CDC2020 Start Position 
   //d0 << (4*cellsize)+(cellsize/2), (cellsize*9)+(cellsize/2), 0.985+0.6, 1.5708, 0.1;
   //jrnl
-  d0 << 0, 0, 1.01, 1.5708, 0.3;
+  d0 << 6*1.05, 3*1.05, 1.01, 1.5708, 0.3;
   //HW
   //d0 << 0, 0, 0.985, 0, 0.1;
 
@@ -98,8 +98,12 @@ int DoMain()
   //CDC
   //obs0 << (4*cellsize)+(cellsize/2), (cellsize*6)+(cellsize/2), 0;
   obs20 << (10*cellsize)+(cellsize/2), (cellsize*10)+(cellsize/2), 0;
+  // obs20 << (6*1.05), (1.05*1), 0;
+
   //IROS
-  obs0 << (0*cellsize)+(cellsize/2), (cellsize*0)+(cellsize/2), 2.25;
+   
+  obs0 << 42/8, 42 - (42/8 * 8), 0;
+  obs20 << 49/8, 49 - (49/8 * 8), 0;
  
 
   ::phase_space_planner::PhaseSpacePlanner psp;
@@ -122,32 +126,36 @@ int DoMain()
       initial_action.stop = 1;
       initial_action.forward = 
       initial_action.stanceFoot= 0;
+      // initial_action.obs1= 0;
+      // initial_action.obs2= 0;
       Publish(&lcm, channel_waypoint, initial_action);
     }
      while(!(lcm.HandleSubscriptions(0))) //HOLD FOR NEW Action
     {
     
     }
+    
 
   double v;
   double pre_v = 0.1;
 
-  for (int i = 0; i < 120; i++) 
+  for (int i = 0; i < 70; i++) 
   {
-
+    std::cout << i << std::endl;
      while(!(lcm.HandleSubscriptions(0))) //HOLD FOR NEW Action
     {
-    
+
     }
+    
 
     // revieve msg.x
     //lcmt_TAMP_waypoint rec{};
     //rec.N = msg_x.N;
     //std::vector<int> obstacle_location = parser.getPropertyArray("obstacle_location");
     Eigen::Matrix<double, 3, 1> obs;
-    Eigen::Matrix<double, 3, 1> obs2;
+    Eigen::Matrix<double, 3, 1> obs22;
     obs << 0,0,0;//(obstacle_location[0]*(cellsize/10))-cellsize/2, (obstacle_location[1]*(cellsize/10))-cellsize/2, 2.25;
-    obs2 << 0,0,0;//((obstacle_location[2])*(cellsize/10))-cellsize/2, ((obstacle_location[3])*(cellsize/10))-cellsize/2+(2*cellsize), 0;
+    obs22 << 0,0,0;//((obstacle_location[2])*(cellsize/10))-cellsize/2, ((obstacle_location[3])*(cellsize/10))-cellsize/2+(2*cellsize), 0;
  
     double h =1.01 ;//0.985;
     /*
@@ -164,7 +172,15 @@ int DoMain()
     int stop = msg_x.stop; //parser.getProperty("stop");
     int forward =msg_x.forward; //parser.getProperty("forward");
     int stanceFoot =msg_x.stanceFoot;// parser.getProperty("stanceFoot");
+    int obs1 = msg_x.s;
+    int obs2 = msg_x.TaskAchieved;
+
     
+    // std::cout << obs1 << "x= " << obs1 / 8  << "  y=  " << obs1 - (obs1/8) *8  +obs2*0 << std::endl;
+
+    obs << obs1/8  , obs1 - (obs1/8) *8 , 0;
+    obs22 << obs2/8  , obs2 - (obs2/8) *8 , 0;
+
     if (stanceFoot == 0)
     {
       stanceFoot = 1;
@@ -179,7 +195,7 @@ int DoMain()
     double dheading = 0;
     double dheight = 0;
 
-    double step_factor =0.3;
+    double step_factor = 0.4;
 
     
 
@@ -217,7 +233,7 @@ int DoMain()
 
     if (turn == 0)
     {
-      dheading =0.3926991;// 0.261799;//
+      dheading = 0.314159; // 0.3926991;// 0.261799;//
       std::cout << "Turn left 22.5: ";
       if (v > 0.3)
       {
@@ -234,7 +250,7 @@ int DoMain()
     }
         else if (turn == 1)
     {
-            dheading = 0.3926991;
+            dheading = 0.314159;// 0.3926991;
       std::cout << "Turn left 22.5: ";
       if (v > 0.3)
       {
@@ -262,7 +278,7 @@ int DoMain()
     else if (turn == 3)
     { 
 
-      dheading = -0.3926991;//-0.261799;//-0.3926991;
+      dheading = -0.314159;// -0.3926991;//-0.261799;//-0.3926991;
       std::cout << "Turn Right 22.5: ";
 
       if (v > 0.3)
@@ -280,7 +296,7 @@ int DoMain()
     else if (turn == 4)
     { 
 
-      dheading = -0.3926991;
+      dheading = -0.314159; //-0.3926991;
       std::cout << "Turn Right 22.5: ";
 
       if (v > 0.3)
@@ -396,7 +412,7 @@ int DoMain()
         Primitive acn(step_length*step_factor, 0, dheight, v, h); 
         psp.UpdatePrimitive(acn);
         psp.UpdateKeyframe();
-        psp.UpdateObstacle(obs, obs2);
+        psp.UpdateObstacle(obs, obs22);
         psp.FirstStep();
         //psp.UpdateTrajectory();
     
@@ -412,7 +428,7 @@ int DoMain()
         Primitive acn(step_length*step_factor, dheading, dheight, 0.1, h);
         psp.UpdatePrimitive(acn);
         psp.UpdateKeyframe();
-        psp.UpdateObstacle(obs, obs2);
+        psp.UpdateObstacle(obs, obs22);
         psp.UpdateTrajectory();
         psp.LastStep();
         psp.End();
@@ -426,7 +442,7 @@ int DoMain()
         Primitive acn(step_length*step_factor, dheading, dheight, v, h);
         psp.UpdatePrimitive(acn);
         psp.UpdateKeyframe();
-        psp.UpdateObstacle(obs, obs2);
+        psp.UpdateObstacle(obs, obs22);
         psp.UpdateTrajectory();
 
         //if (psp.goodlateral(0,0) == 0)
@@ -446,9 +462,16 @@ int DoMain()
         // Primitive acn(0.02, 0, 0, 0.05, h);
         // psp.UpdatePrimitive(acn);
         // psp.UpdateKeyframe();
-        // //psp.Stand(obs, obs2);
-        //v = 0.1;
-      
+        // psp.Stand(obs, obs22);
+        Eigen::Matrix<double, 6, 1> obstacle;
+
+        obstacle << obs(0, 0),
+                  obs(1, 0),
+                  0.4,
+                  obs22(0, 0),
+                  obs22(1, 0),
+                  0.4;
+        psp.obstacle_list.push_back(obstacle);
     }
     //parser.advanceStep();
     pre_v = v;
