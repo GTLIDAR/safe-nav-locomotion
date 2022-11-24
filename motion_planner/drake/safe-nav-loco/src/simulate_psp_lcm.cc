@@ -66,7 +66,7 @@ int DoMain()
   //CDC2020 Start Position 
   //d0 << (4*cellsize)+(cellsize/2), (cellsize*9)+(cellsize/2), 0.985+0.6, 1.5708, 0.1;
   //jrnl
-  d0 << 6*1.05, 3*1.05, 1.01, 1.5708, 0.3;
+  d0 << 5.5*0.37*cellsize, 3.5*0.37*cellsize, 1.01, 1.5708, 0.25;
   //HW
   //d0 << 0, 0, 0.985, 0, 0.1;
 
@@ -139,9 +139,10 @@ int DoMain()
   double v;
   double pre_v = 0.1;
 
-  for (int i = 0; i < 70; i++) 
+  for (int i = 0; i < 120; i++) 
   {
-    std::cout << i << std::endl;
+    // std::cout << i << std::endl;
+
      while(!(lcm.HandleSubscriptions(0))) //HOLD FOR NEW Action
     {
 
@@ -195,7 +196,9 @@ int DoMain()
     double dheading = 0;
     double dheight = 0;
 
-    double step_factor = 0.4;
+    double step_factor = 0.37;
+
+    std::cout<< "stepl= " << stepL << "  " << std::endl;
 
     
 
@@ -319,11 +322,14 @@ int DoMain()
     {
       step_length = 0.3119+0.104;//0.55;0.3119+0.104; //4 fine cells
       //v= 0.45;
+      step_length = (2.7/26.0)*4;
       v = pre_v + 0.05;
       if (pre_v >= 0.6)
       {
         v = 0.6;
       }
+
+      
     }
     else if (stepL == 1)
     {
@@ -336,7 +342,7 @@ int DoMain()
     else if (stepL == 3)
     {
       step_length = 0.3839;
-      //step_length = 0.265935;
+      // step_length =  0.258;
     }
     else if (stepL == 4)
     {
@@ -347,16 +353,19 @@ int DoMain()
     else if (stepL == 5)
     {
       step_length =  .207962;
+      step_length = (2.7/26.0)*2;
       //v=0.3;
     }
     else if (stepL == 6)
     {
       step_length = .311944;
+      step_length = (2.7/26.0)*3;
      //v =0.2;
     }
     else if (stepL == 7)
     {
       step_length = .519906;
+      step_length = (2.7/26.0)*5;
       //v =0.3;
     }
    
@@ -457,7 +466,7 @@ int DoMain()
     { 
         
         Eigen::Matrix<double, 13, 1> psp_param;
-        psp_param << 0, 0, 0, 0.25 ,0.4, 0, 0.2, 0.2, 0.1, 0, 0, 0, 0;
+        psp_param << 0, 0, 0, 0.25 ,0.4, 0, 0.2, 0.2, 0.1, psp.p_foot(0, 0), psp.p_foot(1, 0), psp.X_d(0, 0), psp.X_d(1, 0);
         psp.psp_list.push_back(psp_param);
         // Primitive acn(0.02, 0, 0, 0.05, h);
         // psp.UpdatePrimitive(acn);
@@ -476,7 +485,7 @@ int DoMain()
     //parser.advanceStep();
     pre_v = v;
 
-    //std::cout << "N= " << psp.N << "S= " << psp.S << "E= " << psp.E << "W= " << psp.W <<  std::endl << std::endl;
+    std::cout << "N= " << psp.N << "S= " << psp.S << "E= " << psp.E << "W= " << psp.W <<  std::endl << std::endl;
     {
       lcmt_TAMP_waypoint dummy{};
       dummy.N = psp.N;

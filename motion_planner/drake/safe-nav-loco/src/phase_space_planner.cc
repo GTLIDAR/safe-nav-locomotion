@@ -11,7 +11,7 @@ namespace phase_space_planner
       double p_f, double p, double p_dot, 
       double h, double aq, double eps, double count) 
   {
-    double w_sq = G / h; 
+    // double w_sq = G / h; 
     double p_ddot;
     double inc_p;
     Eigen::Matrix<double, 3, 1> result;
@@ -19,7 +19,7 @@ namespace phase_space_planner
     for (int i = 0; i < count; i++)
     {   
      
-      p_ddot = w_sq * (p - p_f);
+      p_ddot = aq * (p - p_f);
       inc_p = eps * p_dot + 0.5 * eps * eps * p_ddot;
       p = p + inc_p;
       p_dot = p_dot + eps * p_ddot;
@@ -126,13 +126,14 @@ namespace phase_space_planner
     double sum_vn=0;
     int sweep_c = 0;
     double v_inc[60];
+    double step_factor =0.37;
    
       temp_s2_dot = prim(3, 0);  
       double good_vn[60];
       
 
       //double v_inc[] = {0.1,1.25, 0.15,1.75, 0.2,.225, 0.25,.275, 0.3,.325, 0.35,.375, 0.4,.425, 0.45,.475, 0.5,.525, 0.55,.575, 0.6,.625, 0.65};
-      for (int i=0; i<=60; i++)
+      for (int i=0; i<=40; i++)
       {
         v_inc[i]=(i*0.01)+0.1;
 
@@ -142,6 +143,14 @@ namespace phase_space_planner
           v_inc[i]=0.1; //stopping apex velocity
          // std::cout << "here" << std::endl;
         }
+        
+        if(prim(0, 0) == step_factor*0.3839){
+
+          v_inc[i]=0.15;
+          // std::cout << "here" << std::endl;
+
+        }
+        
 
         
         
@@ -150,7 +159,7 @@ namespace phase_space_planner
      //goodlateral = 1;
       //goodlateral(0,0) = 0;
       //std::cout << " og_vn= " << prim(3, 0) << std::endl;
-      for (int counter = 0; counter <= 60; counter++)
+      for (int counter = 0; counter <= 40; counter++)
       { 
         //std::cout << "counter= "<< counter  << std::endl;
 
@@ -161,7 +170,7 @@ namespace phase_space_planner
 
               prim(3, 0) = v_inc[counter]; //go through the apex velocities
               
-              if (counter == 60) // if done with the for loop, do an extra one but chose the mid-point
+              if (counter == 40) // if done with the for loop, do an extra one but chose the mid-point
               {
                 
 
@@ -297,8 +306,8 @@ namespace phase_space_planner
           backward_num = 0;
           aq = (v2 - v1) / (s2 - s1); 
           bq = 0;
-          w1_sq = G / (prim(4, 0));// G / (aq*(s1_foot) + bq*(l1_foot) + prim(4, 0));
-          w2_sq = G / (prim(4, 0));//G / (aq*(s2_foot) + bq*(l2_foot) + prim(4, 0));
+          w1_sq = G / prim(4, 0);// G / (aq*(s1_foot) + bq*(l1_foot) + prim(4, 0));
+          w2_sq = G / 1.7;//G / (aq*(s2_foot) + bq*(l2_foot) + prim(4, 0));
           double inc_s1, inc_l1, inc_s2;
           
         
@@ -313,7 +322,7 @@ namespace phase_space_planner
               s1 = s1 + inc_s1;
               s1_dot = s1_dot + eps * s1_ddot;
 
-              l1_ddot = w1_sq * (l1 - l1_foot);
+              l1_ddot = w2_sq * (l1 - l1_foot);
               inc_l1 = eps * l1_dot + 0.5 * eps * eps * l1_ddot;
               l1 = l1 + inc_l1;
               l1_dot = l1_dot + eps * l1_ddot;
@@ -329,7 +338,7 @@ namespace phase_space_planner
             else 
             {
               backward_num = backward_num + 1;
-              s2_ddot = w2_sq * (s2 - s2_foot);
+              s2_ddot = w1_sq * (s2 - s2_foot);
               inc_s2 = - eps * s2_dot - 0.5 * eps * eps * s2_ddot;
               s2 = s2 + inc_s2;
               s2_dot = s2_dot - eps * s2_ddot;
@@ -360,7 +369,7 @@ namespace phase_space_planner
           double pre_foot, pre_dot;
           Eigen::Matrix<double, 3, 1> res;
 
-          res = ForwardProp(l2_foot, l1, l1_dot, (prim(4, 0)), aq, eps, backward_num); 
+          res = ForwardProp(l2_foot, l1, l1_dot, (prim(4, 0)), w2_sq, eps, backward_num); 
           l2_dot = res(1, 0);
           l2_ddot = 0.002;
           //std::cout << "l2_dot= " << l2_dot << std::endl;
@@ -371,7 +380,7 @@ namespace phase_space_planner
             pre_foot = l2_foot;
             l2_foot = l2_foot - l2_dot/l2_ddot;
             pre_dot = l2_dot;
-            res = ForwardProp(l2_foot, l1, l1_dot, (prim(4, 0)), aq, eps, backward_num); 
+            res = ForwardProp(l2_foot, l1, l1_dot, (prim(4, 0)), w2_sq, eps, backward_num); 
             l2_dot = res(1, 0);
             l2_ddot = (l2_dot - pre_dot) / (l2_foot - pre_foot);
             n = n + 1;
@@ -394,16 +403,16 @@ namespace phase_space_planner
           //std::cout << "dy1_n= " << l2 << ", vn= "<< prim(3,0) << std::endl;
           //std::cout << "dy2_n= " << l2_foot << std::endl;
           //std::cout << "used vn= "<< prim(3,0) << std::endl;
-          double cy1 = 2;
-          double cy2 =2;
-          double ct = 3;
+          double cy1 = 4;
+          double cy2 =4;
+          double ct = 6;
           double ctd = 0;
-          double c_sw = 3;
+          double c_sw = 2;
           double cvd =0;
-          double t_des = 0.1;
+          double t_des = 0.45;
           double y1_d = 0.0;
           double y2_d = 0.135;
-          double Sw_d = 0.2;
+          double Sw_d = 0.45;
 
           if(stance == 1) 
            {
@@ -436,8 +445,11 @@ namespace phase_space_planner
                         sweep_c= sweep_c+1;
                         sum_vn = sum_vn + prim(3,0);
                         
-                        new_cost = cy1*std::abs((-y1_d-l2)) + cy2*std::abs((-y2_d-(l2_foot - l2))) + ct*std::abs((t_des - eps*(backward_num+forward_num))) + c_sw*std::abs(Sw_d - std::abs(l2_foot - l1_foot))
+                        new_cost = cy1*std::abs((-y1_d-l2)) + cy2*std::abs((-y2_d-(l2_foot - l2))) + ct*std::abs((0.35 - eps*(backward_num+forward_num))) + c_sw*std::abs(Sw_d - std::abs(l2_foot - l1_foot))
                          + ctd*std::abs((eps*(backward_num-forward_num))) + cvd*std::abs((ds_switch-psp_log(1)));
+
+                        // new_cost =  2*ct*std::abs((0.35 - eps*(backward_num+forward_num))) + 2*c_sw*std::abs(Sw_d - std::abs(l2_foot - l1_foot))
+                        //  + ctd*std::abs((eps*(backward_num-forward_num))) + cvd*std::abs((ds_switch-psp_log(1)));
                         // new_cost = 7*std::abs((l2)) + 4*std::abs((-y2_d-0.05-(l2_foot - l2))) + ct*std::abs((t_des - eps*(backward_num+forward_num)))+ c_sw*std::abs(0.4 - std::abs(l2_foot - l1_foot));  //delta_y1 + delta_y2
                         // new_cost = cy1*std::abs((y1_d-l2)) + cy2*std::abs((y2_d-(l2_foot - l2))) + ct*std::abs((t_des - eps*(backward_num+forward_num)));  //delta_y1 + delta_y2
                         // new_cost =7*std::abs((l2)) + 4*std::abs((-y2_d-(l2_foot - l2))) ;
@@ -446,13 +458,14 @@ namespace phase_space_planner
                         if(new_cost < cost)
                         {
                           cost = new_cost;
-                          if (prim(3, 0)>= 0.4)
+                          if (prim(3, 0)>= 0.25)
                           {
-                              opt_vn = 0.4;
+                              opt_vn = 0.25;
                           }
                           else{
                           opt_vn = prim(3, 0);
                           }
+                          // opt_vn = prim(3, 0);
                           //std::cout << "opt_vn= "<< opt_vn << std::endl;
                         //std::cout << "cost= "<< cost << std::endl;                        
                         }
@@ -492,8 +505,11 @@ namespace phase_space_planner
                         sum_vn = sum_vn + prim(3,0);
                         //std::cout << "sweep_c= "<< sweep_c << std::endl;
 
-                         new_cost = cy1*std::abs((-y1_d-l2)) + cy2*std::abs((-y2_d-(l2_foot - l2))) + ct*std::abs((t_des - eps*(backward_num+forward_num))) + c_sw*std::abs(Sw_d - std::abs(l2_foot - l1_foot))
+                         new_cost = cy1*std::abs((y1_d-l2)) + cy2*std::abs((y2_d-(l2_foot - l2))) + ct*std::abs((0.35- eps*(backward_num+forward_num))) + c_sw*std::abs(Sw_d - std::abs(l2_foot - l1_foot))
                          + ctd*std::abs((eps*(backward_num-forward_num))) + cvd*std::abs((ds_switch-psp_log(1)));
+
+                        //  new_cost = 2*ct*std::abs((0.35- eps*(backward_num+forward_num))) + 2*c_sw*std::abs(Sw_d - std::abs(l2_foot - l1_foot))
+                        //  + ctd*std::abs((eps*(backward_num-forward_num))) + cvd*std::abs((ds_switch-psp_log(1)));
                         // new_cost = 7*std::abs((l2)) + 4*std::abs((y2_d+0.05-(l2_foot - l2))) + ct*std::abs((t_des - eps*(backward_num+forward_num)))+ c_sw*std::abs(0.4 - std::abs(l2_foot - l1_foot));  //delta_y1 + delta_y2
                         // new_cost = cy1*std::abs((y1_d-l2))  cy2*std::abs((y2_d-(l2_foot - l2))) + ct*std::abs((t_des - eps*(backward_num+forward_num)));  //delta_y1 + delta_y2
                         
@@ -503,13 +519,14 @@ namespace phase_space_planner
                         if(new_cost < cost)
                         {
                           cost = new_cost;
-                            if (prim(3, 0)>= 0.4)
-                            {
-                                opt_vn = 0.4;
-                            }
-                            else{
-                            opt_vn = prim(3, 0);
-                            }
+                          if (prim(3, 0)>= 0.25)
+                          {
+                              opt_vn = 0.25;
+                          }
+                          else{
+                          opt_vn = prim(3, 0);
+                          }
+                          // opt_vn = prim(3, 0);
                           //std::cout << "opt_vn= "<< opt_vn << std::endl;
                          // std::cout << "cost= "<< cost << std::endl;
                         }
@@ -562,14 +579,15 @@ namespace phase_space_planner
     //Eigen::Matrix<double, 5, 1> pre_apex = apex_list[step-1];
     //double prev_heading = pre_apex(3, 0);
     //std::cout << "current= " << X_apex(3,0) << "  prev= " << prev_heading << std::endl << std::endl << std::endl;
-    double step_factor =0.4;
+    
       if (prim(0, 0) > step_factor*0.4 && prim(0, 0) < step_factor*0.46)
       {
         sag = 4;
       }
       else if (prim(0, 0) > step_factor*0.46)
       {
-        sag = 5;
+        // sag = 5;
+        sag = 3;
       }
       else if (prim(0, 0) > step_factor*0.3 && prim(0, 0) < step_factor*0.4)
       {
@@ -581,10 +599,10 @@ namespace phase_space_planner
       }
 
 
-    if ((prim(1, 0) != 0) && ( (std::cos(X_apex(3,0)) > 0.95) || (std::cos(X_apex(3,0)) < -0.95) || (std::sin(X_apex(3,0))>0.95) || (std::sin(X_apex(3,0)) < -0.95)  )) //((prim(1, 0) == 0) && (X_apex(3,0) != prev_heading))
+    if ((prim(1, 0) != 0) && ( (std::cos(X_apex(3,0)) > 0.985) || (std::cos(X_apex(3,0)) < -0.985) || (std::sin(X_apex(3,0))>0.985) || (std::sin(X_apex(3,0)) < -0.985)  )) //((prim(1, 0) == 0) && (X_apex(3,0) != prev_heading))
     {
 
-       std::cout << "**here**" << std::endl << std::endl;
+     std::cout << "**here**" << std::endl << std::endl;
 
     /*  // nominal next fine cell number difference     
       if(std::sin(X_apex(3, 0)) > 0.8 )
@@ -896,7 +914,7 @@ namespace phase_space_planner
     }
 
 
-    std::cout << "step= " << prim(0, 0)/0.4 << ", N= " << N << ", S= " << S << ", E= " << E << ", W= " << W <<  std::endl << std::endl;
+    // std::cout << "step= " << prim(0, 0)/0.4 << ", N= " << N << ", S= " << S << ", E= " << E << ", W= " << W <<  std::endl << std::endl;
 
     waypoint(0, 0) += prim(0, 0)*std::cos(X_apex(3, 0));
     waypoint(1, 0) += prim(0, 0)*std::sin(X_apex(3, 0));
@@ -923,7 +941,7 @@ namespace phase_space_planner
      psp_log << dl_switch, ds_switch, s2_foot-s1_foot, l2_foot-l1_foot, eps*forward_num+eps*backward_num, prim(1,0),eps*forward_num, eps*backward_num, opt_vn, p_foot(0, 0), p_foot(1, 0), X_d(0, 0), X_d(1, 0);
      psp_list.push_back(psp_log);
 
-    std::cout << std::endl << "step tine: " << eps*forward_num+eps*backward_num << std::endl;
+    // std::cout << std::endl << "step tine: " << eps*forward_num+eps*backward_num << std::endl;
     foot_dis = l2_foot - l2;
     // sim_list 
     //std::cout << prim(1,0);

@@ -6,7 +6,7 @@ import simulateController_TRO_Online as Simulator
 import copy
 import compute_all_vis
 import cv2
-from gridworld_fine_auto_spec_2l import *
+from gridworld_fine_auto_spec_2l_5step import *
 
 # mapname = 'BeliefEvasion_jrnlt'
 # mapname = 'BeliefEvasion_jrnl_CRT3'
@@ -117,6 +117,10 @@ example_name_f = 'Belief_Evasion_fine_abstraction_straight_nondeterministic'
 # example_name_f = 'Belief_Evasion_fine_abstraction_nondeterministic_last_step_of_turn_no_short'
 # example_name_f = 'Belief_Evasion_fine_abstraction_nondeterministic_sagital_once'
 example_name_f = 'Belief_Evasion_fine_staight_nondeterministic_5step'
+example_name_f = 'Belief_Evasion_fine_staight_nondeterministic_5step_new'
+example_name_f = 'Belief_Evasion_fine_staight_nondeterministic_5step_no5'
+example_name_f = 'Belief_Evasion_fine_staight_nondeterministic_5step_no5_n3'
+# example_name_f = 'Belief_Evasion_fine_staight_nondeterministic_5step_2lat'
 jsonfile_name_f = folder_locn + "Integration/" + example_name_f + ".json"
 trial_name_f = folder_locn + example_name_f
 outfile_f = trial_name_f + '.json'
