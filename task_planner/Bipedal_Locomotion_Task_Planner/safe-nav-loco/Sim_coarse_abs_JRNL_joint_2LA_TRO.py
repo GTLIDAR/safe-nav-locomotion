@@ -1,7 +1,7 @@
 from gridworld_multi_obs_TRO import *
 # from gridworld_multi_obs import *
 # import simulateController_colors_belief_slugs as Simulator
-# import simulateController_colors_belief_slugs_2LA as Simulator
+# import simulateController_colors_belief_slugs_2LA_online as Simulator
 import simulateController_TRO_Online as Simulator
 import copy
 import compute_all_vis
@@ -32,15 +32,15 @@ h, w = image.shape[:2]
 
 folder_locn = 'Examples/'
 
-example_name = 'TRO_ENV_New_GW'
+# example_name = 'TRO_ENV_New_GW'
 # example_name = 'TRO_ENV_New_GW_KLAUS'
 
 example_name = 'coarse_grid_multi_obs_NO_belief_collision_new_env'
 
+# example_name ='coarse_grid_multi_obs_joint_belief_collision_new_env'
 
 
-
-
+print ' 1 '
 
 
 trial_name = folder_locn + example_name
@@ -89,6 +89,9 @@ pg[0] = {0:set(allowed_states[0])}
 # pg[0] = {0:(set(allowed_states[0])-set([37,38,39,49,50,53,54,61,62,63,64,65,66])),1:set([37,38,49,50]),2:set([61,62]),3:set([39]),4:set([63,64]),5:set([53,54,65,66])}
 #pg[0] = {0:(set(allowed_states[0])-set([17,18,19,25,26,28,29,30,33,34,35,36,37,38])),1:set([17,18,25,26]),2:set([33,34]),3:set([19]),4:set([35]),5:set([28,29,30,36,37,38])}
 
+#New Env belief states
+# pg[0] = {0:(set(allowed_states[0])-set([49,50,27,35,25,26,33,34,41,42,51,52,45,46,53,54])),1:set([25,26,33,34,41,42]),2:set([49,50]),3:set([27,35]),4:set([51,52]),5:set([45,46,53,54])}
+
 visdist = [4,20,3500,3500]
 target_vis_dist = 2
 vel = [1,2,2,2]
@@ -97,7 +100,7 @@ obj = compute_all_vis.img2obj(image)
 iset = compute_all_vis.compute_visibility_for_all(obj, h, w, radius=visdist[0])
 invisibilityset.append(iset)
 
-
+print ' 2 '
 
 
 
@@ -161,5 +164,7 @@ outfile = trial_name+'.slugsin'
 filename.append(outfile)
 
 jsonfile_name = example_name + ".json"
+
+print ' 3 '
 # Simulator.userControlled_partition(filename[0], gwg, pg[0], moveobstacles, invisibilityset, jsonfile_name)
 Simulator.userControlled_partition(slugs,filename[0], gwg, pg[0], moveobstacles, invisibilityset, jsonfile_name,filename_f[0], gwg_f, pg_f[0], moveobstacles_f, invisibilityset_f,jsonfile_name_f,allowed_states)

@@ -174,13 +174,14 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
     print 'Start time is: ' + str(datetime.datetime.now().time())
     # Open Slugs
     slugsProcess = subprocess.Popen(slugsLink+" --interactiveStrategy "+" --biasForAction"+" "+filename, shell=True, bufsize=32000, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-
+    print ' 3.1 '
     # Get input APs
     slugsProcess.stdin.write("XPRINTINPUTS\n")
     slugsProcess.stdin.flush()
     slugsProcess.stdout.readline() # Skip the prompt
     lastLine = " "
     inputAPs = []
+    print ' 3.5 '
     while (lastLine!=""):
         lastLine = slugsProcess.stdout.readline().strip()
         if lastLine!="":
@@ -189,7 +190,7 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
     now = time.time()
     print('Synthesis took ', now - then, ' seconds')
 
-
+    print ' 4 '
     # Get output APs
     slugsProcess.stdin.write("XPRINTOUTPUTS\n")
     slugsProcess.stdin.flush()
@@ -370,8 +371,10 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
                 msg.forward = automaton_f[automaton_state_f]['State']['forward']
                 msg.stanceFoot = automaton_f[automaton_state_f]['State']['stanceFoot']
                 msg.orientation = automaton_f[automaton_state_f]['State']['orientation']
-                msg.s = automaton_f[automaton_state_f]['State']['s']
-                msg.TaskAchieved = automaton_f[automaton_state_f]['State']['TaskAchieved']
+                msg.s = gridstate[0] # automaton_f[automaton_state_f]['State']['s']
+                msg.TaskAchieved = gridstate[1] # automaton_f[automaton_state_f]['State']['TaskAchieved']
+                # msg.obs1 = automaton_f[automaton_state_f]['State']['turn'] #gridstate[0]
+                # msg.obs2 = automaton_f[automaton_state_f]['State']['turn'] # gridstate[1]
                 print 'sent TaskAchieved is ',msg.TaskAchieved
                 lc.publish("new_waypoint", msg.encode())
 

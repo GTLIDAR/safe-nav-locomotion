@@ -445,7 +445,7 @@ namespace phase_space_planner
                         sweep_c= sweep_c+1;
                         sum_vn = sum_vn + prim(3,0);
                         
-                        new_cost = cy1*std::abs((-y1_d-l2)) + cy2*std::abs((-y2_d-(l2_foot - l2))) + ct*std::abs((0.35 - eps*(backward_num+forward_num))) + c_sw*std::abs(Sw_d - std::abs(l2_foot - l1_foot))
+                        new_cost = 0*cy1*std::abs((-y1_d-l2)) + cy2*std::abs((-y2_d-(l2_foot - l2))) + ct*std::abs((0.35 - eps*(backward_num+forward_num))) + 2*c_sw*std::abs((Sw_d-0.05) - std::abs(l2_foot - l1_foot))
                          + ctd*std::abs((eps*(backward_num-forward_num))) + cvd*std::abs((ds_switch-psp_log(1)));
 
                         // new_cost =  2*ct*std::abs((0.35 - eps*(backward_num+forward_num))) + 2*c_sw*std::abs(Sw_d - std::abs(l2_foot - l1_foot))
@@ -505,7 +505,7 @@ namespace phase_space_planner
                         sum_vn = sum_vn + prim(3,0);
                         //std::cout << "sweep_c= "<< sweep_c << std::endl;
 
-                         new_cost = cy1*std::abs((y1_d-l2)) + cy2*std::abs((y2_d-(l2_foot - l2))) + ct*std::abs((0.35- eps*(backward_num+forward_num))) + c_sw*std::abs(Sw_d - std::abs(l2_foot - l1_foot))
+                         new_cost = 0*cy1*std::abs((y1_d-l2)) + cy2*std::abs((y2_d-(l2_foot - l2))) + ct*std::abs((0.35- eps*(backward_num+forward_num))) + 2*c_sw*std::abs((Sw_d-0.05) - std::abs(l2_foot - l1_foot))
                          + ctd*std::abs((eps*(backward_num-forward_num))) + cvd*std::abs((ds_switch-psp_log(1)));
 
                         //  new_cost = 2*ct*std::abs((0.35- eps*(backward_num+forward_num))) + 2*c_sw*std::abs(Sw_d - std::abs(l2_foot - l1_foot))
@@ -517,7 +517,7 @@ namespace phase_space_planner
                         //std::cout << "vn= "<< prim(3, 0) << std::endl;
                         //std::cout << "new_cost= "<< new_cost << std::endl;   
                         if(new_cost < cost)
-                        {
+                        { 
                           cost = new_cost;
                           if (prim(3, 0)>= 0.25)
                           {
@@ -938,7 +938,7 @@ namespace phase_space_planner
      
      //psp << (X_apex(0, 0) - X_d(0, 0))*COS + (X_apex(1, 0) - X_d(1, 0))*SIN, s1_foot, X_apex(4, 0)*std::cos(prim(1, 0)-phi), s2, s2_foot, s2_dot, eps*forward_num, eps*backward_num;
      //psp << switch velocity(2), step length, step width, apex-apex step time, heading change, t1, t2
-     psp_log << dl_switch, ds_switch, s2_foot-s1_foot, l2_foot-l1_foot, eps*forward_num+eps*backward_num, prim(1,0),eps*forward_num, eps*backward_num, opt_vn, p_foot(0, 0), p_foot(1, 0), X_d(0, 0), X_d(1, 0);
+     psp_log << dl_switch, ds_switch, s2_foot-s1_foot, l2_foot-l1_foot, eps*forward_num+eps*backward_num, prim(1,0),eps*forward_num, eps*backward_num, opt_vn, p_foot(0, 0), p_foot(1, 0), X_d(0, 0), X_d(1, 0), X_switch(0, 0),  X_switch(1, 0);
      psp_list.push_back(psp_log);
 
     // std::cout << std::endl << "step tine: " << eps*forward_num+eps*backward_num << std::endl;

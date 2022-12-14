@@ -86,7 +86,7 @@ int DoMain()
 
   Eigen::Matrix<double, 3, 1> foot0;
   //CDC
-  foot0 << d0(0, 0)+0.135+0.08, d0(1, 0), d0(2,0)-0.985;
+  foot0 << d0(0, 0)+0.135+0.07, d0(1, 0), d0(2,0)-0.985;
   //HW
   //foot0 << d0(0, 0), d0(1, 0)-0.135-0.08, d0(2,0)-0.985;
   foot0 << d0(0, 0)+0.10012+0.03, d0(1, 0), d0(2,0)-1.01;
@@ -139,7 +139,7 @@ int DoMain()
   double v;
   double pre_v = 0.1;
 
-  for (int i = 0; i < 120; i++) 
+  for (int i = 0; i < 100; i++) 
   {
     // std::cout << i << std::endl;
 
@@ -419,6 +419,23 @@ int DoMain()
         //std::cout << "Start: ";
         psp.Start(stanceFoot);
         Primitive acn(step_length*step_factor, 0, dheight, v, h); 
+
+
+        Eigen::Matrix<double, 15, 1> psp_param;
+        psp_param << 0, 0.05, 0.15369279, 0.32287856, 0.49900000, 0.00000000, 0.31100000, 0.18800000, 0.1, psp.p_foot(0, 0), psp.p_foot(1, 0), psp.X_d(0, 0), psp.X_d(1, 0),  psp.X_d(0, 0), psp.X_d(1, 0);
+        Eigen::Matrix<double, 6, 1> obstacle;
+
+        obstacle << obs(0, 0),
+                  obs(1, 0),
+                  0.4,
+                  obs22(0, 0),
+                  obs22(1, 0),
+                  0.4;
+        psp.psp_list.push_back(psp_param);
+        psp.obstacle_list.push_back(obstacle);
+        psp.psp_list.push_back(psp_param);
+        psp.obstacle_list.push_back(obstacle);
+
         psp.UpdatePrimitive(acn);
         psp.UpdateKeyframe();
         psp.UpdateObstacle(obs, obs22);
@@ -465,8 +482,8 @@ int DoMain()
     else 
     { 
         
-        Eigen::Matrix<double, 13, 1> psp_param;
-        psp_param << 0, 0, 0, 0.25 ,0.4, 0, 0.2, 0.2, 0.1, psp.p_foot(0, 0), psp.p_foot(1, 0), psp.X_d(0, 0), psp.X_d(1, 0);
+        Eigen::Matrix<double, 15, 1> psp_param;
+        psp_param << 0, 0, 0, 0.4 ,0.4, 0, 0.2, 0.2, 0.1, psp.p_foot(0, 0), psp.p_foot(1, 0), psp.X_d(0, 0), psp.X_d(1, 0), psp.X_d(0, 0), psp.X_d(1, 0);
         psp.psp_list.push_back(psp_param);
         // Primitive acn(0.02, 0, 0, 0.05, h);
         // psp.UpdatePrimitive(acn);
@@ -566,7 +583,7 @@ int DoMain()
   write_data<2>(psp.step_list, file_name);
 
   file_name = "/home/sa-zhao/code/safe-nav-locomotion/motion_planner/drake/safe-nav-loco/vis/log_psp.txt";
-  write_data<13>(psp.psp_list, file_name);
+  write_data<15>(psp.psp_list, file_name);
   
   return 0;
 }

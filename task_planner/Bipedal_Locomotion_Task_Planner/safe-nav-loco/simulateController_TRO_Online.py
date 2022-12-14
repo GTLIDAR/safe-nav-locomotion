@@ -666,6 +666,7 @@ def userControlled_partition(slugsLink,filename,gwg,partitionGrid,moveobstacles,
                 #     if arrow1 != None:
                 #         print "arrow1: " + arrow1
                 #         break
+                        
                 arrows = ['N','S','W','E','R']
                 rnd = random.randint(0,4)
                 arrow0 = arrows[rnd]

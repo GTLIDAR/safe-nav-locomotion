@@ -95,6 +95,7 @@ yd_COM = log_COM[:, 4]
 zd_COM = log_COM[:, 5]
 ax1.plot(x_COM, y_COM, linewidth=1, label="walker CoM trajectory", color="red")
 ax1.plot(log_obstacle[:,0], log_obstacle[:,1], linewidth=2, label="walker CoM trajectory", color="green")
+ax1.plot(log_obstacle[:,3], log_obstacle[:,4], linewidth=2, label="walker CoM trajectory", color="blue")
 #ax2.plot(x_COM,xd_COM)
 #ax3.plot(y_COM,yd_COM)
 
@@ -105,7 +106,7 @@ z_apex = log_apex[:, 2]
 xd_apex = log_apex[:,4]
 
 ax1.scatter(x_apex, y_apex, linewidth=2, label="Apex", color="red",marker="o")
-# ax1.scatter(x_switch, y_switch, linewidth=2, label="Apex", color="black",marker="o")
+ax1.scatter(x_switch, y_switch, linewidth=2, label="Apex", color="black",marker="o")
 #ax2.scatter(x_apex, xd_apex, label="Apex", color="red",marker="o")
 #ax2.scatter(x_switch, xd_switch, label="Apex", color="red",marker="o")
 
